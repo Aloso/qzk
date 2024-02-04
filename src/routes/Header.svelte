@@ -35,7 +35,7 @@
 
 <style lang="scss">
 	header {
-		border-bottom: 3px solid #ff28e2;
+		border-bottom: 3px solid #e91fce;
 		font-size: 1.2rem;
 		line-height: 1.8rem;
 		letter-spacing: 0.03rem;
@@ -71,25 +71,44 @@
 
 	a.nav-link {
 		display: flex;
+		position: relative;
+		flex-direction: column;
 		padding: 10px 15px;
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;
 		transform: skewX(7deg);
 		font-weight: 600;
-		align-items: end;
+		justify-content: end;
+		color: #2d0042;
+
+		&::after {
+			content: '';
+			position: absolute;
+			display: block;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			height: 0;
+			background-color: #e91fce;
+			transition: 0.2s;
+		}
 
 		&:hover,
 		&:focus {
-			text-decoration: none;
-			background-color: #ffdceb;
-			color: var(--color-link);
-			outline: none;
+			&::after {
+				height: 8px;
+			}
 		}
 
 		&.active {
-			background-color: #ff28e2;
+			background-color: #e91fce;
 			color: white;
+
+			&:hover,
+			&:focus {
+				background-color: #dc13c1;
+			}
 		}
 	}
 
