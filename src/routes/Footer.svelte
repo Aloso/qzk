@@ -25,7 +25,7 @@
 	footer {
 		border-top: 3px solid #ffd5f9;
 		background-color: #ffe7fc;
-		margin-top: 2rem;
+		margin-top: 4rem;
 		padding-bottom: 2rem;
 	}
 
@@ -34,7 +34,7 @@
 		gap: 4rem;
 		padding: 1rem;
 		margin: 0 auto;
-		max-width: 64rem;
+		max-width: 70rem;
 		box-sizing: border-box;
 		flex-wrap: wrap;
 	}
@@ -42,6 +42,7 @@
 	footer a {
 		font-weight: 500;
 		text-decoration: none;
+		color: var(--color-theme);
 	}
 
 	.link-section {
@@ -52,6 +53,6 @@
 
 	.title {
 		margin: 0.5rem 0;
-		opacity: 0.7;
+		opacity: 0.8;
 	}
 </style>

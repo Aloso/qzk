@@ -20,12 +20,34 @@
 	]
 
 	let { url } = $props<{ url: string }>()
+
+	let prevScrollY = 0
+	let scrollY = $state(globalThis.scrollY)
+
+	$effect(() => {
+		let isAtTop = scrollY < 88
+		let wasAtTop = prevScrollY < 88
+		prevScrollY = scrollY
+		if (isAtTop !== wasAtTop) updateLogo(isAtTop)
+	})
+
+	function updateLogo(isAtTop: boolean) {
+		const elem = document.querySelector('[data-header-logo]')
+		if (!elem) return
+		if (isAtTop) {
+			elem.setAttribute('src', '/logo.png')
+		} else {
+			elem.setAttribute('src', '/logo-2.png')
+		}
+	}
 </script>
+
+<svelte:window bind:scrollY />
 
 <header>
 	<div class="header-inner">
 		<a class="logo-link" href="/">
-			<img class="logo" src="/logo.png" alt="Queeres Zentrum Kassel" />
+			<img data-header-logo class="logo" src="/logo.png" alt="Queeres Zentrum Kassel" />
 		</a>
 		<nav>
 			{#each links as link}
@@ -47,12 +69,18 @@
 		font-size: 1.2rem;
 		line-height: 1.8rem;
 		letter-spacing: 0.03rem;
+		background-color: white;
+		z-index: 1;
+
+		position: sticky;
+		top: -88px;
+		box-shadow: 0 0 20px 20px white;
 	}
 
 	.header-inner {
 		display: flex;
 		align-items: stretch;
-		max-width: 64rem;
+		max-width: 70rem;
 		padding: 0 1rem;
 		box-sizing: border-box;
 		margin: 0 auto;
