@@ -23,5 +23,7 @@ export interface Author {
 
 export interface StaticPage {
 	name: string
+	slug: string
+	description?: string
 	content: Document
 }

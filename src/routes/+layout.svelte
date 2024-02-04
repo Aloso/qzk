@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores'
 	import Header from './Header.svelte'
+	import Footer from './Footer.svelte'
 	import './styles.scss'
 </script>
 
@@ -11,7 +12,7 @@
 		<slot />
 	</main>
 
-	<footer>Dies ist der Footer.</footer>
+	<Footer />
 </div>
 
 <style>
@@ -30,19 +31,5 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 1rem;
-		background-color: #ffdafa;
-		margin-top: 2rem;
-	}
-
-	footer a {
-		font-weight: bold;
 	}
 </style>

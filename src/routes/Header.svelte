@@ -9,6 +9,14 @@
 			text: 'Blog',
 			url: '/blog',
 		},
+		{
+			text: 'Mitgliedschaft<br />&nbsp;und Spenden',
+			url: '/mitgliedschaft',
+		},
+		{
+			text: 'Kontakt',
+			url: '/kontakt',
+		},
 	]
 
 	let { url } = $props<{ url: string }>()
@@ -26,7 +34,7 @@
 					href={link.url}
 					class:active={link.exact ? url === link.url : url.startsWith(link.url)}
 				>
-					<span class="nav-link-inner">{link.text}</span>
+					<span class="nav-link-inner">{@html link.text}</span>
 				</a>
 			{/each}
 		</nav>
@@ -80,6 +88,7 @@
 		transform: skewX(7deg);
 		font-weight: 600;
 		justify-content: end;
+		line-height: 1.25;
 		color: #2d0042;
 
 		&::after {
