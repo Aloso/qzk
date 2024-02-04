@@ -9,6 +9,10 @@
 	const { author, posts } = data
 </script>
 
+<svelte:head>
+	<title>{author.name} - Queeres Zentrum Kassel</title>
+</svelte:head>
+
 <div>
 	<div class="author-layout">
 		<Image

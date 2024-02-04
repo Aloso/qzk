@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/stores'
 </script>
+
+<svelte:head>
+	<title>Fehler - Queeres Zentrum Kassel</title>
+</svelte:head>
 
 <div class="inner">
 	{#if $page.status === 404}

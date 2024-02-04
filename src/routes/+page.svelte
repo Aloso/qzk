@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Startseite</title>
+	<title>Queeres Zentrum Kassel</title>
 	<meta name="description" content="Dies ist die Startseite des Queeren Zentrums Kassel" />
 </svelte:head>
 

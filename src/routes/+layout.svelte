@@ -38,7 +38,7 @@
 		justify-content: center;
 		align-items: center;
 		padding: 1rem;
-		background-color: #ffe3fe;
+		background-color: #ffdafa;
 		margin-top: 2rem;
 	}
 

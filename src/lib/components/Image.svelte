@@ -27,5 +27,6 @@
 <style>
 	img {
 		object-fit: cover;
+		background-color: #eee;
 	}
 </style>

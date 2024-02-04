@@ -24,12 +24,12 @@ body {
 
 a {
 	color: var(--color-link);
-	text-decoration: none;
+	text-decoration: 1.67px underline;
+	text-underline-offset: 0.25rem;
 
 	&:hover,
 	&:focus {
-		text-decoration: underline;
-		text-underline-position: 0.1em;
+		text-decoration-color: var(--color-accent);
 	}
 }
 
