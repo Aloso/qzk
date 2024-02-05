@@ -3,7 +3,7 @@
 	import Authors from '../../Authors.svelte'
 	import Image from '$lib/components/Image.svelte'
 	import type { BlogPost } from '$lib/data'
-	import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+	import RichText from '$lib/components/RichText.svelte'
 
 	export let data: BlogPost
 </script>
@@ -19,7 +19,7 @@
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} />
 		<section>
-			{@html documentToHtmlString(data.content)}
+			<RichText data={data.content} width={800} />
 		</section>
 	</div>
 

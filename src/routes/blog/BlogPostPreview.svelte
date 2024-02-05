@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 	import Image from '$lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
 	import Authors from './Authors.svelte'
 	import type { BlogPost } from '$lib/data'
+	import RichText from '$lib/components/RichText.svelte'
 
 	let { photo, title, slug, authors, published, teaser } = $props<BlogPost>()
 </script>
@@ -15,7 +15,7 @@
 		<div class="published"><PublishDate date={published} /></div>
 		<Authors {authors} small />
 		<div class="teaser">
-			{@html documentToHtmlString(teaser)}
+			<RichText data={teaser} width={700} />
 		</div>
 		<a href="/blog/{published}/{slug}">Artikel aufrufen</a>
 	</div>

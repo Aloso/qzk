@@ -2,8 +2,8 @@
 	import Image from '$lib/components/Image.svelte'
 	import type { Entries } from '$lib/contentful/types'
 	import type { Author, BlogPost } from '$lib/data'
-	import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
+	import RichText from '$lib/components/RichText.svelte'
 
 	export let data: { author: Author; posts: Entries<BlogPost> }
 	const { author, posts } = data
@@ -25,7 +25,9 @@
 			<h1 class="name">{author.name}</h1>
 			<div class="role">{author.role}</div>
 			<div class="pronouns">Pronomen: {author.pronouns}</div>
-			<div class="description">{@html documentToHtmlString(author.description)}</div>
+			<div class="description">
+				<RichText data={author.description} width={700} />
+			</div>
 		</div>
 	</div>
 

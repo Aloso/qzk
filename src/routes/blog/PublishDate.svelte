@@ -12,4 +12,4 @@
 	})
 </script>
 
-{withDescription ? 'Veröffenticht: ' : ''}{dateFmt}
+{withDescription ? 'Veröffentlicht: ' : ''}{dateFmt}
