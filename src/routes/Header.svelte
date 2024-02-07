@@ -21,6 +21,8 @@
 
 	let { url } = $props<{ url: string }>()
 
+	let mobileExtended = $state(false)
+
 	// let prevScrollY = 0
 	// let scrollY = $state(globalThis.scrollY)
 	//
@@ -56,15 +58,34 @@
             0,0 Z"
 			/>
 		</clipPath>
+		<clipPath id="headerClipPathMobile" clipPathUnits="objectBoundingBox">
+			<path
+				d="M 0,0 H 1 V
+						0.5 C 0.7,0.9 0.55,1
+            0.3,0.9 0.06,0.81 0.009,0.45
+            0,0 Z"
+			/>
+		</clipPath>
 	</defs>
 </svg>
 
 <header>
+	<nav class="mobile-nav" class:extended={mobileExtended}>
+		{#each links as link}
+			<a
+				class="mobile-nav-link"
+				href={link.url}
+				class:active={link.exact ? url === link.url : url.startsWith(link.url)}
+			>
+				{@html link.text}
+			</a>
+		{/each}
+	</nav>
 	<div class="header-inner">
 		<a class="logo-link" href="/">
 			<img data-header-logo class="logo" src="/logo-white.png" alt="Queeres Zentrum Kassel" />
 		</a>
-		<nav>
+		<nav class="desktop-nav">
 			{#each links as link}
 				<a
 					class="nav-link"
@@ -75,6 +96,9 @@
 				</a>
 			{/each}
 		</nav>
+		<button class="burger-menu-button" on:click={() => (mobileExtended = !mobileExtended)}>
+			<img src="/burger.svg" alt="Menü" />
+		</button>
 	</div>
 </header>
 
@@ -116,7 +140,7 @@
 		filter: drop-shadow(0.75px 3px #0001);
 	}
 
-	nav {
+	.desktop-nav {
 		display: flex;
 		flex-grow: 1;
 		min-height: 80px;
@@ -151,5 +175,74 @@
 	.nav-link-inner {
 		display: block;
 		transform: skewX(-10deg);
+	}
+
+	.burger-menu-button,
+	.mobile-nav {
+		display: none;
+	}
+
+	@media (max-width: 1200px) {
+		.header-inner {
+			display: flex;
+			align-items: start;
+			justify-content: space-evenly;
+			clip-path: url(#headerClipPathMobile);
+		}
+
+		.desktop-nav {
+			display: none;
+		}
+
+		.burger-menu-button {
+			display: block;
+			background-color: transparent;
+			width: 4rem;
+			height: 4rem;
+			margin-top: 1.4rem;
+			color: white;
+			border: none;
+			border-radius: 30px;
+			transition: background-color 0.2s;
+
+			img {
+				width: 2rem;
+				height: 2rem;
+			}
+
+			&:hover,
+			&:focus {
+				background-color: #0002;
+			}
+		}
+
+		.mobile-nav {
+			display: flex;
+			flex-direction: column;
+			box-sizing: border-box;
+			height: 30rem;
+			margin-top: -30rem;
+			padding: 2rem;
+			background-color: hsl(289, 35%, 55%);
+			overflow: hidden;
+			transition: 0.4s;
+
+			&.extended {
+				margin-top: 0;
+			}
+
+			a {
+				color: white;
+				padding: 1.6rem;
+				text-decoration: none;
+				font-weight: 500;
+				border-radius: 30px;
+
+				&:hover,
+				&:focus {
+					background-color: #0002;
+				}
+			}
+		}
 	}
 </style>

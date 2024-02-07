@@ -31,7 +31,7 @@
 
 	.footer-inner {
 		display: flex;
-		gap: 4rem;
+		gap: 2.5rem 4rem;
 		padding: 1rem;
 		margin: 0 auto;
 		max-width: 70rem;
