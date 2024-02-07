@@ -23,8 +23,8 @@
 
 <style lang="scss">
 	footer {
-		border-top: 3px solid #ffd5f9;
-		background-color: #ffe7fc;
+		border-top: 3px solid hsl(289, 55%, 89%);
+		background-color: hsl(289, 65%, 94%);
 		margin-top: 4rem;
 		padding-bottom: 2rem;
 	}

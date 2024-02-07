@@ -10,7 +10,7 @@
 			url: '/blog',
 		},
 		{
-			text: 'Mitgliedschaft<br />&nbsp;und Spenden',
+			text: 'Mitgliedschaft',
 			url: '/mitgliedschaft',
 		},
 		{
@@ -21,33 +21,48 @@
 
 	let { url } = $props<{ url: string }>()
 
-	let prevScrollY = 0
-	let scrollY = $state(globalThis.scrollY)
-
-	$effect(() => {
-		let isAtTop = scrollY < 88
-		let wasAtTop = prevScrollY < 88
-		prevScrollY = scrollY
-		if (isAtTop !== wasAtTop) updateLogo(isAtTop)
-	})
-
-	function updateLogo(isAtTop: boolean) {
-		const elem = document.querySelector('[data-header-logo]')
-		if (!elem) return
-		if (isAtTop) {
-			elem.setAttribute('src', '/logo.png')
-		} else {
-			elem.setAttribute('src', '/logo-2.png')
-		}
-	}
+	// let prevScrollY = 0
+	// let scrollY = $state(globalThis.scrollY)
+	//
+	// $effect(() => {
+	// 	let isAtTop = scrollY < 88
+	// 	let wasAtTop = prevScrollY < 88
+	// 	prevScrollY = scrollY
+	// 	if (isAtTop !== wasAtTop) updateLogo(isAtTop)
+	// })
+	//
+	// function updateLogo(isAtTop: boolean) {
+	// 	const elem = document.querySelector('[data-header-logo]')
+	// 	if (!elem) return
+	// 	if (isAtTop) {
+	// 		elem.setAttribute('src', '/logo.png')
+	// 	} else {
+	// 		elem.setAttribute('src', '/logo-2.png')
+	// 	}
+	// }
 </script>
 
-<svelte:window bind:scrollY />
+<!-- <svelte:window bind:scrollY /> -->
+
+<svg width="0" height="0">
+	<defs>
+		<clipPath id="headerClipPath" clipPathUnits="objectBoundingBox">
+			<path
+				d="M 0,0 H
+            1 C 0.84,0.02 0.86,0.8
+            0.75,0.65 0.6,0.38 0.58,0.39
+            0.5,0.34 0.2,0.25 0.3,1
+            0.1,0.9 0.02,0.81 0.003,0.45
+            0,0 Z"
+			/>
+		</clipPath>
+	</defs>
+</svg>
 
 <header>
 	<div class="header-inner">
 		<a class="logo-link" href="/">
-			<img data-header-logo class="logo" src="/logo.png" alt="Queeres Zentrum Kassel" />
+			<img data-header-logo class="logo" src="/logo-white.png" alt="Queeres Zentrum Kassel" />
 		</a>
 		<nav>
 			{#each links as link}
@@ -65,15 +80,14 @@
 
 <style lang="scss">
 	header {
-		border-bottom: 3px solid #e91fce;
 		font-size: 1.2rem;
 		line-height: 1.8rem;
 		letter-spacing: 0.03rem;
-		background-color: white;
 		z-index: 1;
 
-		position: sticky;
-		top: -88px;
+		// position: sticky;
+		// top: 0;
+		// top: -88px;
 		box-shadow: 0 0 20px 20px white;
 	}
 
@@ -81,21 +95,25 @@
 		display: flex;
 		align-items: stretch;
 		max-width: 70rem;
-		padding: 0 1rem;
+		padding: 0 1rem 0 3.5rem;
 		box-sizing: border-box;
 		margin: 0 auto;
+
+		background-color: hsl(289, 35%, 55%);
+		clip-path: url(#headerClipPath);
 	}
 
 	.logo-link {
-		margin: 1rem 2rem 1rem 0;
+		margin: 1rem 1rem 2rem 0;
 		flex-grow: 0;
 		flex-shrink: 0;
 	}
 
 	.logo {
 		width: 67vw;
-		max-width: 210px;
+		max-width: 200px;
 		aspect-ratio: 802 / 441;
+		filter: drop-shadow(0.75px 3px #0001);
 	}
 
 	nav {
@@ -113,44 +131,25 @@
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;
-		transform: skewX(7deg);
+		transform: skewX(10deg);
 		font-weight: 600;
-		justify-content: end;
+		justify-content: start;
 		line-height: 1.25;
-		color: #2d0042;
-
-		&::after {
-			content: '';
-			position: absolute;
-			display: block;
-			left: 0;
-			bottom: 0;
-			width: 100%;
-			height: 0;
-			background-color: #e91fce;
-			transition: 0.2s;
-		}
+		color: white;
+		text-shadow: 0.75px 3px #0001;
 
 		&:hover,
 		&:focus {
-			&::after {
-				height: 8px;
-			}
+			background-color: hsl(289, 35%, 47%);
 		}
 
 		&.active {
-			background-color: #e91fce;
-			color: white;
-
-			&:hover,
-			&:focus {
-				background-color: #dc13c1;
-			}
+			background-color: hsl(289, 35%, 47%);
 		}
 	}
 
 	.nav-link-inner {
 		display: block;
-		transform: skewX(-7deg);
+		transform: skewX(-10deg);
 	}
 </style>
