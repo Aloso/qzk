@@ -41,4 +41,10 @@
 	h2 {
 		margin-top: 0;
 	}
+
+	@media (max-width: 800px) {
+		.blogPost {
+			flex-direction: column;
+		}
+	}
 </style>

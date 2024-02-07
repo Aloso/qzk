@@ -76,6 +76,7 @@
 				class="mobile-nav-link"
 				href={link.url}
 				class:active={link.exact ? url === link.url : url.startsWith(link.url)}
+				on:click={() => (mobileExtended = false)}
 			>
 				{@html link.text}
 			</a>

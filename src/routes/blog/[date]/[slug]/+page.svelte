@@ -42,6 +42,10 @@
 
 	.mainbar {
 		width: 44rem;
+
+		@media (max-width: 900px) {
+			width: auto;
+		}
 	}
 
 	.sidebar {
@@ -49,6 +53,10 @@
 		margin: 2rem 0;
 		position: sticky;
 		top: 0;
+
+		@media (max-width: 900px) {
+			width: auto;
+		}
 	}
 
 	.sidebar-title {
