@@ -135,7 +135,7 @@
 	}
 
 	.logo {
-		width: 67vw;
+		width: 50vw;
 		max-width: 200px;
 		aspect-ratio: 802 / 441;
 		filter: drop-shadow(0.75px 3px #0001);
@@ -200,11 +200,12 @@
 			background-color: transparent;
 			width: 4rem;
 			height: 4rem;
-			margin-top: 1.4rem;
+			margin-top: 1.2rem;
 			color: white;
 			border: none;
 			border-radius: 30px;
 			transition: background-color 0.2s;
+			filter: drop-shadow(0.75px 3px #0001);
 
 			img {
 				width: 2rem;

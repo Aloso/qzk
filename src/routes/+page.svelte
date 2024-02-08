@@ -80,6 +80,22 @@
 		</p>
 
 		<hr />
+		<div class="font-desc">Laila, Asap</div>
+		<h1 class="laila">Willkommen beim Queeren Zentrum Kassel</h1>
+		<h2 class="laila">Ein paar Worte über Spenden</h2>
+		<p class="asap">
+			Damit unser Zentrum funktionieren kann, brauchen wir dringend <b>Geld- und Sachspenden</b>.
+			Wenn du oder Menschen aus deinem Umfeld etwas beitragen könnt, dann freuen wir uns sehr.
+			Überweist gerne den Betrag auf unser Konto <i>mit dem Verwendungszweck "Spende"</i> oder schreibt
+			uns, wie ihr uns die Sachspenden zukommen lassen könnt.
+		</p>
+		<p class="asap">
+			Selbstverständlich könnt ihr dafür auch eine Spendenbescheinigung bekommen. Die könnt ihr bei
+			uns anfragen oder hier herunterladen und gemeinsam mit dem Kontoauszug beim Finanzamt
+			einreichen.
+		</p>
+
+		<hr />
 	</div>
 </section>
 
