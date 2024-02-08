@@ -97,7 +97,16 @@
 				</a>
 			{/each}
 		</nav>
-		<button class="burger-menu-button" on:click={() => (mobileExtended = !mobileExtended)}>
+		<button
+			class="burger-menu-button"
+			on:click={() => {
+				if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
+					document.scrollingElement.scrollTo({ top: 0, behavior: 'smooth' })
+				}
+
+				mobileExtended = !mobileExtended
+			}}
+		>
 			<img src="/burger.svg" alt="Menü" />
 		</button>
 	</div>
@@ -129,7 +138,7 @@
 	}
 
 	.logo-link {
-		margin: 1rem 1rem 2rem 0;
+		margin: 1rem 1rem 2.5rem 0;
 		flex-grow: 0;
 		flex-shrink: 0;
 	}
@@ -210,6 +219,7 @@
 			img {
 				width: 2rem;
 				height: 2rem;
+				vertical-align: middle;
 			}
 
 			&:hover,

@@ -12,6 +12,7 @@
 		"setup": "node ./contentful/setup.js"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240129.0",
 		"@contentful/rich-text-html-renderer": "^16.3.4",
 		"@contentful/rich-text-types": "^16.3.4",
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -32,8 +33,11 @@
 		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^3.6.0",
 		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
+		"typescript": "^5.3.3",
 		"vite": "^5.0.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@cloudflare/pages-plugin-mailchannels": "^0.1.2"
+	}
 }

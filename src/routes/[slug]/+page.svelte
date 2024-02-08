@@ -2,6 +2,7 @@
 	import RichText from '$lib/components/RichText.svelte'
 	import type { Item } from '$lib/contentful/types'
 	import type { StaticPage } from '$lib/data'
+	import ContactForm from './ContactForm.svelte'
 
 	export let data: Item<StaticPage>
 </script>
@@ -16,3 +17,7 @@
 <section>
 	<RichText data={data.fields?.content} width={900} />
 </section>
+
+{#if data.fields?.slug === 'kontakt'}
+	<ContactForm />
+{/if}

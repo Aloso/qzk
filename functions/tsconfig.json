@@ -1,0 +1,11 @@
+{
+	"include": ["**/*"],
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"lib": ["esnext"],
+		"types": ["@cloudflare/workers-types"],
+		"typeRoots": ["../node_modules"],
+		"strict": true,
+	},
+}
