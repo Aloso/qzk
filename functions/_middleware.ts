@@ -9,7 +9,7 @@ export const onRequest: PagesFunction = mailChannelsPlugin({
 	from: {
 		name: 'Queeres Zentrum Kassel',
 		// The domain of your `from` address must be the same as the domain you set up MailChannels Domain Lockdown for (detailed below)
-		email: 'info@aloso.foo',
+		email: 'info@qz.aloso.foo',
 	},
 	subject: ({ formData }: { formData: FormData }) => `[QZK Formular] ${formData.get('subject')}`,
 	respondWith: () => {
