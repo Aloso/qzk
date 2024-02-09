@@ -54,6 +54,15 @@
 		<div class="error" class:visible={contentError}>Bitte Nachricht eingeben</div>
 	</label>
 
+	<input type="hidden" name="_template" value="box" />
+	<input type="hidden" name="_captcha" value="false" />
+	<input
+		type="hidden"
+		name="_next"
+		value="https://{$page.url
+			.host}/email/gesendet?context=CONTACT_FORM&backLink={encodeURIComponent($page.url.href)}"
+	/>
+
 	<!--
 	<input type="hidden" name="backLink" value={$page.url.href} />
 	<input type="hidden" name="context" value="CONTACT_FORM" />
