@@ -3,6 +3,7 @@
 	import type { Item } from '$lib/contentful/types'
 	import type { StaticPage } from '$lib/data'
 	import ContactForm from './ContactForm.svelte'
+	import Newsletter from './Newsletter.svelte'
 
 	export let data: Item<StaticPage>
 </script>
@@ -20,4 +21,5 @@
 
 {#if data.fields?.slug === 'kontakt'}
 	<ContactForm />
+	<Newsletter />
 {/if}
