@@ -1,22 +1,73 @@
+<script lang="ts">
+	import { page } from '$app/stores'
+
+	let subject = $state('')
+	let email = $state('')
+	let content = $state('')
+	let emailFocused = $state(false)
+
+	let dirty = $state(false)
+	let emailValid = $derived(/^\S+@\S+\.\S+$/.test(email))
+
+	let subjectError = $derived(dirty && subject === '')
+	let emailError = $derived(
+		(email && (dirty || !emailFocused) && !emailValid) || (dirty && email === ''),
+	)
+	let contentError = $derived(dirty && content === '')
+
+	let formError = $derived(subject === '' || !emailValid || content === '')
+</script>
+
 <hr />
 
 <h1>Kontaktiere uns</h1>
 
-<form data-static-form-name="contact">
+<form method="post" action="/-send-mail">
 	<label>
 		<div class="label-text">Betreff:</div>
-		<input type="text" name="subject" />
+		<input type="text" name="subject" required bind:value={subject} class:invalid={subjectError} />
+		<div class="error" class:visible={subjectError}>Bitte Betreff eingeben</div>
 	</label>
+
 	<label>
 		<div class="label-text">Deine E-Mail:</div>
-		<input type="email" name="email" />
-		<div class="error">Diese E-Mail-Adresse ist nicht gültig!</div>
+		<input
+			type="email"
+			name="email"
+			required
+			bind:value={email}
+			on:focus={() => (emailFocused = true)}
+			on:blur={() => (emailFocused = false)}
+			class:invalid={emailError}
+		/>
+		<div class="error" class:visible={email && !emailValid && emailError}>
+			Diese E-Mail-Adresse ist nicht gültig!
+		</div>
+		<div class="error" class:visible={dirty && email === ''}>
+			Bitte Deine E-Mail-Adresse eingeben
+		</div>
 	</label>
+
 	<label>
 		<div class="label-text">Nachricht:</div>
-		<textarea name="message" />
+		<textarea name="content" required bind:value={content} class:invalid={contentError} />
+		<div class="error" class:visible={contentError}>Bitte Nachricht eingeben</div>
 	</label>
-	<button type="submit">Absenden</button>
+
+	<input type="hidden" name="backLink" value={$page.url.href} />
+	<input type="hidden" name="context" value="CONTACT_FORM" />
+
+	<button
+		type="submit"
+		class:disabled={dirty && formError}
+		on:click={(event) => {
+			if (formError) {
+				event.preventDefault()
+				event.stopPropagation()
+			}
+			dirty = true
+		}}>Absenden</button
+	>
 </form>
 
 <style lang="scss">
@@ -55,12 +106,8 @@
 			outline: none;
 		}
 
-		&:invalid:not(:focus) {
+		&.invalid {
 			border-color: red;
-
-			+ .error {
-				display: block;
-			}
 		}
 	}
 
@@ -73,6 +120,10 @@
 		font-size: 0.9rem;
 		margin: 0.5rem 0 1.5rem;
 		color: red;
+
+		&.visible {
+			display: block;
+		}
 	}
 
 	button {
@@ -89,6 +140,11 @@
 		&:hover,
 		&:focus {
 			background-color: var(--color-link);
+		}
+
+		&.disabled {
+			background-color: #717171;
+			border-color: #717171;
 		}
 	}
 </style>
