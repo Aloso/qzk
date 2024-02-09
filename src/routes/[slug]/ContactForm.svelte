@@ -22,10 +22,10 @@
 
 <h1>Kontaktiere uns</h1>
 
-<form method="post" action="/-send-mail">
+<form method="POST" action="https://formsubmit.co/ludwig.stecher@gmx.de">
 	<label>
 		<div class="label-text">Betreff:</div>
-		<input type="text" name="subject" required bind:value={subject} class:invalid={subjectError} />
+		<input type="text" name="_subject" required bind:value={subject} class:invalid={subjectError} />
 		<div class="error" class:visible={subjectError}>Bitte Betreff eingeben</div>
 	</label>
 
@@ -54,8 +54,10 @@
 		<div class="error" class:visible={contentError}>Bitte Nachricht eingeben</div>
 	</label>
 
+	<!--
 	<input type="hidden" name="backLink" value={$page.url.href} />
 	<input type="hidden" name="context" value="CONTACT_FORM" />
+	-->
 
 	<button
 		type="submit"
