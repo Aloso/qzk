@@ -63,11 +63,6 @@
 			.host}/email/gesendet?context=CONTACT_FORM&backLink={encodeURIComponent($page.url.href)}"
 	/>
 
-	<!--
-	<input type="hidden" name="backLink" value={$page.url.href} />
-	<input type="hidden" name="context" value="CONTACT_FORM" />
-	-->
-
 	<button
 		type="submit"
 		class:disabled={dirty && formError}
