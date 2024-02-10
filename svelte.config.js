@@ -22,6 +22,15 @@ const config = {
 					precompress: false,
 					strict: true,
 				}),
+		prerender: {
+			entries: [
+				'/newsletter/double-opt-in',
+				'/newsletter/angemeldet',
+				'/newsletter/abgemeldet',
+				'/email/error',
+				'/email/gesendet',
+			],
+		},
 	},
 }
 

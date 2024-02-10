@@ -22,12 +22,6 @@
 				{/each}
 			</div>
 		{/each}
-
-		<div aria-hidden="true" class="hidden-links">
-			<a href="/newsletter/double-opt-in">1</a>
-			<a href="/newsletter/angemeldet">2</a>
-			<a href="/newsletter/abgemeldet">3</a>
-		</div>
 	</div>
 </footer>
 
@@ -64,9 +58,5 @@
 	.title {
 		margin: 0.5rem 0;
 		opacity: 0.8;
-	}
-
-	.hidden-links {
-		display: none;
 	}
 </style>
