@@ -1,8 +1,8 @@
 import type { StaticPage } from '$lib/data'
 import { error } from '@sveltejs/kit'
-import { client, type Item } from '..'
+import { client } from '..'
 
-export async function loadStatic(slug: string | null): Promise<Item<StaticPage>> {
+export async function loadStatic(slug: string | null): Promise<StaticPage> {
 	if (slug === 'index') {
 		error(404, 'Not found')
 	}
@@ -16,5 +16,5 @@ export async function loadStatic(slug: string | null): Promise<Item<StaticPage>>
 		error(404, 'Not found')
 	}
 
-	return pages.items[0] as unknown as Item<StaticPage>
+	return pages.items[0].fields as unknown as StaticPage
 }

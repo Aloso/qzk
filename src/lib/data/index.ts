@@ -68,7 +68,3 @@ export interface TypedNavigation {
 	text: string
 	children: TypedNavigation[]
 }
-
-export interface ItemData<T> {
-	data: Item<T>
-}

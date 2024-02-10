@@ -4,9 +4,9 @@
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import SubmitButton from '$lib/components/SubmitButton.svelte'
 	import ValidatedInput from '$lib/components/ValidatedInput.svelte'
-	import type { ItemData, StaticPage } from '$lib/data'
+	import type { StaticPage } from '$lib/data'
 
-	let { data } = $props<ItemData<StaticPage>>()
+	let { data } = $props<{ data: StaticPage }>()
 
 	let email = $state('')
 	let checkbox = $state(false)
@@ -20,7 +20,7 @@
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.fields?.content} width={900} />
+	<RichText data={data.content} width={900} />
 </section>
 
 <form

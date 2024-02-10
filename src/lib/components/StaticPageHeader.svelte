@@ -1,13 +1,12 @@
 <script lang="ts">
-	import type { Item } from '$lib/contentful'
 	import type { StaticPage } from '$lib/data'
 
-	let { fields } = $props<Item<StaticPage>>()
+	let { name, description } = $props<StaticPage>()
 </script>
 
 <svelte:head>
-	<title>{fields?.name} - Queeres Zentrum Kassel</title>
-	{#if fields?.description}
-		<meta name="description" content={fields?.description} />
+	<title>{name} - Queeres Zentrum Kassel</title>
+	{#if description}
+		<meta name="description" content={description} />
 	{/if}
 </svelte:head>

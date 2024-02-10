@@ -4,7 +4,7 @@
 	import SubmitButton from '$lib/components/SubmitButton.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import RichText from '$lib/components/RichText.svelte'
-	import type { ItemData, StaticPage } from '$lib/data'
+	import type { StaticPage } from '$lib/data'
 
 	let subject = $state('')
 	let email = $state('')
@@ -17,13 +17,13 @@
 
 	let submitClicked = $state(false)
 
-	let { data } = $props<ItemData<StaticPage>>()
+	let { data } = $props<{ data: StaticPage }>()
 </script>
 
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.fields?.content} width={900} />
+	<RichText data={data.content} width={900} />
 </section>
 
 <hr />
