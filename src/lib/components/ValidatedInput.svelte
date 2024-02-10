@@ -1,4 +1,6 @@
 <script lang="ts">
+	import FormError from './FormError.svelte'
+
 	interface Props {
 		label: string
 		type: 'text' | 'email' | 'password' | 'textarea'
@@ -56,9 +58,7 @@
 		/>
 	{/if}
 
-	<div class="error" aria-hidden={!errorVisible} class:visible={errorVisible}>
-		{error}
-	</div>
+	<FormError visible={!!errorVisible}>{error}</FormError>
 </label>
 
 <style lang="scss">
@@ -99,16 +99,5 @@
 
 	textarea {
 		min-height: var(--min-height, 160px);
-	}
-
-	.error {
-		display: none;
-		font-size: 0.9rem;
-		margin: 0.5rem 0 1.5rem;
-		color: red;
-
-		&.visible {
-			display: block;
-		}
 	}
 </style>
