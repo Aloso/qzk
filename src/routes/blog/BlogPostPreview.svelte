@@ -26,7 +26,7 @@
 			<h3>{post.title}</h3>
 			<div class="published combined">
 				<PublishDate date={post.published} />
-				<Author author={post.authors[0]} small single />
+				<Author author={post.authors[0]} small single plus={post.authors.length - 1} />
 			</div>
 		{:else}
 			<h2>{post.title}</h2>

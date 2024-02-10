@@ -6,9 +6,10 @@
 		author: AuthorPreview
 		small?: boolean
 		single?: boolean
+		plus?: number
 	}
 
-	let { author, small, single } = $props<Props>()
+	let { author, small, single, plus } = $props<Props>()
 </script>
 
 <a class="author" class:small class:single href="/autor/{author.slug}">
@@ -20,7 +21,12 @@
 		height={small ? 30 : 60}
 	/>
 	<div class="right" class:small>
-		<span class="name" class:small>{author.name}</span>
+		<span class="name" class:small>
+			{author.name}
+			{#if plus && plus > 0}
+				<span class="plus">+{plus}</span>
+			{/if}
+		</span>
 		<span class="role" class:small>{author.role}</span>
 	</div>
 </a>
@@ -75,6 +81,7 @@
 	.name {
 		font-size: 1.2rem;
 		margin-bottom: 3px;
+		line-height: 27px;
 		&.small {
 			font-size: 1rem;
 			margin-bottom: 0;
@@ -86,5 +93,15 @@
 		&.small {
 			display: none;
 		}
+	}
+
+	.plus {
+		display: inline-block;
+		min-width: 30px;
+		height: 30px;
+		background-color: #eee;
+		border-radius: 30px;
+		margin: 0 -1rem -10px 0.5rem;
+		text-align: center;
 	}
 </style>
