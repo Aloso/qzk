@@ -1,4 +1,5 @@
 import { loadAuthor, loadAllBlogPosts } from '$lib/contentful/loader'
+import { selectBlogPostPreview } from '$lib/contentful/selector/selectBlogPostPreview'
 import type { Author, BlogPostPreview } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
 
@@ -10,16 +11,7 @@ export interface Data {
 
 export async function load({ params }: LoadEvent<{ slug: string }>): Promise<Data> {
 	const { fields: author, sys } = await loadAuthor(params.slug)
-	const postItems = await loadAllBlogPosts({ authorId: sys.id })
-
-	const posts = postItems.items.map((post) => {
-		const { title, slug, published, photo, teaser, authors: authorItems } = post.fields
-		const authors = authorItems.map((author) => {
-			const { slug, name, role, photo } = author.fields
-			return { slug, name, role, photo }
-		})
-		return { title, slug, published, photo, teaser, authors }
-	})
-
-	return { author, posts, totalPosts: postItems.total }
+	const postEntries = await loadAllBlogPosts({ authorId: sys.id })
+	const posts = postEntries.items.map(selectBlogPostPreview)
+	return { author, posts, totalPosts: postEntries.total }
 }
