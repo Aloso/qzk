@@ -1,25 +1,21 @@
 <script lang="ts">
-	const links = [
-		{
-			text: 'Aktuelles',
-			url: '/',
-			exact: true,
-		},
-		{
-			text: 'Blog',
-			url: '/blog',
-		},
-		{
-			text: 'Mitgliedschaft',
-			url: '/mitgliedschaft',
-		},
-		{
-			text: 'Kontakt',
-			url: '/kontakt',
-		},
-	]
+	import type { Navigations, TypedNavigation } from '$lib/data'
 
-	let { url } = $props<{ url: string }>()
+	interface Props {
+		url: string
+		links: Navigations['header']
+	}
+
+	let { url, links } = $props<Props>()
+
+	const startMatches = new Set<string | undefined>(['/blog', '/autor', '/newsletter'])
+
+	function isNavItem(item: TypedNavigation, url: string) {
+		if (item.href === url) return true
+		if (startMatches.has(item.href) && url.startsWith(item.href!)) return true
+		if (item.children.some((c) => isNavItem(c, url))) return true
+		return false
+	}
 
 	let mobileExtended = $state(false)
 
@@ -74,25 +70,22 @@
 		{#each links as link}
 			<a
 				class="mobile-nav-link"
-				href={link.url}
-				class:active={link.exact ? url === link.url : url.startsWith(link.url)}
+				href={link.href}
+				class:active={isNavItem(link, url)}
 				on:click={() => (mobileExtended = false)}
 			>
 				{@html link.text}
 			</a>
 		{/each}
 	</nav>
+
 	<div class="header-inner">
 		<a class="logo-link" href="/">
 			<img data-header-logo class="logo" src="/logo-white.png" alt="Queeres Zentrum Kassel" />
 		</a>
 		<nav class="desktop-nav">
 			{#each links as link}
-				<a
-					class="nav-link"
-					href={link.url}
-					class:active={link.exact ? url === link.url : url.startsWith(link.url)}
-				>
+				<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
 					<span class="nav-link-inner">{@html link.text}</span>
 				</a>
 			{/each}

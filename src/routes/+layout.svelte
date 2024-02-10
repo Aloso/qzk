@@ -1,18 +1,21 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores'
 	import Header from './Header.svelte'
 	import Footer from './Footer.svelte'
 	import './styles.scss'
+	import type { Navigations } from '$lib/data'
+
+	let { data } = $props<{ data: Navigations }>()
 </script>
 
 <div class="app">
-	<Header url={$page.url.pathname} />
+	<Header url={$page.url.pathname} links={data.header} />
 
 	<main>
 		<slot />
 	</main>
 
-	<Footer />
+	<Footer links={data.footer} />
 </div>
 
 <style>

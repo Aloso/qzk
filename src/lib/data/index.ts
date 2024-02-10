@@ -28,6 +28,22 @@ export interface StaticPage {
 	content: Document
 }
 
+export interface Navigation {
+	name: 'Header' | 'Footer'
+	links: string
+}
+
+export interface Navigations {
+	header: TypedNavigation[]
+	footer: TypedNavigation[]
+}
+
+export interface TypedNavigation {
+	href?: string
+	text: string
+	children: TypedNavigation[]
+}
+
 export interface ItemData<T> {
 	data: Item<T>
 }

@@ -1,29 +1,33 @@
+<script lang="ts">
+	import type { Navigations } from '$lib/data'
+
+	interface Props {
+		links: Navigations['footer']
+	}
+
+	let { links } = $props<Props>()
+</script>
+
 <footer>
 	<div class="footer-inner">
-		<div class="link-section">
-			<div class="title">Queeres Zentrum Kassel</div>
-			<a href="/">Aktuelles</a>
-			<a href="/blog">Blog</a>
-			<a href="/mitgliedschaft">Mitgliedschaft und Spenden</a>
-			<a href="/kontakt">Kontakt</a>
-			<a href="/newsletter">Newsletter</a>
+		{#each links as section}
+			<div class="link-section">
+				{#if section.href}
+					<a class="title" href={section.href}>{section.text}</a>
+				{:else}
+					<div class="title">{section.text}</div>
+				{/if}
+				{#each section.children as link}
+					<a href={link.href}>{link.text}</a>
+				{/each}
+			</div>
+		{/each}
+
+		<div aria-hidden="true" class="hidden-links">
+			<a href="/newsletter/double-opt-in">1</a>
+			<a href="/newsletter/angemeldet">2</a>
+			<a href="/newsletter/abgemeldet">3</a>
 		</div>
-		<div class="link-section">
-			<div class="title">Informationen</div>
-			<a href="/ueber-uns">Über Uns</a>
-			<a href="/selbstverstaendnis">Selbstverständnis</a>
-			<a href="/awareness-konzept">Awarenesskonzept</a>
-		</div>
-		<div class="link-section">
-			<div class="title">Rechtliches</div>
-			<a href="/impressum">Impressum</a>
-			<a href="/datenschutz">Datenschutz</a>
-		</div>
-	</div>
-	<div aria-hidden="true" class="hidden-links">
-		<a href="/newsletter/double-opt-in">1</a>
-		<a href="/newsletter/angemeldet">2</a>
-		<a href="/newsletter/abgemeldet">3</a>
 	</div>
 </footer>
 
@@ -45,7 +49,7 @@
 		flex-wrap: wrap;
 	}
 
-	footer a {
+	a {
 		font-weight: 500;
 		text-decoration: none;
 		color: var(--color-theme);
