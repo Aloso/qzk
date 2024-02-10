@@ -20,6 +20,11 @@
 			<a href="/datenschutz">Datenschutz</a>
 		</div>
 	</div>
+	<div aria-hidden="true" class="hidden-links">
+		<a href="/newsletter/double-opt-in">1</a>
+		<a href="/newsletter/angemeldet">2</a>
+		<a href="/newsletter/abgemeldet">3</a>
+	</div>
 </footer>
 
 <style lang="scss">
@@ -55,5 +60,9 @@
 	.title {
 		margin: 0.5rem 0;
 		opacity: 0.8;
+	}
+
+	.hidden-links {
+		display: none;
 	}
 </style>
