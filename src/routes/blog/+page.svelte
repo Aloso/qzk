@@ -13,7 +13,7 @@
 <h1>Blog</h1>
 <section>
 	{#each posts as post}
-		<BlogPostPreview {...post} />
+		<BlogPostPreview {post} />
 	{/each}
 </section>
 

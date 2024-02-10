@@ -73,6 +73,10 @@ ul,
 ol {
 	line-height: 1.5;
 	font-size: 1.16667rem;
+
+	.smaller-paragraphs & {
+		font-size: 1.1rem;
+	}
 }
 
 blockquote {

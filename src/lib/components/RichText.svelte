@@ -7,6 +7,7 @@
 	interface Props {
 		data: Document
 		width: number
+		small?: boolean
 	}
 
 	const { data, width } = $props<Props>()

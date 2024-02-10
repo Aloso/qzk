@@ -5,12 +5,13 @@
 	interface Props {
 		author: AuthorPreview
 		small?: boolean
+		single?: boolean
 	}
 
-	let { author, small } = $props<Props>()
+	let { author, small, single } = $props<Props>()
 </script>
 
-<a class="author" class:small href="/autor/{author.slug}">
+<a class="author" class:small class:single href="/autor/{author.slug}">
 	<Image
 		class="BlogPost-Author-photo"
 		img={author.photo}
@@ -45,6 +46,10 @@
 		&.small {
 			min-height: 30px;
 			gap: 0.75rem;
+		}
+
+		&.single {
+			margin: 0;
 		}
 	}
 

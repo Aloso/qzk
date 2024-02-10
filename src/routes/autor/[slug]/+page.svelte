@@ -42,9 +42,11 @@
 	{#if totalPosts > 20}
 		<p>Die neuesten Beiträge werden angezeigt</p>
 	{/if}
-	{#each posts as post}
-		<BlogPostPreview {...post} />
-	{/each}
+	<div class="blog-posts">
+		{#each posts as post}
+			<BlogPostPreview {post} small />
+		{/each}
+	</div>
 </div>
 
 <style lang="scss">
@@ -55,9 +57,15 @@
 		gap: 2rem;
 		margin: 1rem 0;
 
+		@media (max-width: 800px) {
+			flex-direction: column;
+		}
+
 		:global(.Author-photo) {
 			border-radius: 30px;
 			flex-shrink: 0;
+			max-width: 100%;
+			height: auto;
 		}
 	}
 
@@ -72,5 +80,11 @@
 
 	.content {
 		flex-grow: 1;
+	}
+
+	.blog-posts {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
 	}
 </style>
