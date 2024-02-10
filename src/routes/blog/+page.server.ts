@@ -1,11 +1,5 @@
-import { client } from '$lib/contentful'
+import { loadAllBlogPosts } from '$lib/contentful/loader'
 
 export async function load() {
-	const posts = await client.getEntries({
-		content_type: 'blogPost',
-		limit: 20,
-		order: ['fields.published'],
-	})
-
-	return posts
+	return loadAllBlogPosts({ limit: 20 })
 }

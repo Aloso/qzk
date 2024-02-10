@@ -27,3 +27,7 @@ export interface StaticPage {
 	description?: string
 	content: Document
 }
+
+export interface ItemData<T> {
+	data: Item<T>
+}
