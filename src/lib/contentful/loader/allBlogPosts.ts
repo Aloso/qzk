@@ -9,7 +9,7 @@ interface Options {
 export async function loadAllBlogPosts({ limit, authorId }: Options): Promise<Entries<BlogPost>> {
 	const args: Record<string, unknown> = {
 		content_type: 'blogPost',
-		order: ['fields.published'],
+		order: ['-fields.published'],
 	}
 	if (authorId) {
 		args['fields.authors.sys.id'] = authorId

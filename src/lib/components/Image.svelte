@@ -11,6 +11,9 @@
 		height?: number
 	}
 	let { img, alt, fallbackAlt, width, height, ...rest } = $props<Props>()
+	if (!img.fields) {
+		throw new Error(`Tried to include an asset that isn't published: ${img.sys.id}`)
+	}
 
 	const size = getSize(img, width, height)
 	const cssSize = getHtmlSize(size, width, height)

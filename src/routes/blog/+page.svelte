@@ -11,6 +11,16 @@
 </svelte:head>
 
 <h1>Blog</h1>
-{#each posts as post}
-	<BlogPostPreview {...post} />
-{/each}
+<section>
+	{#each posts as post}
+		<BlogPostPreview {...post} />
+	{/each}
+</section>
+
+<style lang="scss">
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+</style>
