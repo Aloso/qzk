@@ -6,6 +6,7 @@
 			<a href="/blog">Blog</a>
 			<a href="/mitgliedschaft">Mitgliedschaft und Spenden</a>
 			<a href="/kontakt">Kontakt</a>
+			<a href="/newsletter">Newsletter</a>
 		</div>
 		<div class="link-section">
 			<div class="title">Informationen</div>

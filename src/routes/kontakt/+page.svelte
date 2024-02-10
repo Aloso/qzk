@@ -28,7 +28,7 @@
 
 <hr />
 
-<h1>Kontaktiere uns</h1>
+<h2>Kontaktiere uns</h2>
 
 <form
 	method="POST"
@@ -82,6 +82,14 @@
 
 	<SubmitButton disabled={submitClicked && !!formError}>Absenden</SubmitButton>
 </form>
+
+<hr />
+
+<h2>Newsletter</h2>
+
+<p>Erhalte Neuigkeiten des Queeren Zentrums per E-Mail!</p>
+
+<p><a href="/newsletter">Zur Anmeldung</a></p>
 
 <style lang="scss">
 	form {
