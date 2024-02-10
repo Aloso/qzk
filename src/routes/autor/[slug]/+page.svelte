@@ -5,7 +5,11 @@
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
 	import RichText from '$lib/components/RichText.svelte'
 
-	export let data: { author: Author; posts: Entries<BlogPost> }
+	interface Props {
+		data: { author: Author; posts: Entries<BlogPost> }
+	}
+
+	let { data } = $props<Props>()
 	const { author, posts } = data
 </script>
 
