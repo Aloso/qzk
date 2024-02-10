@@ -1,9 +1,9 @@
 <script lang="ts">
 	import BlogPostPreview from './BlogPostPreview.svelte'
-	import type { Entries } from '$lib/contentful/types'
-	import type { BlogPost } from '$lib/data'
+	import type { Data } from './+page.server'
 
-	export let data: Entries<BlogPost>
+	let { data } = $props<{ data: Data }>()
+	let { posts } = data
 </script>
 
 <svelte:head>
@@ -11,6 +11,6 @@
 </svelte:head>
 
 <h1>Blog</h1>
-{#each data.items as post}
-	<BlogPostPreview {...post.fields} />
+{#each posts as post}
+	<BlogPostPreview {...post} />
 {/each}

@@ -1,10 +1,9 @@
 <script lang="ts">
 	import AuthorComponent from './Author.svelte'
-	import type { Author } from '$lib/data'
-	import type { Item } from '$lib/contentful/types'
+	import type { AuthorPreview } from '$lib/data'
 
 	interface Props {
-		authors: Item<Author>[]
+		authors: AuthorPreview[]
 		small?: boolean
 	}
 
@@ -13,7 +12,7 @@
 
 <div class="authors" class:small>
 	{#each authors as author}
-		<AuthorComponent author={author.fields} {small} />
+		<AuthorComponent {author} {small} />
 	{/each}
 </div>
 

@@ -2,25 +2,24 @@
 	import PublishDate from '../../PublishDate.svelte'
 	import Authors from '../../Authors.svelte'
 	import Image from '$lib/components/Image.svelte'
-	import type { BlogPost, ItemData } from '$lib/data'
+	import type { BlogPostView } from '$lib/data'
 	import RichText from '$lib/components/RichText.svelte'
 
-	let { data } = $props<ItemData<BlogPost>>()
-	let blogPost = data.fields
+	let { data } = $props<{ data: BlogPostView }>()
 </script>
 
 <svelte:head>
-	<title>{blogPost.title} - Queeres Zentrum Kassel</title>
+	<title>{data.title} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <div class="layout">
 	<div class="mainbar">
-		<h1>{blogPost.title}</h1>
-		<div><PublishDate date={blogPost.published} withDescription /></div>
-		<Authors authors={blogPost.authors} />
-		<Image class="BlogPost-photo" img={blogPost.photo} width={800} />
+		<h1>{data.title}</h1>
+		<div><PublishDate date={data.published} withDescription /></div>
+		<Authors authors={data.authors} />
+		<Image class="BlogPost-photo" img={data.photo} width={800} />
 		<section>
-			<RichText data={blogPost.content} width={800} />
+			<RichText data={data.content} width={800} />
 		</section>
 	</div>
 

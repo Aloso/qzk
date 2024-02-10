@@ -11,6 +11,24 @@ export interface BlogPost {
 	content: Document
 }
 
+export interface BlogPostView {
+	title: string
+	slug: string
+	authors: AuthorPreview[]
+	published: string
+	photo: Image
+	content: Document
+}
+
+export interface BlogPostPreview {
+	title: string
+	slug: string
+	authors: AuthorPreview[]
+	published: string
+	photo: Image
+	teaser: Document
+}
+
 export interface Author {
 	id: string
 	slug: string
@@ -19,6 +37,13 @@ export interface Author {
 	pronouns: string
 	photo: Image
 	description: Document
+}
+
+export interface AuthorPreview {
+	slug: string
+	name: string
+	role: string
+	photo: Image
 }
 
 export interface StaticPage {

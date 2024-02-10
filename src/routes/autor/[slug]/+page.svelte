@@ -1,16 +1,15 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
-	import type { Entries } from '$lib/contentful/types'
-	import type { Author, BlogPost } from '$lib/data'
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
 	import RichText from '$lib/components/RichText.svelte'
+	import type { Data } from './+page.server'
 
 	interface Props {
-		data: { author: Author; posts: Entries<BlogPost> }
+		data: Data
 	}
 
 	let { data } = $props<Props>()
-	const { author, posts } = data
+	const { author, posts, totalPosts } = data
 </script>
 
 <svelte:head>
@@ -37,14 +36,14 @@
 
 	<hr />
 	<h2>
-		{posts.total}
-		{posts.total === 1 ? 'Beitrag' : 'Beiträge'} von {author.name}
+		{totalPosts}
+		{totalPosts === 1 ? 'Beitrag' : 'Beiträge'} von {author.name}
 	</h2>
-	{#if posts.total > 20}
+	{#if totalPosts > 20}
 		<p>Die neuesten Beiträge werden angezeigt</p>
 	{/if}
-	{#each posts.items as post}
-		<BlogPostPreview {...post.fields} />
+	{#each posts as post}
+		<BlogPostPreview {...post} />
 	{/each}
 </div>
 

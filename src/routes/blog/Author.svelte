@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
-	import type { Author } from '$lib/data'
+	import type { AuthorPreview } from '$lib/data'
 
 	interface Props {
-		author: Author
+		author: AuthorPreview
 		small?: boolean
 	}
 

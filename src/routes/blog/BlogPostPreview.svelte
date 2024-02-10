@@ -2,10 +2,10 @@
 	import Image from '$lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
 	import Authors from './Authors.svelte'
-	import type { BlogPost } from '$lib/data'
+	import type { BlogPostPreview } from '$lib/data'
 	import RichText from '$lib/components/RichText.svelte'
 
-	let { photo, title, slug, authors, published, teaser } = $props<BlogPost>()
+	let { photo, title, slug, authors, published, teaser } = $props<BlogPostPreview>()
 </script>
 
 <div class="blogPost">
