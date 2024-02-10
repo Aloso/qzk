@@ -11,7 +11,7 @@ export interface Data {
 
 export async function load({ params }: LoadEvent<{ slug: string }>): Promise<Data> {
 	const { fields: author, sys } = await loadAuthor(params.slug)
-	const postEntries = await loadAllBlogPosts({ authorId: sys.id })
+	const postEntries = await loadAllBlogPosts({ authorIds: [sys.id] })
 	const posts = postEntries.items.map(selectBlogPostPreview)
 	return { author, posts, totalPosts: postEntries.total }
 }

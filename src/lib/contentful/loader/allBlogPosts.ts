@@ -3,27 +3,32 @@ import { client, type Entries } from '..'
 
 interface Options {
 	limit?: number
-	authorId?: string
+	authorIds?: string[]
 	linksTo?: string
+	tags?: string[]
 }
 
 export async function loadAllBlogPosts({
 	limit,
-	authorId,
+	authorIds,
 	linksTo,
+	tags,
 }: Options): Promise<Entries<BlogPost>> {
 	const args: Record<string, unknown> = {
 		content_type: 'blogPost',
 		order: ['-fields.published'],
 	}
-	if (authorId) {
-		args['fields.authors.sys.id'] = authorId
+	if (authorIds) {
+		args['fields.authors.sys.id[in]'] = authorIds
 	}
 	if (limit) {
 		args.limit = limit
 	}
 	if (linksTo) {
 		args.links_to_entry = linksTo
+	}
+	if (tags) {
+		args['metadata.tags.sys.id[in]'] = tags
 	}
 
 	const posts = await client.getEntries(args)

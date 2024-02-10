@@ -9,18 +9,21 @@
 	interface Props {
 		post: BlogPostPreview
 		small?: boolean
+		noImage?: boolean
 	}
 
-	let { post, small } = $props<Props>()
+	let { post, small, noImage } = $props<Props>()
 </script>
 
 <div class="blogPost" class:small>
-	<Image
-		class="BlogPostPreview-photo"
-		img={post.photo}
-		width={small ? 150 : 250}
-		height={small ? 150 : 250}
-	/>
+	{#if !noImage}
+		<Image
+			class="BlogPostPreview-photo"
+			img={post.photo}
+			width={small ? 150 : 250}
+			height={small ? 150 : 250}
+		/>
+	{/if}
 	<div class="right">
 		{#if small}
 			<h3>{post.title}</h3>

@@ -4,6 +4,7 @@
 	import Image from '$lib/components/Image.svelte'
 	import type { BlogPostView } from '$lib/data'
 	import RichText from '$lib/components/RichText.svelte'
+	import BlogPostPreview from '../../BlogPostPreview.svelte'
 
 	let { data } = $props<{ data: BlogPostView }>()
 </script>
@@ -24,16 +25,17 @@
 	</div>
 
 	<div class="sidebar">
-		<div class="sidebar-title">Hier entsteht eine Sidebar</div>
-		<div class="box">Was soll denn hier für Inhalt rein?</div>
-		<div class="box">Was soll denn hier für Inhalt rein?</div>
+		<div class="sidebar-title">Mehr interessante Beiträge</div>
+		{#each data.related as post}
+			<BlogPostPreview {post} small noImage />
+		{/each}
 	</div>
 </div>
 
 <style lang="scss">
 	.layout {
 		display: flex;
-		gap: 2rem;
+		gap: 4rem;
 
 		@media (max-width: 900px) {
 			flex-direction: column;
@@ -49,7 +51,7 @@
 	}
 
 	.sidebar {
-		width: 24rem;
+		width: 22rem;
 		margin: 2rem 0;
 		position: sticky;
 		top: 0;
@@ -57,20 +59,16 @@
 		@media (max-width: 900px) {
 			width: auto;
 		}
+
+		:global(h3) {
+			font-size: 1.5rem;
+		}
 	}
 
 	.sidebar-title {
-		font-size: 1.67rem;
+		font-size: 1.33rem;
 		font-weight: 600;
 		margin-bottom: 1em;
-	}
-
-	.box {
-		background-color: #ddd;
-		padding: 5rem 1.4rem;
-		margin: 1rem 0;
-		border-radius: 30px;
-		text-align: center;
 	}
 
 	:global(.BlogPost-photo) {

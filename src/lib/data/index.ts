@@ -18,6 +18,7 @@ export interface BlogPostView {
 	published: string
 	photo: Image
 	content: Document
+	related: BlogPostPreview[]
 }
 
 export interface BlogPostPreview {
