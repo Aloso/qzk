@@ -46,7 +46,7 @@
 <style lang="scss">
 	.blogPost {
 		display: flex;
-		gap: 2rem;
+		gap: 1rem 2rem;
 	}
 
 	:global(.BlogPostPreview-photo) {

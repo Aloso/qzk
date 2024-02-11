@@ -24,12 +24,14 @@
 		</section>
 	</div>
 
-	<div class="sidebar">
-		<div class="sidebar-title">Mehr interessante Beiträge</div>
-		{#each data.related as post}
-			<BlogPostPreview {post} small noImage />
-		{/each}
-	</div>
+	{#if data.related.length > 0}
+		<div class="sidebar">
+			<div class="sidebar-title">Mehr interessante Beiträge</div>
+			{#each data.related as post}
+				<BlogPostPreview {post} small noImage />
+			{/each}
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -37,7 +39,7 @@
 		display: flex;
 		gap: 4rem;
 
-		@media (max-width: 900px) {
+		@media (max-width: 1200px) {
 			flex-direction: column;
 		}
 	}
@@ -45,7 +47,7 @@
 	.mainbar {
 		width: 44rem;
 
-		@media (max-width: 900px) {
+		@media (max-width: 1200px) {
 			width: auto;
 		}
 	}
@@ -75,6 +77,7 @@
 		border-radius: 30px;
 		margin-bottom: 1rem;
 		width: 100%;
+		max-width: 44rem;
 		height: auto;
 	}
 
