@@ -6,6 +6,10 @@
 	import type { Navigations } from '$lib/data'
 
 	let { data } = $props<{ data: Navigations }>()
+
+	if (globalThis.location && globalThis.location.host === 'www.queereszentrumkassel.de') {
+		globalThis.location.replace(globalThis.location.href.replace(/www\./, ''))
+	}
 </script>
 
 <div class="app">
