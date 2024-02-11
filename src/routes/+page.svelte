@@ -52,7 +52,7 @@
 		position: sticky;
 		top: 0;
 
-		@media (max-width: 900px) {
+		@media (max-width: 1200px) {
 			width: auto;
 		}
 	}
@@ -65,5 +65,11 @@
 
 	section {
 		max-width: 44rem;
+	}
+
+	:global(#timely-iframe-embed-0) {
+		@media (min-width: 1200px) {
+			min-height: 400px;
+		}
 	}
 </style>
