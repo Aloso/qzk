@@ -57,70 +57,6 @@ function getFrame(name: string): Window | undefined {
 	return window.frames[name]
 }
 
-const embeddedButtonStyles = `
-.timely-embedded-fes-btn {
- color: #8089a7;
- background-color: transparent;
- padding: 5px;
- font-size: 14px;
- border-radius: 5px;
- border: 1px solid #8089a7;
- display: inline-block;
- font-family: Sans-serif;
- width: -webkit-fit-content;
- width: -moz-fit-content;
- width: fit-content;
- text-align: center;
- text-transform: uppercase;
- cursor: pointer;
-}
-`
-const iFrameStyles = `
-.timely-frame {
- display: block;
- position: relative;
- width: 100%; /* TODO: use vw units */
- border: none;
- margin: 0px auto;
- transition: none;
-}
-.timely-button-focus-init:focus {
- background-color: transparent !important;
- text-decoration: none !important;
- outline: none !important;
- color: transparent !important;
-}
-.timely-frame:not(.timely-slider) {
- height: 400px;
-}
-`
-const eventDetailsStyles = `
-.timely-iframe-popup-container {
- display: none;
- position: fixed;
- left: 0;
- top: 0;
- width: 100vw;
- z-index: 100000;
- text-align: center;
- overflow-y: auto;
- -webkit-overflow-scrolling: touch;
- background: rgba(0,0,0,0.5);
- scrollbar-width: none; /* Firefox and IE */
-}
-.timely-iframe-popup-container::-webkit-scrollbar {
- display: none; /* Chrome and Safari */
-}
-.timely-iframe-popup {
- width: 100vw;
- height: 100vh;
- margin: 0px auto;
- padding: 0px;
- border: none;
- overflow: hidden;
-}
-`
-
 function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, baseSRC: URL) {
 	return (triggeredEvent: MessageEvent) => {
 		if (!isValidOrigin(triggeredEvent)) {
@@ -310,12 +246,6 @@ export function run({ id, src }: RunArgs) {
 					</div>`,
 			null,
 		)
-
-		const styleElement = document.createElement('style')
-		styleElement.appendChild(
-			document.createTextNode(embeddedButtonStyles + iFrameStyles + eventDetailsStyles),
-		)
-		document.head.appendChild(styleElement)
 
 		window.addEventListener('message', messageEventListener(isValidOrigin, baseSRC), false)
 
