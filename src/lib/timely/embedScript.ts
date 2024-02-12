@@ -124,6 +124,8 @@ const eventDetailsStyles = `
 
 function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, baseSRC: URL) {
 	return (triggeredEvent: MessageEvent) => {
+		console.debug(triggeredEvent)
+
 		if (!isValidOrigin(triggeredEvent)) {
 			console.warn(`${baseSRC.origin} <--> ${triggeredEvent.origin}`)
 			return
