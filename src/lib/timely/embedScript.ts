@@ -150,7 +150,17 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 			handleEventDetailsOpen(message)
 		}
 
-		if (message.timelyClosePopup || message.timelyCloseSpaceDetails) {
+		if (message.timelyClosePopup) {
+			timelyClosePopup()
+			setTimeout(() => {
+				const scrollX = window.pageXOffset || document.documentElement.scrollLeft
+				const scrollY = window.pageYOffset || document.documentElement.scrollTop
+				document.getElementById('timely-iframe-container')!.focus()
+				window.scrollTo(scrollX, scrollY)
+			})
+		}
+
+		if (message.timelyCloseSpaceDetails) {
 			timelyClosePopup()
 		}
 
