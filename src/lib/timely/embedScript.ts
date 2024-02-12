@@ -1,15 +1,6 @@
 // NOTE: This script is taken as-is from Time.ly, converted to TypeScript, type errors fixed, then turned into a module.
 // However, it still fundamentally works the same, so I do not own this code.
 
-declare global {
-	interface Window {
-		timelyOpenPopup?: (iframeUrl: string) => void
-		timelyClosePopup?: () => void
-		timelyOpenEvent?: (iFrameUrl: string, iFrameName: string) => void
-		timelyPopupInitialized?: boolean
-	}
-}
-
 interface Message {
 	height?: number
 	timelyFrame: string
@@ -30,6 +21,36 @@ interface RunArgs {
 	id: string
 	src: string
 	insertBefore: Element
+}
+
+let timelyPopupInitialized = false
+
+const getIframePopupContainer = () =>
+	document.querySelector('.timely-iframe-popup-container') as HTMLDivElement | undefined
+const getIframe = (id: string) => document.querySelector(id) as HTMLIFrameElement | undefined
+const getIframePopup = () => getIframe('.timely-iframe-popup')
+
+function timelyOpenPopup(iFrameUrl: string) {
+	getIframePopupContainer()!.style.display = 'block'
+	getIframePopup()!.src = iFrameUrl
+
+	// Disable / Hide scrollbar of the main page when ED is open.
+	document.body.style.overflow = 'hidden'
+}
+
+function timelyOpenEvent(iFrameUrl: string, iFrameName: string) {
+	getIframe(iFrameName)!.src = iFrameUrl
+}
+
+function timelyClosePopup() {
+	getIframePopupContainer()!.style.display = 'none'
+	getIframePopup()!.src = 'about:blank' // Hide popup iFrame
+
+	/* Remove url fragment without causing page to jump */
+	history.pushState('', document.title, window.location.pathname + window.location.search)
+
+	// Restore the body overflow style
+	document.body.style.overflow = ''
 }
 
 function insertElement(str: string, element: Element | null) {
@@ -92,7 +113,6 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 		}
 
 		const message: Message = JSON.parse(JSON.stringify(triggeredEvent.data))
-		const iFrame = document.querySelector('.timely-frame:not(.timely-slider)') as HTMLIFrameElement
 
 		const messageTimelyFrame = document.getElementById(message.timelyFrame)
 		if (message.height && messageTimelyFrame && !message.timelyFrame.includes('-space-popup')) {
@@ -122,29 +142,12 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 			window.history.pushState({}, '', '#' + unescape(message.urlUpdates))
 		}
 
-		if (iFrame.id) {
-			if (message.timelyFilters) {
-				getFrame(iFrame.id)!.postMessage({ timelyFilters: message.timelyFilters }, '*')
-			}
-
-			if (message.timelyLoggedInUserData) {
-				getFrame(iFrame.id)!.postMessage(
-					{ timelyLoggedInUserData: message.timelyLoggedInUserData },
-					'*',
-				)
-			}
-
-			if (message.timelySignOut) {
-				getFrame(iFrame.id)!.postMessage({ timelySignOut: 1 }, '*')
-			}
-		}
-
 		if (message.timelySpaceDetailsUrl) {
 			const iFrameUrl = new URL(message.timelySpaceDetailsUrl)
 			iFrameUrl.searchParams.set('timely_id', message.timelyFrame + '-space-popup')
 
 			if (timelyIframePopup!.src !== iFrameUrl.href) {
-				window.timelyOpenPopup!(iFrameUrl.href)
+				timelyOpenPopup(iFrameUrl.href)
 
 				const fragmentMatcher = /^#space=[0-9]+?(\?popup=1)?$/gm
 				const isTimelyUrlFragment = fragmentMatcher.test(message.timelyUrlFragment)
@@ -159,18 +162,8 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 			handleEventDetailsOpen(message)
 		}
 
-		if (message.timelyClosePopup) {
-			window.timelyClosePopup!()
-			setTimeout(() => {
-				const scrollX = window.pageXOffset || document.documentElement.scrollLeft
-				const scrollY = window.pageYOffset || document.documentElement.scrollTop
-				document.getElementById('timely-iframe-container')!.focus()
-				window.scrollTo(scrollX, scrollY)
-			})
-		}
-
-		if (message.timelyCloseSpaceDetails) {
-			window.timelyClosePopup!()
+		if (message.timelyClosePopup || message.timelyCloseSpaceDetails) {
+			timelyClosePopup()
 		}
 
 		if (message.timelyFocusEvent) {
@@ -209,8 +202,8 @@ export function run({ id, src, insertBefore }: RunArgs) {
 	)
 
 	// Add common CSS and iframe for ED just once
-	if (!window.timelyPopupInitialized) {
-		window.timelyPopupInitialized = true
+	if (!timelyPopupInitialized) {
+		timelyPopupInitialized = true
 		insertElement(
 			`<div class="timely-iframe-popup-container" onclick="window.timelyClosePopup();">
 						<iframe class="timely-iframe-popup" src="about:blank" id="${id}-event-popup" name="${id}-event-popup"
@@ -247,37 +240,6 @@ export function run({ id, src, insertBefore }: RunArgs) {
 			},
 			false,
 		)
-
-		const getIframePopupContainer = () =>
-			document.querySelector('.timely-iframe-popup-container') as HTMLDivElement | undefined
-		const getIframe = (id: string) => document.querySelector(id) as HTMLIFrameElement | undefined
-		const getIframePopup = () => getIframe('.timely-iframe-popup')
-
-		// Open popup
-		window.timelyOpenPopup = function (iFrameUrl: string) {
-			getIframePopupContainer()!.style.display = 'block'
-			getIframePopup()!.src = iFrameUrl
-
-			// Disable / Hide scrollbar of the main page when ED is open.
-			document.body.style.overflow = 'hidden'
-		}
-
-		// Open event
-		window.timelyOpenEvent = function (iFrameUrl: string, iFrameName: string) {
-			getIframe(iFrameName)!.src = iFrameUrl
-		}
-
-		// Close popup
-		window.timelyClosePopup = function () {
-			getIframePopupContainer()!.style.display = 'none'
-			getIframePopup()!.src = 'about:blank' // Hide popup iFrame
-
-			/* Remove url fragment without causing page to jump */
-			history.pushState('', document.title, window.location.pathname + window.location.search)
-
-			// Restore the body overflow style
-			document.body.style.overflow = ''
-		}
 	}
 
 	const eventId = location.hash.match(/^#event=(\d+)(?=;instance|$)/)
@@ -341,17 +303,17 @@ function handleEventDetailsOpen(message: Message) {
 
 	if (iframePopup!.src !== iframeUrl.href) {
 		if (message.timelyDisplayPreference === 'popup') {
-			window.timelyOpenPopup!(iframeUrl.href)
+			timelyOpenPopup(iframeUrl.href)
 		} else if (message.timelyDisplayPreference === 'new_tab' && isTimelyUrlFragment) {
 			window.open(message.timelyUrlFragment, '_blank')
 			return
 		} else if (message.timelyDisplayPreference === 'same_page') {
-			window.timelyOpenEvent!(iframeUrl.href, message.timelyFrame)
+			timelyOpenEvent(iframeUrl.href, message.timelyFrame)
 			return
 		}
 
 		if (!('timelyDisplayPreference' in message)) {
-			window.timelyOpenPopup!(iframeUrl.href)
+			timelyOpenPopup(iframeUrl.href)
 		}
 
 		if (isTimelyUrlFragment) {
