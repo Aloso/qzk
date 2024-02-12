@@ -1,9 +1,25 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
-	import type { Item } from '$lib/contentful/types'
 	import type { StaticPage } from '$lib/data'
+	import * as timely from '$lib/timely/embedScript'
+	import { onMount } from 'svelte'
 
-	export let data: Item<StaticPage>
+	interface Props {
+		data: StaticPage
+	}
+
+	let { data } = $props<Props>()
+
+	let timelyNode = $state<HTMLElement>()
+
+	onMount(() => {
+		timely.run({
+			id: 'timely_script',
+			src: 'https://events.timely.fun/q9g7m151/?nofilters=1&lang=de-DE',
+			maxHeight: 0,
+			insertBefore: timelyNode!,
+		})
+	})
 </script>
 
 <svelte:head>
@@ -13,18 +29,12 @@
 
 <div class="layout">
 	<section class="mainbar">
-		<RichText data={data.fields.content} width={900} />
+		<RichText data={data.content} width={900} />
 	</section>
 
 	<div class="sidebar">
 		<div class="sidebar-title">Veranstaltungen</div>
-		<script
-			id="timely_script"
-			class="timely-script"
-			src="https://events.timely.fun/embed.js"
-			data-src="https://events.timely.fun/q9g7m151/?nofilters=1&lang=de-DE"
-			data-max-height="0"
-		></script>
+		<div bind:this={timelyNode} />
 	</div>
 </div>
 
