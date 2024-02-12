@@ -124,12 +124,12 @@ const eventDetailsStyles = `
 
 function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, baseSRC: URL) {
 	return (triggeredEvent: MessageEvent) => {
-		console.debug(triggeredEvent)
-
 		if (!isValidOrigin(triggeredEvent)) {
 			console.warn(`${baseSRC.origin} <--> ${triggeredEvent.origin}`)
 			return
 		}
+
+		console.debug(triggeredEvent.origin, triggeredEvent.data)
 
 		const message: Message = JSON.parse(JSON.stringify(triggeredEvent.data))
 		const iFrame = document.querySelector('.timely-frame:not(.timely-slider)') as HTMLIFrameElement
