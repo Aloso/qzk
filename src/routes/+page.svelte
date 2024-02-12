@@ -16,7 +16,6 @@
 		timely.run({
 			id: 'timely_script',
 			src: 'https://events.timely.fun/q9g7m151/?nofilters=1&lang=de-DE',
-			insertBefore: timelyNode!,
 		})
 	})
 </script>
@@ -33,7 +32,24 @@
 
 	<div class="sidebar">
 		<div class="sidebar-title">Veranstaltungen</div>
-		<div bind:this={timelyNode} />
+		<button
+			id="timely-iframe-container"
+			class="timely-button-focus-init"
+			title=" "
+			type="button"
+			style="position: absolute !important; border: transparent !important; background-color: transparent !important; color: transparent !important;"
+			>Focus Button</button
+		>
+		<iframe
+			id="timely_script"
+			name="timely_script"
+			title=""
+			sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads"
+			scrolling="no"
+			src="https://events.timely.fun/q9g7m151/?nofilters=1&amp;lang=de-DE&amp;timely_id=timely_script"
+			class="timely-frame"
+			style="height: calc(300px);"
+		></iframe>
 	</div>
 </div>
 

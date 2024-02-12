@@ -29,7 +29,6 @@ interface Message {
 interface RunArgs {
 	id: string
 	src: string
-	insertBefore: Element
 }
 
 function insertElement(str: string, element: Element | null) {
@@ -251,7 +250,7 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 	}
 }
 
-export function run({ id, src, insertBefore }: RunArgs) {
+export function run({ id, src }: RunArgs) {
 	const paramsRegex = {
 		// Format: YYYY-MM-DD
 		startDate: /start_date=(\d{4}-\d\d-\d\d)/,
@@ -298,18 +297,6 @@ export function run({ id, src, insertBefore }: RunArgs) {
 
 	src = clearFilterParams(baseSRC.href, paramsRegex)
 	src += addFilterParams(paramsRegex)
-
-	// Add main calendar frame
-	// TODO: remove use of scrolling attribute, deprecated attribute
-	insertElement(
-		`<button id="timely-iframe-container" class="timely-button-focus-init"
-			title=" " type="button"
-			style="position: absolute !important; border: transparent !important; background-color: transparent !important; color: transparent !important;">Focus Button</button>
-		<iframe id="${id}" name="${id}"
-			sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads"
-			scrolling="${window.top === window.self ? 'no' : 'yes'}" src="${src}" class="timely-frame"></iframe>`,
-		insertBefore,
-	)
 
 	// Add common CSS and iframe for ED just once
 	if (!window.timelyPopupInitialized) {
