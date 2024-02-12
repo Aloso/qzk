@@ -1,6 +1,17 @@
 // NOTE: This script is taken as-is from Time.ly, converted to TypeScript, type errors fixed, then turned into a module.
 // However, it still fundamentally works the same, so I do not own this code.
 
+import { clearFilterParamsIn, hashFiltersToSearchString } from './urlFilters'
+
+declare global {
+	interface Window {
+		timelyOpenPopup?: (iframeUrl: string) => void
+		timelyClosePopup?: () => void
+		timelyOpenEvent?: (iFrameUrl: string, iFrameName: string) => void
+		timelyPopupInitialized?: boolean
+	}
+}
+
 interface Message {
 	height?: number
 	timelyFrame: string
@@ -22,8 +33,6 @@ interface RunArgs {
 	src: string
 	insertBefore: Element
 }
-
-let timelyPopupInitialized = false
 
 const getIframePopupContainer = () =>
 	document.querySelector('.timely-iframe-popup-container') as HTMLDivElement | undefined
@@ -78,27 +87,6 @@ const paramsRegex = [
 	// Format: 123-12345 or 123-12345,222-222 (event id - instance id)
 	/ids=((\d+-\d+),?)+/,
 ]
-
-function clearFilterParamsIn(src: string, hash: string, regExps: RegExp[]) {
-	for (const regExp of regExps) {
-		if (regExp.test(hash) && regExp.test(src)) {
-			src = src.replace(regExp, '')
-		}
-	}
-	return src
-}
-
-function hashFiltersToSearchString(hash: string, regExps: RegExp[]) {
-	let params = ''
-
-	for (const regExp of regExps) {
-		const filterMatch = hash.match(regExp)
-		if (filterMatch) {
-			params += '&' + filterMatch[0]
-		}
-	}
-	return params
-}
 
 function getFrame(name: string): Window | undefined {
 	// @ts-expect-error The type definitions for this are incomplete
@@ -202,8 +190,8 @@ export function run({ id, src, insertBefore }: RunArgs) {
 	)
 
 	// Add common CSS and iframe for ED just once
-	if (!timelyPopupInitialized) {
-		timelyPopupInitialized = true
+	if (!window.timelyPopupInitialized) {
+		window.timelyPopupInitialized = true
 		insertElement(
 			`<div class="timely-iframe-popup-container" onclick="window.timelyClosePopup();">
 						<iframe class="timely-iframe-popup" src="about:blank" id="${id}-event-popup" name="${id}-event-popup"
@@ -211,6 +199,10 @@ export function run({ id, src, insertBefore }: RunArgs) {
 					</div>`,
 			null,
 		)
+
+		window.timelyOpenPopup = timelyOpenPopup
+		window.timelyOpenEvent = timelyOpenEvent
+		window.timelyClosePopup = timelyClosePopup
 
 		window.addEventListener('message', messageEventListener(isValidOrigin, baseSRC), false)
 
