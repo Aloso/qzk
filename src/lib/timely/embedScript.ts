@@ -1,8 +1,6 @@
 // NOTE: This script is taken as-is from Time.ly, converted to TypeScript, type errors fixed, then turned into a module.
 // However, it still fundamentally works the same, so I do not own this code.
 
-import { clearFilterParamsIn, hashFiltersToSearchString } from './urlFilters'
-
 declare global {
 	interface Window {
 		timelyOpenPopup?: (iframeUrl: string) => void
@@ -45,25 +43,84 @@ function insertElement(str: string, element: Element | null) {
 	}
 }
 
-const paramsRegex = [
-	// Format: YYYY-MM-DD
-	/start_date=(\d{4}-\d\d-\d\d)/,
-	/end_date=(\d{4}-\d\d-\d\d)/,
-	// Format: 123 or 123,124,125
-	/categories=((\d+),?)+/,
-	/tags=((\d+),?)+/,
-	/venues=((\d+),?)+/,
-	/organizers=((\d+),?)+/,
-	/filter_groups=((\d+),?)+/,
-	/filter_groups_?\d+?=((\d+),?)+/,
-	// Format: 123-12345 or 123-12345,222-222 (event id - instance id)
-	/ids=((\d+-\d+),?)+/,
-]
+function clearFilterParams(src: string, paramsRegex: Record<string, RegExp>) {
+	for (const filter in paramsRegex) {
+		if (location.hash.match(paramsRegex[filter]) && src.match(paramsRegex[filter])) {
+			src = src.replace(paramsRegex[filter], '')
+		}
+	}
+
+	return src
+}
 
 function getFrame(name: string): Window | undefined {
 	// @ts-expect-error The type definitions for this are incomplete
 	return window.frames[name]
 }
+
+const embeddedButtonStyles = `
+.timely-embedded-fes-btn {
+ color: #8089a7;
+ background-color: transparent;
+ padding: 5px;
+ font-size: 14px;
+ border-radius: 5px;
+ border: 1px solid #8089a7;
+ display: inline-block;
+ font-family: Sans-serif;
+ width: -webkit-fit-content;
+ width: -moz-fit-content;
+ width: fit-content;
+ text-align: center;
+ text-transform: uppercase;
+ cursor: pointer;
+}
+`
+const iFrameStyles = `
+.timely-frame {
+ display: block;
+ position: relative;
+ width: 100%; /* TODO: use vw units */
+ border: none;
+ margin: 0px auto;
+ transition: none;
+}
+.timely-button-focus-init:focus {
+ background-color: transparent !important;
+ text-decoration: none !important;
+ outline: none !important;
+ color: transparent !important;
+}
+.timely-frame:not(.timely-slider) {
+ height: 400px;
+}
+`
+const eventDetailsStyles = `
+.timely-iframe-popup-container {
+ display: none;
+ position: fixed;
+ left: 0;
+ top: 0;
+ width: 100vw;
+ z-index: 100000;
+ text-align: center;
+ overflow-y: auto;
+ -webkit-overflow-scrolling: touch;
+ background: rgba(0,0,0,0.5);
+ scrollbar-width: none; /* Firefox and IE */
+}
+.timely-iframe-popup-container::-webkit-scrollbar {
+ display: none; /* Chrome and Safari */
+}
+.timely-iframe-popup {
+ width: 100vw;
+ height: 100vh;
+ margin: 0px auto;
+ padding: 0px;
+ border: none;
+ overflow: hidden;
+}
+`
 
 function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, baseSRC: URL) {
 	return (triggeredEvent: MessageEvent) => {
@@ -137,7 +194,34 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 		}
 
 		if (message.timelyEventDetailsUrl) {
-			handleEventDetailsOpen(message)
+			const fragmentMatcher = /^#event=[a-z0-9-_]+(;instance=[0-9]{14})?(\?popup=1)?$/gm
+			const isTimelyUrlFragment = fragmentMatcher.test(message.timelyUrlFragment)
+			const iFrameUrl =
+				message.timelyEventDetailsUrl +
+				(message.timelyEventDetailsUrl.indexOf('?') > -1 ? '&' : '?') +
+				'timely_id=' +
+				message.timelyFrame +
+				'-event-popup'
+
+			if (timelyIframePopup!.src !== iFrameUrl) {
+				if (message.timelyDisplayPreference === 'popup') {
+					window.timelyOpenPopup!(iFrameUrl)
+				} else if (message.timelyDisplayPreference === 'new_tab' && isTimelyUrlFragment) {
+					window.open(message.timelyUrlFragment, '_blank')
+					return
+				} else if (message.timelyDisplayPreference === 'same_page') {
+					window.timelyOpenEvent!(iFrameUrl, message.timelyFrame)
+					return
+				}
+
+				if (!('timelyDisplayPreference' in message)) {
+					window.timelyOpenPopup!(iFrameUrl)
+				}
+
+				if (isTimelyUrlFragment) {
+					window.history.pushState({}, '', location.pathname + unescape(message.timelyUrlFragment))
+				}
+			}
 		}
 
 		if (message.timelyClosePopup) {
@@ -166,6 +250,42 @@ function messageEventListener(isValidOrigin: (event: MessageEvent) => boolean, b
 }
 
 export function run({ id, src, insertBefore }: RunArgs) {
+	const paramsRegex = {
+		// Format: YYYY-MM-DD
+		startDate: /start_date=(\d{4}-\d\d-\d\d)/,
+		endDate: /end_date=(\d{4}-\d\d-\d\d)/,
+		// Format: 123 or 123,124,125
+		categories: /categories=((\d+),?)+/,
+		tags: /tags=((\d+),?)+/,
+		venues: /venues=((\d+),?)+/,
+		organizers: /organizers=((\d+),?)+/,
+		filterGroups: /filter_groups=((\d+),?)+/,
+		filterGroupsByIds: /filter_groups_?\d+?=((\d+),?)+/,
+		// Format: 123-12345 or 123-12345,222-222 (event id - instance id)
+		ids: /ids=((\d+-\d+),?)+/,
+	}
+
+	function addFilterParams(paramsRegex: Record<string, RegExp>) {
+		let params = ''
+		const filters: Record<string, RegExpMatchArray | null> = {}
+
+		for (const filter in paramsRegex) {
+			filters[filter] = location.hash.match(paramsRegex[filter])
+		}
+
+		for (const filter in filters) {
+			if (location.hash.match(paramsRegex[filter]) && src.match(paramsRegex[filter])) {
+				src = src.replace(paramsRegex[filter], '')
+			}
+
+			const filterMatch = filters[filter]
+			if (filterMatch && filterMatch.length) {
+				params += '&' + filterMatch[0]
+			}
+		}
+		return params
+	}
+
 	const clientLocation = new URL(location.href)
 	const baseSRC = new URL(src)
 	baseSRC.searchParams.set('timely_id', id)
@@ -174,31 +294,39 @@ export function run({ id, src, insertBefore }: RunArgs) {
 		return clientLocation.origin == event.origin || baseSRC.origin == event.origin
 	}
 
-	src =
-		clearFilterParamsIn(baseSRC.href, location.hash, paramsRegex) +
-		hashFiltersToSearchString(location.hash, paramsRegex)
+	src = clearFilterParams(baseSRC.href, paramsRegex)
+	src += addFilterParams(paramsRegex)
 
 	// Add main calendar frame
 	// TODO: remove use of scrolling attribute, deprecated attribute
 	insertElement(
-		`<button id="timely-iframe-container" class="timely-button-focus-init" type="button"
+		`<button id="timely-iframe-container" class="timely-button-focus-init"
+			title=" " type="button"
 			style="position: absolute !important; border: transparent !important; background-color: transparent !important; color: transparent !important;">Focus Button</button>
 		<iframe id="${id}" name="${id}"
 			sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads"
-			src="${src}" class="timely-frame"></iframe>`,
+			scrolling="${window.top === window.self ? 'no' : 'yes'}" src="${src}" class="timely-frame"></iframe>`,
 		insertBefore,
 	)
 
 	// Add common CSS and iframe for ED just once
 	if (!window.timelyPopupInitialized) {
 		window.timelyPopupInitialized = true
+		const eventiFrameName = id + '-event-popup'
 		insertElement(
 			`<div class="timely-iframe-popup-container" onclick="window.timelyClosePopup();">
-						<iframe class="timely-iframe-popup" src="about:blank" id="${id}-event-popup" name="${id}-event-popup"
+						<iframe class="timely-iframe-popup" src="about:blank" id="${eventiFrameName}"
+							name="${eventiFrameName}" title="${eventiFrameName}"
 							sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads"></iframe>
 					</div>`,
 			null,
 		)
+
+		const styleElement = document.createElement('style')
+		styleElement.appendChild(
+			document.createTextNode(embeddedButtonStyles + iFrameStyles + eventDetailsStyles),
+		)
+		document.head.appendChild(styleElement)
 
 		window.addEventListener('message', messageEventListener(isValidOrigin, baseSRC), false)
 
@@ -304,39 +432,5 @@ export function run({ id, src, insertBefore }: RunArgs) {
 				}
 			})
 		}, 500)
-	}
-}
-
-function handleEventDetailsOpen(message: Message) {
-	if (!message.timelyEventDetailsUrl) return
-
-	const fragmentMatcher = /^#event=[a-z0-9-_]+(;instance=[0-9]{14})?(\?popup=1)?$/gm
-	const isTimelyUrlFragment = fragmentMatcher.test(message.timelyUrlFragment)
-
-	const iframeUrl = new URL(message.timelyEventDetailsUrl)
-	iframeUrl.searchParams.set('timely_id', `${message.timelyFrame}-event-popup`)
-
-	const iframePopup = document.querySelector('.timely-iframe-popup') as
-		| HTMLIFrameElement
-		| undefined
-
-	if (iframePopup!.src !== iframeUrl.href) {
-		if (message.timelyDisplayPreference === 'popup') {
-			window.timelyOpenPopup!(iframeUrl.href)
-		} else if (message.timelyDisplayPreference === 'new_tab' && isTimelyUrlFragment) {
-			window.open(message.timelyUrlFragment, '_blank')
-			return
-		} else if (message.timelyDisplayPreference === 'same_page') {
-			window.timelyOpenEvent!(iframeUrl.href, message.timelyFrame)
-			return
-		}
-
-		if (!('timelyDisplayPreference' in message)) {
-			window.timelyOpenPopup!(iframeUrl.href)
-		}
-
-		if (isTimelyUrlFragment) {
-			window.history.pushState({}, '', location.pathname + unescape(message.timelyUrlFragment))
-		}
 	}
 }
