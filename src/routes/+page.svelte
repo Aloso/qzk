@@ -16,7 +16,6 @@
 		timely.run({
 			id: 'timely_script',
 			src: 'https://events.timely.fun/q9g7m151/?nofilters=1&lang=de-DE',
-			maxHeight: 0,
 			insertBefore: timelyNode!,
 		})
 	})
