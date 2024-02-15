@@ -8,6 +8,7 @@
 	import { deleteDraft, editDraft, fetchDraft, submitDraft } from '$lib/events/draftApi'
 	import type { Event } from '$lib/events/types'
 	import { goto } from '$app/navigation'
+	import { createSubmittedDrafts } from '../../lib/hooks/createSubmittedDrafts.svelte'
 
 	let { data } = $props<{ data: StaticPage }>()
 
@@ -36,32 +37,44 @@
 	let eventKey = $state<string>()
 	let isMissing = $state(false)
 	let error = $state<string>()
-	let createdDraftKeys = $state<string[]>([])
-
-	$effect(() => {
-		localStorage.setItem('createdDraftKeys', JSON.stringify(createdDraftKeys))
-	})
+	const submittedDrafts = createSubmittedDrafts()
 
 	onMount(() => {
 		const key = new URL(location.href).searchParams.get('key')
 		if (key) {
-			eventKey = key
 			loadDraftEvent(key)
-		}
-
-		const lsDraftKeys = localStorage.getItem('createdDraftKeys')
-		if (lsDraftKeys) {
-			createdDraftKeys = JSON.parse(lsDraftKeys)
 		}
 	})
 
 	async function loadDraftEvent(key: string) {
+		eventKey = key
 		isMissing = false
 		const draft = await fetchDraft(key)
 		if (draft === null) {
 			isMissing = true
-			createdDraftKeys = createdDraftKeys.filter((k) => k !== key)
-			return
+			submittedDrafts.remove(key)
+		} else {
+			defaults = {
+				title: draft.title,
+				description: draft.description,
+				startDate: draft.time.start.split('T')[0],
+				startTime: draft.time.start.split('T')[1] ?? '',
+				endDate: draft.time.end?.split('T')[0] ?? '',
+				endTime: draft.time.end?.split('T')[1] ?? '',
+				wholeDay: !draft.time.start.includes('T'),
+				placeType: draft.place.room ? 'QZ' : draft.place.type,
+				placeRoom: draft.place.room,
+				placeName: draft.place.name,
+				placeAddress: draft.place.address ?? '',
+				organizerName: draft.organizer?.name ?? '',
+				organizerEmail: draft.organizer?.email ?? '',
+				organizerPhone: draft.organizer?.phone ?? '',
+				organizerWebsite: draft.organizer?.website ?? '',
+				website: draft.website ?? '',
+				pictureUrl: draft.pictureUrl ?? '',
+				yourName: draft.submitter.name,
+				yourEmail: draft.submitter.email,
+			}
 		}
 	}
 
@@ -76,8 +89,9 @@
 				}
 			} else {
 				const { key } = await submitDraft(event)
-				createdDraftKeys = [...createdDraftKeys, key]
+				submittedDrafts.add(key, `${new Date().toLocaleString()} - ${event.title}`)
 				goto(`/planen?key=${encodeURIComponent(key)}`)
+				loadDraftEvent(key)
 			}
 		} catch (e) {
 			console.error(e)
@@ -91,30 +105,34 @@
 		if (confirm('Bist du sicher?')) {
 			if (await deleteDraft(eventKey!)) {
 				goto('/planen')
+				eventKey = undefined
+				isMissing = false
 			} else {
 				error = 'Der Entwurf konnte nicht gelöscht werden. Vielleicht wurde er bereits akzeptiert!'
 				isMissing = true
-				createdDraftKeys = createdDraftKeys.filter((k) => k !== eventKey)
 			}
+			submittedDrafts.remove(eventKey!)
 		}
 	}
 </script>
 
 <StaticPageHeader {...data} />
 
-<section>
-	<RichText data={data.content} width={900} />
-</section>
-
-<hr />
-
-{#if createdDraftKeys.length}
-	<h2>Eingereichte Veranstaltungen</h2>
+{#if submittedDrafts.items.length}
+	<h1>Eingereichte Veranstaltungen</h1>
 	<ul>
-		{#each createdDraftKeys as draftKey}
-			<li><a href="/planen?key={encodeURIComponent(draftKey)}">{draftKey}</a></li>
+		{#each submittedDrafts.items as { key, name }}
+			<li class:active={key === eventKey}>
+				<a href="/planen?key={encodeURIComponent(key)}">{name}</a>
+			</li>
 		{/each}
 	</ul>
+
+	<hr />
+{:else}
+	<section>
+		<RichText data={data.content} width={900} />
+	</section>
 
 	<hr />
 {/if}
@@ -143,8 +161,17 @@
 	{error}
 />
 
-<style>
+<style lang="scss">
 	.error {
 		color: #ad1515;
+	}
+
+	.active {
+		font-weight: bold;
+
+		a {
+			text-decoration: none;
+			color: black;
+		}
 	}
 </style>

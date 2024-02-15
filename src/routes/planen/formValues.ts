@@ -9,7 +9,7 @@ export interface FormValues {
 	wholeDay: boolean
 
 	placeType: 'QZ' | 'PHYSICAL' | 'ONLINE'
-	placeRoom: undefined | 'room 1' | 'room 2' | 'room3'
+	placeRoom: undefined | string
 	placeName: string
 	placeAddress: string
 

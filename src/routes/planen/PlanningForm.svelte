@@ -47,7 +47,7 @@
 
 	// place
 	let placeType = $state<'QZ' | 'PHYSICAL' | 'ONLINE'>('QZ')
-	let placeRoom = $state<'room 1' | 'room 2' | 'room3'>()
+	let placeRoom = $state<string>()
 	let placeName = $state('')
 	let placeAddress = $state('')
 
