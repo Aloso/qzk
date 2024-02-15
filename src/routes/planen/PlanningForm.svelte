@@ -1,7 +1,38 @@
 <script lang="ts">
-	import { submitDraft } from '$lib/events/submitDraft'
 	import type { Event } from '$lib/events/types'
 	import { onMount } from 'svelte'
+	import type { FormValues } from './formValues'
+
+	interface Props {
+		defaults: FormValues
+		onSubmit: (event: Event) => void
+		onDelete?: () => void
+		error?: string
+	}
+
+	let { defaults, onSubmit, onDelete, error } = $props<Props>()
+
+	$effect(() => {
+		title = defaults.title
+		description = defaults.description
+		startDate = defaults.startDate
+		startTime = defaults.startTime
+		endDate = defaults.endDate
+		endTime = defaults.endTime
+		wholeDay = defaults.wholeDay
+		placeType = defaults.placeType
+		placeRoom = defaults.placeRoom
+		placeName = defaults.placeName
+		placeAddress = defaults.placeAddress
+		organizerName = defaults.organizerName
+		organizerEmail = defaults.organizerEmail
+		organizerPhone = defaults.organizerPhone
+		organizerWebsite = defaults.organizerWebsite
+		website = defaults.website
+		pictureUrl = defaults.pictureUrl
+		yourName = defaults.yourName
+		yourEmail = defaults.yourEmail
+	})
 
 	// topic
 	let title = $state('')
@@ -72,7 +103,7 @@
 	function submitForm() {
 		localStorage.setItem('submitterData', JSON.stringify({ name: yourName, email: yourEmail }))
 
-		const obj: Event = {
+		const event: Event = {
 			title,
 			description,
 			time: {
@@ -111,16 +142,7 @@
 				email: yourEmail,
 			},
 		}
-		actualSubmit(obj)
-	}
-
-	async function actualSubmit(event: Event) {
-		try {
-			const { key } = await submitDraft(event)
-			console.log(key)
-		} catch (error) {
-			alert(error)
-		}
+		onSubmit(event)
 	}
 </script>
 
@@ -228,6 +250,16 @@
 	</label>
 
 	<button type="submit">Absenden</button>
+
+	{#if onDelete}
+		<button class="delete-button" on:click|preventDefault|stopPropagation={onDelete}>
+			Löschen
+		</button>
+	{/if}
+
+	{#if error}
+		<p class="error">{error}</p>
+	{/if}
 </form>
 
 <style lang="scss">
@@ -333,7 +365,7 @@
 		line-height: 100%;
 	}
 
-	button[type='submit'] {
+	button {
 		background-color: var(--color-theme);
 		border: none;
 		color: white;
@@ -348,8 +380,21 @@
 		}
 	}
 
+	.delete-button {
+		background-color: darkred;
+
+		&:hover,
+		&:focus {
+			background-color: #ab0a0a;
+		}
+	}
+
 	p {
 		margin: 1rem 0;
 		font-size: 93%;
+	}
+
+	.error {
+		color: #aa0b0b;
 	}
 </style>

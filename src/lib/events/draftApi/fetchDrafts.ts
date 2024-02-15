@@ -1,5 +1,5 @@
-import { authorizedHeaders, type Auth } from '.'
-import type { DraftData } from './types'
+import { authorizedHeaders, type Auth } from '..'
+import type { DraftData } from '../types'
 
 export async function fetchDrafts(auth: Auth, start?: number, limit?: number): Promise<DraftData> {
 	const url = new URL('https://events.queereszentrumkassel.de/drafts')
