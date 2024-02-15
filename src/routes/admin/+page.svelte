@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { fetchDrafts } from '$lib/events/draftApi'
+	import { fetchAllDrafts } from '$lib/events/draftApi'
 	import { onMount } from 'svelte'
 
 	let username = $state('')
@@ -17,7 +17,7 @@
 
 	async function actualSubmit(username: string, password: string) {
 		try {
-			await fetchDrafts({ username, password }, 0, 1)
+			await fetchAllDrafts({ username, password }, 0, 1)
 			goto('/admin/events')
 		} catch {
 			loginFailed = true

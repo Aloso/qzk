@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fetchDrafts } from '$lib/events/draftApi'
+	import { fetchAllDrafts } from '$lib/events/draftApi'
 	import type { DraftData, Event } from '$lib/events/types'
 	import { redirect } from '@sveltejs/kit'
 
@@ -13,7 +13,7 @@
 		const credentials = localStorage.getItem('credentials')
 		if (credentials == null) redirect(307, '/admin')
 
-		const response = fetchDrafts(JSON.parse(credentials), page * pageSize, pageSize)
+		const response = fetchAllDrafts(JSON.parse(credentials), page * pageSize, pageSize)
 		handleResponse(response)
 	})
 

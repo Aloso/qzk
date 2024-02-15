@@ -1,5 +1,5 @@
 export async function deleteDraft(key: string): Promise<boolean> {
-	const url = new URL('https://events.queereszentrumkassel.de/drafts')
+	const url = new URL('https://events.queereszentrumkassel.de/draft')
 	url.searchParams.set('key', key)
 	const response = await fetch(url, { method: 'DELETE' })
 

@@ -1,7 +1,7 @@
 import type { Event } from '../types'
 
 export async function submitDraft(draft: Event): Promise<{ key: string }> {
-	const response = await fetch('https://events.queereszentrumkassel.de/drafts', {
+	const response = await fetch('https://events.queereszentrumkassel.de/draft', {
 		method: 'POST',
 		body: JSON.stringify(draft),
 	})
