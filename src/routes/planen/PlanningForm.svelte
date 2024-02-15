@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { submitDraft } from '$lib/events/submitDraft'
 	import type { Event } from '$lib/events/types'
+	import { onMount } from 'svelte'
 
 	// topic
 	let title = $state('')
@@ -12,7 +13,6 @@
 	let endDate = $state('')
 	let endTime = $state('')
 	let wholeDay = $state(false)
-	let noEnd = $state(false)
 
 	// place
 	let placeType = $state<'QZ' | 'PHYSICAL' | 'ONLINE'>('QZ')
@@ -34,6 +34,18 @@
 	let yourName = $state('')
 	let yourEmail = $state('')
 
+	let formLoaded = $state(false)
+
+	onMount(() => {
+		formLoaded = true
+		const submitterData = localStorage.getItem('submitterData')
+		if (submitterData) {
+			const { name, email } = JSON.parse(submitterData)
+			yourName = name
+			yourEmail = email
+		}
+	})
+
 	$effect(() => {
 		if (startDate) {
 			const start = new Date(startTime ? `${startDate}T${startTime}` : startDate)
@@ -48,13 +60,28 @@
 		}
 	})
 
+	$effect(() => {
+		if (organizerName && !yourName) {
+			yourName = organizerName
+		}
+		if (organizerEmail && !yourEmail) {
+			yourEmail = organizerEmail
+		}
+	})
+
 	function submitForm() {
+		localStorage.setItem('submitterData', JSON.stringify({ name: yourName, email: yourEmail }))
+
 		const obj: Event = {
 			title,
 			description,
 			time: {
 				start: wholeDay ? startDate : `${startDate}T${startTime}`,
-				end: noEnd ? undefined : wholeDay ? endDate : `${endDate}T${endTime}`,
+				end: wholeDay
+					? endDate || undefined
+					: endTime === ''
+						? undefined
+						: `${startDate}T${endTime}`,
 			},
 			place: {
 				name:
@@ -79,6 +106,10 @@
 			website: website === '' ? undefined : website,
 			pictureUrl: pictureUrl === '' ? undefined : pictureUrl,
 			tags: [],
+			submitter: {
+				name: yourName,
+				email: yourEmail,
+			},
 		}
 		actualSubmit(obj)
 	}
@@ -93,37 +124,44 @@
 	}
 </script>
 
-<form on:submit|preventDefault={submitForm}>
+{#if !formLoaded}
+	<form>Wird geladen...</form>
+{/if}
+
+<form on:submit|preventDefault={submitForm} class:hidden={!formLoaded}>
 	Mit einem <span class="red-star">*</span> markierte Felder sind verpflichtend.
 
 	<div class="section-title">Name und Beschreibung</div>
 	<label>
-		<em class="required">Name</em>
-		<input type="text" bind:value={title} />
+		<em class="full-width required">Name der Veranstaltung</em>
+		<input class="full-width" type="text" bind:value={title} required />
 	</label>
 	<label>
-		<em class="required">Beschreibung</em>
-		<textarea bind:value={description} rows="6" />
+		<em class="full-width required">Beschreibung</em>
+		<textarea class="full-width" bind:value={description} rows="6" required />
 	</label>
 
 	<div class="section-title">Zeit</div>
-	<label for="_startDate">
-		<em class="required">Beginn</em>
-		<input id="_startDate" type="date" bind:value={startDate} />
-		<input type="time" bind:value={startTime} class:hidden={wholeDay} />
-	</label>
-	<label>
-		<em class="one-line">Ganztägig</em>
+	<label class="checkbox-label">
 		<input type="checkbox" bind:checked={wholeDay} />
-	</label>
-	<label for="_endDate" class:hidden={noEnd}>
-		<em class="required">Ende</em>
-		<input id="_endDate" type="date" bind:value={endDate} />
-		<input type="time" bind:value={endTime} class:hidden={wholeDay} />
+		Ganztagig bzw. über mehrere Tage
 	</label>
 	<label>
-		<em class="one-line">Kein Ende angeben</em>
-		<input type="checkbox" bind:checked={noEnd} />
+		<em class="required">{wholeDay ? 'Startdatum' : 'Datum'}</em>
+		<input type="date" bind:value={startDate} required />
+	</label>
+	<label class:hidden={!wholeDay}>
+		<em class="required">Enddatum</em>
+		<input type="date" bind:value={endDate} required={wholeDay} />
+	</label>
+	<label class:hidden={wholeDay}>
+		<em class="required">Beginn</em>
+		<input type="time" bind:value={startTime} required={!wholeDay} />
+	</label>
+	<label class:hidden={wholeDay}>
+		<em>Ende</em>
+		<input type="time" bind:value={endTime} />
+		<span class="more-info">(kann leer gelassen werden)</span>
 	</label>
 
 	<div class="section-title">Ort</div>
@@ -138,7 +176,7 @@
 	</label>
 	<label class:hidden={placeType !== 'QZ'}>
 		<em class="required">Raum</em>
-		<select bind:value={placeRoom}>
+		<select bind:value={placeRoom} required={placeType === 'QZ'}>
 			<option value={undefined}>Bitte wählen...</option>
 			<option value="*innen-Raum">*innen-Raum</option>
 			<option value="Gelber Raum">Gelber Raum</option>
@@ -160,13 +198,11 @@
 	</label>
 
 	<div class="section-title">Organisator*innen</div>
+	<p>Freiwillige Angaben – Kontaktdaten der organisierenden Person/Gruppe</p>
 	<label>
-		<em>Name</em>
-		<input type="text" bind:value={organizerName} placeholder="Person oder Gruppe" />
+		<em>Name(n)</em>
+		<input type="text" bind:value={organizerName} />
 	</label>
-	{#if organizerName}
-		<div style="margin: 1rem 0">Gib Kontaktdaten für die Teilnehmer*innen an (freiwillig):</div>
-	{/if}
 	<label class:hidden={organizerName === ''}>
 		<em>E-Mail</em>
 		<input type="text" bind:value={organizerEmail} />
@@ -180,18 +216,8 @@
 		<input type="text" bind:value={organizerWebsite} />
 	</label>
 
-	<div class="section-title">Sonstiges</div>
-	<label>
-		<em>URL für Titelbild</em>
-		<input type="text" bind:value={pictureUrl} />
-	</label>
-	<label>
-		<em>Veranstaltungs-Website</em>
-		<input type="text" bind:value={website} />
-	</label>
-
-	<div class="section-title">Kontakt</div>
-	<div style="margin: 1rem 0">Diese Daten werden nicht veröffentlicht.</div>
+	<div class="section-title">Persönliche Infos</div>
+	<p>Diese Daten werden nicht veröffentlicht.</p>
 	<label>
 		<em class="required">Dein Name</em>
 		<input type="text" bind:value={yourName} />
@@ -231,11 +257,12 @@
 		border: 2px solid #aaa;
 		font: inherit;
 		font-size: 95%;
-		margin: 0.5rem 0;
+		margin: 0;
 		padding: 10px 12px;
 		border-radius: 15px;
 		min-width: 50px;
 		transition: border-color 0.2s;
+		vertical-align: top;
 
 		&:hover,
 		&:focus {
@@ -248,40 +275,38 @@
 	textarea,
 	input[type='text'] {
 		box-sizing: border-box;
-		width: calc(100% - 190px);
+		width: calc(100% - 150px);
 
 		@media (max-width: 650px) {
 			width: 100%;
 		}
 	}
 
-	textarea {
-		vertical-align: top;
+	.full-width {
+		width: 100% !important;
 	}
 
 	label {
 		display: block;
-		margin: 0;
+		margin: 1rem 0;
 		transition: color 0.2s;
 
 		&:hover {
 			color: var(--color-theme);
 		}
-
-		&:first-child {
-			margin-top: 0;
-		}
 	}
 
-	.radio-label {
-		padding: 8px 0;
+	.radio-label,
+	.checkbox-label {
+		margin: 0.5rem 0;
 	}
 
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 180px;
+		width: 140px;
 		padding: 10px 0;
+		vertical-align: -12px;
 
 		&.required::after {
 			content: ' *';
@@ -291,15 +316,15 @@
 		@media (max-width: 650px) {
 			display: block;
 			padding: 0;
-			margin-top: 0.5rem;
+			margin: 0.5rem 0 0.3rem;
 			width: auto;
-
-			&.one-line {
-				display: inline-block;
-				padding: 10px 0;
-				margin: 0;
-			}
 		}
+	}
+
+	.more-info {
+		display: inline-block;
+		padding: 0 6px;
+		vertical-align: -12px;
 	}
 
 	.red-star {
@@ -321,5 +346,10 @@
 		&:focus {
 			background-color: var(--color-link);
 		}
+	}
+
+	p {
+		margin: 1rem 0;
+		font-size: 93%;
 	}
 </style>

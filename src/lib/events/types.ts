@@ -13,6 +13,7 @@ export interface Event {
 	organizer?: Organizer
 	pictureUrl?: string
 	tags: string[]
+	submitter: Submitter
 }
 
 interface Time {
@@ -38,4 +39,9 @@ interface Organizer {
 	phone?: string
 	email?: string
 	website?: string
+}
+
+interface Submitter {
+	name: string
+	email: string
 }
