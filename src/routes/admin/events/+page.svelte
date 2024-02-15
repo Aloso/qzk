@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fetchDrafts } from '$lib/events/fetchDrafts'
+	import { fetchDrafts } from '$lib/events/draftApi'
 	import type { DraftData, Event } from '$lib/events/types'
 	import { redirect } from '@sveltejs/kit'
 

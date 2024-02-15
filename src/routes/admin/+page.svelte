@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { fetchDrafts } from '$lib/events/fetchDrafts'
+	import { fetchDrafts } from '$lib/events/draftApi'
 	import { onMount } from 'svelte'
 
 	let username = $state('')
