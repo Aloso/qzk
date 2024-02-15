@@ -140,9 +140,10 @@
 		<em class="required">Raum</em>
 		<select bind:value={placeRoom}>
 			<option value={undefined}>Bitte wählen...</option>
-			<option value="room 1">Raum 1</option>
-			<option value="room 2">Raum 2</option>
-			<option value="room 3">Raum 3</option>
+			<option value="*innen-Raum">*innen-Raum</option>
+			<option value="Gelber Raum">Gelber Raum</option>
+			<option value="Blauer Raum">Blauer Raum</option>
+			<option value="Rückzugsraum">Rückzugsraum</option>
 		</select>
 	</label>
 	<label class:hidden={placeType !== 'PHYSICAL'}>
