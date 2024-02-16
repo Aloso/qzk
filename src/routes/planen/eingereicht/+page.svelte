@@ -70,11 +70,15 @@
 	}
 
 	async function onDelete() {
-		if (confirm('Bist du sicher?') && router.key) {
+		if (confirm('Möchtest du die Veranstaltung löschen?') && router.key) {
 			submittedDrafts.remove(router.key)
 			try {
 				await deleteDraft(router.key)
-				goto('/planen')
+				if (credentials.auth) {
+					goto('/admin/events')
+				} else {
+					goto('/planen')
+				}
 			} catch (e) {
 				if (e instanceof Error) {
 					status = { type: 'error', message: e.message }
@@ -89,10 +93,14 @@
 			router.key &&
 			credentials.auth
 		) {
-			submittedDrafts.remove(router.key)
 			try {
-				await publishDraft(router.key, credentials.auth)
-				goto('/admin/events')
+				const success = await publishDraft(router.key, credentials.auth)
+				if (success) {
+					submittedDrafts.remove(router.key)
+					goto('/admin/events')
+				} else {
+					status = { type: 'error', message: 'Veranstaltung konnte nicht veröffentlicht werden' }
+				}
 			} catch (e) {
 				if (e instanceof Error) {
 					status = { type: 'error', message: e.message }

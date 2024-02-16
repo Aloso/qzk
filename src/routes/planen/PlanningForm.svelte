@@ -78,8 +78,8 @@
 		const submitterData = localStorage.getItem('submitterData')
 		if (submitterData) {
 			const { name, email } = JSON.parse(submitterData)
-			yourName = name
-			yourEmail = email
+			if (yourName === '') yourName = name
+			if (yourEmail === '') yourEmail = email
 		}
 	})
 

@@ -1,8 +1,7 @@
 import { host } from '.'
 import { authorizedHeaders, type Auth } from '..'
-import type { Event } from '../types'
 
-export async function publishDraft(key: string, auth: Auth): Promise<Event | null> {
+export async function publishDraft(key: string, auth: Auth): Promise<boolean> {
 	const url = new URL(host + '/event')
 	url.searchParams.set('key', key)
 
@@ -12,11 +11,10 @@ export async function publishDraft(key: string, auth: Auth): Promise<Event | nul
 	})
 	if (!response.ok) {
 		if (response.status === 404) {
-			return null
+			return false
 		} else {
 			throw new Error('request unsuccessful: ' + response.status, { cause: response })
 		}
 	}
-	const data = await response.json()
-	return data
+	return true
 }
