@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FormError from '../FormError.svelte'
+	import FormError from './FormError.svelte'
 
 	interface Props {
 		name?: string
