@@ -25,7 +25,7 @@
 		tabindex="0"
 		bind:this={overlay}
 		on:click={(e) => {
-			if (e.currentTarget === overlay) onClose()
+			if (e.target === overlay) onClose()
 		}}
 		on:keydown={(e) => {
 			if (e.key === 'Escape') onClose()

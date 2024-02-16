@@ -18,7 +18,7 @@
 		} else {
 			return (
 				formatDate(new Date(time.start), concise) +
-				' ' +
+				' \u{00A0}' +
 				formatTime(new Date(time.start)) +
 				(onlyStart ? '' : ' – ' + formatTime(new Date(time.end!)))
 			)
