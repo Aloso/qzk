@@ -10,6 +10,8 @@
 	import { createEventPlanningRouter } from '$lib/hooks/createEventPlanningRouter.svelte'
 	import { goto } from '$app/navigation'
 	import SubmittedList from '../SubmittedList.svelte'
+	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
+	import { publishDraft } from '$lib/events/eventApi'
 
 	let { data } = $props<{ data: StaticPage }>()
 
@@ -22,6 +24,7 @@
 	let status = $state<Status>({ type: 'loading' })
 	const defaults = createEventPlanningDefaults()
 	const submittedDrafts = createSubmittedDrafts()
+	const credentials = createAdminCredentials()
 
 	const router = createEventPlanningRouter({
 		onMount(key) {
@@ -79,6 +82,24 @@
 			}
 		}
 	}
+
+	async function onPublish() {
+		if (
+			confirm('Die Veranstaltung erscheint jetzt auf der Startseite. Bestätigen?') &&
+			router.key &&
+			credentials.auth
+		) {
+			submittedDrafts.remove(router.key)
+			try {
+				await publishDraft(router.key, credentials.auth)
+				goto('/admin/events')
+			} catch (e) {
+				if (e instanceof Error) {
+					status = { type: 'error', message: e.message }
+				}
+			}
+		}
+	}
 </script>
 
 <StaticPageHeader {...data} />
@@ -111,7 +132,13 @@
 {#if status.type === 'loading'}
 	<div class="loading">Lädt...</div>
 {:else}
-	<PlanningForm defaults={defaults.values} {onSubmit} {onDelete} {status} />
+	<PlanningForm
+		defaults={defaults.values}
+		{onSubmit}
+		{onDelete}
+		onPublish={credentials.auth ? onPublish : undefined}
+		{status}
+	/>
 {/if}
 
 <style lang="scss">

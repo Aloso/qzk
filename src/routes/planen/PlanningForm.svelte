@@ -7,13 +7,14 @@
 		defaults: FormValues
 		onSubmit: (event: Event) => void
 		onDelete?: () => void
+		onPublish?: () => void
 		status:
 			| { type: 'ready'; submitted?: boolean }
 			| { type: 'submitting' }
 			| { type: 'error'; message: string; missing?: boolean }
 	}
 
-	let { defaults, onSubmit, onDelete, status } = $props<Props>()
+	let { defaults, onSubmit, onDelete, onPublish, status } = $props<Props>()
 
 	$effect(() => {
 		title = defaults.title
@@ -274,6 +275,15 @@
 			Löschen
 		</button>
 	{/if}
+	{#if onPublish}
+		<button
+			class="publish-button"
+			on:click|preventDefault|stopPropagation={onPublish}
+			disabled={status.type === 'error' || status.type === 'submitting'}
+		>
+			Veröffentlichen
+		</button>
+	{/if}
 
 	{#if status.type === 'submitting'}
 		<p>Wird abgesendet...</p>
@@ -407,6 +417,16 @@
 		&:hover,
 		&:focus {
 			background-color: #ab0a0a;
+		}
+	}
+
+	.publish-button {
+		background-color: #06771b;
+		margin-left: 1rem;
+
+		&:hover,
+		&:focus {
+			background-color: #109b2a;
 		}
 	}
 

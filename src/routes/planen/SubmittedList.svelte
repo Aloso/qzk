@@ -53,6 +53,7 @@
 		margin: 0 0.5rem 0 0;
 
 		a {
+			display: block;
 			padding: 0.5rem 0.7rem;
 			text-decoration: none;
 			color: inherit;

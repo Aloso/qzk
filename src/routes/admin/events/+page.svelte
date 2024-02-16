@@ -92,7 +92,7 @@
 			<div class="event-tags">
 				{event.tags.join('\n')}
 			</div>
-			<a href="/planen?key={encodeURIComponent(event.key!)}">Bearbeiten</a>
+			<a href="/planen/eingereicht?key={encodeURIComponent(event.key!)}">Bearbeiten</a>
 		</div>
 	{/each}
 </div>
