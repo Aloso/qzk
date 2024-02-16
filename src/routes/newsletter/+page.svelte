@@ -2,8 +2,8 @@
 	import Checkbox from '$lib/components/forms/Checkbox.svelte'
 	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import SubmitButton from '$lib/components/SubmitButton.svelte'
-	import ValidatedInput from '$lib/components/ValidatedInput.svelte'
+	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
+	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
 	import type { StaticPage } from '$lib/data'
 
 	let { data } = $props<{ data: StaticPage }>()

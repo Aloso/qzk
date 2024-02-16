@@ -49,6 +49,7 @@
 			{#each events as event}
 				<EventView {event} />
 			{/each}
+			<a href="/planen" class="add-event">Veranstaltung einreichen</a>
 		{/if}
 	</div>
 </div>
@@ -86,6 +87,25 @@
 		font-size: 1.33rem;
 		font-weight: 600;
 		margin-bottom: 1em;
+	}
+
+	.add-event {
+		display: inline-block;
+		background-color: var(--color-theme);
+		color: white;
+		border: none;
+		padding: 12px 18px;
+		border-radius: 15px;
+		font: inherit;
+		font-size: 1rem;
+		transition: background-color 0.2s;
+		animation: 1s fade-in;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			background-color: var(--color-link);
+		}
 	}
 
 	section {

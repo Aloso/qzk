@@ -88,15 +88,6 @@
 {/if}
 
 <style lang="scss">
-	@keyframes fade-in {
-		0% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-
 	.overlay {
 		box-sizing: border-box;
 		display: flex;

@@ -53,15 +53,6 @@
 		}
 	}
 
-	@keyframes fade-in {
-		0% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-
 	.event-title {
 		font-family: var(--font-heading);
 		font-weight: 600;
