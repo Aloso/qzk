@@ -18,5 +18,8 @@ export async function submitDraft(draft: Event): Promise<{ key: string }> {
 		}
 	}
 	const data = await response.json()
+
+	// add a slight delay to make reading stale data from KV afterwards less likely
+	await new Promise((resolve) => setTimeout(resolve, 1000))
 	return data
 }
