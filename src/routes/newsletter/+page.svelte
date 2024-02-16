@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Checkbox from '$lib/components/Checkbox.svelte'
+	import Checkbox from '$lib/components/forms/Checkbox.svelte'
 	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import SubmitButton from '$lib/components/SubmitButton.svelte'

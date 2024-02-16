@@ -1,7 +1,9 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
+	import EventView from '$lib/components/events/EventView.svelte'
 	import type { StaticPage } from '$lib/data'
-	import * as timely from '$lib/timely/embedScript'
+	import { fetchAllEvents } from '$lib/events/eventApi'
+	import type { Event } from '$lib/events/types'
 	import { onMount } from 'svelte'
 
 	interface Props {
@@ -10,14 +12,23 @@
 
 	let { data } = $props<Props>()
 
-	let timelyNode = $state<HTMLElement>()
+	let events = $state<Event[]>()
 
 	onMount(() => {
-		timely.run({
-			id: 'timely_script',
-			src: 'https://events.timely.fun/q9g7m151/?nofilters=1&lang=de-DE',
-		})
+		loadEvents()
 	})
+
+	async function loadEvents() {
+		const now = Date.now()
+		events = (await fetchAllEvents()).filter((e) => getEnd(e.time) > now)
+		events.sort((a, b) => a.time.start.localeCompare(b.time.start))
+	}
+
+	function getEnd(time: Event['time']) {
+		let d = time.end ?? time.start
+		if (!d.includes('T')) d = `${d}T23:59:59`
+		return new Date(d).getTime()
+	}
 </script>
 
 <svelte:head>
@@ -32,24 +43,13 @@
 
 	<div class="sidebar">
 		<div class="sidebar-title">Veranstaltungen</div>
-		<button
-			id="timely-iframe-container"
-			class="timely-button-focus-init"
-			title=" "
-			type="button"
-			style="position: absolute !important; border: transparent !important; background-color: transparent !important; color: transparent !important;"
-			>Focus Button</button
-		>
-		<iframe
-			id="timely_script"
-			name="timely_script"
-			title=""
-			sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation allow-downloads"
-			scrolling="no"
-			src="https://events.timely.fun/q9g7m151/?nofilters=1&amp;lang=de-DE&amp;timely_id=timely_script"
-			class="timely-frame"
-			style="height: calc(300px);"
-		></iframe>
+		{#if events === undefined}
+			Wird geladen...
+		{:else}
+			{#each events as event}
+				<EventView {event} />
+			{/each}
+		{/if}
 	</div>
 </div>
 
@@ -90,11 +90,5 @@
 
 	section {
 		max-width: 44rem;
-	}
-
-	:global(#timely-iframe-embed-0) {
-		@media (min-width: 1200px) {
-			min-height: 400px;
-		}
 	}
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import ValidatedInput from '$lib/components/ValidatedInput.svelte'
-	import SubmitButton from '$lib/components/SubmitButton.svelte'
+	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
+	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import RichText from '$lib/components/RichText.svelte'
 	import type { StaticPage } from '$lib/data'

@@ -111,11 +111,6 @@
 		line-height: 1.8rem;
 		letter-spacing: 0.03rem;
 		z-index: 1;
-
-		// position: sticky;
-		// top: 0;
-		// top: -88px;
-		box-shadow: 0 0 20px 20px white;
 	}
 
 	.header-inner {

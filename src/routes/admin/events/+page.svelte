@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import EventView from '$lib/components/events/EventView.svelte'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
 	import type { DraftData, Event } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
@@ -45,55 +46,7 @@
 	{/if}
 
 	{#each data as event}
-		<div class="event">
-			<div class="event-title">{event.title}</div>
-			<div class="event-description">{event.description}</div>
-			<div class="event-time">
-				{new Date(event.time.start).toLocaleString('de-DE')} –
-				{event.time.end ? new Date(event.time.end).toLocaleString('de-DE') : ''}
-			</div>
-			{#if event.time.repeats}
-				<div class="event-repeats">
-					Wiederholung: {event.time.repeats.cycle} - {event.time.repeats.days}
-				</div>
-			{/if}
-			<div class="event-place">
-				<div class="event-place-name">Ort: {event.place.name}</div>
-				{#if event.place.type === 'PHYSICAL'}
-					<div class="event-place-address">{event.place.address}</div>
-					{#if event.place.room}
-						<div class="event-place-room">Raum: {event.place.room}</div>
-					{/if}
-				{:else if event.place.url}
-					<a href={event.place.url}>Link zur Teilnahme</a>
-				{/if}
-			</div>
-			{#if event.website}
-				<a class="event-website" href={event.website} target="_blank" rel="noreferrer noopener">
-					Website
-				</a>
-			{/if}
-			{#if event.organizer}
-				Kontakt:
-				<div class="event-organizer">{event.organizer.name}</div>
-				{#if event.organizer.email}
-					<a href="mailto:{event.organizer.email}">{event.organizer.email}</a>
-				{/if}
-				{#if event.organizer.phone}
-					<a href="tel:{event.organizer.phone}">{event.organizer.phone}</a>
-				{/if}
-				{#if event.organizer.website}
-					<a href={event.organizer.website} target="_blank" rel="noreferrer noopener">Website</a>
-				{/if}
-			{/if}
-			{#if event.pictureUrl}
-				<img src={event.pictureUrl} alt={event.title} />
-			{/if}
-			<div class="event-tags">
-				{event.tags.join('\n')}
-			</div>
-			<a href="/planen/eingereicht?key={encodeURIComponent(event.key!)}">Bearbeiten</a>
-		</div>
+		<EventView {event} editable />
 	{/each}
 </div>
 
@@ -124,16 +77,5 @@
 		&:focus {
 			background-color: white;
 		}
-	}
-
-	.event-title {
-		font-weight: 600;
-		font-size: 2rem;
-		margin: 1rem 0 0.5rem 0;
-	}
-
-	.event-place-address,
-	.event-tags {
-		white-space: pre-wrap;
 	}
 </style>
