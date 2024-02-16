@@ -1,7 +1,7 @@
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 
-interface SubmittedDraft {
+export interface SubmittedDraft {
 	key: string
 	name: string
 }

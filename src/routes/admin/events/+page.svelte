@@ -16,7 +16,7 @@
 			const response = fetchAllDrafts(credentials.auth, page * pageSize, pageSize)
 			handleResponse(response)
 		} else {
-			goto('/admin')
+			goto('/admin', { replaceState: true })
 		}
 	})
 
@@ -64,8 +64,8 @@
 					{#if event.place.room}
 						<div class="event-place-room">Raum: {event.place.room}</div>
 					{/if}
-				{:else if event.place.address}
-					<a href={event.place.address}>Link zur Teilnahme</a>
+				{:else if event.place.url}
+					<a href={event.place.url}>Link zur Teilnahme</a>
 				{/if}
 			</div>
 			{#if event.website}

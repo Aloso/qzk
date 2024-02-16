@@ -31,6 +31,7 @@ interface Place {
 	name: string
 	room?: string
 	address?: string
+	url?: string
 	type: 'PHYSICAL' | 'ONLINE'
 }
 

@@ -14,6 +14,7 @@ export interface FormValues {
 	placeRoom: undefined | string
 	placeName: string
 	placeAddress: string
+	placeUrl: string
 
 	organizerName: string
 	organizerEmail: string
@@ -39,6 +40,7 @@ const emptyDefaults: FormValues = {
 	placeRoom: undefined,
 	placeName: '',
 	placeAddress: '',
+	placeUrl: '',
 	organizerName: '',
 	organizerEmail: '',
 	organizerPhone: '',
@@ -72,6 +74,7 @@ export function createEventPlanningDefaults() {
 				placeRoom: draft.place.room,
 				placeName: draft.place.name,
 				placeAddress: draft.place.address ?? '',
+				placeUrl: draft.place.url ?? '',
 				organizerName: draft.organizer?.name ?? '',
 				organizerEmail: draft.organizer?.email ?? '',
 				organizerPhone: draft.organizer?.phone ?? '',

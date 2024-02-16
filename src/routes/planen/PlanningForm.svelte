@@ -7,10 +7,13 @@
 		defaults: FormValues
 		onSubmit: (event: Event) => void
 		onDelete?: () => void
-		error?: string
+		status:
+			| { type: 'ready'; submitted?: boolean }
+			| { type: 'submitting' }
+			| { type: 'error'; message: string; missing?: boolean }
 	}
 
-	let { defaults, onSubmit, onDelete, error } = $props<Props>()
+	let { defaults, onSubmit, onDelete, status } = $props<Props>()
 
 	$effect(() => {
 		title = defaults.title
@@ -24,6 +27,7 @@
 		placeRoom = defaults.placeRoom
 		placeName = defaults.placeName
 		placeAddress = defaults.placeAddress
+		placeUrl = defaults.placeUrl
 		organizerName = defaults.organizerName
 		organizerEmail = defaults.organizerEmail
 		organizerPhone = defaults.organizerPhone
@@ -50,6 +54,7 @@
 	let placeRoom = $state<string>()
 	let placeName = $state('')
 	let placeAddress = $state('')
+	let placeUrl = $state('')
 
 	// organizer
 	let organizerName = $state('')
@@ -116,13 +121,10 @@
 			},
 			place: {
 				name:
-					placeType === 'PHYSICAL'
-						? placeName
-						: placeType === 'QZ'
-							? 'Queeres Zentrum Kassel'
-							: 'Online-Veranstaltung',
+					placeType === 'PHYSICAL' ? placeName : placeType === 'QZ' ? 'Queeres Zentrum Kassel' : '',
 				type: placeType === 'QZ' ? 'PHYSICAL' : placeType,
 				address: placeType === 'QZ' ? 'Mauerstraße 11\n34117 Kassel' : placeAddress,
+				url: placeType === 'ONLINE' ? placeUrl || undefined : undefined,
 				room: placeType === 'QZ' ? placeRoom : undefined,
 			},
 			organizer:
@@ -166,7 +168,7 @@
 	<div class="section-title">Zeit</div>
 	<label class="checkbox-label">
 		<input type="checkbox" bind:checked={wholeDay} />
-		Ganztagig bzw. über mehrere Tage
+		Ganztägig bzw. über mehrere Tage
 	</label>
 	<label>
 		<em class="required">{wholeDay ? 'Startdatum' : 'Datum'}</em>
@@ -183,7 +185,6 @@
 	<label class:hidden={wholeDay}>
 		<em>Ende</em>
 		<input type="time" bind:value={endTime} />
-		<span class="more-info">(kann leer gelassen werden)</span>
 	</label>
 
 	<div class="section-title">Ort</div>
@@ -208,15 +209,20 @@
 	</label>
 	<label class:hidden={placeType !== 'PHYSICAL'}>
 		<em class="required">Name</em>
-		<input type="text" bind:value={placeName} />
+		<input type="text" bind:value={placeName} required={placeType === 'PHYSICAL'} />
 	</label>
 	<label class:hidden={placeType !== 'PHYSICAL'}>
 		<em class="required">Adresse</em>
-		<textarea bind:value={placeAddress} placeholder={'Adresszeile 1\nAdresszeile 2'} rows="2" />
+		<textarea
+			bind:value={placeAddress}
+			placeholder={'Adresszeile 1\nAdresszeile 2'}
+			rows="2"
+			required={placeType === 'PHYSICAL'}
+		/>
 	</label>
 	<label class:hidden={placeType !== 'ONLINE'}>
-		<em class="required">Link zum Beitreten</em>
-		<input type="text" bind:value={placeAddress} placeholder="z.B. Link zu Zoom" />
+		<em>URL</em>
+		<input type="text" bind:value={placeUrl} placeholder="Z.B. Link zu Online-Meeting" />
 	</label>
 
 	<div class="section-title">Organisator*innen</div>
@@ -249,16 +255,32 @@
 		<input type="text" bind:value={yourEmail} required />
 	</label>
 
-	<button type="submit">Absenden</button>
+	<hr />
 
+	<p>
+		Durch das Absenden stimmst du der Verarbeitung und Veröffentlichung dieser Daten zu. Mehr
+		Informationen findest du in unserer <a href="/datenschutz" target="_blank">
+			Datenschutzerklärung
+		</a>.
+	</p>
+
+	<button type="submit" disabled={status.type === 'error' && status.missing}>Absenden</button>
 	{#if onDelete}
-		<button class="delete-button" on:click|preventDefault|stopPropagation={onDelete}>
+		<button
+			class="delete-button"
+			on:click|preventDefault|stopPropagation={onDelete}
+			disabled={status.type === 'error' && status.missing}
+		>
 			Löschen
 		</button>
 	{/if}
 
-	{#if error}
-		<p class="error">{error}</p>
+	{#if status.type === 'submitting'}
+		<p>Wird abgesendet...</p>
+	{:else if status.type === 'error'}
+		<p class="error">{status.message}</p>
+	{:else if status.type === 'ready' && status.submitted}
+		<p>Gespeichert.</p>
 	{/if}
 </form>
 
@@ -353,12 +375,6 @@
 		}
 	}
 
-	.more-info {
-		display: inline-block;
-		padding: 0 6px;
-		vertical-align: -12px;
-	}
-
 	.red-star {
 		color: red;
 		font-size: 140%;
@@ -371,12 +387,16 @@
 		color: white;
 		padding: 15px;
 		border-radius: 15px;
-		margin: 1.5rem 0 0 0;
+		margin: 1rem 0 0 0;
 		font: inherit;
 
 		&:hover,
 		&:focus {
 			background-color: var(--color-link);
+		}
+
+		&:disabled {
+			opacity: 0.5;
 		}
 	}
 

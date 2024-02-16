@@ -21,7 +21,7 @@
 	async function actualSubmit(username: string, password: string) {
 		try {
 			await fetchAllDrafts({ username, password }, 0, 1)
-			goto('/admin/events')
+			goto('/admin/events', { replaceState: true })
 		} catch {
 			loginFailed = true
 			loaded = true
