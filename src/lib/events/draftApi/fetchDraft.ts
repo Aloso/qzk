@@ -1,7 +1,8 @@
+import { host } from '.'
 import type { Event } from '../types'
 
 export async function fetchDraft(key: string): Promise<Event | null> {
-	const url = new URL('https://events.queereszentrumkassel.de/draft')
+	const url = new URL(host + '/draft')
 	url.searchParams.set('key', key)
 
 	const response = await fetch(url)

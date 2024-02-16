@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Event } from '$lib/events/types'
+	import type { FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
-	import type { FormValues } from './formValues'
 
 	interface Props {
 		defaults: FormValues
@@ -242,11 +242,11 @@
 	<p>Diese Daten werden nicht veröffentlicht.</p>
 	<label>
 		<em class="required">Dein Name</em>
-		<input type="text" bind:value={yourName} />
+		<input type="text" bind:value={yourName} required />
 	</label>
 	<label>
 		<em class="required">Deine E-Mail</em>
-		<input type="text" bind:value={yourEmail} />
+		<input type="text" bind:value={yourEmail} required />
 	</label>
 
 	<button type="submit">Absenden</button>
@@ -382,6 +382,7 @@
 
 	.delete-button {
 		background-color: darkred;
+		margin-left: 1rem;
 
 		&:hover,
 		&:focus {
@@ -396,5 +397,6 @@
 
 	.error {
 		color: #aa0b0b;
+		white-space: pre-wrap;
 	}
 </style>

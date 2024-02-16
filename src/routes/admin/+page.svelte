@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
+	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { onMount } from 'svelte'
 
 	let username = $state('')
 	let password = $state('')
 	let submitted = $state(false)
 	let loginFailed = $state(false)
+	let loaded = $state(false)
+	const credentials = createAdminCredentials()
 
 	function submit() {
 		submitted = true
@@ -21,19 +24,21 @@
 			goto('/admin/events')
 		} catch {
 			loginFailed = true
+			loaded = true
 		}
 	}
 
 	onMount(() => {
-		const credentials = localStorage.getItem('credentials')
-		if (credentials != null) {
-			const { username, password } = JSON.parse(credentials)
+		if (credentials.auth) {
+			const { username, password } = credentials.auth
 			actualSubmit(username, password)
+		} else {
+			loaded = true
 		}
 	})
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit} class:hidden={!loaded}>
 	<h1>Admin-Bereich</h1>
 	<label>
 		Name:
@@ -52,6 +57,10 @@
 </form>
 
 <style lang="scss">
+	.hidden {
+		display: none;
+	}
+
 	h1 {
 		text-align: center;
 	}
