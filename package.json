@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"postbuild": "tsx scripts/build-sitemap.ts",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -24,6 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
 		"contentful": "^10.6.21",
+		"directory-tree": "^3.5.1",
 		"dotenv": "^16.4.4",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -34,6 +36,7 @@
 		"svelte": "5.0.0-next.55",
 		"svelte-check": "^3.6.4",
 		"tslib": "^2.6.2",
+		"tsx": "^4.7.1",
 		"typescript": "^5.3.3",
 		"vite": "^5.1.3"
 	},
