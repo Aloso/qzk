@@ -67,6 +67,11 @@
 		</p>
 	{/if}
 
+	<p class="warning">
+		Warnung: {tab === 'drafts' ? 'Veröffentlichte/entfernte' : 'Entfernte'} Veranstaltungen können aufgrund
+		von Caches bis zu 60 Sekunden später noch angezeigt werden.
+	</p>
+
 	{#each data as event, i}
 		<EventView
 			{event}
@@ -106,5 +111,12 @@
 		&:focus {
 			background-color: white;
 		}
+	}
+
+	.warning {
+		background-color: #f8efc2;
+		padding: 10px 15px;
+		border-radius: 15px;
+		font-size: 1.1rem;
 	}
 </style>
