@@ -23,12 +23,12 @@
 		button {
 			margin: 2px -2px -2px 0;
 			border-radius: 15px 15px 0 0;
-			font-size: 1.2rem;
 			background-color: #eee;
 			border: 2px solid #aaa;
 			padding: 0.5rem 1rem;
 			color: black;
 			font: inherit;
+			font-size: 1.1rem;
 			transition: background-color 0.2s;
 
 			&:hover,
@@ -53,7 +53,7 @@
 					height: 8px;
 					border-bottom-right-radius: 7px;
 					border-width: 0 2px 2px 0;
-					box-shadow: 5px 5px 0 white;
+					box-shadow: 5px 2px 0 white;
 				}
 
 				&::after {
@@ -67,7 +67,7 @@
 					height: 8px;
 					border-bottom-left-radius: 7px;
 					border-width: 0 0 2px 2px;
-					box-shadow: -5px 5px 0 white;
+					box-shadow: -5px 2px 0 white;
 				}
 			}
 		}
