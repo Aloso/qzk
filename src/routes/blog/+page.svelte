@@ -11,11 +11,15 @@
 </svelte:head>
 
 <h1>Blog</h1>
-<section>
-	{#each posts as post}
-		<BlogPostPreview {post} />
-	{/each}
-</section>
+{#if posts.length === 0}
+	<p>Es wurden noch keine Blog Posts veröffentlicht. Schau später nochmal vorbei!</p>
+{:else}
+	<section>
+		{#each posts as post}
+			<BlogPostPreview {post} />
+		{/each}
+	</section>
+{/if}
 
 <style lang="scss">
 	section {
