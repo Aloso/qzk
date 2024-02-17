@@ -6,9 +6,14 @@
 	interface Props {
 		event: Event
 		editable?: boolean
+		published?: boolean
+		onEdited?: (newEvent: Event) => void
+		onPublished?: () => void
+		onDeletedOrUnpublished?: () => void
 	}
 
-	let { event, editable } = $props<Props>()
+	let { event, editable, published, onEdited, onPublished, onDeletedOrUnpublished } =
+		$props<Props>()
 	let overlayShown = $state(false)
 </script>
 
@@ -27,8 +32,12 @@
 
 <EventPopup
 	event={overlayShown ? event : undefined}
-	onClose={() => (overlayShown = false)}
 	{editable}
+	{published}
+	onClose={() => (overlayShown = false)}
+	{onEdited}
+	{onPublished}
+	{onDeletedOrUnpublished}
 />
 
 <style lang="scss">

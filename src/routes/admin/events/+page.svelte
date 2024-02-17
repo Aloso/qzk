@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import EventView from '$lib/components/events/EventView.svelte'
+	import TabBar from '$lib/components/TabBar.svelte'
+	import type { Auth } from '$lib/events'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
-	import type { DraftData, Event } from '$lib/events/types'
+	import { fetchAllEvents } from '$lib/events/eventApi'
+	import type { Event } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
 	const pageSize = 25
+
+	let tab = $state<'drafts' | 'published'>('drafts')
+
 	let data = $state<Event[]>([])
 	let length = $state(0)
 	let page = $state(0)
@@ -14,25 +20,41 @@
 
 	$effect(() => {
 		if (credentials.auth) {
-			const response = fetchAllDrafts(credentials.auth, page * pageSize, pageSize)
-			handleResponse(response)
+			loading = true
+			setEvents(tab, credentials.auth, page)
 		} else {
 			goto('/admin', { replaceState: true })
 		}
 	})
 
-	async function handleResponse(responsePromise: Promise<DraftData>) {
-		const response = await responsePromise
-		data = response.events
-		length = response.length
-		loading = false
+	async function setEvents(tab: 'drafts' | 'published', auth: Auth, page: number) {
+		if (tab === 'drafts') {
+			const response = await fetchAllDrafts(auth, page * pageSize, pageSize)
+			data = response.events
+			length = response.length
+			loading = false
+		} else {
+			data = await fetchAllEvents()
+			data.sort((a, b) => a.time.start.localeCompare(b.time.start))
+
+			length = data.length
+			loading = false
+		}
 	}
 </script>
 
+<h1>Veranstaltungen</h1>
+<TabBar
+	tabs={[
+		['drafts', 'Entwürfe'],
+		['published', 'Veröffentlicht'],
+	]}
+	bind:active={tab}
+/>
+
 <div class:hidden={loading}>
-	<h1>Veranstaltungen - Entwürfe</h1>
 	<p class="event-count">{data.length} {data.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}</p>
-	{#if length > 25}
+	{#if tab === 'drafts' && length > 25}
 		<p>
 			Seite {page}
 			<span class="pagination">
@@ -45,8 +67,15 @@
 		</p>
 	{/if}
 
-	{#each data as event}
-		<EventView {event} editable />
+	{#each data as event, i}
+		<EventView
+			{event}
+			editable
+			published={tab === 'published'}
+			onEdited={(e) => (data[i] = e)}
+			onPublished={() => data.splice(i, 1)}
+			onDeletedOrUnpublished={() => data.splice(i, 1)}
+		/>
 	{/each}
 </div>
 
@@ -65,13 +94,13 @@
 
 	button {
 		background-color: #eee;
-		border: 2px solid #bbb;
+		border: 2px solid #aaa;
 		border-radius: 10px;
 		padding: 0.5rem 1rem;
 		color: black;
 		font: inherit;
-		font-size: 0.94%;
-		transition: 0.2s;
+		font-size: 94%;
+		transition: background-color 0.2s;
 
 		&:hover,
 		&:focus {

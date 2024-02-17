@@ -6,15 +6,18 @@
 	interface Props {
 		defaults: FormValues
 		onSubmit: (event: Event) => void
+		onCancel?: () => void
 		onDelete?: () => void
 		onPublish?: () => void
 		status:
 			| { type: 'ready'; submitted?: boolean }
 			| { type: 'submitting' }
+			| { type: 'deleting' }
 			| { type: 'error'; message: string; missing?: boolean }
+		popup?: boolean
 	}
 
-	let { defaults, onSubmit, onDelete, onPublish, status } = $props<Props>()
+	let { defaults, onSubmit, onCancel, onDelete, onPublish, status, popup } = $props<Props>()
 
 	$effect(() => {
 		title = defaults.title
@@ -150,10 +153,10 @@
 </script>
 
 {#if !formLoaded}
-	<form>Wird geladen...</form>
+	<form class:popup>Wird geladen...</form>
 {/if}
 
-<form on:submit|preventDefault={submitForm} class:hidden={!formLoaded}>
+<form on:submit|preventDefault={submitForm} class:popup class:hidden={!formLoaded}>
 	Mit einem <span class="red-star">*</span> markierte Felder sind verpflichtend.
 
 	<div class="section-title">Name und Beschreibung</div>
@@ -266,6 +269,11 @@
 	</p>
 
 	<button type="submit" disabled={status.type === 'error' && status.missing}>Absenden</button>
+	{#if onCancel}
+		<button class="cancel-button" on:click|preventDefault|stopPropagation={onCancel}>
+			Abbruch
+		</button>
+	{/if}
 	{#if onDelete}
 		<button
 			class="delete-button"
@@ -279,7 +287,9 @@
 		<button
 			class="publish-button"
 			on:click|preventDefault|stopPropagation={onPublish}
-			disabled={status.type === 'error' || status.type === 'submitting'}
+			disabled={status.type === 'error' ||
+				status.type === 'submitting' ||
+				status.type === 'deleting'}
 		>
 			Veröffentlichen
 		</button>
@@ -287,6 +297,8 @@
 
 	{#if status.type === 'submitting'}
 		<p>Wird abgesendet...</p>
+	{:else if status.type === 'deleting'}
+		<p>Wird gelöscht...</p>
 	{:else if status.type === 'error'}
 		<p class="error">{status.message}</p>
 	{:else if status.type === 'ready' && status.submitted}
@@ -302,6 +314,13 @@
 		padding: 30px;
 		max-width: 700px;
 		font-size: 105%;
+
+		&.popup {
+			border: none;
+			background-color: white;
+			padding: 3rem;
+			margin: 50rem 0 5rem;
+		}
 	}
 
 	.section-title {
@@ -427,6 +446,16 @@
 		&:hover,
 		&:focus {
 			background-color: #109b2a;
+		}
+	}
+
+	.cancel-button {
+		background-color: #656565;
+		margin-left: 1rem;
+
+		&:hover,
+		&:focus {
+			background-color: #7e7e7e;
 		}
 	}
 

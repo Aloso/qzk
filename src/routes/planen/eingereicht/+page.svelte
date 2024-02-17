@@ -3,7 +3,7 @@
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import type { StaticPage } from '$lib/data'
 	import PlanningForm from '../PlanningForm.svelte'
-	import { deleteDraft, editDraft, fetchDraft } from '$lib/events/draftApi'
+	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
 	import type { Event } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
@@ -53,7 +53,7 @@
 		status = { type: 'submitting' }
 		try {
 			if (router.key) {
-				const success = await editDraft(event, router.key)
+				const success = await updateDraft(event, router.key)
 				status = success
 					? { type: 'ready', submitted: true }
 					: {
