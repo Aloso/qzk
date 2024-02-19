@@ -18,10 +18,13 @@ export interface Item<T> {
 	}
 	sys: {
 		id: string
+		contentType?: {
+			sys: { id: string }
+		}
 	}
 }
 
-export interface Asset<D extends Details> {
+export interface Asset<D extends Details = Details> {
 	title: string
 	description?: string
 	file: {
