@@ -26,7 +26,7 @@
 	{/if}
 	<div class="right">
 		{#if small}
-			<h3>{post.title}</h3>
+			<h3><a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a></h3>
 			<div class="published combined">
 				<PublishDate date={post.published} />
 				<Author author={post.authors[0]} small single plus={post.authors.length - 1} />
@@ -73,6 +73,17 @@
 		display: flex;
 		gap: 1rem;
 		align-items: center;
+	}
+
+	.title-link {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: var(--color-link);
+			text-decoration: var(--link-decoration-hover);
+		}
 	}
 
 	@media (max-width: 800px) {
