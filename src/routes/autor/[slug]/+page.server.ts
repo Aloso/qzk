@@ -1,5 +1,5 @@
 import { loadAuthor, loadAllBlogPosts } from '$lib/contentful/loader'
-import { selectBlogPostPreview } from '$lib/contentful/selector/selectBlogPostPreview'
+import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { Author, BlogPostPreview } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
 

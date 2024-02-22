@@ -1,16 +1,18 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
-	import type { StaticPage } from '$lib/data'
 	import { fetchAllEvents } from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
 	import { onMount } from 'svelte'
+	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
+	import type { Data } from './+page.server'
 
 	interface Props {
-		data: StaticPage
+		data: Data
 	}
 
-	let { data } = $props<Props>()
+	const { data } = $props<Props>()
+	const { content, posts } = data
 
 	let events = $state<Event[]>()
 
@@ -38,7 +40,16 @@
 
 <div class="layout">
 	<section class="mainbar">
-		<RichText data={data.content} width={900} />
+		<RichText data={content.content} width={900} />
+
+		<hr />
+		<h2>Neue Blog-Beiträge</h2>
+
+		<div class="blogPosts">
+			{#each posts as post}
+				<BlogPostPreview_ {post} small />
+			{/each}
+		</div>
 	</section>
 
 	<div class="sidebar">
@@ -110,5 +121,11 @@
 
 	section {
 		max-width: 44rem;
+	}
+
+	.blogPosts {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
 	}
 </style>

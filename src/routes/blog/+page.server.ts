@@ -1,5 +1,5 @@
 import { loadAllBlogPosts } from '$lib/contentful/loader'
-import { selectBlogPostPreview } from '$lib/contentful/selector/selectBlogPostPreview'
+import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreview } from '$lib/data'
 
 export interface Data {

@@ -1,5 +1,4 @@
 import contentful from 'contentful'
-export * from './constants'
 export * from './types'
 
 const isDev = process.env.NODE_ENV === 'development'

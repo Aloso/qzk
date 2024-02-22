@@ -1,7 +1,6 @@
 import type { Entries, Item } from '$lib/contentful'
 import { loadAllBlogPosts, loadBlogPost } from '$lib/contentful/loader'
-import { selectAuthorPreview } from '$lib/contentful/selector/selectAuthorPreview'
-import { selectBlogPostPreview } from '$lib/contentful/selector/selectBlogPostPreview'
+import { selectAuthorPreview, selectBlogPostPreview } from '$lib/contentful/selector'
 import type { Author, BlogPost, BlogPostView } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
 import type { Tag } from 'contentful'
