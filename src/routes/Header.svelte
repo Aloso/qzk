@@ -18,52 +18,7 @@
 	}
 
 	let mobileExtended = $state(false)
-
-	// let prevScrollY = 0
-	// let scrollY = $state(globalThis.scrollY)
-	//
-	// $effect(() => {
-	// 	let isAtTop = scrollY < 88
-	// 	let wasAtTop = prevScrollY < 88
-	// 	prevScrollY = scrollY
-	// 	if (isAtTop !== wasAtTop) updateLogo(isAtTop)
-	// })
-	//
-	// function updateLogo(isAtTop: boolean) {
-	// 	const elem = document.querySelector('[data-header-logo]')
-	// 	if (!elem) return
-	// 	if (isAtTop) {
-	// 		elem.setAttribute('src', '/logo.png')
-	// 	} else {
-	// 		elem.setAttribute('src', '/logo-2.png')
-	// 	}
-	// }
 </script>
-
-<!-- <svelte:window bind:scrollY /> -->
-
-<svg width="0" height="0">
-	<defs>
-		<clipPath id="headerClipPath" clipPathUnits="objectBoundingBox">
-			<path
-				d="M 0,0 H
-            1 C 0.84,0.02 0.86,0.8
-            0.75,0.65 0.6,0.38 0.58,0.39
-            0.5,0.34 0.2,0.25 0.3,1
-            0.1,0.9 0.02,0.81 0.003,0.45
-            0,0 Z"
-			/>
-		</clipPath>
-		<clipPath id="headerClipPathMobile" clipPathUnits="objectBoundingBox">
-			<path
-				d="M 0,0 H 1 V
-						0.5 C 0.7,0.9 0.55,1
-            0.3,0.9 0.06,0.81 0.009,0.45
-            0,0 Z"
-			/>
-		</clipPath>
-	</defs>
-</svg>
 
 <header>
 	<nav class="mobile-nav" class:extended={mobileExtended}>
@@ -79,54 +34,61 @@
 		{/each}
 	</nav>
 
-	<div class="header-inner">
-		<a class="logo-link" href="/">
-			<img data-header-logo class="logo" src="/logo-white.png" alt="Queeres Zentrum Kassel" />
-		</a>
-		<nav class="desktop-nav">
-			{#each links as link}
-				<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
-					<span class="nav-link-inner">{@html link.text}</span>
-				</a>
-			{/each}
-		</nav>
-		<button
-			class="burger-menu-button"
-			on:click={() => {
-				if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
-					document.scrollingElement.scrollTo({ top: 0, behavior: 'smooth' })
-				}
+	<div class="header-i">
+		<div class="header-ii">
+			<a class="logo-link" href="/">
+				<img data-header-logo class="logo" src="/logo.svg" alt="Queeres Zentrum Kassel" />
+			</a>
+			<nav class="desktop-nav">
+				{#each links as link}
+					<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
+						<span class="nav-link-inner">{@html link.text}</span>
+					</a>
+				{/each}
+			</nav>
+			<button
+				class="burger-menu-button"
+				on:click={() => {
+					if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
+						document.scrollingElement.scrollTo({ top: 0, behavior: 'smooth' })
+					}
 
-				mobileExtended = !mobileExtended
-			}}
-		>
-			<img src="/burger.svg" alt="Menü" />
-		</button>
+					mobileExtended = !mobileExtended
+				}}
+			>
+				<img src="/burger.svg" alt="Menü" />
+			</button>
+		</div>
 	</div>
 </header>
 
 <style lang="scss">
 	header {
 		font-size: 1.2rem;
-		line-height: 1.8rem;
+		line-height: 2rem;
 		letter-spacing: 0.03rem;
-		z-index: 1;
+		z-index: 0;
 	}
 
-	.header-inner {
+	.header-i {
+		margin: -200px 0 0 -50px;
+		padding: 180px 0 0 50px;
+		background-color: hsl(289, 35%, 55%);
+		box-shadow: 0 -50px 0 50px hsl(289, 35%, 55%);
+		transform: rotate(-3deg);
+	}
+
+	.header-ii {
 		display: flex;
 		align-items: stretch;
 		max-width: 70rem;
-		padding: 0 1rem 0 3.5rem;
+		padding: 0 1rem 0 1rem;
 		box-sizing: border-box;
 		margin: 0 auto;
-
-		background-color: hsl(289, 35%, 55%);
-		clip-path: url(#headerClipPath);
 	}
 
 	.logo-link {
-		margin: 1rem 1rem 2.5rem 0;
+		margin: 1rem 1rem 0.8rem 0;
 		flex-grow: 0;
 		flex-shrink: 0;
 	}
@@ -134,31 +96,31 @@
 	.logo {
 		width: 50vw;
 		max-width: 200px;
-		aspect-ratio: 802 / 441;
+		aspect-ratio: 800 / 439;
 		filter: drop-shadow(0.75px 3px #0001);
 	}
 
 	.desktop-nav {
 		display: flex;
 		flex-grow: 1;
-		min-height: 80px;
-		align-items: stretch;
+		align-items: end;
+		margin: 0 0 0.5rem;
 	}
 
 	a.nav-link {
 		display: flex;
 		position: relative;
 		flex-direction: column;
-		padding: 10px 15px;
+		padding: 12px 15px;
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;
-		transform: skewX(10deg);
 		font-weight: 600;
 		justify-content: start;
 		line-height: 1.25;
 		color: white;
 		text-shadow: 0.75px 3px #0001;
+		border-radius: 15px;
 
 		&:hover,
 		&:focus {
@@ -172,7 +134,6 @@
 
 	.nav-link-inner {
 		display: block;
-		transform: skewX(-10deg);
 	}
 
 	.burger-menu-button,
@@ -181,11 +142,17 @@
 	}
 
 	@media (max-width: 1200px) {
-		.header-inner {
+		.header-i {
+			margin: -100px 0 0 -50px;
+			padding: 100px 0 0 50px;
+			position: relative;
+			z-index: 0;
+		}
+
+		.header-ii {
 			display: flex;
-			align-items: start;
 			justify-content: space-evenly;
-			clip-path: url(#headerClipPathMobile);
+			align-items: center;
 		}
 
 		.desktop-nav {
@@ -197,7 +164,7 @@
 			background-color: transparent;
 			width: 4rem;
 			height: 4rem;
-			margin-top: 1.2rem;
+			margin: 0;
 			color: white;
 			border: none;
 			border-radius: 30px;
@@ -217,6 +184,8 @@
 		}
 
 		.mobile-nav {
+			position: relative;
+			z-index: 1;
 			display: flex;
 			flex-direction: column;
 			box-sizing: border-box;
@@ -236,6 +205,7 @@
 				padding: 1.6rem;
 				text-decoration: none;
 				font-weight: 500;
+				font-size: 1.4rem;
 				border-radius: 30px;
 
 				&:hover,
