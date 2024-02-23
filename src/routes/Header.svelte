@@ -67,13 +67,15 @@
 		font-size: 1.2rem;
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
-		margin-bottom: 1rem;
+		overflow: hidden;
+		margin-bottom: -100rem;
+		padding-bottom: 101rem;
 		z-index: 0;
 	}
 
 	.header-i {
-		margin: -200px 0 0 -50px;
-		padding: 180px 0 0 50px;
+		margin: -200px -50px 0 -50px;
+		padding: 180px 50px 0 50px;
 		background-color: hsl(289, 35%, 55%);
 		box-shadow: 0 -50px 0 50px hsl(289, 35%, 55%);
 		transform: rotate(-3deg);
@@ -168,7 +170,7 @@
 			margin: 0;
 			color: white;
 			border: none;
-			border-radius: 30px;
+			border-radius: 20px;
 			transition: background-color 0.2s;
 			filter: drop-shadow(0.75px 3px #0001);
 
