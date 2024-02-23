@@ -90,6 +90,7 @@
 
 	.role {
 		color: #555;
+		font-size: 0.93rem;
 		&.small {
 			display: none;
 		}

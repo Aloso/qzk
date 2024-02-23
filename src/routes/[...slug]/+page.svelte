@@ -11,3 +11,13 @@
 <section>
 	<RichText data={data.content} width={900} />
 </section>
+
+<style lang="scss">
+	section {
+		max-width: 44rem;
+	}
+
+	:global(section p) {
+		line-height: 1.7;
+	}
+</style>

@@ -84,4 +84,8 @@
 	section {
 		max-width: 44rem;
 	}
+
+	:global(section p) {
+		line-height: 1.7;
+	}
 </style>

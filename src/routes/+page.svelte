@@ -12,7 +12,7 @@
 	}
 
 	const { data } = $props<Props>()
-	const { content, posts } = data
+	const { page, posts } = data
 
 	let events = $state<Event[]>()
 
@@ -40,7 +40,7 @@
 
 <div class="layout">
 	<section class="mainbar">
-		<RichText data={content.content} width={900} />
+		<RichText data={page.content} width={900} />
 
 		<hr />
 		<h2>Neue Blog-Beiträge</h2>

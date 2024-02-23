@@ -67,6 +67,7 @@
 		font-size: 1.2rem;
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
+		margin-bottom: 1rem;
 		z-index: 0;
 	}
 
