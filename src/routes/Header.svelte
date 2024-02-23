@@ -17,17 +17,17 @@
 		return false
 	}
 
-	let mobileExtended = $state(false)
+	let mobileNav = $state<HTMLElement>()
 </script>
 
 <header>
-	<nav class="mobile-nav" class:extended={mobileExtended}>
+	<nav id="mobile-nav" bind:this={mobileNav}>
 		{#each links as link}
 			<a
 				class="mobile-nav-link"
 				href={link.href}
 				class:active={isNavItem(link, url)}
-				on:click={() => (mobileExtended = false)}
+				on:click={() => mobileNav?.classList.toggle('extended')}
 			>
 				{@html link.text}
 			</a>
@@ -46,18 +46,10 @@
 					</a>
 				{/each}
 			</nav>
-			<button
-				class="burger-menu-button"
-				on:click={() => {
-					if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
-						document.scrollingElement.scrollTo({ top: 0, behavior: 'smooth' })
-					}
-
-					mobileExtended = !mobileExtended
-				}}
-			>
+			<button id="burger-menu-button">
 				<img src="/burger.svg" alt="Menü" />
 			</button>
+			<script src="/scripts/nav.js"></script>
 		</div>
 	</div>
 </header>
@@ -139,8 +131,8 @@
 		display: block;
 	}
 
-	.burger-menu-button,
-	.mobile-nav {
+	#burger-menu-button,
+	#mobile-nav {
 		display: none;
 	}
 
@@ -162,7 +154,7 @@
 			display: none;
 		}
 
-		.burger-menu-button {
+		#burger-menu-button {
 			display: block;
 			background-color: transparent;
 			width: 4rem;
@@ -186,7 +178,7 @@
 			}
 		}
 
-		.mobile-nav {
+		#mobile-nav {
 			position: relative;
 			z-index: 1;
 			display: flex;
@@ -199,7 +191,7 @@
 			overflow: hidden;
 			transition: 0.4s;
 
-			&.extended {
+			&:global(.extended) {
 				margin-top: 0;
 			}
 
