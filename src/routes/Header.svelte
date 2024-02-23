@@ -60,9 +60,10 @@
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
 		overflow: hidden;
-		margin-bottom: -100rem;
-		padding-bottom: 101rem;
-		z-index: 0;
+		margin-bottom: -30vh;
+		padding-bottom: calc(30vh + 1rem);
+		z-index: -1;
+		position: relative;
 	}
 
 	.header-i {
