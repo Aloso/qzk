@@ -62,7 +62,7 @@
 		overflow: hidden;
 		margin-bottom: -30vh;
 		padding-bottom: calc(30vh + 1rem);
-		z-index: -1;
+		z-index: 0;
 		position: relative;
 	}
 
