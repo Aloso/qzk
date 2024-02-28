@@ -56,14 +56,14 @@
 
 			.nav-group {
 				border-radius: 30px;
-				box-shadow: 0 0 0 0 var(--color-theme);
+				box-shadow: 0 0 0 0 #fff2;
 				transition:
 					box-shadow 0.2s,
 					padding-bottom 0.2s;
 				padding-bottom: 0;
 
 				&:global(.extended) {
-					box-shadow: 0 0 0 3px var(--color-theme);
+					box-shadow: 0 0 0 3px #fff2;
 					padding-bottom: 1rem;
 
 					.nav-extender {
@@ -87,7 +87,9 @@
 				line-height: 0;
 				padding: 0 2rem;
 				overflow: hidden;
-				transition: 0.2s;
+				transition:
+					line-height 0.2s,
+					padding 0.2s;
 			}
 
 			.nav-extender {
