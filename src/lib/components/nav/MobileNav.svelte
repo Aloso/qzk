@@ -97,6 +97,8 @@
 				color: transparent;
 				font-size: 0;
 				border: none;
+				border-radius: 100px;
+				box-shadow: inset 0 0 0 0.875rem #a664b4;
 				background-color: transparent;
 				width: calc(3.2rem + 30px);
 				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: white; stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
@@ -105,10 +107,6 @@
 				background-position: center center;
 				transform: rotate(-90deg);
 				transition: transform 0.2s;
-
-				&:focus {
-					background-color: transparent;
-				}
 			}
 
 			a,
