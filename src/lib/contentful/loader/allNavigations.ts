@@ -38,7 +38,8 @@ function parseText(text: string) {
 
 				currentItem.children.push({ href, text, children: [] })
 			} else {
-				items.push({ href, text, children: [] })
+				currentItem = { href, text, children: [] }
+				items.push(currentItem)
 			}
 		}
 	}

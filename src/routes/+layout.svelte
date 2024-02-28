@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores'
-	import Header from './Header.svelte'
-	import Footer from './Footer.svelte'
-	import './styles.scss'
+	import Footer from '$lib/components/nav/Footer.svelte'
+	import Header from '$lib/components/nav/Header.svelte'
 	import type { Navigations } from '$lib/data'
+	import './styles.scss'
 
 	let { data } = $props<{ data: Navigations }>()
 
