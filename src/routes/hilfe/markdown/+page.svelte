@@ -363,8 +363,8 @@ In diesem Absatz steht `Text mit fester Breite`.
 
 	.result {
 		border-radius: 20px;
-		padding: 0.2rem 1.5rem;
-		border: 2px solid var(--color-theme);
+		padding: 1rem 2rem;
 		margin: 1rem 0;
+		box-shadow: 0 2px 15px #0004;
 	}
 </style>
