@@ -129,7 +129,7 @@
 				<div class="event-time">
 					<EventDateTime time={event.time} />
 				</div>
-				<p class="event-description">{event.description}</p>
+				<p class="event-description">{@html event.descHtml}</p>
 
 				<div class="event-place">
 					<p class="event-place-name"><b>Ort:</b> {event.place.name}</p>
@@ -230,10 +230,6 @@
 		h2 {
 			margin-top: 0;
 		}
-	}
-
-	.event-description {
-		white-space: pre-wrap;
 	}
 
 	.event-place-address,

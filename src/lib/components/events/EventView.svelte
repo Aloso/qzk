@@ -22,7 +22,7 @@
 	<div class="event-time">
 		<EventDateTime time={event.time} concise />
 	</div>
-	<div class="event-description">{event.description}</div>
+	<div class="event-description">{@html event.descHtml}</div>
 	{#if event.time.repeats}
 		<div class="event-repeats">
 			Wiederholung: {event.time.repeats.cycle} - {event.time.repeats.days}
@@ -67,6 +67,20 @@
 		font-weight: 600;
 		font-size: 1.5rem;
 		margin: 0;
+	}
+
+	.event-description {
+		:global(p),
+		:global(ul),
+		:global(ol),
+		:global(li),
+		:global(blockquote) {
+			font-size: inherit;
+		}
+
+		:global(p) {
+			margin: 0.5rem 0;
+		}
 	}
 
 	.event-time {

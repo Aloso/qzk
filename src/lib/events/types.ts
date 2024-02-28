@@ -7,6 +7,7 @@ export interface Event {
 	key?: string
 	title: string
 	description: string
+	descHtml?: string
 	website?: string
 	time: Time
 	place: Place
