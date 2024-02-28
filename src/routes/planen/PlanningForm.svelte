@@ -168,6 +168,7 @@
 		<em class="full-width required">Beschreibung</em>
 		<textarea class="full-width" bind:value={description} rows="6" required />
 	</label>
+	<div class="hint">Formatierung mit <a href="/hilfe/markdown">Markdown</a> unterstützt</div>
 
 	<div class="section-title">Zeit</div>
 	<label class="checkbox-label">
@@ -408,6 +409,17 @@
 		color: red;
 		font-size: 140%;
 		line-height: 100%;
+	}
+
+	.hint {
+		opacity: 0.6;
+		font-size: 0.85rem;
+		text-align: right;
+		margin-top: -0.3rem;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 
 	button {
