@@ -2,7 +2,7 @@ import { host } from '.'
 import type { Event } from '../types'
 import { formatErrors } from './errors'
 
-export async function submitDraft(draft: Event): Promise<{ key: string }> {
+export async function submitDraft(draft: Event): Promise<Event> {
 	const response = await fetch(host + '/draft', {
 		method: 'POST',
 		body: JSON.stringify(draft),
@@ -17,7 +17,7 @@ export async function submitDraft(draft: Event): Promise<{ key: string }> {
 			})
 		}
 	}
-	const data = await response.json()
 
-	return data
+	const created = await response.json()
+	return created
 }

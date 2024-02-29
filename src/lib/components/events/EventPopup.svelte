@@ -40,16 +40,18 @@
 
 	async function onSubmit(newEvent: Event) {
 		if (credentials.auth && event?.key) {
+			const key = event.key
 			try {
 				editingStatus = { type: 'submitting' }
 				if (published) {
-					await updateEvent(credentials.auth, newEvent, event.key)
+					newEvent = await updateEvent(credentials.auth, newEvent, key)
 				} else {
-					const success = await updateDraft(newEvent, event.key)
-					if (!success) {
+					const updated = await updateDraft(newEvent, key)
+					if (!updated) {
 						editingStatus = { type: 'error', message: 'Fehler beim Bearbeiten!' }
 						return
 					}
+					newEvent = updated
 				}
 				editingStatus = undefined
 				onEdited?.(newEvent)

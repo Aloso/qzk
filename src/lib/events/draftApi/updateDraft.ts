@@ -2,7 +2,7 @@ import { host } from '.'
 import type { Event } from '../types'
 import { formatErrors } from './errors'
 
-export async function updateDraft(draft: Event, key: string): Promise<boolean> {
+export async function updateDraft(draft: Event, key: string): Promise<Event | false> {
 	const url = new URL(host + '/draft')
 	url.searchParams.set('key', key)
 	const response = await fetch(url, { method: 'PUT', body: JSON.stringify(draft) })
@@ -17,5 +17,7 @@ export async function updateDraft(draft: Event, key: string): Promise<boolean> {
 			throw new Error('request unsuccessful: ' + response.status, { cause: response })
 		}
 	}
-	return true
+
+	const created = await response.json()
+	return created
 }

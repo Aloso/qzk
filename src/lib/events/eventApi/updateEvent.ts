@@ -3,7 +3,7 @@ import { authorizedHeaders, type Auth } from '..'
 import { formatErrors } from '../draftApi/errors'
 import type { Event } from '../types'
 
-export async function updateEvent(auth: Auth, event: Event, key: string): Promise<void> {
+export async function updateEvent(auth: Auth, event: Event, key: string): Promise<Event> {
 	const url = new URL(host + '/event')
 	url.searchParams.set('key', key)
 
@@ -22,4 +22,6 @@ export async function updateEvent(auth: Auth, event: Event, key: string): Promis
 			})
 		}
 	}
+	const created = await response.json()
+	return created
 }
