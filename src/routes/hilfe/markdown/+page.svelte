@@ -136,12 +136,15 @@ Und _das hier_ ist kursiv.
 	<h2 id="trennlinien">Trennlinien</h2>
 
 	<p>
-		Du kannst eine Trennlinie mit <code>---</code> oder <code>***</code> einfügen:
+		Du kannst eine Trennlinie mit <code>---</code> oder <code>***</code> einfügen. Darüber und darunter
+		sollte eine Zeile leer sein:
 	</p>
 
 	<pre>
 Ein Absatz
+
 ---
+
 Ein neuer Absatz
 </pre>
 
