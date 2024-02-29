@@ -15,6 +15,14 @@
 	let { event, editable, published, onEdited, onPublished, onDeletedOrUnpublished } =
 		$props<Props>()
 	let overlayShown = $state(false)
+
+	let descElem = $state<HTMLElement>()
+	let overflown = $state(false)
+	$effect(() => {
+		if (descElem) {
+			overflown = descElem.clientHeight < descElem.scrollHeight
+		}
+	})
 </script>
 
 <button class="event" on:click={() => (overlayShown = true)}>
@@ -22,7 +30,7 @@
 	<div class="event-time">
 		<EventDateTime time={event.time} concise />
 	</div>
-	<div class="event-description">{@html event.descHtml}</div>
+	<div class="event-description" class:overflown bind:this={descElem}>{@html event.descHtml}</div>
 	{#if event.time.repeats}
 		<div class="event-repeats">
 			Wiederholung: {event.time.repeats.cycle} - {event.time.repeats.days}
@@ -70,6 +78,20 @@
 	}
 
 	.event-description {
+		position: relative;
+		max-height: 170px;
+		overflow: hidden;
+
+		&.overflown::after {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: 50px;
+			bottom: 0;
+			background: linear-gradient(transparent, white);
+		}
+
 		:global(p),
 		:global(ul),
 		:global(ol),
