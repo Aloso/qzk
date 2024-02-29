@@ -79,7 +79,7 @@
 
 	.event-description {
 		position: relative;
-		max-height: 170px;
+		max-height: 150px;
 		overflow: hidden;
 
 		&.overflown::after {
