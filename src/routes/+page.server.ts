@@ -2,6 +2,8 @@ import { loadAllBlogPosts, loadStatic } from '$lib/contentful/loader'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreview, StaticPage } from '$lib/data'
 
+export const prerender = true
+
 export interface Data {
 	page: StaticPage
 	posts: BlogPostPreview[]
