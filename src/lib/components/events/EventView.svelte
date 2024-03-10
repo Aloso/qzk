@@ -49,6 +49,8 @@
 />
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	.event {
 		display: block;
 		border: none;
@@ -71,7 +73,7 @@
 	}
 
 	.event-title {
-		font-family: var(--font-heading);
+		font-family: vars.$FONT_HEADING;
 		font-weight: 600;
 		font-size: 1.5rem;
 		margin: 0;
