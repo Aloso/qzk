@@ -77,6 +77,10 @@
 		font-weight: 600;
 		font-size: 1.5rem;
 		margin: 0;
+
+		@supports (font-variation-settings: normal) {
+			font-family: vars.$FONT_HEADING_VARIABLE;
+		}
 	}
 
 	.event-description {
