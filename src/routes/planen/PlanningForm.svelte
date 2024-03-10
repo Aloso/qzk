@@ -320,7 +320,7 @@
 			border: none;
 			background-color: white;
 			padding: 3rem;
-			margin: 50rem 0 5rem;
+			margin: auto;
 		}
 	}
 

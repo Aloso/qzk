@@ -207,8 +207,6 @@
 	.overlay {
 		box-sizing: border-box;
 		display: flex;
-		align-items: center;
-		justify-content: center;
 		position: fixed;
 		left: 0;
 		top: 0;
@@ -218,9 +216,11 @@
 		animation: 0.3s fade-in;
 		z-index: 1000;
 		overflow: auto;
+		padding: 2rem;
 	}
 
 	.popup {
+		margin: auto;
 		display: block;
 		box-sizing: border-box;
 		background-color: white;
