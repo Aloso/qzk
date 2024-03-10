@@ -1,4 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { Event } from '$lib/events/types'
+
 // for information about these interfaces
 declare global {
 	namespace App {
@@ -8,6 +11,10 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	interface Window {
+		__fetchEventsPromise?: Promise<Event[]>
+	}
 }
 
-export {};
+export {}

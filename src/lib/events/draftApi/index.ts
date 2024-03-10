@@ -4,4 +4,4 @@ export * from './fetchDraft'
 export * from './fetchAllDrafts'
 export * from './submitDraft'
 
-export const host = import.meta.env.VITE_ENDPOINT_EVENTS
+export const host = import.meta.env.VITE_PUBLIC_ENDPOINT_EVENTS

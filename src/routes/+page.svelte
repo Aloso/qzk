@@ -21,8 +21,11 @@
 	})
 
 	async function loadEvents() {
+		const response = await (window.__fetchEventsPromise ?? fetchAllEvents())
+		window.__fetchEventsPromise = undefined
+
 		const now = Date.now()
-		events = (await fetchAllEvents()).filter((e) => getEnd(e.time) > now)
+		events = response.filter((e) => getEnd(e.time) > now)
 		events.sort((a, b) => a.time.start.localeCompare(b.time.start))
 	}
 

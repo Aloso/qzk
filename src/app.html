@@ -2,17 +2,31 @@
 <html lang="de-DE">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Bitter:wght@400;500;600;700&family=Laila:wght@400;500;600&display=swap"
-			rel="stylesheet">
+			rel="stylesheet"
+		/>
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
-		<meta name="theme-color" content="#9f80ee">
+		<meta name="theme-color" content="#9f80ee" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
+		<script type="module">
+			async function fetchAllEvents() {
+				const response = await fetch('%sveltekit.env.VITE_PUBLIC_ENDPOINT_EVENTS%/events')
+				if (!response.ok) {
+					throw new Error('request unsuccessful: ' + response.status, { cause: response })
+				}
+				const events = await response.json()
+				return events
+			}
+			if (location.pathname === '/') {
+				window.__fetchEventsPromise = fetchAllEvents()
+			}
+		</script>
 	</body>
 </html>
