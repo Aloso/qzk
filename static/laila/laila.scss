@@ -1,0 +1,18 @@
+@mixin ff($name, $style, $weight, $path) {
+	@font-face {
+		font-family: $name;
+		font-style: $style;
+		font-weight: $weight;
+		font-display: swap;
+		src: url($path) format('woff2');
+	}
+}
+
+@mixin laila($style, $weight, $path) {
+	@include ff(Laila, $style, $weight, '/laila/Laila-' + $path + '.woff2');
+}
+
+@include laila(normal, 300, 'Light');
+@include laila(normal, 400, 'Regular');
+@include laila(normal, 600, 'SemiBold');
+@include laila(normal, 700, 'Bold');

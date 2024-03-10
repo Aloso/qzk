@@ -1,0 +1,36 @@
+@mixin ff($name, $style, $weight, $path) {
+	@font-face {
+		font-family: $name;
+		font-style: $style;
+		font-weight: $weight;
+		font-display: swap;
+		src: url($path) format('woff2');
+	}
+}
+
+@mixin asap($style, $weight, $path) {
+	@include ff(Asap, $style, $weight, '/asap/wf/Asap-' + $path + '.woff2');
+}
+
+@include ff(AsapVariable, normal, 100 900, '/asap/variable/Asap[wdth,wght].woff2');
+@include ff(AsapVariable, italic, 100 900, '/asap/variable/Asap-Italic[wdth,wght].woff2');
+
+@include asap(normal, 100, 'Thin');
+@include asap(normal, 200, 'ExtraLight');
+@include asap(normal, 300, 'Light');
+@include asap(normal, 400, 'Regular');
+@include asap(normal, 500, 'Medium');
+@include asap(normal, 600, 'SemiBold');
+@include asap(normal, 700, 'Bold');
+@include asap(normal, 800, 'ExtraBold');
+@include asap(normal, 900, 'Black');
+
+@include asap(italic, 100, 'ThinItalic');
+@include asap(italic, 200, 'ExtraLightItalic');
+@include asap(italic, 300, 'LightItalic');
+@include asap(italic, 400, 'Italic');
+@include asap(italic, 500, 'MediumItalic');
+@include asap(italic, 600, 'SemiBoldItalic');
+@include asap(italic, 700, 'BoldItalic');
+@include asap(italic, 800, 'ExtraBoldItalic');
+@include asap(italic, 900, 'BlackItalic');

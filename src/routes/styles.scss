@@ -1,5 +1,8 @@
 @use './vars.scss' as vars;
 
+@use '../../static/asap/asap.scss';
+@use '../../static/laila/laila.scss';
+
 :root {
 	--color-theme: #6e0cb4;
 	--color-accent: #f000ec;
@@ -10,6 +13,10 @@
 	font-family: vars.$FONT_BODY;
 	color: var(--color-text);
 	font-size: 18px;
+
+	@supports (font-variation-settings: normal) {
+		font-family: AsapVariable, sans-serif;
+	}
 }
 
 body {
