@@ -14,6 +14,11 @@ declare global {
 
 	interface Window {
 		__fetchEventsPromise?: Promise<Event[]>
+		instgrm?: {
+			Embeds: {
+				process: () => void
+			}
+		}
 	}
 }
 
