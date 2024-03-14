@@ -81,6 +81,14 @@
 </div>
 
 <style lang="scss">
+	@mixin calculated-height {
+		min-height: calc(200px + 0.6666666667 * min(44rem, 100vw - 2rem));
+
+		@media (max-width: 517px) {
+			min-height: calc(154px + 0.6666666667 * min(44rem, 100vw - 2rem));
+		}
+	}
+
 	blockquote {
 		display: flex;
 		flex-direction: column;
@@ -94,7 +102,7 @@
 		transition: min-height 0.5s;
 
 		.loaded & {
-			min-height: calc(200px + 0.6666666667 * min(44rem, 100vw - 2rem));
+			@include calculated-height();
 		}
 	}
 
@@ -158,8 +166,9 @@
 
 		:global(iframe) {
 			box-sizing: border-box;
-			min-height: calc(200px + 0.6666666667 * min(44rem, 100vw - 2rem));
 			border-radius: 15px !important;
+
+			@include calculated-height();
 		}
 	}
 </style>
