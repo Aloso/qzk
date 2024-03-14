@@ -104,6 +104,15 @@ hr {
 	margin: 2rem 0;
 }
 
+body.show-paragraphs {
+	[data-p-mark]::after {
+		content: '\00b6';
+		position: absolute;
+		color: #f56363;
+		padding-left: 2px;
+	}
+}
+
 @keyframes fade-in {
 	0% {
 		opacity: 0;

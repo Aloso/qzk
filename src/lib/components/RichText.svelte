@@ -1,3 +1,25 @@
+<script lang="ts" context="module">
+	if (dev && browser) {
+		let showParagraphs = 'show-paragraphs' in localStorage
+		if (showParagraphs) {
+			document.body.classList.toggle('show-paragraphs')
+		}
+
+		const listener = (event: KeyboardEvent) => {
+			if (event.key === '§' && event.target === document.body) {
+				showParagraphs = !showParagraphs
+				if (showParagraphs) {
+					localStorage.setItem('show-paragraphs', 'true')
+				} else {
+					localStorage.removeItem('show-paragraphs')
+				}
+				document.body.classList.toggle('show-paragraphs')
+			}
+		}
+		document.body.addEventListener('keypress', listener)
+	}
+</script>
+
 <script lang="ts">
 	import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 	import {
@@ -11,6 +33,7 @@
 	import { getSize } from './imageCalc'
 	import type { Entry } from 'contentful'
 	import type { StaticPage, BlogPost, Author } from '$lib/data'
+	import { browser, dev } from '$app/environment'
 
 	interface Props {
 		data: Document
@@ -20,8 +43,8 @@
 
 	const { data, width } = $props<Props>()
 
-	const html = $derived(
-		documentToHtmlString(data, {
+	const html = $derived.by(() => {
+		let result = documentToHtmlString(data, {
 			preserveWhitespace: true,
 			renderNode: {
 				[BLOCKS.EMBEDDED_ASSET]: (node) => {
@@ -59,8 +82,9 @@
 					}
 				},
 			},
-		}),
-	)
+		})
+		return dev ? result.replaceAll('<br/>', '<span data-p-mark></span><br/>') : result
+	})
 </script>
 
 {@html html}
