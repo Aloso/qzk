@@ -10,11 +10,7 @@
 		const hasConsent = localStorage.getItem('consent:instagram')
 		errorShown = 'instagram-error-shown' in localStorage
 		if (hasConsent) {
-			if (window.instgrm) {
-				window.instgrm.Embeds.process()
-			} else {
-				fetchScript()
-			}
+			fetchScript()
 		} else {
 			st = 'ask-for-consent'
 		}
@@ -26,6 +22,12 @@
 	}
 
 	async function fetchScript() {
+		if (window.instgrm) {
+			window.instgrm.Embeds.process()
+			st = 'loaded'
+			return
+		}
+
 		st = 'loading'
 
 		let res: Response
