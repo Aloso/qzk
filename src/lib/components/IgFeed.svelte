@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onMount, tick } from 'svelte'
 
 	type State = 'idle' | 'ask-for-consent' | 'loading' | 'loaded' | 'error'
 
-	let state = $state<State>('idle')
+	let st = $state<State>('idle')
+	let errorShown = $state(false)
 
 	onMount(() => {
 		const hasConsent = localStorage.getItem('consent:instagram')
+		errorShown = 'instagram-error-shown' in localStorage
 		if (hasConsent) {
 			fetchScript()
 		} else {
-			state = 'ask-for-consent'
+			st = 'ask-for-consent'
 		}
 	})
 
@@ -20,23 +22,26 @@
 	}
 
 	async function fetchScript() {
-		state = 'loading'
+		st = 'loading'
 
 		let res: Response
 		try {
 			res = await fetch('https://www.instagram.com/embed.js')
 		} catch {
-			state = 'error'
+			st = 'error'
+			await tick()
+			localStorage.setItem('instagram-error-shown', 'true')
 			return
 		}
 
 		await res.text()
-		state = 'loaded'
+		localStorage.removeItem('instagram-error-shown')
+		st = 'loaded'
 	}
 
 	const profile = 'queereszentrumkassel'
 	const permaLink = `https://www.instagram.com/${profile}/`
-	const loaded = $derived(state === 'loaded')
+	const loaded = $derived(st === 'loaded')
 </script>
 
 <h2>Instagram</h2>
@@ -48,23 +53,23 @@
 		data-instgrm-version="12"
 		style="width: 100%"
 	>
-		{#if state !== 'error'}
+		{#if st !== 'error' || errorShown}
 			<div class="username">@queereszentrumkassel</div>
 		{/if}
 
-		{#if state === 'idle'}
+		{#if st === 'idle' || (st === 'error' && errorShown)}
 			<a id="main_link" href={permaLink} target="_blank" rel="noreferrer noopener">
 				Profil auf Instagram ansehen
 			</a>
-		{:else if state === 'ask-for-consent'}
+		{:else if st === 'ask-for-consent'}
 			<button class="consent-button" on:click={giveConsent}>Profil laden</button>
 			<div class="consent">
 				Dadurch werden Daten an Instagram übermittelt. Mehr unter
 				<a href="/datenschutz">Datenschutz</a>.
 			</div>
-		{:else if state === 'loading' || state === 'loaded'}
+		{:else if st === 'loading' || st === 'loaded'}
 			Lädt...
-		{:else if state === 'error'}
+		{:else if st === 'error'}
 			<div class="error">
 				Das Profil konnte nicht geladen werden. Möglicherweise wurde es durch den Browser oder einen
 				Ad-Blocker blockiert.
