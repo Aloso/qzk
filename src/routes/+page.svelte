@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
+	import IgFeed from '$lib/components/IgFeed.svelte'
 
 	interface Props {
 		data: Data
@@ -44,6 +45,9 @@
 <div class="layout">
 	<section class="mainbar">
 		<RichText data={page.content} width={900} />
+
+		<hr />
+		<IgFeed />
 
 		<hr />
 		<h2>Neue Blog-Beiträge</h2>
