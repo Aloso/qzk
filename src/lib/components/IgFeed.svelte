@@ -64,7 +64,7 @@
 		{:else if st === 'ask-for-consent'}
 			<button class="consent-button" on:click={giveConsent}>Profil laden</button>
 			<div class="consent">
-				Dadurch werden Daten an Instagram übermittelt. Mehr unter
+				Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter
 				<a href="/datenschutz">Datenschutz</a>.
 			</div>
 		{:else if st === 'loading' || st === 'loaded'}
