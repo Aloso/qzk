@@ -6,7 +6,7 @@
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
 	import type { StaticPage } from '$lib/data'
 
-	let { data } = $props<{ data: StaticPage }>()
+	let { data }: { data: StaticPage } = $props()
 
 	let email = $state('')
 	let checkbox = $state(false)

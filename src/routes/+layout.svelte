@@ -5,7 +5,7 @@
 	import type { Navigations } from '$lib/data'
 	import './styles.scss'
 
-	let { data } = $props<{ data: Navigations }>()
+	let { data }: { data: Navigations } = $props()
 
 	if (globalThis.location && globalThis.location.host === 'www.queereszentrumkassel.de') {
 		globalThis.location.replace(globalThis.location.href.replace(/www\./, ''))

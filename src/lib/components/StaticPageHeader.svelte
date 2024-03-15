@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { StaticPage } from '$lib/data'
 
-	let { name, description } = $props<StaticPage>()
+	let { name, description }: StaticPage = $props()
 </script>
 
 <svelte:head>

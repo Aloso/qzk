@@ -8,7 +8,7 @@
 		data: Data
 	}
 
-	let { data } = $props<Props>()
+	let { data }: Props = $props()
 	const { author, posts, totalPosts } = data
 </script>
 

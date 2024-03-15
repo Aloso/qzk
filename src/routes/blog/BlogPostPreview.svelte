@@ -12,7 +12,7 @@
 		noImage?: boolean
 	}
 
-	let { post, small, noImage } = $props<Props>()
+	let { post, small, noImage }: Props = $props()
 </script>
 
 <div class="blogPost" class:small>

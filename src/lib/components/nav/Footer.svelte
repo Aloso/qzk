@@ -5,7 +5,7 @@
 		links: Navigations['footer']
 	}
 
-	let { links } = $props<Props>()
+	let { links }: Props = $props()
 </script>
 
 <footer>

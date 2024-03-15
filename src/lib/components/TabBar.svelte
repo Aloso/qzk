@@ -4,7 +4,7 @@
 		active: string
 	}
 
-	let { tabs, active } = $props<Props>()
+	let { tabs, active }: Props = $props()
 </script>
 
 <div class="tabs">

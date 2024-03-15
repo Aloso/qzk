@@ -17,7 +17,7 @@
 		popup?: boolean
 	}
 
-	let { defaults, onSubmit, onCancel, onDelete, onPublish, status, popup } = $props<Props>()
+	let { defaults, onSubmit, onCancel, onDelete, onPublish, status, popup }: Props = $props()
 
 	$effect(() => {
 		title = defaults.title

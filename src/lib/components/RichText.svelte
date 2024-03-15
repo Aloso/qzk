@@ -41,7 +41,7 @@
 		small?: boolean
 	}
 
-	const { data, width } = $props<Props>()
+	const { data, width }: Props = $props()
 
 	const html = $derived.by(() => {
 		let result = documentToHtmlString(data, {

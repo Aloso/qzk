@@ -7,7 +7,7 @@
 		small?: boolean
 	}
 
-	let { authors, small } = $props<Props>()
+	let { authors, small }: Props = $props()
 </script>
 
 <div class="authors" class:small>

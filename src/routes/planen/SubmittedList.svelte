@@ -7,7 +7,7 @@
 		items: SubmittedDraft[]
 	}
 
-	let { selectedKey, onSelect, items } = $props<Props>()
+	let { selectedKey, onSelect, items }: Props = $props()
 
 	let titleElem = $state<HTMLElement>()
 </script>

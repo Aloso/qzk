@@ -12,7 +12,7 @@
 		data: Data
 	}
 
-	const { data } = $props<Props>()
+	const { data }: Props = $props()
 	const { page, posts } = data
 
 	let events = $state<Event[]>()

@@ -13,7 +13,7 @@
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { publishDraft } from '$lib/events/eventApi'
 
-	let { data } = $props<{ data: StaticPage }>()
+	let { data }: { data: StaticPage } = $props()
 
 	type Status =
 		| { type: 'loading' }

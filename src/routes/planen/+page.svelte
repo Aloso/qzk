@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation'
 	import SubmittedList from './SubmittedList.svelte'
 
-	let { data } = $props<{ data: StaticPage }>()
+	let { data }: { data: StaticPage } = $props()
 
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 

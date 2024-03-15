@@ -4,7 +4,7 @@
 		withDescription?: boolean
 	}
 
-	let { date, withDescription } = $props<Props>()
+	let { date, withDescription }: Props = $props()
 	const dateFmt = new Date(date).toLocaleDateString('de-DE', {
 		day: '2-digit',
 		month: '2-digit',

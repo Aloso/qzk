@@ -10,7 +10,7 @@
 		width?: number
 		height?: number
 	}
-	let { img, alt, fallbackAlt, width, height, ...rest } = $props<Props>()
+	let { img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
 	if (!img.fields) {
 		throw new Error(`Tried to include an asset that isn't published: ${img.sys.id}`)
 	}

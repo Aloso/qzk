@@ -17,7 +17,7 @@
 
 	let submitClicked = $state(false)
 
-	let { data } = $props<{ data: StaticPage }>()
+	let { data }: { data: StaticPage } = $props()
 </script>
 
 <StaticPageHeader {...data} />

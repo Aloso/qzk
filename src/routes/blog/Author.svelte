@@ -9,7 +9,7 @@
 		plus?: number
 	}
 
-	let { author, small, single, plus } = $props<Props>()
+	let { author, small, single, plus }: Props = $props()
 </script>
 
 <a class="author" class:small class:single href="/autor/{author.slug}">

@@ -2,7 +2,7 @@
 	import BlogPostPreview from './BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 
-	let { data } = $props<{ data: Data }>()
+	let { data }: { data: Data } = $props()
 	let { posts } = data
 </script>
 

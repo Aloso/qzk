@@ -7,7 +7,7 @@
 		links: Navigations['header']
 	}
 
-	let { url, links } = $props<Props>()
+	let { url, links }: Props = $props()
 </script>
 
 <nav>
