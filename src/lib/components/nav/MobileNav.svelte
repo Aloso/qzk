@@ -19,7 +19,7 @@
 				</a>
 
 				{#if link.children?.length}
-					<button data-nav-extender="" class="nav-extender">Erweitern</button>
+					<button data-nav-extender="" class="nav-extender" aria-label="Erweitern"></button>
 				{/if}
 			</div>
 			{#each link.children as child}
@@ -46,7 +46,7 @@
 			height: 30rem;
 			margin-top: -30rem;
 			padding: 2rem;
-			background-color: hsl(289, 35%, 55%);
+			background-color: #a664b4;
 			overflow: hidden;
 			transition: 0.4s;
 
@@ -94,8 +94,6 @@
 
 			.nav-extender {
 				flex-grow: 0;
-				color: transparent;
-				font-size: 0;
 				border: none;
 				border-radius: 100px;
 				box-shadow: inset 0 0 0 0.875rem #a664b4;
@@ -107,10 +105,14 @@
 				background-position: center center;
 				transform: rotate(-90deg);
 				transition: transform 0.2s;
+
+				&:hover,
+				&:focus {
+					background-color: #0002;
+				}
 			}
 
-			a,
-			.nav-extender {
+			a {
 				display: block;
 				flex-grow: 1;
 				color: white;
