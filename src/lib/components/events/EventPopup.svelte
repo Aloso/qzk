@@ -19,8 +19,15 @@
 
 	const credentials = createAdminCredentials()
 
-	let { event, editable, published, onClose, onEdited, onPublished, onDeletedOrUnpublished } =
-		$props<Props>()
+	let {
+		event,
+		editable,
+		published,
+		onClose,
+		onEdited,
+		onPublished,
+		onDeletedOrUnpublished,
+	}: Props = $props()
 	let overlay = $state<HTMLElement>()
 
 	let editingStatus = $state<
@@ -110,10 +117,10 @@
 		role="button"
 		tabindex="0"
 		bind:this={overlay}
-		on:click={(e) => {
+		onclick={(e) => {
 			if (e.target === overlay) onClose()
 		}}
-		on:keydown={(e) => {
+		onkeydown={(e) => {
 			if (e.key === 'Escape') onClose()
 		}}
 	>
@@ -176,10 +183,10 @@
 
 				<div class="controls">
 					{#if editable}
-						<button class="delete-button" on:click={onDelete}>Löschen</button>
+						<button class="delete-button" onclick={onDelete}>Löschen</button>
 						<button
 							class="edit-button"
-							on:click={() => {
+							onclick={() => {
 								if (event) {
 									defaults.setToDraft(event)
 									editingStatus = { type: 'ready' }
@@ -189,11 +196,11 @@
 							Bearbeiten
 						</button>
 						{#if !published}
-							<button class="publish-button" on:click={onPublish}>Veröffentlichen</button>
+							<button class="publish-button" onclick={onPublish}>Veröffentlichen</button>
 						{/if}
 					{/if}
 
-					<button class="close-button" on:click={() => onClose()}>Schließen</button>
+					<button class="close-button" onclick={() => onClose()}>Schließen</button>
 				</div>
 				{#if popupError}
 					<p class="popup-error">{popupError}</p>

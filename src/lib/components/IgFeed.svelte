@@ -68,7 +68,7 @@
 				Profil auf Instagram ansehen
 			</a>
 		{:else if st === 'ask-for-consent'}
-			<button class="consent-button" on:click={giveConsent}>Profil laden</button>
+			<button class="consent-button" onclick={giveConsent}>Profil laden</button>
 			<div class="consent">
 				Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter
 				<a href="/datenschutz">Datenschutz</a>.

@@ -3,7 +3,7 @@
 		disabled?: boolean
 	}
 
-	let { disabled } = $props<Props>()
+	let { disabled }: Props = $props()
 </script>
 
 <button type="submit" class:disabled>

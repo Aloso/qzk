@@ -6,7 +6,7 @@
 		concise?: boolean
 	}
 
-	let { time, concise } = $props<Props>()
+	let { time, concise }: Props = $props()
 
 	let formatted = $derived.by(() => {
 		const wholeDay = !time.start.includes('T')

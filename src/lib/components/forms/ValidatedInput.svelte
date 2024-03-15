@@ -13,8 +13,8 @@
 		style?: string
 	}
 
-	let { label, type, name, value, required, error, hasError, submitClicked, style } =
-		$props<Props>()
+	let { label, type, name, value, required, error, hasError, submitClicked, style }: Props =
+		$props()
 
 	let focused = $state(false)
 	let customError = $state<string | false>(false)
@@ -41,9 +41,9 @@
 			{value}
 			class:invalid={errorVisible}
 			{style}
-			on:input={(e) => (value = e.currentTarget.value)}
-			on:focus={() => (focused = true)}
-			on:blur={() => (focused = false)}
+			oninput={(e) => (value = e.currentTarget.value)}
+			onfocus={() => (focused = true)}
+			onblur={() => (focused = false)}
 		/>
 	{:else}
 		<input
@@ -52,9 +52,9 @@
 			{value}
 			class:invalid={errorVisible}
 			{style}
-			on:input={(e) => (value = e.currentTarget.value)}
-			on:focus={() => (focused = true)}
-			on:blur={() => (focused = false)}
+			oninput={(e) => (value = e.currentTarget.value)}
+			onfocus={() => (focused = true)}
+			onblur={() => (focused = false)}
 		/>
 	{/if}
 

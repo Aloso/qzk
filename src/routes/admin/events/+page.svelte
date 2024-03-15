@@ -58,10 +58,10 @@
 		<p>
 			Seite {page}
 			<span class="pagination">
-				<button disabled={page === 0} on:click={() => (page -= 1)}>Zurück</button>
-				<button disabled={length <= page * pageSize} on:click={() => (page += 1)}>Weiter</button>
+				<button disabled={page === 0} onclick={() => (page -= 1)}>Zurück</button>
+				<button disabled={length <= page * pageSize} onclick={() => (page += 1)}>Weiter</button>
 				{#if page > 1}
-					<button on:click={() => (page = 0)}>Zum Anfang</button>
+					<button onclick={() => (page = 0)}>Zum Anfang</button>
 				{/if}
 			</span>
 		</p>

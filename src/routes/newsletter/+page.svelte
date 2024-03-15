@@ -26,7 +26,7 @@
 <form
 	method="POST"
 	action="https://3a21c768.sibforms.com/serve/MUIFADgcRngDHEOQekOVRjyGk_GWH_ZxhN5vaZBwEv35Twecv86LJQjqOgJAWwOt8LuGKlOAcdryM5r4OSmtAxYCT4AXmofrepNoQDgmE9hoy__Qte3j2l15Oe0NURXeNBONlgbg_PXRYZTvc1PpHqPtS797KOFZYiw6FMBndP0ThMf9UfuqnbGVujVfIxRhIJVhn4c9hEywsOzJ"
-	on:submit={(event) => {
+	onsubmit={(event) => {
 		if (formError) {
 			event.preventDefault()
 		}

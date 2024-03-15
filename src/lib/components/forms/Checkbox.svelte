@@ -9,7 +9,7 @@
 		submitClicked: boolean
 	}
 
-	let { name, value, checked, required, submitClicked } = $props<Props>()
+	let { name, value, checked, required, submitClicked }: Props = $props()
 </script>
 
 <label>
@@ -18,7 +18,7 @@
 		{name}
 		{value}
 		{checked}
-		on:change={(e) => (checked = e.currentTarget.checked)}
+		onchange={(e) => (checked = e.currentTarget.checked)}
 	/>
 	<div class="label-text">
 		<slot />

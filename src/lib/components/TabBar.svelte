@@ -9,7 +9,7 @@
 
 <div class="tabs">
 	{#each tabs as [tabType, name]}
-		<button class:active={active === tabType} on:click={() => (active = tabType)}>{name}</button>
+		<button class:active={active === tabType} onclick={() => (active = tabType)}>{name}</button>
 	{/each}
 </div>
 

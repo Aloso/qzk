@@ -33,7 +33,7 @@
 <form
 	method="POST"
 	action="https://formsubmit.co/info@queereszentrumkassel.de"
-	on:submit={(event) => {
+	onsubmit={(event) => {
 		if (formError) {
 			event.preventDefault()
 		}

@@ -6,7 +6,7 @@
 	import RichText from '$lib/components/RichText.svelte'
 	import BlogPostPreview from '../../BlogPostPreview.svelte'
 
-	let { data } = $props<{ data: BlogPostView }>()
+	let { data }: { data: BlogPostView } = $props()
 </script>
 
 <svelte:head>

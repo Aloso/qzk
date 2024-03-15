@@ -20,7 +20,7 @@
 			<li class:active={key === selectedKey}>
 				<a
 					href="/planen/eingereicht?key={encodeURIComponent(key)}"
-					on:click={() => {
+					onclick={() => {
 						onSelect?.(key)
 						setTimeout(() => {
 							if (titleElem) {

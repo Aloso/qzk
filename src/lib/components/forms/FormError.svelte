@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { visible } = $props<{ visible: boolean }>()
+	let { visible }: { visible: boolean } = $props()
 </script>
 
 <div class="error" aria-hidden={!visible} class:visible>

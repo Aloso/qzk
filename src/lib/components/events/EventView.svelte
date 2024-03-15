@@ -12,8 +12,8 @@
 		onDeletedOrUnpublished?: () => void
 	}
 
-	let { event, editable, published, onEdited, onPublished, onDeletedOrUnpublished } =
-		$props<Props>()
+	let { event, editable, published, onEdited, onPublished, onDeletedOrUnpublished }: Props =
+		$props()
 	let overlayShown = $state(false)
 
 	let descElem = $state<HTMLElement>()
@@ -25,7 +25,7 @@
 	})
 </script>
 
-<button class="event" on:click={() => (overlayShown = true)}>
+<button class="event" onclick={() => (overlayShown = true)}>
 	<div class="event-title">{event.title}</div>
 	<div class="event-time">
 		<EventDateTime time={event.time} concise />
