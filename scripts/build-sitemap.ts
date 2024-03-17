@@ -11,6 +11,8 @@ const disallowed = fs
 	.filter((line) => line.startsWith('Disallow:'))
 	.map((line) => line.replace(/^Disallow:\s*/, ''))
 
+const lessImportant = ['/datenschutz', '/impressum']
+
 function getSitemapXML(domain: string, routes: string[]) {
 	let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
 	sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -18,7 +20,12 @@ function getSitemapXML(domain: string, routes: string[]) {
 		if (route === '/index') return
 		if (disallowed.includes(route + '/') || disallowed.some((d) => route.startsWith(d))) return
 
-		const prio = route === '/' ? '1.0' : /^\/[^/]+$/.test(route) ? '0.7' : '0.4'
+		const prio =
+			route === '/'
+				? '1.0'
+				: /^\/[^/]+$/.test(route) && !lessImportant.includes(route)
+					? '0.7'
+					: '0.4'
 		sitemap += getSitemapUrl(domain + route, prio, route === '/blog')
 	})
 	sitemap += '</urlset>\n'
