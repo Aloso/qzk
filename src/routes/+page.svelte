@@ -67,7 +67,7 @@
 			{#each events as event}
 				<EventView {event} />
 			{/each}
-			<a href="/planen" class="add-event">Veranstaltung einreichen</a>
+			<a href="/planen" class="add-event">Neue Veranstaltung</a>
 		{/if}
 	</div>
 </div>
@@ -112,6 +112,7 @@
 		background-color: var(--color-theme);
 		color: white;
 		border: none;
+		margin: 0.5rem 0;
 		padding: 12px 18px;
 		border-radius: 15px;
 		font: inherit;

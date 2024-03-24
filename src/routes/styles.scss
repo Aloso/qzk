@@ -79,6 +79,20 @@ h6 {
 	color: var(--color-theme);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	br + b {
+		font-weight: inherit;
+		font-size: 75%;
+		display: block;
+		opacity: 0.85;
+	}
+}
+
 p,
 ul,
 ol {
@@ -88,6 +102,10 @@ ol {
 	.smaller-paragraphs & {
 		font-size: 1.1rem;
 	}
+}
+
+section p {
+	line-height: 1.7;
 }
 
 blockquote {
