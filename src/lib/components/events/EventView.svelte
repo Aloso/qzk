@@ -5,6 +5,8 @@
 
 	interface Props {
 		event: Event
+		showDescription?: boolean
+		showPlace?: boolean
 		editable?: boolean
 		published?: boolean
 		onEdited?: (newEvent: Event) => void
@@ -12,8 +14,16 @@
 		onDeletedOrUnpublished?: () => void
 	}
 
-	let { event, editable, published, onEdited, onPublished, onDeletedOrUnpublished }: Props =
-		$props()
+	let {
+		event,
+		showDescription = true,
+		showPlace = false,
+		editable,
+		published,
+		onEdited,
+		onPublished,
+		onDeletedOrUnpublished,
+	}: Props = $props()
 	let overlayShown = $state(false)
 
 	let descElem = $state<HTMLElement>()
@@ -30,7 +40,14 @@
 	<div class="event-time">
 		<EventDateTime time={event.time} concise />
 	</div>
-	<div class="event-description" class:overflown bind:this={descElem}>{@html event.descHtml}</div>
+	{#if showDescription}
+		<div class="event-description" class:overflown bind:this={descElem}>{@html event.descHtml}</div>
+	{/if}
+	{#if showPlace}
+		<div class="event-place">
+			{event.place.name}{event.place.room ? `, ${event.place.room}` : ''}
+		</div>
+	{/if}
 	{#if event.time.repeats}
 		<div class="event-repeats">
 			Wiederholung: {event.time.repeats.cycle} - {event.time.repeats.days}

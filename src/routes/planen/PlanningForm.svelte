@@ -9,6 +9,7 @@
 		onCancel?: () => void
 		onDelete?: () => void
 		onPublish?: () => void
+		onTimeChange?: (time: Event['time']) => void
 		status:
 			| { type: 'ready'; submitted?: boolean }
 			| { type: 'submitting' }
@@ -17,7 +18,8 @@
 		popup?: boolean
 	}
 
-	let { defaults, onSubmit, onCancel, onDelete, onPublish, status, popup }: Props = $props()
+	let { defaults, onSubmit, onCancel, onDelete, onPublish, onTimeChange, status, popup }: Props =
+		$props()
 
 	$effect(() => {
 		title = defaults.title
@@ -40,6 +42,15 @@
 		pictureUrl = defaults.pictureUrl
 		yourName = defaults.yourName
 		yourEmail = defaults.yourEmail
+	})
+
+	$effect(() => {
+		// run when one of these changes
+		endDate
+		endTime
+		if (startDate && (startTime || wholeDay)) {
+			onTimeChange?.(getTime())
+		}
 	})
 
 	// topic
@@ -115,31 +126,9 @@
 		const event: Event = {
 			title,
 			description,
-			time: {
-				start: wholeDay ? startDate : `${startDate}T${startTime}`,
-				end: wholeDay
-					? endDate || undefined
-					: endTime === ''
-						? undefined
-						: `${startDate}T${endTime}`,
-			},
-			place: {
-				name:
-					placeType === 'PHYSICAL' ? placeName : placeType === 'QZ' ? 'Queeres Zentrum Kassel' : '',
-				type: placeType === 'QZ' ? 'PHYSICAL' : placeType,
-				address: placeType === 'QZ' ? 'Mauerstraße 11\n34117 Kassel' : placeAddress,
-				url: placeType === 'ONLINE' ? placeUrl || undefined : undefined,
-				room: placeType === 'QZ' ? placeRoom : undefined,
-			},
-			organizer:
-				organizerName === ''
-					? undefined
-					: {
-							name: organizerName,
-							email: organizerEmail === '' ? undefined : organizerEmail,
-							phone: organizerPhone === '' ? undefined : organizerPhone,
-							website: organizerWebsite === '' ? undefined : organizerWebsite,
-						},
+			time: getTime(),
+			place: getPlace(),
+			organizer: getOrganizer(),
 			website: website === '' ? undefined : website,
 			pictureUrl: pictureUrl === '' ? undefined : pictureUrl,
 			tags: [],
@@ -149,6 +138,35 @@
 			},
 		}
 		onSubmit(event)
+	}
+
+	function getTime(): Event['time'] {
+		return {
+			start: wholeDay ? startDate : `${startDate}T${startTime}`,
+			end: wholeDay ? endDate || undefined : endTime === '' ? undefined : `${startDate}T${endTime}`,
+		}
+	}
+
+	function getPlace(): Event['place'] {
+		return {
+			name:
+				placeType === 'PHYSICAL' ? placeName : placeType === 'QZ' ? 'Queeres Zentrum Kassel' : '',
+			type: placeType === 'QZ' ? 'PHYSICAL' : placeType,
+			address: placeType === 'QZ' ? 'Mauerstraße 11\n34117 Kassel' : placeAddress,
+			url: placeType === 'ONLINE' ? placeUrl || undefined : undefined,
+			room: placeType === 'QZ' ? placeRoom : undefined,
+		}
+	}
+
+	function getOrganizer(): Event['organizer'] {
+		return organizerName === ''
+			? undefined
+			: {
+					name: organizerName,
+					email: organizerEmail === '' ? undefined : organizerEmail,
+					phone: organizerPhone === '' ? undefined : organizerPhone,
+					website: organizerWebsite === '' ? undefined : organizerWebsite,
+				}
 	}
 </script>
 
@@ -309,11 +327,12 @@
 
 <style lang="scss">
 	form {
+		box-sizing: border-box;
 		background-color: #eee;
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		padding: 30px;
-		max-width: 700px;
+		max-width: 40rem;
 		font-size: 105%;
 
 		&.popup {
