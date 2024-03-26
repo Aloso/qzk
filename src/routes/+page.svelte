@@ -1,7 +1,7 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
-	import { fetchAllEvents } from '$lib/events/eventApi'
+	import { fetchAllEvents, type EventNoSubmitter } from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
@@ -15,7 +15,7 @@
 	const { data }: Props = $props()
 	const { page, posts } = data
 
-	let events = $state<Event[]>()
+	let events = $state<EventNoSubmitter[]>()
 
 	onMount(() => {
 		loadEvents()

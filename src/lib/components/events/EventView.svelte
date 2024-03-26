@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { EventNoSubmitter } from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
 	import EventDateTime from './EventDateTime.svelte'
 	import EventPopup from './EventPopup.svelte'
 
 	interface Props {
-		event: Event
+		event: EventNoSubmitter
 		showDescription?: boolean
 		showPlace?: boolean
 		editable?: boolean

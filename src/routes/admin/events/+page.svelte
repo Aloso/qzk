@@ -34,7 +34,7 @@
 			length = response.length
 			loading = false
 		} else {
-			data = await fetchAllEvents()
+			data = (await fetchAllEvents(credentials.auth)) as Event[]
 			data.sort((a, b) => a.time.start.localeCompare(b.time.start))
 
 			length = data.length

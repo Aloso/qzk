@@ -1,14 +1,8 @@
 import type { Event } from '$lib/events/types'
 
-export interface FormValues {
+export interface FormValuesStep1 {
 	title: string
 	description: string
-
-	startDate: string
-	startTime: string
-	endDate: string
-	endTime: string
-	wholeDay: boolean
 
 	placeType: 'QZ' | 'PHYSICAL' | 'ONLINE'
 	placeRoom: undefined | string
@@ -16,17 +10,31 @@ export interface FormValues {
 	placeAddress: string
 	placeUrl: string
 
+	website: string
+	pictureUrl: string
+}
+
+export interface FormValuesStep2 {
+	startDate: string
+	startTime: string
+	endDate: string
+	endTime: string
+	wholeDay: boolean
+}
+
+export interface FormValuesStep3 {
 	organizerName: string
 	organizerEmail: string
 	organizerPhone: string
 	organizerWebsite: string
+}
 
-	website: string
-	pictureUrl: string
-
+export interface FormValuesStep4 {
 	yourName: string
 	yourEmail: string
 }
+
+export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & FormValuesStep4
 
 const emptyDefaults: FormValues = {
 	title: '',

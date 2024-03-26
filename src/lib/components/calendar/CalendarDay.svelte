@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { Event } from '$lib/events/types'
+	import type { EventNoSubmitter } from '$lib/events/eventApi'
 
 	interface Props {
 		day: number
 		month: number
 		year: number
 		isCurrentMonth?: boolean
-		allEvents: Event[]
-		draftTime?: Event['time']
+		allEvents: EventNoSubmitter[]
+		draftTime?: EventNoSubmitter['time']
 	}
 
 	let { day, month, year, isCurrentMonth, allEvents, draftTime }: Props = $props()

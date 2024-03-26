@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { deleteDraft, updateDraft } from '$lib/events/draftApi'
-	import { deleteEvent, publishDraft, updateEvent } from '$lib/events/eventApi'
+	import {
+		deleteEvent,
+		publishDraft,
+		updateEvent,
+		type EventNoSubmitter,
+	} from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
@@ -8,7 +13,7 @@
 	import EventDateTime from './EventDateTime.svelte'
 
 	interface Props {
-		event?: Event
+		event?: EventNoSubmitter
 		editable?: boolean
 		published?: boolean
 		onClose: () => void
@@ -188,7 +193,7 @@
 							class="edit-button"
 							onclick={() => {
 								if (event) {
-									defaults.setToDraft(event)
+									defaults.setToDraft(event as Event)
 									editingStatus = { type: 'ready' }
 								}
 							}}

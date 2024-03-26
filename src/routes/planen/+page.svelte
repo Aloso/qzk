@@ -2,16 +2,16 @@
 	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import type { StaticPage } from '$lib/data'
-	import PlanningForm from './PlanningForm.svelte'
+	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
 	import type { Event } from '$lib/events/types'
 	import { createSubmittedDrafts } from '../../lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { goto } from '$app/navigation'
 	import SubmittedList from './SubmittedList.svelte'
-	import CalendarView from './CalendarView.svelte'
+	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import { onMount } from 'svelte'
-	import { fetchAllEvents } from '$lib/events/eventApi'
+	import { fetchAllEvents, type EventNoSubmitter } from '$lib/events/eventApi'
 	import EventView from '$lib/components/events/EventView.svelte'
 
 	let { data }: { data: StaticPage } = $props()
@@ -41,7 +41,7 @@
 		}
 	}
 
-	let events = $state<Event[]>()
+	let events = $state<EventNoSubmitter[]>()
 	let draftTime = $state<Event['time']>()
 	let showDate = $state(new Date())
 	let intersecting = $derived.by(() => {

@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { EventNoSubmitter } from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
 	import CalendarDay from './CalendarDay.svelte'
 
 	interface Props {
-		events: Event[]
+		events: EventNoSubmitter[]
 		showDate: Date
 		draftTime?: Event['time']
 	}

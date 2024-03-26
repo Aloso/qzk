@@ -43,7 +43,7 @@ interface Organizer {
 	website?: string
 }
 
-interface Submitter {
+export interface Submitter {
 	name: string
 	email: string
 }
