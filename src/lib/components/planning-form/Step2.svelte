@@ -15,6 +15,7 @@
 </script>
 
 <div class="section-title">Zeit</div>
+<p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
 <TimeSlot bind:time={values.time} />
 
 <style lang="scss">
@@ -22,5 +23,14 @@
 		font-weight: 600;
 		font-size: 1.5rem;
 		margin: 1.5rem 0 1rem 0;
+	}
+
+	p {
+		margin: 1rem 0;
+		font-size: 93%;
+
+		&.optional {
+			color: green;
+		}
 	}
 </style>
