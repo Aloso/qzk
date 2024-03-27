@@ -101,7 +101,6 @@
 		display: inline-block;
 		width: 140px;
 		padding: 10px 0;
-		vertical-align: -12px;
 
 		@media (max-width: 650px) {
 			display: block;

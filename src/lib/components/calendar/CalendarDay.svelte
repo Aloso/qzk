@@ -36,7 +36,7 @@
 	})
 </script>
 
-<div class="calendar-day" class:isCurrentMonth class:isToday>
+<button type="button" class="calendar-day" class:isCurrentMonth class:isToday>
 	<div class="day-label">{day}</div>
 	{#if dayEvents.length > 0}
 		<div class="events-badge">{dayEvents.length}</div>
@@ -44,28 +44,39 @@
 	{#if hasDraftEvent}
 		<div class="draft-badge" />
 	{/if}
-</div>
+</button>
 
 <style lang="scss">
 	.calendar-day {
-		display: inline-block;
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
 		box-sizing: border-box;
 		height: 70px;
 		width: calc(100% / 7);
 		vertical-align: top;
+		text-align: left;
+		font-family: inherit;
+		padding: 0;
 		border: 2px solid #d6d6d6;
 		border-width: 0 2px 2px 0;
 		background-color: #eee;
-		transition: background-color 0.1s;
+		transition:
+			background-color 0.1s,
+			border-color 0.1s,
+			box-shadow 0.1s;
 
 		.day-label {
 			color: #0006;
 			font-size: 1.25rem;
 			padding: 0.3rem 0.5rem;
+			flex: 1 0 100%;
 		}
 
 		&:hover {
 			background-color: #e3e3e3;
+			border-color: #b6b6b6;
+			box-shadow: -1px -1px 0 1px #b6b6b6;
 		}
 
 		&.isCurrentMonth {
@@ -87,6 +98,8 @@
 
 			&:hover {
 				background-color: #ffc3dc;
+				border-color: #dc4f9f;
+				box-shadow: -1px -1px 0 1px #dc4f9f;
 			}
 		}
 
@@ -98,7 +111,7 @@
 			padding: 2px 4px;
 			text-align: center;
 			border-radius: 100px;
-			margin: 0 -10px 0 10px;
+			margin: 0 -6px 0 10px;
 			font-size: 0.95rem;
 			font-weight: 600;
 			height: 1.25rem;

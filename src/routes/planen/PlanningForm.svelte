@@ -313,7 +313,7 @@
 		border-radius: 15px;
 		min-width: 50px;
 		transition: border-color 0.2s;
-		vertical-align: top;
+		vertical-align: middle;
 
 		&:hover,
 		&:focus {
@@ -357,7 +357,6 @@
 		display: inline-block;
 		width: 140px;
 		padding: 10px 0;
-		vertical-align: -12px;
 
 		&.required::after {
 			content: ' *';
