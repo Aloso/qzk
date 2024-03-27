@@ -128,6 +128,7 @@
 		font-size: 1.33rem;
 		font-weight: 600;
 		margin: 1em 0;
+		font-family: inherit;
 
 		&:first-child {
 			margin-top: 0;
@@ -138,18 +139,11 @@
 		width: 30rem;
 		flex-grow: 1;
 		flex-shrink: 1;
-		position: sticky;
-		top: 0;
-		padding-top: 1rem;
-		margin-top: -1rem;
 		box-sizing: border-box;
-		max-height: 100vh;
-		overflow: auto;
 
 		@media (max-width: 1280px) {
 			width: auto;
 			max-width: 40rem;
-			max-height: revert;
 		}
 	}
 </style>

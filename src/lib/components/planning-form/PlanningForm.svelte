@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Event } from '$lib/events/types'
+	import type { Event, Time } from '$lib/events/types'
 	import type { FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
 	import Step1 from './Step1.svelte'
@@ -28,24 +28,24 @@
 
 	let values = $state(defaults)
 
+	let prevStep = $state(1)
 	let step = $state(1)
 	let valid = $state([false, false, false, false])
 
 	let progressElem = $state<HTMLElement>()
 	$effect(() => {
-		step
+		if (step !== prevStep) {
+			prevStep = step
 
-		setTimeout(() => {
-			progressElem?.scrollIntoView({ behavior: 'smooth' })
-		})
+			setTimeout(() => {
+				progressElem?.scrollIntoView({ behavior: 'smooth' })
+			})
+		}
 	})
 
 	$effect(() => {
-		// run when one of these changes
-		values.endDate
-		values.endTime
-		if (values.startDate && (values.startTime || values.wholeDay)) {
-			onTimeChange?.(getTime())
+		if (values.time.start) {
+			onTimeChange?.(values.time as Time)
 		}
 	})
 
@@ -70,7 +70,7 @@
 		const event: Event = {
 			title: values.title,
 			description: values.description,
-			time: getTime(),
+			time: values.time as Time,
 			place: getPlace(),
 			organizer: getOrganizer(),
 			website: values.website === '' ? undefined : values.website,
@@ -82,17 +82,6 @@
 			},
 		}
 		onSubmit(event)
-	}
-
-	function getTime(): Event['time'] {
-		return {
-			start: values.wholeDay ? values.startDate : `${values.startDate}T${values.startTime}`,
-			end: values.wholeDay
-				? values.endDate || undefined
-				: values.endTime === ''
-					? undefined
-					: `${values.startDate}T${values.endTime}`,
-		}
 	}
 
 	function getPlace(): Event['place'] {

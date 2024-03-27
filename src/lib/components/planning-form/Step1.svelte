@@ -86,7 +86,7 @@
 		border-radius: 15px;
 		min-width: 50px;
 		transition: border-color 0.2s;
-		vertical-align: top;
+		vertical-align: middle;
 
 		&:hover,
 		&:focus {
@@ -129,7 +129,7 @@
 		display: inline-block;
 		width: 150px;
 		padding: 10px 0;
-		vertical-align: -12px;
+		vertical-align: middle;
 
 		@media (max-width: 650px) {
 			display: block;
@@ -145,7 +145,8 @@
 		text-align: right;
 		margin-top: -0.3rem;
 
-		&:hover {
+		&:hover,
+		&:focus-within {
 			opacity: 1;
 		}
 	}

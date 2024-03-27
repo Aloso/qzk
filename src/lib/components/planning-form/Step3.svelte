@@ -47,7 +47,7 @@
 
 	select,
 	textarea,
-	input:not([type='checkbox']):not([type='radio']) {
+	input:not([type='checkbox']) {
 		background-color: white;
 		border: 2px solid #aaa;
 		font: inherit;
@@ -57,7 +57,7 @@
 		border-radius: 15px;
 		min-width: 50px;
 		transition: border-color 0.2s;
-		vertical-align: top;
+		vertical-align: middle;
 
 		&:hover,
 		&:focus {

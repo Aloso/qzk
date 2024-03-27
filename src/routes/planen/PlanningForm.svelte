@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Event } from '$lib/events/types'
+	import TimeSlot from '$lib/components/planning-form/TimeSlot.svelte'
+	import type { Event, Time } from '$lib/events/types'
 	import type { FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
 
@@ -24,11 +25,7 @@
 	$effect(() => {
 		title = defaults.title
 		description = defaults.description
-		startDate = defaults.startDate
-		startTime = defaults.startTime
-		endDate = defaults.endDate
-		endTime = defaults.endTime
-		wholeDay = defaults.wholeDay
+		time = defaults.time
 		placeType = defaults.placeType
 		placeRoom = defaults.placeRoom
 		placeName = defaults.placeName
@@ -45,12 +42,7 @@
 	})
 
 	$effect(() => {
-		// run when one of these changes
-		endDate
-		endTime
-		if (startDate && (startTime || wholeDay)) {
-			onTimeChange?.(getTime())
-		}
+		if (time.start) onTimeChange?.(time as Time)
 	})
 
 	// topic
@@ -58,11 +50,7 @@
 	let description = $state('')
 
 	// time
-	let startDate = $state('')
-	let startTime = $state('')
-	let endDate = $state('')
-	let endTime = $state('')
-	let wholeDay = $state(false)
+	let time = $state<Partial<Time>>({})
 
 	// place
 	let placeType = $state<'QZ' | 'PHYSICAL' | 'ONLINE'>('QZ')
@@ -98,20 +86,6 @@
 	})
 
 	$effect(() => {
-		if (startDate) {
-			const start = new Date(startTime ? `${startDate}T${startTime}` : startDate)
-			if (endDate) {
-				const end = new Date(endDate)
-				if (end < start) {
-					endDate = startDate
-				}
-			} else {
-				endDate = startDate
-			}
-		}
-	})
-
-	$effect(() => {
 		if (organizerName && !yourName) {
 			yourName = organizerName
 		}
@@ -126,7 +100,7 @@
 		const event: Event = {
 			title,
 			description,
-			time: getTime(),
+			time: time as Time,
 			place: getPlace(),
 			organizer: getOrganizer(),
 			website: website === '' ? undefined : website,
@@ -138,13 +112,6 @@
 			},
 		}
 		onSubmit(event)
-	}
-
-	function getTime(): Event['time'] {
-		return {
-			start: wholeDay ? startDate : `${startDate}T${startTime}`,
-			end: wholeDay ? endDate || undefined : endTime === '' ? undefined : `${startDate}T${endTime}`,
-		}
 	}
 
 	function getPlace(): Event['place'] {
@@ -189,26 +156,7 @@
 	<div class="hint">Formatierung mit <a href="/hilfe/markdown">Markdown</a> unterstützt</div>
 
 	<div class="section-title">Zeit</div>
-	<label class="checkbox-label">
-		<input type="checkbox" bind:checked={wholeDay} />
-		Ganztägig bzw. über mehrere Tage
-	</label>
-	<label>
-		<em class="required">{wholeDay ? 'Startdatum' : 'Datum'}</em>
-		<input type="date" bind:value={startDate} required />
-	</label>
-	<label class:hidden={!wholeDay}>
-		<em class="required">Enddatum</em>
-		<input type="date" bind:value={endDate} required={wholeDay} />
-	</label>
-	<label class:hidden={wholeDay}>
-		<em class="required">Beginn</em>
-		<input type="time" bind:value={startTime} required={!wholeDay} />
-	</label>
-	<label class:hidden={wholeDay}>
-		<em>Ende</em>
-		<input type="time" bind:value={endTime} />
-	</label>
+	<TimeSlot bind:time />
 
 	<div class="section-title">Ort</div>
 	<label class="radio-label">

@@ -17,7 +17,7 @@ export interface Event {
 	submitter: Submitter
 }
 
-interface Time {
+export interface Time {
 	start: string
 	end?: string
 	repeats?: Repeats

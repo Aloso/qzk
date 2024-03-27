@@ -1,4 +1,4 @@
-import type { Event } from '$lib/events/types'
+import type { Event, Time } from '$lib/events/types'
 
 export interface FormValuesStep1 {
 	title: string
@@ -15,11 +15,7 @@ export interface FormValuesStep1 {
 }
 
 export interface FormValuesStep2 {
-	startDate: string
-	startTime: string
-	endDate: string
-	endTime: string
-	wholeDay: boolean
+	time: Partial<Time>
 }
 
 export interface FormValuesStep3 {
@@ -39,11 +35,7 @@ export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & F
 const emptyDefaults: FormValues = {
 	title: '',
 	description: '',
-	startDate: '',
-	startTime: '',
-	endDate: '',
-	endTime: '',
-	wholeDay: false,
+	time: {},
 	placeType: 'QZ',
 	placeRoom: undefined,
 	placeName: '',
@@ -73,11 +65,7 @@ export function createEventPlanningDefaults() {
 			defaults = {
 				title: draft.title,
 				description: draft.description,
-				startDate: draft.time.start.split('T')[0],
-				startTime: draft.time.start.split('T')[1] ?? '',
-				endDate: draft.time.end?.split('T')[0] ?? '',
-				endTime: draft.time.end?.split('T')[1] ?? '',
-				wholeDay: !draft.time.start.includes('T'),
+				time: draft.time,
 				placeType: draft.place.room ? 'QZ' : draft.place.type,
 				placeRoom: draft.place.room,
 				placeName: draft.place.name,
