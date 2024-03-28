@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TimeSlot from '$lib/components/planning-form/TimeSlot.svelte'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import type { FormTime, FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
@@ -6,11 +7,13 @@
 	import Step2 from './Step2.svelte'
 	import Step3 from './Step3.svelte'
 	import Step4 from './Step4.svelte'
-	import Progress from '../forms/Progress.svelte'
 
 	interface Props {
 		defaults: FormValues
 		onSubmit: (event: Event & WithSubmitter) => void
+		onCancel?: () => void
+		onDelete?: () => void
+		onPublish?: () => void
 		onTimeChange?: (time: Time) => void
 		status:
 			| { type: 'ready'; submitted?: boolean }
@@ -20,32 +23,18 @@
 		popup?: boolean
 	}
 
-	let { defaults, onSubmit, onTimeChange, status, popup }: Props = $props()
+	let { defaults, onSubmit, onCancel, onDelete, onPublish, onTimeChange, status, popup }: Props =
+		$props()
 
 	let values = $state(defaults)
-
-	let prevStep = $state(1)
-	let step = $state(1)
 	let valid = $state([false, false, false, false])
-
-	let progressElem = $state<HTMLElement>()
-	$effect(() => {
-		if (step !== prevStep) {
-			prevStep = step
-
-			setTimeout(() => {
-				progressElem?.scrollIntoView({ behavior: 'smooth' })
-			})
-		}
-	})
+	let formLoaded = $state(false)
 
 	$effect(() => {
 		if (values.time[0] && isTimeValid(values.time[0])) {
 			onTimeChange?.(values.time[0])
 		}
 	})
-
-	let formLoaded = $state(false)
 
 	onMount(() => {
 		formLoaded = true
@@ -57,7 +46,9 @@
 		}
 	})
 
-	function submitForm() {
+	function submitForm(ev: SubmitEvent) {
+		ev.preventDefault()
+
 		localStorage.setItem(
 			'submitterData',
 			JSON.stringify({ name: values.yourName, email: values.yourEmail }),
@@ -66,7 +57,7 @@
 		const event: Event & WithSubmitter = {
 			title: values.title,
 			description: values.description,
-			time: values.time as Time[],
+			time: values.time.filter((time): time is Time => !!time.start),
 			place: getPlace(),
 			organizer: getOrganizer(),
 			website: values.website === '' ? undefined : values.website,
@@ -77,6 +68,7 @@
 				email: values.yourEmail,
 			},
 		}
+
 		onSubmit(event)
 	}
 
@@ -115,34 +107,38 @@
 	<form class:popup>Wird geladen...</form>
 {/if}
 
-<form on:submit|preventDefault={submitForm} class:popup class:hidden={!formLoaded}>
-	<Progress min={1} max={4} value={step} bind:elem={progressElem} />
+<form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
+	<Step1 {values} bind:valid={valid[1]} />
+	<Step2 {values} bind:valid={valid[2]} />
+	<Step3 {values} bind:valid={valid[3]} />
+	<Step4 {values} bind:valid={valid[4]} professional />
 
-	{#if step === 1}
-		<Step1 {values} bind:valid={valid[1]} />
-	{:else if step === 2}
-		<Step2 {values} bind:valid={valid[2]} />
-	{:else if step === 3}
-		<Step3 {values} bind:valid={valid[3]} />
-	{:else}
-		<Step4 {values} bind:valid={valid[4]} />
+	<button type="submit" disabled={status.type === 'error' && status.missing}>Absenden</button>
+	{#if onCancel}
+		<button type="button" class="cancel-button" onclick={onCancel}>Abbruch</button>
 	{/if}
-
-	<div class="nav-buttons">
-		{#if step > 1}
-			<button type="button" onclick={() => step--}>Zurück</button>
-		{:else}
-			<div />
-		{/if}
-
-		{#if step === 4}
-			<button type="submit" disabled={!valid[step] || (status.type === 'error' && status.missing)}>
-				Absenden
-			</button>
-		{:else}
-			<button type="button" disabled={!valid[step]} onclick={() => step++}>Weiter</button>
-		{/if}
-	</div>
+	{#if onDelete}
+		<button
+			type="button"
+			class="delete-button"
+			onclick={onDelete}
+			disabled={status.type === 'error' && status.missing}
+		>
+			Löschen
+		</button>
+	{/if}
+	{#if onPublish}
+		<button
+			type="button"
+			class="publish-button"
+			onclick={onPublish}
+			disabled={status.type === 'error' ||
+				status.type === 'submitting' ||
+				status.type === 'deleting'}
+		>
+			Veröffentlichen
+		</button>
+	{/if}
 
 	{#if status.type === 'submitting'}
 		<p>Wird abgesendet...</p>
@@ -162,13 +158,9 @@
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		padding: 30px;
-		width: 100%;
-		max-width: 40rem;
+		width: 40rem;
+		max-width: 100%;
 		font-size: 105%;
-
-		&.hidden {
-			display: none;
-		}
 
 		&.popup {
 			border: none;
@@ -178,9 +170,8 @@
 		}
 	}
 
-	.nav-buttons {
-		display: flex;
-		justify-content: space-between;
+	.hidden {
+		display: none;
 	}
 
 	button {
@@ -200,6 +191,41 @@
 		&:disabled {
 			opacity: 0.5;
 		}
+	}
+
+	.delete-button {
+		background-color: darkred;
+		margin-left: 1rem;
+
+		&:hover,
+		&:focus {
+			background-color: #ab0a0a;
+		}
+	}
+
+	.publish-button {
+		background-color: #06771b;
+		margin-left: 1rem;
+
+		&:hover,
+		&:focus {
+			background-color: #109b2a;
+		}
+	}
+
+	.cancel-button {
+		background-color: #656565;
+		margin-left: 1rem;
+
+		&:hover,
+		&:focus {
+			background-color: #7e7e7e;
+		}
+	}
+
+	p {
+		margin: 1rem 0;
+		font-size: 93%;
 	}
 
 	.error {

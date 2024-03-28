@@ -1,12 +1,11 @@
 import { host } from '.'
 import { authorizedHeaders, type Auth } from '..'
-import type { Event, Submitter } from '../types'
+import { wire2event } from '../convert'
+import type { Event, WireEvent, WithSubmitter } from '../types'
 
-export interface EventNoSubmitter extends Omit<Event, 'submitter'> {
-	submitter?: Submitter
-}
-
-export async function fetchAllEvents(auth?: Auth): Promise<EventNoSubmitter[]> {
+export async function fetchAllEvents(): Promise<Event[]>
+export async function fetchAllEvents(auth: Auth): Promise<(Event & WithSubmitter)[]>
+export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 	const response = await fetch(
 		host + '/events',
 		auth ? { headers: authorizedHeaders(auth) } : undefined,
@@ -14,6 +13,14 @@ export async function fetchAllEvents(auth?: Auth): Promise<EventNoSubmitter[]> {
 	if (!response.ok) {
 		throw new Error('request unsuccessful: ' + response.status, { cause: response })
 	}
-	const events = await response.json()
-	return events
+	const events: WireEvent[] = await response.json()
+	return events.map(wire2event)
+}
+
+export async function fetchAllEventsWithCache(): Promise<Event[]> {
+	const response = await (window.__fetchEventsPromise?.then((e) => e.map(wire2event)) ??
+		fetchAllEvents())
+	window.__fetchEventsPromise = undefined
+
+	return response
 }

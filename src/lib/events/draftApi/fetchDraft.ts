@@ -1,7 +1,8 @@
 import { host } from '.'
-import type { Event } from '../types'
+import { wire2event } from '../convert'
+import type { Event, WireEvent, WithSubmitter } from '../types'
 
-export async function fetchDraft(key: string): Promise<Event | null> {
+export async function fetchDraft(key: string): Promise<(Event & WithSubmitter) | null> {
 	const url = new URL(host + '/draft')
 	url.searchParams.set('key', key)
 
@@ -13,6 +14,6 @@ export async function fetchDraft(key: string): Promise<Event | null> {
 			throw new Error('request unsuccessful: ' + response.status, { cause: response })
 		}
 	}
-	const data = await response.json()
-	return data
+	const data: WireEvent & WithSubmitter = await response.json()
+	return wire2event(data)
 }

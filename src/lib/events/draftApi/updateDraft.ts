@@ -1,11 +1,18 @@
 import { host } from '.'
-import type { Event } from '../types'
+import { event2wire, wire2event } from '../convert'
+import type { Event, WireEvent, WithSubmitter } from '../types'
 import { formatErrors } from './errors'
 
-export async function updateDraft(draft: Event, key: string): Promise<Event | false> {
+export async function updateDraft(
+	draft: Event & WithSubmitter,
+	key: string,
+): Promise<(Event & WithSubmitter) | false> {
 	const url = new URL(host + '/draft')
 	url.searchParams.set('key', key)
-	const response = await fetch(url, { method: 'PUT', body: JSON.stringify(draft) })
+	const response = await fetch(url, {
+		method: 'PUT',
+		body: JSON.stringify(event2wire(draft)),
+	})
 
 	if (!response.ok) {
 		if (response.status === 404) {
@@ -18,6 +25,6 @@ export async function updateDraft(draft: Event, key: string): Promise<Event | fa
 		}
 	}
 
-	const created = await response.json()
-	return created
+	const created: WireEvent & WithSubmitter = await response.json()
+	return wire2event(created)
 }

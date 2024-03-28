@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { EventNoSubmitter } from '$lib/events/eventApi'
+	import type { Event, Time } from '$lib/events/types'
 
 	interface Props {
 		day: number
 		month: number
 		year: number
 		isCurrentMonth?: boolean
-		allEvents: EventNoSubmitter[]
-		draftTime?: EventNoSubmitter['time']
+		allEvents: Event[]
+		draftTime?: Time
 	}
 
 	let { day, month, year, isCurrentMonth, allEvents, draftTime }: Props = $props()
@@ -21,18 +21,14 @@
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
 	let dayEvents = $derived(
-		allEvents.filter((event) => {
-			const start = new Date(event.time.start)
-			const end = event.time.end ? new Date(event.time.end) : start
-			return !(start > dayEnd || end < dayStart)
-		}),
+		allEvents.filter((event) =>
+			event.time.some((time) => !(time.start > dayEnd || (time.end ?? time.start) < dayStart)),
+		),
 	)
+
 	let hasDraftEvent = $derived.by(() => {
 		if (!draftTime) return false
-
-		const start = new Date(draftTime.start)
-		const end = draftTime.end ? new Date(draftTime.end) : start
-		return !(start > dayEnd || end < dayStart)
+		return !(draftTime.start > dayEnd || (draftTime.end ?? draftTime.start) < dayStart)
 	})
 </script>
 

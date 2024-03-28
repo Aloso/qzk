@@ -5,14 +5,14 @@
 	import type { Auth } from '$lib/events'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
 	import { fetchAllEvents } from '$lib/events/eventApi'
-	import type { Event } from '$lib/events/types'
+	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
 	const pageSize = 25
 
 	let tab = $state<'drafts' | 'published'>('drafts')
 
-	let data = $state<Event[]>([])
+	let data = $state<(Event & WithSubmitter)[]>([])
 	let length = $state(0)
 	let page = $state(0)
 	let loading = $state(true)
@@ -34,8 +34,8 @@
 			length = response.length
 			loading = false
 		} else {
-			data = (await fetchAllEvents(credentials.auth)) as Event[]
-			data.sort((a, b) => a.time.start.localeCompare(b.time.start))
+			data = await fetchAllEvents(auth)
+			data.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
 
 			length = data.length
 			loading = false

@@ -1,31 +1,51 @@
 export interface DraftData {
 	length: number
-	events: Event[]
+	events: (Event & WithSubmitter)[]
 }
 
-export interface Event {
+export interface WireDraftData {
+	length: number
+	events: (WireEvent & WithSubmitter)[]
+}
+
+export interface EventCommon {
 	key?: string
 	title: string
 	description: string
 	descHtml?: string
 	website?: string
-	time: Time
 	place: Place
 	organizer?: Organizer
 	pictureUrl?: string
 	tags: string[]
+	submitter?: Submitter
+}
+
+export interface WithKey extends EventCommon {
+	key: string
+}
+
+export interface WithSubmitter extends EventCommon {
 	submitter: Submitter
 }
 
-export interface Time {
-	start: string
-	end?: string
-	repeats?: Repeats
+export interface WireEvent extends EventCommon {
+	time: WireTime | WireTime[]
 }
 
-interface Repeats {
-	cycle: 'DAY' | 'WEEK' | 'MONTH'
-	days?: number
+export interface Event extends EventCommon {
+	time: Time[]
+}
+
+export interface WireTime {
+	start: string
+	end?: string
+}
+
+export interface Time {
+	hasStartTime: boolean
+	start: Date
+	end?: Date
 }
 
 interface Place {

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
-	import { fetchAllEvents, type EventNoSubmitter } from '$lib/events/eventApi'
-	import type { Event } from '$lib/events/types'
+	import { fetchAllEvents, fetchAllEventsWithCache } from '$lib/events/eventApi'
+	import type { Event, Time, WireEvent } from '$lib/events/types'
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 	import IgFeed from '$lib/components/IgFeed.svelte'
+	import { wire2event } from '$lib/events/convert'
 
 	interface Props {
 		data: Data
@@ -15,25 +16,33 @@
 	const { data }: Props = $props()
 	const { page, posts } = data
 
-	let events = $state<EventNoSubmitter[]>()
+	let events = $state<Event[]>()
 
 	onMount(() => {
 		loadEvents()
 	})
 
 	async function loadEvents() {
-		const response = await (window.__fetchEventsPromise ?? fetchAllEvents())
-		window.__fetchEventsPromise = undefined
+		const response = await fetchAllEventsWithCache()
 
 		const now = Date.now()
-		events = response.filter((e) => getEnd(e.time) > now)
-		events.sort((a, b) => a.time.start.localeCompare(b.time.start))
+		events = response.filter((e) => {
+			const filteredTimes = e.time.filter((time) => getEnd(time) > now)
+			filteredTimes.splice(3)
+			e.time = filteredTimes
+			return e.time.length > 0
+		})
+		events.sort((a, b) => +a.time[0].start - +b.time[0].start)
 	}
 
-	function getEnd(time: Event['time']) {
-		let d = time.end ?? time.start
-		if (!d.includes('T')) d = `${d}T23:59:59`
-		return new Date(d).getTime()
+	function getEnd(time: Time) {
+		const d = new Date(time.end ?? time.start)
+		if (!time.end || !time.hasStartTime) {
+			d.setHours(23)
+			d.setMinutes(59)
+			d.setSeconds(59)
+		}
+		return d.getTime()
 	}
 </script>
 

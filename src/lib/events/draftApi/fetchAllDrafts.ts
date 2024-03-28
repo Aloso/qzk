@@ -1,6 +1,7 @@
 import { host } from '.'
 import { authorizedHeaders, type Auth } from '..'
-import type { DraftData } from '../types'
+import { wire2event } from '../convert'
+import type { DraftData, WireDraftData } from '../types'
 
 export async function fetchAllDrafts(
 	auth: Auth,
@@ -15,6 +16,9 @@ export async function fetchAllDrafts(
 	if (!response.ok) {
 		throw new Error('request unsuccessful: ' + response.status, { cause: response })
 	}
-	const data = await response.json()
-	return data
+	const data: WireDraftData = await response.json()
+	return {
+		...data,
+		events: data.events.map(wire2event),
+	}
 }

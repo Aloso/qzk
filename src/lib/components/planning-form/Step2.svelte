@@ -10,13 +10,13 @@
 	let { values, valid }: Props = $props()
 
 	$effect(() => {
-		valid = !!values.time.start
+		valid = !!values.time[0]?.start
 	})
 </script>
 
 <div class="section-title">Zeit</div>
 <p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
-<TimeSlot bind:time={values.time} />
+<TimeSlot bind:time={values.time[0]} />
 
 <style lang="scss">
 	.section-title {

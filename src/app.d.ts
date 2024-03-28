@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { Event } from '$lib/events/types'
+import type { WireEvent } from '$lib/events/types'
 
 // for information about these interfaces
 declare global {
@@ -13,7 +13,7 @@ declare global {
 	}
 
 	interface Window {
-		__fetchEventsPromise?: Promise<Event[]>
+		__fetchEventsPromise?: Promise<WireEvent[]>
 		instgrm?: {
 			Embeds: {
 				process: () => void

@@ -8,9 +8,10 @@
 	interface Props {
 		values: FormValuesStep4 & FormValuesStep3
 		valid: boolean
+		professional?: boolean
 	}
 
-	let { values, valid }: Props = $props()
+	let { values, valid, professional }: Props = $props()
 
 	onMount(() => {
 		if (values.organizerName && !values.yourName) {
@@ -27,10 +28,12 @@
 	})
 </script>
 
-<p class="important">
-	Durch das Absenden stimmst du der Veröffentlichung der angegebenen Daten zu. Mehr Infos findest du
-	in der <a href="/datenschutz" target="_blank">Datenschutzerklärung</a>.
-</p>
+{#if !professional}
+	<p class="important">
+		Durch das Absenden stimmst du der Veröffentlichung der angegebenen Daten zu. Mehr Infos findest
+		du in der <a href="/datenschutz" target="_blank">Datenschutzerklärung</a>.
+	</p>
+{/if}
 
 <div class="section-title">Persönliche Infos</div>
 <p>Diese Daten werden nicht veröffentlicht.</p>

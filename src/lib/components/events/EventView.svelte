@@ -1,16 +1,15 @@
 <script lang="ts">
-	import type { EventNoSubmitter } from '$lib/events/eventApi'
-	import type { Event } from '$lib/events/types'
+	import type { Event, WithSubmitter } from '$lib/events/types'
 	import EventDateTime from './EventDateTime.svelte'
 	import EventPopup from './EventPopup.svelte'
 
 	interface Props {
-		event: EventNoSubmitter
+		event: Event
 		showDescription?: boolean
 		showPlace?: boolean
 		editable?: boolean
 		published?: boolean
-		onEdited?: (newEvent: Event) => void
+		onEdited?: (newEvent: Event & WithSubmitter) => void
 		onPublished?: () => void
 		onDeletedOrUnpublished?: () => void
 	}
@@ -38,8 +37,12 @@
 
 <button class="event" onclick={() => (overlayShown = true)}>
 	<div class="event-title">{event.title}</div>
-	<div class="event-time">
-		<EventDateTime time={event.time} concise />
+	<div class="event-times">
+		{#each event.time as time}
+			<span class="event-time">
+				<EventDateTime {time} concise />
+			</span>
+		{/each}
 	</div>
 	{#if showDescription}
 		<div class="event-description" class:overflown bind:this={descElem}>{@html event.descHtml}</div>
@@ -47,11 +50,6 @@
 	{#if showPlace}
 		<div class="event-place">
 			{event.place.name}{event.place.room ? `, ${event.place.room}` : ''}
-		</div>
-	{/if}
-	{#if event.time.repeats}
-		<div class="event-repeats">
-			Wiederholung: {event.time.repeats.cycle} - {event.time.repeats.days}
 		</div>
 	{/if}
 </button>
@@ -133,7 +131,7 @@
 		display: inline-block;
 		background-color: #ffc7ec;
 		padding: 5px 10px;
-		margin: 5px 0;
+		margin: 5px 5px 0 0;
 		border-radius: 20px;
 	}
 </style>

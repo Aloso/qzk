@@ -1,31 +1,35 @@
 <script lang="ts">
-	import type { Time } from '$lib/events/types'
+	import type { FormTime } from '$lib/hooks/createEventPlanningDefaults.svelte'
 
 	interface Props {
-		time: Partial<Time>
+		time: FormTime
 	}
 
 	let { time }: Props = $props()
 
 	let prevTime = $state(time)
-	let values = $state(initialValues(time.start, time.end))
+	let values = $state(initialValues(time))
 
-	function initialValues(start?: string, end?: string) {
-		const [startDate = '', startTime = ''] = start?.split('T') ?? []
-		const [endDate = '', endTime = ''] = end?.split('T') ?? []
+	function initialValues({ start, end, hasStartTime }: FormTime) {
+		const [startDate = '', startTime = ''] = start?.toISOString().split('T') ?? []
+		const [endDate = '', endTime = ''] = end?.toISOString().split('T') ?? []
 		return {
 			startDate,
-			startTime,
+			startTime: hasStartTime ? startTime : '',
 			endDate,
-			endTime,
-			longerPeriod: !!start && !!end && startDate !== endDate,
+			endTime: hasStartTime ? endTime : '',
+			longerPeriod: !!endDate,
 		}
 	}
 
 	$effect(() => {
-		if (time.start !== prevTime.start || time.end !== prevTime.end) {
+		if (
+			time.start !== prevTime.start ||
+			time.end !== prevTime.end ||
+			time.hasStartTime !== prevTime.hasStartTime
+		) {
 			prevTime = time
-			values = initialValues(time.start, time.end)
+			values = initialValues(time)
 		}
 	})
 
@@ -49,22 +53,27 @@
 		time = prevTime = getTime()
 	})
 
-	function getTime(): Partial<Time> {
+	function getTime(): FormTime {
+		const { startDate, startTime, endDate, endTime, longerPeriod } = values
 		return {
-			start: values.longerPeriod
-				? values.startDate || undefined
-				: values.startDate === ''
-					? undefined
-					: values.startTime === ''
-						? values.startDate
-						: `${values.startDate}T${values.startTime}`,
-			end: values.longerPeriod
-				? values.endDate || undefined
-				: values.endTime === ''
-					? undefined
-					: values.endTime === ''
-						? values.startDate
-						: `${values.startDate}T${values.endTime}`,
+			hasStartTime: !!startTime,
+			start: longerPeriod ? dateFrom(startDate) : dateFrom(startDate, startTime),
+			end: longerPeriod ? dateFrom(endDate) : dateTimeFrom(startDate, endTime),
+		}
+	}
+
+	function dateFrom(date?: string, time?: string): Date | undefined {
+		const d = date || undefined
+		const t = time || undefined
+		if (d) {
+			return new Date(t ? `${d}T${t}` : d)
+		}
+	}
+	function dateTimeFrom(date?: string, time?: string): Date | undefined {
+		const d = date || undefined
+		const t = time || undefined
+		if (d && t) {
+			return new Date(`${d}T${t}`)
 		}
 	}
 </script>

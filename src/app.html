@@ -10,7 +10,7 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script type="module">
-			async function fetchAllEvents() {
+			async function fetchAllWireEvents() {
 				const response = await fetch('%sveltekit.env.VITE_PUBLIC_ENDPOINT_EVENTS%/events')
 				if (!response.ok) {
 					throw new Error('request unsuccessful: ' + response.status, { cause: response })
@@ -19,7 +19,7 @@
 				return events
 			}
 			if (location.pathname === '/') {
-				window.__fetchEventsPromise = fetchAllEvents()
+				window.__fetchEventsPromise = fetchAllWireEvents()
 			}
 		</script>
 	</body>

@@ -2,9 +2,9 @@
 	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import type { StaticPage } from '$lib/data'
-	import PlanningForm from '../PlanningForm.svelte'
+	import PlanningForm from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
-	import type { Event } from '$lib/events/types'
+	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { createEventPlanningRouter } from '$lib/hooks/createEventPlanningRouter.svelte'
@@ -49,7 +49,7 @@
 		}
 	}
 
-	async function onSubmit(event: Event) {
+	async function onSubmit(event: Event & WithSubmitter) {
 		status = { type: 'submitting' }
 		try {
 			if (router.key) {

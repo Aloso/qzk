@@ -1,26 +1,24 @@
 <script lang="ts">
-	import type { Event } from '$lib/events/types'
+	import type { Time } from '$lib/events/types'
 
 	interface Props {
-		time: Event['time']
+		time: Time
 		concise?: boolean
 	}
 
 	let { time, concise }: Props = $props()
 
 	let formatted = $derived.by(() => {
-		const wholeDay = !time.start.includes('T')
-		const onlyStart = !time.end || time.start === time.end
-		if (wholeDay) {
-			return onlyStart
-				? formatDate(new Date(time.start), concise)
-				: formatDateSpan(new Date(time.start), new Date(time.end!), concise)
+		if (!time.hasStartTime) {
+			return time.end
+				? formatDateSpan(time.start, time.end, concise)
+				: formatDate(time.start, concise)
 		} else {
 			return (
-				formatDate(new Date(time.start), concise) +
+				formatDate(time.start, concise) +
 				' \u{00A0}' +
-				formatTime(new Date(time.start)) +
-				(onlyStart ? '' : ' – ' + formatTime(new Date(time.end!)))
+				formatTime(time.start) +
+				(time.end ? ' – ' + formatTime(time.end) : '')
 			)
 		}
 	})

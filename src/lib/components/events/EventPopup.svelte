@@ -1,23 +1,18 @@
 <script lang="ts">
 	import { deleteDraft, updateDraft } from '$lib/events/draftApi'
-	import {
-		deleteEvent,
-		publishDraft,
-		updateEvent,
-		type EventNoSubmitter,
-	} from '$lib/events/eventApi'
-	import type { Event } from '$lib/events/types'
+	import { deleteEvent, publishDraft, updateEvent } from '$lib/events/eventApi'
+	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import PlanningForm from '../../../routes/planen/PlanningForm.svelte'
+	import PlanningFormProfesh from '../planning-form/PlanningFormProfesh.svelte'
 	import EventDateTime from './EventDateTime.svelte'
 
 	interface Props {
-		event?: EventNoSubmitter
+		event?: Event
 		editable?: boolean
 		published?: boolean
 		onClose: () => void
-		onEdited?: (newEvent: Event) => void
+		onEdited?: (newEvent: Event & WithSubmitter) => void
 		onPublished?: () => void
 		onDeletedOrUnpublished?: () => void
 	}
@@ -50,7 +45,7 @@
 		}
 	})
 
-	async function onSubmit(newEvent: Event) {
+	async function onSubmit(newEvent: Event & WithSubmitter) {
 		if (credentials.auth && event?.key) {
 			const key = event.key
 			try {
@@ -130,7 +125,7 @@
 		}}
 	>
 		{#if editingStatus}
-			<PlanningForm
+			<PlanningFormProfesh
 				defaults={defaults.values}
 				{onSubmit}
 				onCancel={() => (editingStatus = undefined)}
@@ -140,8 +135,12 @@
 		{:else}
 			<div class="popup">
 				<h2>{event.title}</h2>
-				<div class="event-time">
-					<EventDateTime time={event.time} />
+				<div class="event-times">
+					{#each event.time as time}
+						<span class="event-time">
+							<EventDateTime {time} />
+						</span>
+					{/each}
 				</div>
 				<p class="event-description">{@html event.descHtml}</p>
 
@@ -192,8 +191,8 @@
 						<button
 							class="edit-button"
 							onclick={() => {
-								if (event) {
-									defaults.setToDraft(event as Event)
+								if (event && event.submitter) {
+									defaults.setToDraft(event as Event & WithSubmitter)
 									editingStatus = { type: 'ready' }
 								}
 							}}
@@ -255,7 +254,7 @@
 		display: inline-block;
 		background-color: #ffc7ec;
 		padding: 8px 12px;
-		margin: 0;
+		margin: 0 8px 8px 0;
 		font-size: 1.1rem;
 		border-radius: 30px;
 	}

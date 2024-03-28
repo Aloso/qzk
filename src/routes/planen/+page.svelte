@@ -4,14 +4,14 @@
 	import type { StaticPage } from '$lib/data'
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
-	import type { Event } from '$lib/events/types'
+	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createSubmittedDrafts } from '../../lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { goto } from '$app/navigation'
 	import SubmittedList from './SubmittedList.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import { onMount } from 'svelte'
-	import { fetchAllEvents, type EventNoSubmitter } from '$lib/events/eventApi'
+	import { fetchAllEvents, fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import EventView from '$lib/components/events/EventView.svelte'
 
 	let { data }: { data: StaticPage } = $props()
@@ -22,7 +22,7 @@
 	const defaults = createEventPlanningDefaults()
 	const submittedDrafts = createSubmittedDrafts()
 
-	async function onSubmit(event: Event) {
+	async function onSubmit(event: Event & WithSubmitter) {
 		status = { type: 'submitting' }
 		try {
 			const { key } = await submitDraft(event)
@@ -41,34 +41,29 @@
 		}
 	}
 
-	let events = $state<EventNoSubmitter[]>()
-	let draftTime = $state<Event['time']>()
+	let events = $state<Event[]>()
+	let draftTime = $state<Time>()
 	let showDate = $state(new Date())
 	let intersecting = $derived.by(() => {
 		if (!events || !draftTime) return []
 
-		let eStart = new Date(draftTime.start)
-		let eEnd = new Date(draftTime.end ?? draftTime.start)
+		let eStart = draftTime.start
+		let eEnd = draftTime.end ?? draftTime.start
 		eEnd.setHours(23)
 		eEnd.setMinutes(59)
 		eEnd.setSeconds(59)
 
-		return events.filter((event) => {
-			const start = new Date(event.time.start)
-			const end = event.time.end ? new Date(event.time.end) : start
-			return !(start > eEnd || end < eStart)
-		})
+		return events.filter((event) =>
+			event.time.some((time) => !(time.start > eEnd || (time.end ?? time.start) < eStart)),
+		)
 	})
 	onMount(() => {
 		loadEvents()
 	})
 
 	async function loadEvents() {
-		const response = await (window.__fetchEventsPromise ?? fetchAllEvents())
-		window.__fetchEventsPromise = undefined
-
-		events = response
-		events.sort((a, b) => a.time.start.localeCompare(b.time.start))
+		events = await fetchAllEventsWithCache()
+		events.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
 	}
 </script>
 

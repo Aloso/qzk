@@ -1,16 +1,21 @@
 import { host } from '.'
 import { authorizedHeaders, type Auth } from '..'
+import { event2wire, wire2event } from '../convert'
 import { formatErrors } from '../draftApi/errors'
-import type { Event } from '../types'
+import type { Event, WireEvent, WithSubmitter } from '../types'
 
-export async function updateEvent(auth: Auth, event: Event, key: string): Promise<Event> {
+export async function updateEvent(
+	auth: Auth,
+	event: Event & WithSubmitter,
+	key: string,
+): Promise<Event & WithSubmitter> {
 	const url = new URL(host + '/event')
 	url.searchParams.set('key', key)
 
 	const response = await fetch(url, {
 		method: 'PUT',
 		headers: authorizedHeaders(auth),
-		body: JSON.stringify(event),
+		body: JSON.stringify(event2wire(event)),
 	})
 	if (!response.ok) {
 		if (response.status === 400) {
@@ -22,6 +27,6 @@ export async function updateEvent(auth: Auth, event: Event, key: string): Promis
 			})
 		}
 	}
-	const created = await response.json()
-	return created
+	const created: WireEvent & WithSubmitter = await response.json()
+	return wire2event(created)
 }
