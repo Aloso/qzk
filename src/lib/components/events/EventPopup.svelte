@@ -163,20 +163,21 @@
 					</p>
 				{/if}
 				{#if event.organizer}
-					<p><b>Kontakt:</b></p>
-					<p class="event-organizer">{event.organizer.name}</p>
-					{#if event.organizer.email}
-						<p><a href="mailto:{event.organizer.email}">{event.organizer.email}</a></p>
-					{/if}
-					{#if event.organizer.phone}
-						<p><a href="tel:{event.organizer.phone}">{event.organizer.phone}</a></p>
-					{/if}
-					{#if event.organizer.website}
-						<p>
+					<p>
+						<b>Kontakt:</b>
+						{event.organizer.name}
+						{#if event.organizer.email}
+							<br /><a href="mailto:{event.organizer.email}">{event.organizer.email}</a>
+						{/if}
+						{#if event.organizer.phone}
+							<br /><a href="tel:{event.organizer.phone}">{event.organizer.phone}</a>
+						{/if}
+						{#if event.organizer.website}
+							<br />
 							<a href={event.organizer.website} target="_blank" rel="noreferrer noopener">Website</a
 							>
-						</p>
-					{/if}
+						{/if}
+					</p>
 				{/if}
 				{#if event.pictureUrl}
 					<img src={event.pictureUrl} alt={event.title} />
@@ -227,7 +228,7 @@
 		animation: 0.3s fade-in;
 		z-index: 1000;
 		overflow: auto;
-		padding: 2rem;
+		padding: 1.2rem;
 	}
 
 	.popup {
@@ -236,8 +237,8 @@
 		box-sizing: border-box;
 		background-color: white;
 		border-radius: 30px;
-		padding: 50px;
-		width: 700px;
+		padding: min(3rem, 1.5rem + 1.3vw);
+		width: calc(700px + 2vw);
 		max-width: 95vw;
 
 		h2 {
@@ -256,7 +257,7 @@
 		padding: 8px 12px;
 		margin: 0 8px 8px 0;
 		font-size: 1.1rem;
-		border-radius: 30px;
+		border-radius: 20px;
 	}
 
 	.controls {

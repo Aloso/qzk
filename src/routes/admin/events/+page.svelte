@@ -30,11 +30,15 @@
 	async function setEvents(tab: 'drafts' | 'published', auth: Auth, page: number) {
 		if (tab === 'drafts') {
 			const response = await fetchAllDrafts(auth, page * pageSize, pageSize)
+			if (tab !== 'drafts') return
+
 			data = response.events
 			length = response.length
 			loading = false
 		} else {
 			data = await fetchAllEvents(auth)
+			if (tab !== 'published') return
+
 			data.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
 
 			length = data.length
@@ -51,6 +55,10 @@
 	]}
 	bind:active={tab}
 />
+
+{#if loading}
+	<p>Veranstaltungen werden geladen...</p>
+{/if}
 
 <div class:hidden={loading}>
 	<p class="event-count">{data.length} {data.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}</p>
