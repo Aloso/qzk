@@ -69,7 +69,7 @@
 	</section>
 
 	<div class="sidebar">
-		<div class="sidebar-title">Veranstaltungen</div>
+		<h2 class="sidebar-title">Veranstaltungen</h2>
 		{#if events === undefined}
 			Wird geladen...
 		{:else}
@@ -110,10 +110,13 @@
 		}
 	}
 
-	.sidebar-title {
-		font-size: 1.33rem;
-		font-weight: 600;
-		margin-bottom: 1em;
+	@media (min-width: 1201px) {
+		.sidebar-title {
+			font-family: inherit;
+			font-size: 1.33rem;
+			font-weight: 600;
+			margin-bottom: 1em;
+		}
 	}
 
 	.add-event {
