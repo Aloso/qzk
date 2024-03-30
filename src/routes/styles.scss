@@ -12,7 +12,7 @@
 	--link-decoration-hover: 1.67px underline var(--color-accent);
 	font-family: vars.$FONT_BODY;
 	color: var(--color-text);
-	font-size: min(18px, 15px + 0.3vw);
+	font-size: min(18px, 15.5px + 0.3vw);
 
 	@supports (font-variation-settings: normal) {
 		font-family: AsapVariable, sans-serif;
