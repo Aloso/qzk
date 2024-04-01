@@ -28,7 +28,9 @@
 	<em class="full-width required">Beschreibung</em>
 	<textarea class="full-width" bind:value={values.description} rows="10" required />
 </label>
-<div class="hint">Formatierung mit <a href="/hilfe/markdown">Markdown</a> unterstützt</div>
+<div class="hint">
+	Formatierung mit <a href="/hilfe/markdown" target="_blank">Markdown</a> unterstützt
+</div>
 
 <label>
 	<em class="required">Ort</em>

@@ -159,6 +159,10 @@
 		:global(p) {
 			margin: 0.5rem 0;
 		}
+
+		:global(.a) {
+			color: var(--color-theme);
+		}
 	}
 
 	.event-time {
