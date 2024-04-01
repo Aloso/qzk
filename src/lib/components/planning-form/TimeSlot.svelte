@@ -3,9 +3,10 @@
 
 	interface Props {
 		time: FormTime
+		onRemove?: () => void
 	}
 
-	let { time }: Props = $props()
+	let { time, onRemove }: Props = $props()
 
 	let prevTime = $state(time)
 	let values = $state(initialValues(time))
@@ -78,26 +79,39 @@
 	}
 </script>
 
-<label class="checkbox-label">
-	<input type="checkbox" bind:checked={values.longerPeriod} />
-	Längerer Zeitraum
-</label>
-<label>
-	<em class="required">{values.longerPeriod ? 'Startdatum' : 'Datum, Uhrzeit'}</em>
-	<input type="date" bind:value={values.startDate} required />
-	{#if !values.longerPeriod}
-		von <input type="time" bind:value={values.startTime} />
-		bis <input type="time" bind:value={values.endTime} />
+<div class="time-slot">
+	<label class="checkbox-label">
+		<input type="checkbox" bind:checked={values.longerPeriod} />
+		Längerer Zeitraum
+	</label>
+	<label>
+		<em class="required">{values.longerPeriod ? 'Startdatum' : 'Datum'}</em>
+		<input type="date" bind:value={values.startDate} required />
+	</label>
+	{#if values.longerPeriod}
+		<label>
+			<em class="required">Enddatum</em>
+			<input type="date" bind:value={values.endDate} required={values.longerPeriod} />
+		</label>
+	{:else}
+		<label>
+			<em class="required">Uhrzeit</em>
+			<input type="time" bind:value={values.startTime} />
+			bis <input type="time" bind:value={values.endTime} />
+		</label>
 	{/if}
-</label>
-<label class:hidden={!values.longerPeriod}>
-	<em class="required">Enddatum</em>
-	<input type="date" bind:value={values.endDate} required={values.longerPeriod} />
-</label>
+
+	{#if onRemove}
+		<button type="button" class="remove" onclick={onRemove}>Entfernen</button>
+	{/if}
+</div>
 
 <style lang="scss">
-	.hidden {
-		display: none;
+	.time-slot {
+		border: 2px solid #0002;
+		border-radius: 20px;
+		padding: 0.65rem 0.75rem;
+		margin: 0.75rem calc(-0.5rem - 2px);
 	}
 
 	select,
@@ -132,7 +146,7 @@
 		width: calc(100% - 150px);
 
 		@media (max-width: 650px) {
-			width: 100%;
+			width: calc(100% - 90px);
 		}
 	}
 
@@ -145,13 +159,17 @@
 		margin: 1rem 0;
 		transition: color 0.2s;
 
+		&:last-child {
+			margin-bottom: 0;
+		}
+
 		&:hover {
 			color: var(--color-theme);
 		}
 	}
 
 	.checkbox-label {
-		margin: 0.5rem 0;
+		margin: 0 0 0.5rem 0;
 	}
 
 	em {
@@ -162,10 +180,23 @@
 		vertical-align: middle;
 
 		@media (max-width: 650px) {
-			display: block;
-			padding: 0;
-			margin: 0.5rem 0 0.3rem;
-			width: auto;
+			width: 80px;
+		}
+	}
+
+	.remove {
+		display: block;
+		color: white;
+		font: inherit;
+		font-size: 0.83rem;
+		padding: 0.33rem 0.5rem;
+		background: #c00;
+		border: none;
+		border-radius: 15px;
+		margin: 0 0 0 auto;
+
+		&:hover {
+			background: #b00;
 		}
 	}
 </style>
