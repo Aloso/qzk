@@ -7,10 +7,10 @@
 		year: number
 		isCurrentMonth?: boolean
 		allEvents: Event[]
-		draftTime?: Time
+		draftTimes?: Time[]
 	}
 
-	let { day, month, year, isCurrentMonth, allEvents, draftTime }: Props = $props()
+	let { day, month, year, isCurrentMonth, allEvents, draftTimes }: Props = $props()
 
 	let now = new Date()
 	let isToday = $derived(
@@ -27,19 +27,21 @@
 	)
 
 	let hasDraftEvent = $derived.by(() => {
-		if (!draftTime) return false
-		return !(draftTime.start > dayEnd || (draftTime.end ?? draftTime.start) < dayStart)
+		if (!draftTimes) return false
+		return draftTimes.some((time) => !(time.start > dayEnd || (time.end ?? time.start) < dayStart))
 	})
 </script>
 
 <button type="button" class="calendar-day" class:isCurrentMonth class:isToday>
 	<div class="day-label">{day}</div>
-	{#if dayEvents.length > 0}
-		<div class="events-badge">{dayEvents.length}</div>
-	{/if}
-	{#if hasDraftEvent}
-		<div class="draft-badge" />
-	{/if}
+	<div class="badges">
+		{#if dayEvents.length > 0}
+			<div class="events-badge">{dayEvents.length}</div>
+		{/if}
+		{#if hasDraftEvent}
+			<div class="draft-badge" />
+		{/if}
+	</div>
 </button>
 
 <style lang="scss">
@@ -61,13 +63,6 @@
 			background-color 0.1s,
 			border-color 0.1s,
 			box-shadow 0.1s;
-
-		.day-label {
-			color: #0006;
-			font-size: 1.25rem;
-			padding: 0.3rem 0.5rem;
-			flex: 1 0 100%;
-		}
 
 		&:hover {
 			background-color: #e3e3e3;
@@ -99,6 +94,23 @@
 			}
 		}
 
+		.day-label {
+			box-sizing: border-box;
+			color: #0006;
+			font-size: 1.25rem;
+			padding: 0.3rem 0.5rem;
+			flex: 1 0 100%;
+		}
+
+		.badges {
+			display: flex;
+			padding: 0 8px;
+
+			@media (max-width: 600px) {
+				padding: 0 6px;
+			}
+		}
+
 		.events-badge,
 		.draft-badge {
 			display: inline-block;
@@ -107,18 +119,34 @@
 			padding: 2px 4px;
 			text-align: center;
 			border-radius: 100px;
-			margin: 0 -6px 0 10px;
 			font-size: 0.95rem;
 			font-weight: 600;
 			height: 1.25rem;
 			min-width: 1.25rem;
 			box-sizing: border-box;
 			vertical-align: top;
+			z-index: 1;
+
+			@media (max-width: 600px) {
+				font-size: 0.85rem;
+				padding: 1px 3px;
+				height: 1.15rem;
+				min-width: 1.15rem;
+			}
 		}
 
 		.draft-badge {
 			background-color: #00da8e;
 			box-shadow: inset 0 0 0 2px #0002;
+		}
+
+		.events-badge + .draft-badge {
+			margin-left: 4px;
+
+			@media (max-width: 600px) {
+				margin-left: -6px;
+				z-index: 0;
+			}
 		}
 	}
 </style>

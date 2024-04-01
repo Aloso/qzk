@@ -27,8 +27,6 @@
 		onDeletedOrUnpublished,
 	}: Props = $props()
 
-	$inspect(event.time)
-
 	let title = $derived(
 		event.title.replace(/\bSelbstverteidigungs\B/, 'Selbst\u{ad}verteidigungs\u{ad}'),
 	)

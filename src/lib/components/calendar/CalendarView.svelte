@@ -5,10 +5,10 @@
 	interface Props {
 		events: Event[]
 		showDate: Date
-		draftTime?: Time
+		draftTimes?: Time[]
 	}
 
-	let { events, showDate, draftTime }: Props = $props()
+	let { events, showDate, draftTimes }: Props = $props()
 
 	let draftEventYear = $derived(showDate.getFullYear())
 	let draftEventMonth = $derived(showDate.getMonth())
@@ -88,7 +88,7 @@
 	</div>
 	<div class="days">
 		{#each days as day}
-			<CalendarDay {...day} allEvents={events} {draftTime} />
+			<CalendarDay {...day} allEvents={events} {draftTimes} />
 		{/each}
 	</div>
 </div>

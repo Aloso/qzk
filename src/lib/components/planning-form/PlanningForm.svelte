@@ -11,7 +11,7 @@
 	interface Props {
 		defaults: FormValues
 		onSubmit: (event: Event & WithSubmitter) => void
-		onTimeChange?: (time: Time) => void
+		onTimeChange?: (times: Time[]) => void
 		status:
 			| { type: 'ready'; submitted?: boolean }
 			| { type: 'submitting' }
@@ -40,8 +40,9 @@
 	})
 
 	$effect(() => {
-		if (values.time[0] && isTimeValid(values.time[0])) {
-			onTimeChange?.(values.time[0])
+		const validTimes = values.time.filter(isTimeValid)
+		if (validTimes.length) {
+			onTimeChange?.(validTimes)
 		}
 	})
 

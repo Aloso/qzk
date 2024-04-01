@@ -42,19 +42,24 @@
 	}
 
 	let events = $state<Event[]>()
-	let draftTime = $state<Time>()
+	let draftTimes = $state<Time[]>()
 	let showDate = $state(new Date())
 	let intersecting = $derived.by(() => {
-		if (!events || !draftTime) return []
+		if (!events || !draftTimes) return []
 
-		let eStart = draftTime.start
-		let eEnd = draftTime.end ?? draftTime.start
-		eEnd.setHours(23)
-		eEnd.setMinutes(59)
-		eEnd.setSeconds(59)
+		let eTimes = draftTimes.map((time) => {
+			let eStart = time.start
+			let eEnd = time.end ?? time.start
+			eEnd.setHours(23)
+			eEnd.setMinutes(59)
+			eEnd.setSeconds(59)
+			return { start: eStart, end: eEnd }
+		})
 
 		return events.filter((event) =>
-			event.time.some((time) => !(time.start > eEnd || (time.end ?? time.start) < eStart)),
+			event.time.some((time) =>
+				eTimes.some((eTime) => !(time.start > eTime.end || (time.end ?? time.start) < eTime.start)),
+			),
 		)
 	})
 	onMount(() => {
@@ -84,8 +89,8 @@
 		defaults={defaults.values}
 		onSubmit={(event) => onSubmit(event)}
 		onTimeChange={(time) => {
-			draftTime = time
-			showDate = new Date(time.start)
+			draftTimes = time
+			showDate = new Date(time[0].start)
 		}}
 		{status}
 	/>
@@ -94,7 +99,7 @@
 		<div class="calendar">
 			<h2 class="sidebar-title">Kalender</h2>
 
-			<CalendarView {events} {showDate} {draftTime} />
+			<CalendarView {events} {showDate} {draftTimes} />
 
 			{#if intersecting.length > 0}
 				<h2 class="sidebar-title">
