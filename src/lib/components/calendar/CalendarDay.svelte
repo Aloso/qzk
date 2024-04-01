@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
 
 	interface Props {
@@ -20,15 +21,11 @@
 	let dayStart = $derived(new Date(year, month, day))
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
-	let dayEvents = $derived(
-		allEvents.filter((event) =>
-			event.time.some((time) => !(time.start > dayEnd || (time.end ?? time.start) < dayStart)),
-		),
-	)
+	let dayEvents = $derived(allEvents.filter((event) => isBetween(event.time, dayStart, dayEnd)))
 
 	let hasDraftEvent = $derived.by(() => {
 		if (!draftTimes) return false
-		return draftTimes.some((time) => !(time.start > dayEnd || (time.end ?? time.start) < dayStart))
+		return isBetween(draftTimes, dayStart, dayEnd)
 	})
 </script>
 

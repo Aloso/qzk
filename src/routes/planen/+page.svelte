@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte'
 	import { fetchAllEvents, fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import EventView from '$lib/components/events/EventView.svelte'
+	import { getDraftTimeBounds, mayIntersect } from '$lib/events/intersections'
 
 	let { data }: { data: StaticPage } = $props()
 
@@ -47,20 +48,8 @@
 	let intersecting = $derived.by(() => {
 		if (!events || !draftTimes) return []
 
-		let eTimes = draftTimes.map((time) => {
-			let eStart = time.start
-			let eEnd = time.end ?? time.start
-			eEnd.setHours(23)
-			eEnd.setMinutes(59)
-			eEnd.setSeconds(59)
-			return { start: eStart, end: eEnd }
-		})
-
-		return events.filter((event) =>
-			event.time.some((time) =>
-				eTimes.some((eTime) => !(time.start > eTime.end || (time.end ?? time.start) < eTime.start)),
-			),
-		)
+		const eTimes = getDraftTimeBounds(draftTimes)
+		return events.filter((event) => mayIntersect(event.time, eTimes))
 	})
 	onMount(() => {
 		loadEvents()

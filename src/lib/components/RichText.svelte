@@ -59,7 +59,6 @@
 					return ''
 				},
 				[INLINES.ASSET_HYPERLINK]: (node, children) => {
-					console.log(children)
 					const { content, data } = node as AssetHyperlink
 					const { target } = data as unknown as { target: Item<Asset> }
 					return `<a href="${encodeURI(target.fields.file.url)}" target="_blank" rel="noopener"
