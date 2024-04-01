@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Event, WithSubmitter } from '$lib/events/types'
+	import { onMount } from 'svelte'
 	import EventDateTime from './EventDateTime.svelte'
 	import EventPopup from './EventPopup.svelte'
+	import { pushState, replaceState } from '$app/navigation'
 
 	interface Props {
 		event: Event
@@ -24,6 +26,15 @@
 		onPublished,
 		onDeletedOrUnpublished,
 	}: Props = $props()
+	let title = $derived(
+		event.title.replace(/\bSelbstverteidigungs\B/, 'Selbst\u{ad}verteidigungs\u{ad}'),
+	)
+	let descHtml = $derived(
+		event.descHtml
+			?.replaceAll(/<a href=".*?">/g, '<span class="a">')
+			.replaceAll(/<\/a>/g, '</span>'),
+	)
+
 	let overlayShown = $state(false)
 
 	let descElem = $state<HTMLElement>()
@@ -33,10 +44,31 @@
 			overflown = descElem.clientHeight < descElem.scrollHeight
 		}
 	})
+
+	onMount(() => {
+		const hash = location.hash.replace(/^#event-/, '')
+		if (hash === event.key) {
+			openPopup()
+		}
+	})
+
+	function openPopup() {
+		overlayShown = true
+		const url = new URL(location.href)
+		url.hash = `#event-${event.key}`
+		replaceState(url, {})
+	}
+
+	function closePopup() {
+		overlayShown = false
+		const url = new URL(location.href)
+		url.hash = ''
+		replaceState(url, {})
+	}
 </script>
 
-<button class="event" onclick={() => (overlayShown = true)}>
-	<div class="event-title">{event.title}</div>
+<button class="event" onclick={openPopup}>
+	<div class="event-title">{title}</div>
 	<div class="event-times">
 		{#each event.time as time}
 			<span class="event-time">
@@ -45,7 +77,7 @@
 		{/each}
 	</div>
 	{#if showDescription}
-		<div class="event-description" class:overflown bind:this={descElem}>{@html event.descHtml}</div>
+		<div class="event-description" class:overflown bind:this={descElem}>{@html descHtml}</div>
 	{/if}
 	{#if showPlace}
 		<div class="event-place">
@@ -56,9 +88,10 @@
 
 <EventPopup
 	event={overlayShown ? event : undefined}
+	{title}
 	{editable}
 	{published}
-	onClose={() => (overlayShown = false)}
+	onClose={closePopup}
 	{onEdited}
 	{onPublished}
 	{onDeletedOrUnpublished}

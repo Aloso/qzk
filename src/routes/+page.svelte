@@ -1,13 +1,12 @@
 <script lang="ts">
 	import RichText from '$lib/components/RichText.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
-	import { fetchAllEvents, fetchAllEventsWithCache } from '$lib/events/eventApi'
-	import type { Event, Time, WireEvent } from '$lib/events/types'
+	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
+	import type { Event, Time } from '$lib/events/types'
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 	import IgFeed from '$lib/components/IgFeed.svelte'
-	import { wire2event } from '$lib/events/convert'
 
 	interface Props {
 		data: Data
@@ -84,7 +83,7 @@
 <style lang="scss">
 	.layout {
 		display: flex;
-		gap: 4rem;
+		gap: 1rem 4rem;
 
 		@media (max-width: 1200px) {
 			flex-direction: column;
@@ -107,6 +106,7 @@
 
 		@media (max-width: 1200px) {
 			width: auto;
+			border-top: 2px solid #ccc;
 		}
 	}
 

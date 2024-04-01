@@ -47,12 +47,17 @@
 		font-weight: 500;
 		text-decoration: none;
 		color: var(--color-theme);
+
+		@media (pointer: coarse) {
+			padding: 0.2rem 0;
+		}
 	}
 
 	.link-section {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+		min-width: 8rem;
 	}
 
 	.title {

@@ -9,6 +9,7 @@
 
 	interface Props {
 		event?: Event
+		title: string
 		editable?: boolean
 		published?: boolean
 		onClose: () => void
@@ -21,6 +22,7 @@
 
 	let {
 		event,
+		title,
 		editable,
 		published,
 		onClose,
@@ -134,7 +136,7 @@
 			/>
 		{:else}
 			<div class="popup">
-				<h2>{event.title}</h2>
+				<h2>{title}</h2>
 				<div class="event-times">
 					{#each event.time as time}
 						<span class="event-time">
@@ -169,15 +171,23 @@
 						{#if event.organizer.email}
 							<br /><a href="mailto:{event.organizer.email}">{event.organizer.email}</a>
 						{/if}
-						{#if event.organizer.phone}
-							<br /><a href="tel:{event.organizer.phone}">{event.organizer.phone}</a>
-						{/if}
-						{#if event.organizer.website}
-							<br />
-							<a href={event.organizer.website} target="_blank" rel="noreferrer noopener">Website</a
-							>
-						{/if}
 					</p>
+
+					{#if event.organizer.phone || event.organizer.website}
+						<p>
+							{#if event.organizer.phone}
+								<a href="tel:{event.organizer.phone}">{event.organizer.phone}</a>
+							{/if}
+							{#if event.organizer.phone && event.organizer.website}
+								<br />
+							{/if}
+							{#if event.organizer.website}
+								<a href={event.organizer.website} target="_blank" rel="noreferrer noopener">
+									Website
+								</a>
+							{/if}
+						</p>
+					{/if}
 				{/if}
 				{#if event.pictureUrl}
 					<img src={event.pictureUrl} alt={event.title} />
@@ -228,7 +238,7 @@
 		animation: 0.3s fade-in;
 		z-index: 1000;
 		overflow: auto;
-		padding: 1.2rem;
+		padding: 4rem 1.2rem;
 	}
 
 	.popup {
@@ -251,11 +261,16 @@
 		white-space: pre-wrap;
 	}
 
+	.event-times {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
 	.event-time {
 		display: inline-block;
 		background-color: #ffc7ec;
 		padding: 8px 12px;
-		margin: 0 8px 8px 0;
 		font-size: 1.1rem;
 		border-radius: 20px;
 	}
