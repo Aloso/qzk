@@ -6,7 +6,7 @@
 		onRemove?: () => void
 	}
 
-	let { time, onRemove }: Props = $props()
+	let { time = $bindable(), onRemove }: Props = $props()
 
 	let prevTime = $state(time)
 	let values = $state(initialValues(time))
@@ -111,7 +111,7 @@
 		border: 2px solid #0002;
 		border-radius: 20px;
 		padding: 0.65rem 0.75rem;
-		margin: 0.75rem calc(-0.5rem - 2px);
+		margin: 0.75rem 0;
 	}
 
 	select,
@@ -146,7 +146,7 @@
 		width: calc(100% - 150px);
 
 		@media (max-width: 650px) {
-			width: calc(100% - 90px);
+			width: calc(100% - 100px);
 		}
 	}
 
@@ -180,7 +180,7 @@
 		vertical-align: middle;
 
 		@media (max-width: 650px) {
-			width: 80px;
+			width: 90px;
 		}
 	}
 

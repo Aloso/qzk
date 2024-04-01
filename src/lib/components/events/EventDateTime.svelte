@@ -9,6 +9,8 @@
 	let { time, concise }: Props = $props()
 
 	let formatted = $derived.by(() => {
+		if (time.start == null) return 'ERROR'
+
 		if (!time.hasStartTime) {
 			return time.end
 				? formatDateSpan(time.start, time.end, concise)

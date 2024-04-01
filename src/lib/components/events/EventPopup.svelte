@@ -126,16 +126,15 @@
 			if (e.key === 'Escape') onClose()
 		}}
 	>
-		{#if editingStatus}
-			<PlanningFormProfesh
-				defaults={defaults.values}
-				{onSubmit}
-				onCancel={() => (editingStatus = undefined)}
-				status={editingStatus}
-				popup
-			/>
-		{:else}
-			<div class="popup">
+		<div class="popup">
+			{#if editingStatus}
+				<PlanningFormProfesh
+					defaults={defaults.values}
+					{onSubmit}
+					onCancel={() => (editingStatus = undefined)}
+					status={editingStatus}
+				/>
+			{:else}
 				<h2>{title}</h2>
 				<div class="event-times">
 					{#each event.time as time}
@@ -220,8 +219,8 @@
 				{#if popupError}
 					<p class="popup-error">{popupError}</p>
 				{/if}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</div>
 {/if}
 

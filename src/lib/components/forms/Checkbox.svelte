@@ -9,7 +9,7 @@
 		submitClicked: boolean
 	}
 
-	let { name, value, checked, required, submitClicked }: Props = $props()
+	let { name, value, checked = $bindable(), required, submitClicked }: Props = $props()
 </script>
 
 <label>

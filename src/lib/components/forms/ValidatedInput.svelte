@@ -13,8 +13,17 @@
 		style?: string
 	}
 
-	let { label, type, name, value, required, error, hasError, submitClicked, style }: Props =
-		$props()
+	let {
+		label,
+		type,
+		name,
+		value = $bindable(),
+		required,
+		error = $bindable(),
+		hasError,
+		submitClicked,
+		style,
+	}: Props = $props()
 
 	let focused = $state(false)
 	let customError = $state<string | false>(false)

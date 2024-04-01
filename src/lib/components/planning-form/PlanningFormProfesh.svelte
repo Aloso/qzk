@@ -1,5 +1,4 @@
 <script lang="ts">
-	import TimeSlot from '$lib/components/planning-form/TimeSlot.svelte'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import type { FormTime, FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
@@ -20,11 +19,9 @@
 			| { type: 'submitting' }
 			| { type: 'deleting' }
 			| { type: 'error'; message: string; missing?: boolean }
-		popup?: boolean
 	}
 
-	let { defaults, onSubmit, onCancel, onDelete, onPublish, onTimeChange, status, popup }: Props =
-		$props()
+	let { defaults, onSubmit, onCancel, onDelete, onPublish, onTimeChange, status }: Props = $props()
 
 	let values = $state(defaults)
 	let valid = $state([false, false, false, false])
@@ -104,10 +101,10 @@
 </script>
 
 {#if !formLoaded}
-	<form class:popup>Wird geladen...</form>
+	Wird geladen...
 {/if}
 
-<form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
+<form onsubmit={submitForm} class:hidden={!formLoaded}>
 	<Step1 {values} bind:valid={valid[1]} />
 	<Step2 {values} bind:valid={valid[2]} />
 	<Step3 {values} bind:valid={valid[3]} />
@@ -152,24 +149,6 @@
 </form>
 
 <style lang="scss">
-	form {
-		box-sizing: border-box;
-		background-color: #eee;
-		border: 2px solid #ddd;
-		border-radius: 30px;
-		padding: 30px;
-		width: 40rem;
-		max-width: 100%;
-		font-size: 105%;
-
-		&.popup {
-			border: none;
-			background-color: white;
-			padding: 3rem;
-			margin: auto;
-		}
-	}
-
 	.hidden {
 		display: none;
 	}

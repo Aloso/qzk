@@ -6,7 +6,7 @@
 		valid: boolean
 	}
 
-	let { values, valid }: Props = $props()
+	let { values, valid = $bindable() }: Props = $props()
 
 	$effect(() => {
 		valid =

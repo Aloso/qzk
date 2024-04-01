@@ -71,7 +71,7 @@ export function createEventPlanningDefaults() {
 			defaults = {
 				title: draft.title,
 				description: draft.description,
-				time: draft.time,
+				time: draft.time.map((time) => ({ ...time })),
 				placeType: draft.place.room ? 'QZ' : draft.place.type,
 				placeRoom: draft.place.room,
 				placeName: draft.place.name,

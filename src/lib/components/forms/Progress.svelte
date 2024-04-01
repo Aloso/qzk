@@ -6,7 +6,7 @@
 		elem?: HTMLElement
 	}
 
-	let { min, max, value, elem }: Props = $props()
+	let { min, max, value, elem = $bindable() }: Props = $props()
 	let range = $derived(max - min)
 </script>
 

@@ -7,16 +7,14 @@
 		valid: boolean
 	}
 
-	let { values, valid }: Props = $props()
+	let { values, valid = $bindable() }: Props = $props()
 
 	$effect(() => {
 		valid = values.time.every((time) => !!time.start)
 	})
 
 	function addSlot() {
-		values.time.push({
-			hasStartTime: false,
-		})
+		values.time.push({ hasStartTime: false })
 	}
 
 	function removeSlot(index: number) {
@@ -27,9 +25,16 @@
 <div class="section-title">Zeit</div>
 <p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
 {#each values.time as _, i}
-	<TimeSlot bind:time={values.time[i]} onRemove={i === 0 ? undefined : () => removeSlot(i)} />
+	<TimeSlot
+		bind:time={values.time[i]}
+		onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}
+	/>
 {/each}
-<button type="button" class="add-slot" onclick={addSlot}>Weiteren Termin hinzufügen</button>
+{#if values.time.length < 10}
+	<button type="button" class="add-slot" onclick={addSlot}>Weiteren Termin hinzufügen</button>
+{:else}
+	<p>Maximal 10 Termine können hinzugefügt werden.</p>
+{/if}
 
 <style lang="scss">
 	.section-title {
@@ -55,7 +60,6 @@
 		background: #0001;
 		border: 2px solid #0002;
 		border-radius: 20px;
-		margin: 0 calc(-0.5rem - 2px);
 
 		&:hover {
 			background: #0002;

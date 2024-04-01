@@ -11,7 +11,7 @@
 		professional?: boolean
 	}
 
-	let { values, valid, professional }: Props = $props()
+	let { values, valid = $bindable(), professional }: Props = $props()
 
 	onMount(() => {
 		if (values.organizerName && !values.yourName) {

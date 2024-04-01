@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte'
 	import EventDateTime from './EventDateTime.svelte'
 	import EventPopup from './EventPopup.svelte'
-	import { pushState, replaceState } from '$app/navigation'
+	import { replaceState } from '$app/navigation'
 
 	interface Props {
 		event: Event
@@ -26,6 +26,9 @@
 		onPublished,
 		onDeletedOrUnpublished,
 	}: Props = $props()
+
+	$inspect(event.time)
+
 	let title = $derived(
 		event.title.replace(/\bSelbstverteidigungs\B/, 'Selbst\u{ad}verteidigungs\u{ad}'),
 	)
