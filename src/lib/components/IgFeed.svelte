@@ -87,6 +87,8 @@
 	</blockquote>
 
 	{#if loaded}
+		<!-- no idea why this makes it work -->
+		{' '}
 		<script src="https://www.instagram.com/embed.js"></script>
 	{/if}
 </div>

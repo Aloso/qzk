@@ -11,7 +11,7 @@
 	import SubmittedList from './SubmittedList.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import { onMount } from 'svelte'
-	import { fetchAllEvents, fetchAllEventsWithCache } from '$lib/events/eventApi'
+	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import EventView from '$lib/components/events/EventView.svelte'
 	import { getDraftTimeBounds, mayIntersect } from '$lib/events/intersections'
 
