@@ -21,9 +21,7 @@ export function getDraftTimeBounds(draftTimes: Time[]): TimeBounds[] {
 	return draftTimes.map(time => {
 		const eStart = time.start
 		const eEnd = new Date(time.end ?? time.start)
-		eEnd.setHours(23)
-		eEnd.setMinutes(59)
-		eEnd.setSeconds(59)
+		eEnd.setHours(23, 59, 59, 999)
 		return { start: eStart, end: eEnd }
 	})
 }
@@ -31,9 +29,7 @@ export function getDraftTimeBounds(draftTimes: Time[]): TimeBounds[] {
 export function getEndOfTime(time: Time): number {
 	const d = new Date(time.end ?? time.start)
 	if (!time.end || time.variant === 'day-range') {
-		d.setHours(23)
-		d.setMinutes(59)
-		d.setSeconds(59)
+		d.setHours(23, 59, 59, 999)
 	}
 	return d.getTime()
 }

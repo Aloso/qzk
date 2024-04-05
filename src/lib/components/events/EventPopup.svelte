@@ -280,6 +280,24 @@
 		padding: 8px 12px;
 		font-size: 1.1rem;
 		border-radius: 20px;
+		overflow: hidden;
+
+		:global(i) {
+			font-style: normal;
+			background-color: #fface3;
+			padding: 8px 12px;
+			margin: -8px -12px;
+
+			&:not(.lone) {
+				border-right: 1px solid #0003;
+				margin-right: 12px;
+			}
+		}
+
+		:global(em) {
+			font-style: normal;
+			font-weight: 600;
+		}
 	}
 
 	.controls {

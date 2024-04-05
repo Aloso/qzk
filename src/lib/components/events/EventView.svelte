@@ -171,5 +171,23 @@
 		padding: 5px 10px;
 		margin: 5px 5px 0 0;
 		border-radius: 20px;
+		overflow: hidden;
+
+		:global(i) {
+			font-style: normal;
+			background-color: #fface3;
+			padding: 5px 10px;
+			margin: -5px -10px;
+
+			&:not(.lone) {
+				border-right: 1px solid #0003;
+				margin-right: 10px;
+			}
+		}
+
+		:global(em) {
+			font-style: normal;
+			font-weight: 600;
+		}
 	}
 </style>

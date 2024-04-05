@@ -13,31 +13,39 @@
 
 		switch (time.variant) {
 			case 'day':
-				return formatDate(time.start, concise)
+				return `<i>${formatDate(time.start, concise)}</i>`
 			case 'time':
-				return `${formatDate(time.start, concise)} \u{00A0}${formatTime(time.start)}`
+				return `<i>${formatDate(time.start, concise)}</i>${formatTime(time.start)}`
 			case 'day-range':
-				return formatDateSpan(time.start, time.end!, concise)
+				return `<i class="lone">${formatDateSpan(time.start, time.end!, concise)}</i>`
 			case 'time-range':
-				return `${formatDate(time.start, concise)} \u{00A0}${formatTime(time.start)} – ${formatTime(time.end!)}`
+				return `<i>${formatDate(time.start, concise)}</i>${formatTime(time.start)} – ${formatTime(time.end!)}`
 		}
 	})
 
 	function formatDate(d: Date, concise = false) {
-		return d.toLocaleDateString(
-			'de-DE',
-			concise
-				? {
-						month: 'numeric',
-						day: 'numeric',
-						weekday: 'short',
-					}
-				: {
-						month: 'long',
-						day: 'numeric',
-						weekday: 'long',
-					},
-		)
+		if (concise) {
+			const days = daysUntil(d)
+			if (days >= 0 && days < 6) {
+				if (days === 0) return '<em>Heute</em>'
+				else if (days === 1) return '<em>Morgen<em>'
+				else return `<em>${d.toLocaleDateString('de-DE', { weekday: 'long' })}</em>`
+			}
+		}
+
+		const format = concise
+			? ({ month: 'numeric', day: 'numeric', weekday: 'short' } as const)
+			: ({ month: 'long', day: 'numeric', weekday: 'long' } as const)
+		return d.toLocaleDateString('de-DE', format).replace(/^(\w\w)\./, '$1')
+	}
+
+	function daysUntil(date: Date | number, reference?: Date | number): number {
+		const ref = reference ? new Date(reference) : new Date()
+		ref.setHours(0, 0, 0, 0)
+
+		const target = new Date(date)
+		target.setHours(0, 0, 0, 0)
+		return Math.round(target.getTime() - ref.getTime()) / 1000 / 60 / 60 / 24
 	}
 
 	function formatTime(d: Date) {
@@ -52,4 +60,4 @@
 	}
 </script>
 
-{formatted}
+{@html formatted}
