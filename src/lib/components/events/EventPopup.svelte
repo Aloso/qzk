@@ -287,6 +287,7 @@
 			background-color: #fface3;
 			padding: 8px 12px;
 			margin: -8px -12px;
+			white-space: nowrap;
 
 			&:not(.lone) {
 				border-right: 1px solid #0003;

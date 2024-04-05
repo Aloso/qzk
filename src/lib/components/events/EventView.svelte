@@ -178,6 +178,7 @@
 			background-color: #fface3;
 			padding: 5px 10px;
 			margin: -5px -10px;
+			white-space: nowrap;
 
 			&:not(.lone) {
 				border-right: 1px solid #0003;

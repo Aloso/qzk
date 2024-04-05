@@ -23,7 +23,7 @@
 		}
 	})
 
-	function formatDate(d: Date, concise = false) {
+	function formatDate(d: Date, concise = false, shortWeekDay = false) {
 		if (concise) {
 			const days = daysUntil(d)
 			if (days >= 0 && days < 6) {
@@ -35,7 +35,7 @@
 
 		const format = concise
 			? ({ month: 'numeric', day: 'numeric', weekday: 'short' } as const)
-			: ({ month: 'long', day: 'numeric', weekday: 'long' } as const)
+			: ({ month: 'long', day: 'numeric', weekday: shortWeekDay ? 'short' : 'long' } as const)
 		return d.toLocaleDateString('de-DE', format).replace(/^(\w\w)\./, '$1')
 	}
 
@@ -56,7 +56,7 @@
 	}
 
 	function formatDateSpan(start: Date, end: Date, concise = false) {
-		return formatDate(start, concise) + ' – ' + formatDate(end, concise)
+		return formatDate(start, concise, true) + ' – ' + formatDate(end, concise, true)
 	}
 </script>
 
