@@ -27,6 +27,7 @@ export interface WithKey extends EventCommon {
 
 export interface WithSubmitter extends EventCommon {
 	submitter: Submitter
+	orgaNotes?: string
 }
 
 export interface WireEvent extends EventCommon {

@@ -64,6 +64,7 @@
 				name: values.yourName,
 				email: values.yourEmail,
 			},
+			orgaNotes: values.orgaNotes === '' ? undefined : values.orgaNotes,
 		}
 
 		onSubmit(event)

@@ -1,5 +1,9 @@
 import type { Time } from './types'
 
+export function getInBetween(eventTimes: Time[], start: number, end: number): Time[] {
+	return eventTimes.filter((time) => !(+time.start > end || +(time.end ?? time.start) < start))
+}
+
 export function isBetween(eventTimes: Time[], start: Date, end: Date): boolean {
 	return eventTimes.some((time) => !(time.start > end || (time.end ?? time.start) < start))
 }
@@ -22,4 +26,14 @@ export function getDraftTimeBounds(draftTimes: Time[]): TimeBounds[] {
 		eEnd.setSeconds(59)
 		return { start: eStart, end: eEnd }
 	})
+}
+
+export function getEndOfTime(time: Time): number {
+	const d = new Date(time.end ?? time.start)
+	if (!time.end || !time.hasStartTime) {
+		d.setHours(23)
+		d.setMinutes(59)
+		d.setSeconds(59)
+	}
+	return d.getTime()
 }

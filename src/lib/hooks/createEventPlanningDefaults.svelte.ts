@@ -34,6 +34,7 @@ export interface FormValuesStep3 {
 export interface FormValuesStep4 {
 	yourName: string
 	yourEmail: string
+	orgaNotes: string
 }
 
 export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & FormValuesStep4
@@ -55,6 +56,7 @@ const emptyDefaults: FormValues = {
 	pictureUrl: '',
 	yourName: '',
 	yourEmail: '',
+	orgaNotes: '',
 }
 
 export function createEventPlanningDefaults() {
@@ -71,7 +73,7 @@ export function createEventPlanningDefaults() {
 			defaults = {
 				title: draft.title,
 				description: draft.description,
-				time: draft.time.map((time) => ({ ...time })),
+				time: draft.time.map(time => ({ ...time })),
 				placeType: draft.place.room ? 'QZ' : draft.place.type,
 				placeRoom: draft.place.room,
 				placeName: draft.place.name,
@@ -85,6 +87,7 @@ export function createEventPlanningDefaults() {
 				pictureUrl: draft.pictureUrl ?? '',
 				yourName: draft.submitter.name,
 				yourEmail: draft.submitter.email,
+				orgaNotes: draft.orgaNotes ?? '',
 			}
 		},
 	}

@@ -119,10 +119,10 @@
 		role="button"
 		tabindex="0"
 		bind:this={overlay}
-		onclick={(e) => {
+		onclick={e => {
 			if (e.target === overlay) onClose()
 		}}
-		onkeydown={(e) => {
+		onkeydown={e => {
 			if (e.key === 'Escape') onClose()
 		}}
 	>
@@ -194,6 +194,14 @@
 				<div class="event-tags">
 					{event.tags.join('\n')}
 				</div>
+				{#if editable && (event as WithSubmitter).orgaNotes}
+					<p>
+						<b>Notizen:</b>
+					</p>
+					<p style="white-space: pre-wrap">
+						{(event as WithSubmitter).orgaNotes}
+					</p>
+				{/if}
 
 				<div class="controls">
 					{#if editable}

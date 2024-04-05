@@ -7,6 +7,7 @@
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 	import IgFeed from '$lib/components/IgFeed.svelte'
+	import { getEndOfTime } from '$lib/events/intersections'
 
 	interface Props {
 		data: Data
@@ -26,22 +27,12 @@
 
 		const now = Date.now()
 		events = response.filter((e) => {
-			const filteredTimes = e.time.filter((time) => getEnd(time) > now)
+			const filteredTimes = e.time.filter((time) => getEndOfTime(time) > now)
 			filteredTimes.splice(3)
 			e.time = filteredTimes
 			return e.time.length > 0
 		})
 		events.sort((a, b) => +a.time[0].start - +b.time[0].start)
-	}
-
-	function getEnd(time: Time) {
-		const d = new Date(time.end ?? time.start)
-		if (!time.end || !time.hasStartTime) {
-			d.setHours(23)
-			d.setMinutes(59)
-			d.setSeconds(59)
-		}
-		return d.getTime()
 	}
 </script>
 

@@ -46,6 +46,11 @@
 	<input type="text" bind:value={values.yourEmail} required />
 </label>
 
+{#if professional}
+	<h3>Notizen (nicht öffentlich)</h3>
+	<textarea bind:value={values.orgaNotes} class="full-width" />
+{/if}
+
 <style lang="scss">
 	.section-title {
 		font-weight: 600;

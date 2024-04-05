@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Event, Time } from '$lib/events/types'
 	import CalendarDay from './CalendarDay.svelte'
+	import MonthNav from './MonthNav.svelte'
 
 	interface Props {
 		events: Event[]
@@ -17,7 +18,6 @@
 	let month = $state(0)
 
 	$effect(() => {
-		showDate // run whenever this changes
 		year = draftEventYear
 		month = draftEventMonth
 	})
@@ -29,9 +29,6 @@
 		date.setHours(12)
 		return date
 	})
-	let monthName = $derived(
-		new Intl.DateTimeFormat('de-DE', { month: 'long' }).format(firstDayOfMonth),
-	)
 
 	let firstWeekDay = $derived((firstDayOfMonth.getDay() + 6) % 7)
 	let daysInMonth = $derived(new Date(year, month + 1, 0).getDate())
@@ -55,32 +52,11 @@
 					: { day: absNumber, month, year, isCurrentMonth: true }
 		}),
 	)
-
-	function toPreviousMonth() {
-		if (month === 0) {
-			month = 11
-			year--
-		} else {
-			month--
-		}
-	}
-
-	function toNextMonth() {
-		if (month === 11) {
-			month = 0
-			year++
-		} else {
-			month++
-		}
-	}
 </script>
 
 <div class="calendar">
-	<div class="month-nav">
-		<button onclick={toPreviousMonth} aria-label="Vorheriger Monat"></button>
-		<div>{monthName} {year}</div>
-		<button onclick={toNextMonth} aria-label="Nächster Monat"></button>
-	</div>
+	<MonthNav bind:year bind:month />
+
 	<div class="weekday-labels">
 		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay}
 			<div>{weekDay}</div>
@@ -94,57 +70,6 @@
 </div>
 
 <style lang="scss">
-	.month-nav {
-		height: 40px;
-		line-height: 40px;
-		display: flex;
-
-		button {
-			border: none;
-			width: 40px;
-			height: 40px;
-			padding: 0;
-			margin: 0;
-			background-color: #eee;
-			border-radius: 100%;
-			font: inherit;
-			color: #555;
-
-			&:hover,
-			&:focus {
-				background-color: #ddd;
-			}
-
-			&:first-child::after {
-				content: '';
-				width: 10px;
-				height: 10px;
-				display: inline-block;
-				border: 2px solid #0008;
-				border-width: 0 0 2px 2px;
-				transform: rotate(45deg);
-				margin-right: -5px;
-			}
-
-			&:last-child::after {
-				content: '';
-				width: 10px;
-				height: 10px;
-				display: inline-block;
-				border: 2px solid #0007;
-				border-width: 0 2px 2px 0;
-				transform: rotate(-45deg);
-				margin-left: -5px;
-			}
-		}
-
-		div {
-			flex-grow: 1;
-			text-align: center;
-			font-size: 1.1rem;
-		}
-	}
-
 	.weekday-labels {
 		font-size: 1.1rem;
 		margin: 0.5rem 0 0 0;

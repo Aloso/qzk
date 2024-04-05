@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import MonthNav from '$lib/components/calendar/MonthNav.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
 	import TabBar from '$lib/components/TabBar.svelte'
 	import type { Auth } from '$lib/events'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
 	import { fetchAllEvents } from '$lib/events/eventApi'
-	import type { Event, WithSubmitter } from '$lib/events/types'
+	import { getInBetween, getEndOfTime } from '$lib/events/intersections'
+	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
 	const pageSize = 25
 
-	let tab = $state<'drafts' | 'published'>('drafts')
+	let tab = $state<'drafts' | 'published' | 'past' | 'months'>('drafts')
 
 	let data = $state<(Event & WithSubmitter)[]>([])
+	let filteredData = $state<(Event & WithSubmitter)[]>([])
 	let length = $state(0)
 	let page = $state(0)
 	let loading = $state(true)
@@ -27,24 +30,75 @@
 		}
 	})
 
-	async function setEvents(tab: 'drafts' | 'published', auth: Auth, page: number) {
+	async function setEvents(
+		tab: 'drafts' | 'published' | 'past' | 'months',
+		auth: Auth,
+		page: number,
+	) {
 		if (tab === 'drafts') {
 			const response = await fetchAllDrafts(auth, page * pageSize, pageSize)
 			if (tab !== 'drafts') return
 
 			data = response.events
 			length = response.length
-			loading = false
 		} else {
 			data = await fetchAllEvents(auth)
-			if (tab !== 'published') return
-
-			data.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
-
-			length = data.length
-			loading = false
 		}
+
+		loading = false
 	}
+
+	function getSortTime(event: Event): number {
+		return event.time[0]?.start.getTime() ?? 0
+	}
+	function getSortTimeEnd(event: Event): number {
+		const t: Time | undefined = event.time[event.time.length - 1]
+		return t?.end?.getTime() ?? t?.start.getTime() ?? 0
+	}
+
+	let date = new Date()
+	let year = $state(date.getFullYear())
+	let month = $state(date.getMonth())
+	let { monthStart, monthEnd } = $derived.by(() => {
+		const date = new Date(`${year}-${String(month + 1).padStart(2, '0')}-01`)
+		const monthStart = +date
+		date.setMonth(date.getMonth() + 1)
+		const monthEnd = +date - 1
+		return { monthStart, monthEnd }
+	})
+
+	$effect(() => {
+		if (loading) return
+
+		let fd: (Event & WithSubmitter)[]
+
+		if (tab === 'drafts') {
+			filteredData = data
+			return
+		} else if (tab === 'published') {
+			const now = Date.now()
+			fd = data
+				.map(event => ({ ...event, time: event.time.filter(time => getEndOfTime(time) > now) }))
+				.filter(event => event.time.length > 0)
+				.toSorted((a, b) => getSortTime(a) - getSortTime(b))
+		} else if (tab === 'past') {
+			const now = Date.now()
+			fd = data
+				.map(event => ({ ...event, time: event.time.filter(time => getEndOfTime(time) <= now) }))
+				.filter(event => event.time.length > 0)
+				.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
+		} else if (tab === 'months') {
+			fd = data
+				.map(event => ({ ...event, time: getInBetween(event.time, monthStart, monthEnd) }))
+				.filter(event => event.time.length > 0)
+				.toSorted((a, b) => getSortTime(a) - getSortTime(b))
+		} else {
+			return
+		}
+
+		filteredData = fd
+		length = fd.length
+	})
 </script>
 
 <h1>Veranstaltungen</h1>
@@ -52,6 +106,8 @@
 	tabs={[
 		['drafts', 'Entwürfe'],
 		['published', 'Veröffentlicht'],
+		['past', 'Ehemalig'],
+		['months', 'Nach Monat'],
 	]}
 	bind:active={tab}
 />
@@ -61,7 +117,10 @@
 {/if}
 
 <div class:hidden={loading}>
-	<p class="event-count">{data.length} {data.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}</p>
+	<p class="event-count">
+		{filteredData.length}
+		{filteredData.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}
+	</p>
 	{#if tab === 'drafts' && length > 25}
 		<p>
 			Seite {page}
@@ -73,14 +132,16 @@
 				{/if}
 			</span>
 		</p>
+	{:else if tab === 'months'}
+		<MonthNav bind:year bind:month />
 	{/if}
 
-	{#each data as event, i}
+	{#each filteredData as event, i}
 		<EventView
 			{event}
 			editable
-			published={tab === 'published'}
-			onEdited={(e) => (data[i] = e)}
+			published={tab !== 'drafts'}
+			onEdited={e => (data[i] = e)}
 			onPublished={() => data.splice(i, 1)}
 			onDeletedOrUnpublished={() => data.splice(i, 1)}
 		/>
