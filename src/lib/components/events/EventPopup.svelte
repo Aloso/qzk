@@ -137,7 +137,7 @@
 			{:else}
 				<h2>{title}</h2>
 				<div class="event-times">
-					{#each event.time as time}
+					{#each event.allTimes ?? event.time as time}
 						<span class="event-time">
 							<EventDateTime {time} />
 						</span>

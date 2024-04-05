@@ -78,18 +78,30 @@
 		} else if (tab === 'published') {
 			const now = Date.now()
 			fd = data
-				.map(event => ({ ...event, time: event.time.filter(time => getEndOfTime(time) > now) }))
+				.map(event => ({
+					...event,
+					allTimes: event.time,
+					time: event.time.filter(time => getEndOfTime(time) > now),
+				}))
 				.filter(event => event.time.length > 0)
 				.toSorted((a, b) => getSortTime(a) - getSortTime(b))
 		} else if (tab === 'past') {
 			const now = Date.now()
 			fd = data
-				.map(event => ({ ...event, time: event.time.filter(time => getEndOfTime(time) <= now) }))
+				.map(event => ({
+					...event,
+					allTimes: event.time,
+					time: event.time.filter(time => getEndOfTime(time) <= now),
+				}))
 				.filter(event => event.time.length > 0)
 				.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
 		} else if (tab === 'months') {
 			fd = data
-				.map(event => ({ ...event, time: getInBetween(event.time, monthStart, monthEnd) }))
+				.map(event => ({
+					...event,
+					allTimes: event.time,
+					time: getInBetween(event.time, monthStart, monthEnd),
+				}))
 				.filter(event => event.time.length > 0)
 				.toSorted((a, b) => getSortTime(a) - getSortTime(b))
 		} else {

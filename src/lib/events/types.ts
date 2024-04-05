@@ -36,6 +36,7 @@ export interface WireEvent extends EventCommon {
 
 export interface Event extends EventCommon {
 	time: Time[]
+	allTimes?: Time[]
 }
 
 export interface WireTime {
