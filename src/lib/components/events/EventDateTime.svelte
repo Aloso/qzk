@@ -11,17 +11,15 @@
 	let formatted = $derived.by(() => {
 		if (time.start == null) return 'ERROR'
 
-		if (!time.hasStartTime) {
-			return time.end
-				? formatDateSpan(time.start, time.end, concise)
-				: formatDate(time.start, concise)
-		} else {
-			return (
-				formatDate(time.start, concise) +
-				' \u{00A0}' +
-				formatTime(time.start) +
-				(time.end ? ' – ' + formatTime(time.end) : '')
-			)
+		switch (time.variant) {
+			case 'day':
+				return formatDate(time.start, concise)
+			case 'time':
+				return `${formatDate(time.start, concise)} \u{00A0}${formatTime(time.start)}`
+			case 'day-range':
+				return formatDateSpan(time.start, time.end!, concise)
+			case 'time-range':
+				return `${formatDate(time.start, concise)} \u{00A0}${formatTime(time.start)} – ${formatTime(time.end!)}`
 		}
 	})
 

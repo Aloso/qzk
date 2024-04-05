@@ -1,4 +1,4 @@
-import type { Event, WithSubmitter } from '$lib/events/types'
+import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
 
 export interface FormValuesStep1 {
 	title: string
@@ -19,7 +19,7 @@ export interface FormValuesStep2 {
 }
 
 export interface FormTime {
-	hasStartTime: boolean
+	variant: TimeVariant
 	start?: Date
 	end?: Date
 }
@@ -42,7 +42,7 @@ export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & F
 const emptyDefaults: FormValues = {
 	title: '',
 	description: '',
-	time: [{ hasStartTime: false }],
+	time: [{ variant: 'day' }],
 	placeType: 'QZ',
 	placeRoom: undefined,
 	placeName: '',

@@ -1,4 +1,4 @@
-import type { Event, EventCommon, Time, WireEvent, WireTime } from './types'
+import type { Event, EventCommon, Time, TimeVariant, WireEvent, WireTime } from './types'
 
 export function wire2event<E extends EventCommon>(event: WireEvent & E): Event & E {
 	const times = Array.isArray(event.time) ? event.time : [event.time]
@@ -17,16 +17,25 @@ export function event2wire<E extends EventCommon>(event: Event & E): WireEvent &
 
 function wire2time(time: WireTime): Time {
 	const hasStartTime = time.start.includes('T')
+	const hasEndTime = time.end?.includes('T') ?? false
+	const variant: TimeVariant = hasEndTime
+		? 'time-range'
+		: hasStartTime
+			? 'time'
+			: time.end
+				? 'day-range'
+				: 'day'
+
 	const start = new Date(time.start)
 	const end = time.end ? new Date(time.end) : undefined
 
-	return { hasStartTime, start, end }
+	return { variant, start, end } as Time
 }
 
 function time2wire(time: Time): WireTime {
 	return {
-		start: formatDate(time.start, time.hasStartTime),
-		end: time.end ? formatDate(time.end, time.hasStartTime) : undefined,
+		start: formatDate(time.start, time.variant === 'time' || time.variant === 'time-range'),
+		end: time.end ? formatDate(time.end, time.variant === 'time-range') : undefined,
 	}
 }
 

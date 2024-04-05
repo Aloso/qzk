@@ -44,11 +44,17 @@ export interface WireTime {
 	end?: string
 }
 
-export interface Time {
-	hasStartTime: boolean
-	start: Date
-	end?: Date
-}
+/**
+  - day:         Start date
+	- time:        Start date + start time
+	- day-range:   Start date + start time + end time
+	- time-range:  Start date + end date
+ */
+export type TimeVariant = 'day' | 'day-range' | 'time' | 'time-range'
+
+export type Time =
+	| { variant: 'day' | 'time'; start: Date; end?: undefined }
+	| { variant: 'day-range' | 'time-range'; start: Date; end: Date }
 
 interface Place {
 	name: string

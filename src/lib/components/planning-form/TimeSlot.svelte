@@ -11,23 +11,22 @@
 	let prevTime = $state(time)
 	let values = $state(initialValues(time))
 
-	function initialValues({ start, end, hasStartTime }: FormTime) {
-		const [startDate = '', startTime = ''] = start?.toISOString().split('T') ?? []
-		const [endDate = '', endTime = ''] = end?.toISOString().split('T') ?? []
-		return {
-			startDate,
-			startTime: hasStartTime ? startTime : '',
-			endDate,
-			endTime: hasStartTime ? endTime : '',
-			longerPeriod: !!endDate,
-		}
+	function initialValues({ start, end, variant }: FormTime) {
+		const [startDate = ''] = start?.toISOString().split('T') ?? []
+		const [endDate = ''] = end?.toISOString().split('T') ?? []
+
+		const format = { hour: '2-digit', minute: '2-digit' } as const
+		const startTime = variant.startsWith('time') ? start!.toLocaleTimeString('de-DE', format) : ''
+		const endTime = variant === 'time-range' ? end!.toLocaleTimeString('de-DE', format) : ''
+
+		return { startDate, startTime, endDate, endTime, longerPeriod: variant === 'day-range' }
 	}
 
 	$effect(() => {
 		if (
 			time.start !== prevTime.start ||
 			time.end !== prevTime.end ||
-			time.hasStartTime !== prevTime.hasStartTime
+			time.variant !== prevTime.variant
 		) {
 			prevTime = time
 			values = initialValues(time)
@@ -57,7 +56,7 @@
 	function getTime(): FormTime {
 		const { startDate, startTime, endDate, endTime, longerPeriod } = values
 		return {
-			hasStartTime: !!startTime,
+			variant: longerPeriod ? 'day-range' : !startTime ? 'day' : !endTime ? 'time' : 'time-range',
 			start: longerPeriod ? dateFrom(startDate) : dateFrom(startDate, startTime),
 			end: longerPeriod ? dateFrom(endDate) : dateTimeFrom(startDate, endTime),
 		}

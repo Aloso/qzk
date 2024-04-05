@@ -10,11 +10,11 @@
 	let { values, valid = $bindable() }: Props = $props()
 
 	$effect(() => {
-		valid = values.time.every((time) => !!time.start)
+		valid = values.time.every(time => !!time.start)
 	})
 
 	function addSlot() {
-		values.time.push({ hasStartTime: false })
+		values.time.push({ variant: 'day' })
 	}
 
 	function removeSlot(index: number) {
