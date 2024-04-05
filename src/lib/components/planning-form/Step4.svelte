@@ -47,7 +47,7 @@
 </label>
 
 {#if professional}
-	<h3>Notizen (nicht öffentlich)</h3>
+	<div class="section-title">Notizen (nicht öffentlich)</div>
 	<textarea bind:value={values.orgaNotes} class="full-width" />
 {/if}
 
