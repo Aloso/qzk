@@ -107,7 +107,7 @@
 
 <form onsubmit={submitForm} class:hidden={!formLoaded}>
 	<Step1 {values} bind:valid={valid[1]} />
-	<Step2 {values} bind:valid={valid[2]} />
+	<Step2 {values} bind:valid={valid[2]} professional />
 	<Step3 {values} bind:valid={valid[3]} />
 	<Step4 {values} bind:valid={valid[4]} professional />
 

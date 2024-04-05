@@ -5,9 +5,10 @@
 	interface Props {
 		values: FormValuesStep2
 		valid: boolean
+		professional?: boolean
 	}
 
-	let { values, valid = $bindable() }: Props = $props()
+	let { values, valid = $bindable(), professional }: Props = $props()
 
 	$effect(() => {
 		valid = values.time.every(time => !!time.start)
@@ -30,7 +31,7 @@
 		onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}
 	/>
 {/each}
-{#if values.time.length < 10}
+{#if professional || values.time.length < 10}
 	<button type="button" class="add-slot" onclick={addSlot}>Weiteren Termin hinzufügen</button>
 {:else}
 	<p>Maximal 10 Termine können hinzugefügt werden.</p>
