@@ -23,6 +23,9 @@
 			</div>
 		{/each}
 	</div>
+	<div class="hidden">
+		<a href="/wegbeschreibung">Wegbeschreibung</a>
+	</div>
 </footer>
 
 <style lang="scss">
@@ -63,5 +66,9 @@
 	.title {
 		margin: 0.5rem 0;
 		opacity: 0.8;
+	}
+
+	.hidden {
+		display: none;
 	}
 </style>
