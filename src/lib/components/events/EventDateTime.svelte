@@ -13,7 +13,7 @@
 
 		switch (time.variant) {
 			case 'day':
-				return `<i>${formatDate(time.start, concise)}</i>`
+				return `<i class="lone">${formatDate(time.start, concise)}</i>`
 			case 'time':
 				return `<i>${formatDate(time.start, concise)}</i>${formatTime(time.start)}`
 			case 'day-range':
