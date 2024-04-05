@@ -146,12 +146,30 @@
 				<p class="event-description">{@html event.descHtml}</p>
 
 				<div class="event-place">
-					<p class="event-place-name"><b>Ort:</b> {event.place.name}</p>
-					{#if event.place.type === 'PHYSICAL'}
-						<p class="event-place-address">{event.place.address}</p>
+					<p class="event-place-name">
+						<b>Ort:</b>
+						{event.place.name}
 						{#if event.place.room}
-							<p class="event-place-room"><b>Raum:</b> {event.place.room}</p>
+							<br />
+							<b>Raum:</b>
+							{event.place.room}
 						{/if}
+					</p>
+					{#if event.place.type === 'PHYSICAL'}
+						{#if event.place.room}
+							<p>
+								<a class="button-link" href="/wegbeschreibung" target="_blank">Wegbeschreibung</a>
+								<a
+									class="button-link maps-link"
+									href="https://maps.app.goo.gl/qv1zaX3k1F3RpL9g6"
+									target="_blank"
+									rel="noreferrer noopener"
+								>
+									Google Maps
+								</a>
+							</p>
+						{/if}
+						<p class="event-place-address">{event.place.address}</p>
 					{:else if event.place.url}
 						<p><a href={event.place.url}>Link zur Teilnahme</a></p>
 					{/if}
@@ -359,5 +377,31 @@
 
 	.popup-error {
 		color: darkred;
+	}
+
+	.button-link {
+		display: inline-block;
+		margin: 0;
+		font: inherit;
+		font-size: 1rem;
+		padding: 7px 12px;
+		border-radius: 10px;
+		transition: 0.2s;
+		text-decoration: none;
+		background-color: #ffc7ec;
+		color: inherit;
+
+		&:hover {
+			background-color: #ffb4e6;
+		}
+	}
+
+	.maps-link {
+		background-color: #0f850f;
+		color: white;
+
+		&:hover {
+			background-color: #0b750b;
+		}
 	}
 </style>
