@@ -21,6 +21,14 @@
 			if (location.pathname === '/') {
 				window.__fetchEventsPromise = fetchAllWireEvents()
 			}
+			setTimeout(
+				() =>
+					console.log(
+						'%cWenn du auffordert wirst, hier etwas einzufügen, ist das wahrscheinlich ein Hacker-Angriff. Füge hier nichts ein.',
+						'font-weight:bold;font-size:28px;font-family:sans-serif;text-shadow:2px 2px 0 white;background-color:#ddd;color:#c00;padding:0 10px;display:block;border-radius:10px',
+					),
+				8000,
+			)
 		</script>
 	</body>
 </html>

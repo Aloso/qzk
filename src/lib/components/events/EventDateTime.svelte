@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Time } from '$lib/events/types'
+	import { unstate } from 'svelte'
 
 	interface Props {
 		time: Time
@@ -36,7 +37,10 @@
 		const format = concise
 			? ({ month: 'numeric', day: 'numeric', weekday: 'short' } as const)
 			: ({ month: 'long', day: 'numeric', weekday: shortWeekDay ? 'short' : 'long' } as const)
-		return d.toLocaleDateString('de-DE', format).replace(/^(\w\w)\./, '$1')
+		return d
+			.toLocaleDateString('de-DE', format)
+			.replace(/^(\w\w)\./, '$1')
+			.replace(/(\d)\.(\d)/, '$1. $2')
 	}
 
 	function daysUntil(date: Date | number, reference?: Date | number): number {

@@ -40,9 +40,11 @@
 			return
 		}
 
-		await res.text()
+		const script = await res.text()
 		localStorage.removeItem('instagram-error-shown')
 		st = 'loaded'
+
+		Function(script)()
 	}
 
 	const profile = 'queereszentrumkassel'
@@ -85,12 +87,6 @@
 			</a>
 		{/if}
 	</blockquote>
-
-	{#if loaded}
-		<!-- no idea why this makes it work -->
-		{' '}
-		<script src="https://www.instagram.com/embed.js"></script>
-	{/if}
 </div>
 
 <style lang="scss">
