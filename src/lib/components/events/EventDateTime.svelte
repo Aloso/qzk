@@ -28,7 +28,7 @@
 			const days = daysUntil(d)
 			if (days >= 0 && days < 6) {
 				if (days === 0) return '<em>Heute</em>'
-				else if (days === 1) return '<em>Morgen<em>'
+				else if (days === 1) return '<em>Morgen</em>'
 				else return `<em>${d.toLocaleDateString('de-DE', { weekday: 'long' })}</em>`
 			}
 		}
