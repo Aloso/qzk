@@ -27,34 +27,27 @@
 			st = 'loaded'
 			return
 		}
-
 		st = 'loading'
+	}
 
-		let res: Response
-		try {
-			res = await fetch('https://www.instagram.com/embed.js')
-		} catch {
-			st = 'error'
-			await tick()
-			localStorage.setItem('instagram-error-shown', 'true')
-			return
-		}
-
-		const script = await res.text()
+	function handleScriptLoad() {
 		localStorage.removeItem('instagram-error-shown')
 		st = 'loaded'
+	}
 
-		Function(script)()
+	async function handleScriptError() {
+		st = 'error'
+		await tick()
+		localStorage.setItem('instagram-error-shown', 'true')
 	}
 
 	const profile = 'queereszentrumkassel'
 	const permaLink = `https://www.instagram.com/${profile}/`
-	const loaded = $derived(st === 'loaded')
 </script>
 
 <h2>Instagram</h2>
 
-<div class="iframe-wrapper" class:loaded>
+<div class="iframe-wrapper" class:loaded={st === 'loaded'}>
 	<blockquote
 		class="instagram-media"
 		data-instgrm-permalink={permaLink}
@@ -87,6 +80,16 @@
 			</a>
 		{/if}
 	</blockquote>
+
+	{#if st === 'loading'}
+		<!-- bug: https://github.com/sveltejs/svelte/issues/11082 -->
+		{' '}
+		<script
+			src="https://www.instagram.com/embed.js"
+			onload={handleScriptLoad}
+			onerror={handleScriptError}
+		></script>
+	{/if}
 </div>
 
 <style lang="scss">
