@@ -43,11 +43,11 @@
 			display: flex;
 			flex-direction: column;
 			box-sizing: border-box;
-			height: 30rem;
-			margin-top: -30rem;
-			padding: 2rem;
+			height: calc(90vh - 12rem);
+			margin-top: calc(12rem - 90vh);
+			padding: 1.8rem;
 			background-color: #a664b4;
-			overflow: hidden;
+			overflow: auto;
 			transition: 0.4s;
 
 			&:global(.extended) {
@@ -55,7 +55,7 @@
 			}
 
 			.nav-group {
-				border-radius: 30px;
+				border-radius: 25px;
 				box-shadow: 0 0 0 0 #fff2;
 				transition:
 					box-shadow 0.2s,
@@ -96,9 +96,10 @@
 				flex-grow: 0;
 				border: none;
 				border-radius: 100px;
-				box-shadow: inset 0 0 0 0.875rem #a664b4;
+				box-shadow: inset 0 0 0 0.66rem #a664b4;
 				background-color: transparent;
-				width: calc(3.2rem + 30px);
+				width: calc(2.8rem + 25px);
+				padding: 0;
 				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: white; stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
 				background-repeat: no-repeat;
 				background-size: 25px;
@@ -116,11 +117,11 @@
 				display: block;
 				flex-grow: 1;
 				color: white;
-				padding: 1.6rem;
+				padding: 1.4rem;
 				text-decoration: none;
 				font-weight: 500;
 				font-size: 1.4rem;
-				line-height: 30px;
+				line-height: 25px;
 				border-radius: 30px;
 
 				&.nav-child {
