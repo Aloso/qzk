@@ -3,8 +3,7 @@
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import RichText from '$lib/components/RichText.svelte'
-	import type { StaticPage } from '$lib/data'
+	import type { StaticPageTransformed } from '$lib/data'
 
 	let subject = $state('')
 	let email = $state('')
@@ -17,13 +16,13 @@
 
 	let submitClicked = $state(false)
 
-	let { data }: { data: StaticPage } = $props()
+	let { data }: { data: StaticPageTransformed } = $props()
 </script>
 
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.content} width={900} />
+	{@html data.content}
 </section>
 
 <hr />
@@ -33,7 +32,7 @@
 <form
 	method="POST"
 	action="https://formsubmit.co/info@queereszentrumkassel.de"
-	onsubmit={(event) => {
+	onsubmit={event => {
 		if (formError) {
 			event.preventDefault()
 		}
@@ -57,7 +56,7 @@
 		bind:error={emailError}
 		required="Bitte Deine E-Mail-Adresse eingeben"
 		{submitClicked}
-		hasError={(email) =>
+		hasError={email =>
 			/^\S+@\S+\.\S+$/.test(email) ? false : 'Diese E-Mail-Adresse ist nicht gültig!'}
 	/>
 	<ValidatedInput

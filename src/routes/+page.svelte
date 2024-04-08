@@ -1,5 +1,4 @@
 <script lang="ts">
-	import RichText from '$lib/components/RichText.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
 	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import type { Event, Time } from '$lib/events/types'
@@ -26,8 +25,8 @@
 		const response = await fetchAllEventsWithCache()
 
 		const now = Date.now()
-		events = response.filter((e) => {
-			const filteredTimes = e.time.filter((time) => getEndOfTime(time) > now)
+		events = response.filter(e => {
+			const filteredTimes = e.time.filter(time => getEndOfTime(time) > now)
 			filteredTimes.splice(3)
 			e.time = filteredTimes
 			return e.time.length > 0
@@ -43,7 +42,7 @@
 
 <div class="layout">
 	<section class="mainbar">
-		<RichText data={page.content} width={900} />
+		{@html page.content}
 
 		<hr />
 		<IgFeed />

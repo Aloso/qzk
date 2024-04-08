@@ -21,6 +21,16 @@ export interface BlogPostView {
 	related: BlogPostPreview[]
 }
 
+export interface BlogPostViewTransformed {
+	title: string
+	slug: string
+	authors: AuthorPreview[]
+	published: string
+	photo: Image
+	content: string
+	related: BlogPostPreviewTransformed[]
+}
+
 export interface BlogPostPreview {
 	title: string
 	slug: string
@@ -28,6 +38,15 @@ export interface BlogPostPreview {
 	published: string
 	photo: Image
 	teaser: Document
+}
+
+export interface BlogPostPreviewTransformed {
+	title: string
+	slug: string
+	authors: AuthorPreview[]
+	published: string
+	photo: Image
+	teaser: string
 }
 
 export interface Author {
@@ -38,6 +57,16 @@ export interface Author {
 	pronouns: string
 	photo: Image
 	description: Document
+}
+
+export interface AuthorTransformed {
+	id: string
+	slug: string
+	name: string
+	role: string
+	pronouns: string
+	photo: Image
+	description: string
 }
 
 export interface AuthorPreview {
@@ -52,6 +81,13 @@ export interface StaticPage {
 	slug: string
 	description?: string
 	content: Document
+}
+
+export interface StaticPageTransformed {
+	name: string
+	slug: string
+	description?: string
+	content: string
 }
 
 export interface Navigation {

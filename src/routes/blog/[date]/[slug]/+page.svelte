@@ -2,11 +2,10 @@
 	import PublishDate from '../../PublishDate.svelte'
 	import Authors from '../../Authors.svelte'
 	import Image from '$lib/components/Image.svelte'
-	import type { BlogPostView } from '$lib/data'
-	import RichText from '$lib/components/RichText.svelte'
+	import type { BlogPostViewTransformed } from '$lib/data'
 	import BlogPostPreview from '../../BlogPostPreview.svelte'
 
-	let { data }: { data: BlogPostView } = $props()
+	let { data }: { data: BlogPostViewTransformed } = $props()
 </script>
 
 <svelte:head>
@@ -20,7 +19,7 @@
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} />
 		<section>
-			<RichText data={data.content} width={800} />
+			{@html data.content}
 		</section>
 	</div>
 

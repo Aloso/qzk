@@ -1,8 +1,12 @@
-import type { StaticPage } from '$lib/data'
+import type { StaticPage, StaticPageTransformed } from '$lib/data'
 import { error } from '@sveltejs/kit'
 import { client } from '..'
+import { renderData } from '../render'
 
-export async function loadStatic(slug: string | null): Promise<StaticPage> {
+export async function loadStatic(
+	slug: string | null,
+	width: number,
+): Promise<StaticPageTransformed> {
 	if (slug === 'index') {
 		error(404, 'Not found')
 	}
@@ -16,5 +20,6 @@ export async function loadStatic(slug: string | null): Promise<StaticPage> {
 		error(404, 'Not found')
 	}
 
-	return pages.items[0].fields as unknown as StaticPage
+	const page = pages.items[0].fields as unknown as StaticPage
+	return { ...page, content: renderData(page.content, width) }
 }

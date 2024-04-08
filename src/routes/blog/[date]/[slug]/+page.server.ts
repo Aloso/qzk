@@ -1,7 +1,8 @@
 import type { Entries, Item } from '$lib/contentful'
 import { loadAllBlogPosts, loadBlogPost } from '$lib/contentful/loader'
+import { renderData } from '$lib/contentful/render'
 import { selectAuthorPreview, selectBlogPostPreview } from '$lib/contentful/selector'
-import type { Author, BlogPost, BlogPostView } from '$lib/data'
+import type { Author, BlogPost, BlogPostViewTransformed } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
 import type { Tag } from 'contentful'
 
@@ -10,13 +11,13 @@ interface UrlParams extends Record<string, string> {
 	slug: string
 }
 
-export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostView> {
+export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostViewTransformed> {
 	const postItem = await loadBlogPost(params.date, params.slug)
 	const { title, slug, published, photo, content, authors: authorItems } = postItem.fields
 	const authors = authorItems.map(selectAuthorPreview)
 
-	const tags = postItem.metadata?.tags.map((tag) => tag.sys.id) ?? []
-	const authorIds = postItem.fields.authors.map((a) => a.sys.id)
+	const tags = postItem.metadata?.tags.map(tag => tag.sys.id) ?? []
+	const authorIds = postItem.fields.authors.map(a => a.sys.id)
 
 	const acc: Accumulator = {
 		authorIds: new Set(authorIds),
@@ -36,7 +37,15 @@ export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostVi
 	acc.posts.sort(([, score1], [, score2]) => score2 - score1)
 	const related = acc.posts.map(([post]) => selectBlogPostPreview(post)).slice(0, 5)
 
-	return { title, slug, published, photo, content, authors, related }
+	return {
+		title,
+		slug,
+		published,
+		photo,
+		content: renderData(content, 900),
+		authors,
+		related: related.map(related => ({ ...related, teaser: renderData(related.teaser, 700) })),
+	}
 }
 
 interface Accumulator {
@@ -49,7 +58,7 @@ interface Accumulator {
 type ScoredBlogPost = readonly [Item<BlogPost>, number]
 
 function filterAndScoreAndAddToPosts(acc: Accumulator, posts: Entries<BlogPost>) {
-	posts.items.forEach((post) => {
+	posts.items.forEach(post => {
 		if (!acc.existingPostIds.has(post.sys.id)) {
 			acc.existingPostIds.add(post.sys.id)
 
@@ -63,7 +72,7 @@ function filterAndScoreAndAddToPosts(acc: Accumulator, posts: Entries<BlogPost>)
 
 function countMatchingTags(tags: Set<string>, reference?: Tag[]) {
 	let n = 0
-	reference?.forEach((tag) => {
+	reference?.forEach(tag => {
 		if (tags.has(tag.sys.id)) {
 			n += 1
 		}
@@ -73,7 +82,7 @@ function countMatchingTags(tags: Set<string>, reference?: Tag[]) {
 
 function countMatchingAuthors(authorIds: Set<string>, reference: Item<Author>[]) {
 	let n = 0
-	reference.forEach((item) => {
+	reference.forEach(item => {
 		if (authorIds.has(item.sys.id)) {
 			n += 1
 		}

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import type { StaticPage } from '$lib/data'
+	import type { StaticPageTransformed } from '$lib/data'
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
@@ -15,7 +14,7 @@
 	import EventView from '$lib/components/events/EventView.svelte'
 	import { getDraftTimeBounds, mayIntersect } from '$lib/events/intersections'
 
-	let { data }: { data: StaticPage } = $props()
+	let { data }: { data: StaticPageTransformed } = $props()
 
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
@@ -49,7 +48,7 @@
 		if (!events || !draftTimes) return []
 
 		const eTimes = getDraftTimeBounds(draftTimes)
-		return events.filter((event) => mayIntersect(event.time, eTimes))
+		return events.filter(event => mayIntersect(event.time, eTimes))
 	})
 	onMount(() => {
 		loadEvents()
@@ -64,7 +63,7 @@
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.content} width={900} />
+	{@html data.content}
 </section>
 
 <hr />
@@ -76,8 +75,8 @@
 <div class="form-layout">
 	<PlanningForm
 		defaults={defaults.values}
-		onSubmit={(event) => onSubmit(event)}
-		onTimeChange={(time) => {
+		onSubmit={event => onSubmit(event)}
+		onTimeChange={time => {
 			draftTimes = time
 			showDate = new Date(time[0].start)
 		}}

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import type { StaticPage } from '$lib/data'
+	import type { StaticPageTransformed } from '$lib/data'
 	import PlanningForm from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
@@ -13,7 +12,7 @@
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { publishDraft } from '$lib/events/eventApi'
 
-	let { data }: { data: StaticPage } = $props()
+	let { data }: { data: StaticPageTransformed } = $props()
 
 	type Status =
 		| { type: 'loading' }
@@ -38,7 +37,7 @@
 		if (draft === null) {
 			status = { type: 'error', message: 'Die Veranstaltung existiert nicht', missing: true }
 			if (retries) {
-				await new Promise((resolve) => setTimeout(resolve, 1000))
+				await new Promise(resolve => setTimeout(resolve, 1000))
 				await loadDraftEvent(key, retries - 1)
 			} else {
 				submittedDrafts.remove(key)
@@ -121,7 +120,7 @@
 			und kann von dir nicht mehr bearbeitet werden.
 		</p>
 	{:else}
-		<RichText data={data.content} width={900} />
+		{@html data.content}
 	{/if}
 
 	<p>
@@ -133,7 +132,7 @@
 
 <SubmittedList
 	selectedKey={router.key}
-	onSelect={(key) => router.gotoEvent(key)}
+	onSelect={key => router.gotoEvent(key)}
 	items={submittedDrafts.items}
 />
 

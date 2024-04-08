@@ -1,15 +1,14 @@
 <script lang="ts">
-	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import type { StaticPage } from '$lib/data'
+	import type { StaticPageTransformed } from '$lib/data'
 
-	export let data: StaticPage
+	export let data: StaticPageTransformed
 </script>
 
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.content} width={900} />
+	{@html data.content}
 </section>
 
 <style lang="scss">

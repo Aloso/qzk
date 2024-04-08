@@ -1,5 +1,5 @@
 import { loadStatic } from '$lib/contentful/loader'
 
 export async function load() {
-	return loadStatic('planen/eingereicht')
+	return loadStatic('planen/eingereicht', 900)
 }

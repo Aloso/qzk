@@ -3,11 +3,10 @@
 	import PublishDate from './PublishDate.svelte'
 	import Authors from './Authors.svelte'
 	import Author from './Author.svelte'
-	import type { BlogPostPreview } from '$lib/data'
-	import RichText from '$lib/components/RichText.svelte'
+	import type { BlogPostPreviewTransformed } from '$lib/data'
 
 	interface Props {
-		post: BlogPostPreview
+		post: BlogPostPreviewTransformed
 		small?: boolean
 		noImage?: boolean
 	}
@@ -37,7 +36,7 @@
 			<Authors authors={post.authors} small />
 		{/if}
 		<div class="teaser smaller-paragraphs">
-			<RichText data={post.teaser} width={700} />
+			{@html post.teaser}
 		</div>
 		<a href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
 	</div>
@@ -47,6 +46,7 @@
 	.blogPost {
 		display: flex;
 		gap: 1rem 2rem;
+		margin: 0 0 1rem 0;
 	}
 
 	:global(.BlogPostPreview-photo) {

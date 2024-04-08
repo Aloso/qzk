@@ -10,5 +10,5 @@ export function entries() {
 }
 
 export async function load({ params }: LoadEvent<{ slug: string }>) {
-	return loadStatic(params.slug)
+	return loadStatic(params.slug, 900)
 }

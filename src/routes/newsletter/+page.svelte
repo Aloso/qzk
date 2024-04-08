@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Checkbox from '$lib/components/forms/Checkbox.svelte'
-	import RichText from '$lib/components/RichText.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
-	import type { StaticPage } from '$lib/data'
+	import type { StaticPageTransformed } from '$lib/data'
 
-	let { data }: { data: StaticPage } = $props()
+	let { data }: { data: StaticPageTransformed } = $props()
 
 	let email = $state('')
 	let checkbox = $state(false)
@@ -20,13 +19,13 @@
 <StaticPageHeader {...data} />
 
 <section>
-	<RichText data={data.content} width={900} />
+	{@html data.content}
 </section>
 
 <form
 	method="POST"
 	action="https://3a21c768.sibforms.com/serve/MUIFADgcRngDHEOQekOVRjyGk_GWH_ZxhN5vaZBwEv35Twecv86LJQjqOgJAWwOt8LuGKlOAcdryM5r4OSmtAxYCT4AXmofrepNoQDgmE9hoy__Qte3j2l15Oe0NURXeNBONlgbg_PXRYZTvc1PpHqPtS797KOFZYiw6FMBndP0ThMf9UfuqnbGVujVfIxRhIJVhn4c9hEywsOzJ"
-	onsubmit={(event) => {
+	onsubmit={event => {
 		if (formError) {
 			event.preventDefault()
 		}
@@ -41,7 +40,7 @@
 		bind:error={emailError}
 		required="Bitte Deine E-Mail-Adresse eingeben"
 		{submitClicked}
-		hasError={(email) =>
+		hasError={email =>
 			/^\S+@\S+\.\S+$/.test(email) ? false : 'Die E-Mail-Adresse ist nicht gültig!'}
 	/>
 

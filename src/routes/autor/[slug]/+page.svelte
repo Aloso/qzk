@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
-	import RichText from '$lib/components/RichText.svelte'
 	import type { Data } from './+page.server'
 
 	interface Props {
@@ -29,7 +28,7 @@
 			<div class="role">{author.role}</div>
 			<div class="pronouns">Pronomen: {author.pronouns}</div>
 			<div class="description">
-				<RichText data={author.description} width={700} />
+				{@html author.description}
 			</div>
 		</div>
 	</div>
