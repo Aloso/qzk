@@ -11,24 +11,26 @@
 </script>
 
 <nav id="mobile-nav">
-	{#each links as link}
-		<div class="nav-group">
-			<div class="nav-row">
-				<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
-					{@html link.text}
-				</a>
+	<div class="mobile-nav-inner">
+		{#each links as link}
+			<div class="nav-group">
+				<div class="nav-row">
+					<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
+						{@html link.text}
+					</a>
 
-				{#if link.children?.length}
-					<button data-nav-extender="" class="nav-extender" aria-label="Erweitern"></button>
-				{/if}
+					{#if link.children?.length}
+						<button data-nav-extender="" class="nav-extender" aria-label="Erweitern"></button>
+					{/if}
+				</div>
+				{#each link.children as child}
+					<a class="nav-child" href={child.href}>
+						{@html child.text}
+					</a>
+				{/each}
 			</div>
-			{#each link.children as child}
-				<a class="nav-child" href={child.href}>
-					{@html child.text}
-				</a>
-			{/each}
-		</div>
-	{/each}
+		{/each}
+	</div>
 </nav>
 
 <style lang="scss">
@@ -45,14 +47,29 @@
 			box-sizing: border-box;
 			height: calc(90vh - 12rem);
 			margin-top: calc(12rem - 90vh);
-			padding: 1.8rem;
 			background-color: #a664b4;
-			overflow: auto;
+			overflow: hidden;
 			transition: 0.4s;
 
 			&:global(.extended) {
 				margin-top: 0;
 			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				box-shadow: inset 0 -80px 40px -40px #a664b4;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				height: 80px;
+				pointer-events: none;
+			}
+		}
+
+		.mobile-nav-inner {
+			padding: 1.8rem;
+			overflow: auto;
 
 			.nav-group {
 				border-radius: 25px;
