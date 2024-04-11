@@ -19,6 +19,8 @@
 </nav>
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	nav {
 		display: flex;
 		flex-grow: 1;
@@ -43,11 +45,11 @@
 
 		&:hover,
 		&:focus {
-			background-color: hsl(289, 35%, 47%);
+			background-color: lighten(vars.$COLOR_T3, 10%);
 		}
 
 		&.active {
-			background-color: hsl(289, 35%, 47%);
+			background-color: lighten(vars.$COLOR_T3, 10%);
 		}
 	}
 

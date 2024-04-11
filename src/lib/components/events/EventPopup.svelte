@@ -251,6 +251,8 @@
 {/if}
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	.overlay {
 		box-sizing: border-box;
 		display: flex;

@@ -31,6 +31,8 @@
 </header>
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	header {
 		font-size: 1.2rem;
 		line-height: 2rem;
@@ -45,8 +47,8 @@
 	.header-i {
 		margin: -200px -50px 0 -50px;
 		padding: 180px 50px 0 50px;
-		background-color: hsl(289, 35%, 55%);
-		box-shadow: 0 -50px 0 50px hsl(289, 35%, 55%);
+		background-color: vars.$COLOR_T3;
+		box-shadow: 0 -50px 0 50px vars.$COLOR_T3;
 		transform: rotate(-3deg);
 	}
 
@@ -112,7 +114,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: #0002;
+				background-color: #ffffff17;
 			}
 		}
 	}

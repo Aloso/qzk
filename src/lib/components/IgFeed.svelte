@@ -119,19 +119,19 @@
 	}
 
 	.username {
-		color: #777;
+		color: #666;
 		font-size: 1rem;
 	}
 
 	.consent {
 		font-size: 0.9rem;
-		color: #888;
+		color: #666;
 		text-align: center;
 		line-height: 1.2;
 		text-wrap: balance;
 
 		a {
-			color: #555;
+			color: #444;
 			padding: 5px 0;
 			margin: -5px 0;
 			text-decoration-color: #777;
@@ -156,14 +156,15 @@
 		line-height: 40px;
 		border-radius: 8px;
 		color: white;
-		background-color: #0095f6;
+		background-color: #0085dd;
+		text-shadow: 0 1px 2px #0002;
 		border: none;
 		font-size: 1rem;
 		font-family: inherit;
 
 		&:hover,
 		&:focus {
-			background-color: #0082d9;
+			background-color: #0078c8;
 		}
 	}
 

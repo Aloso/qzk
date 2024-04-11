@@ -34,6 +34,8 @@
 </nav>
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	#mobile-nav {
 		display: none;
 	}
@@ -47,7 +49,7 @@
 			box-sizing: border-box;
 			height: calc(90vh - 12rem);
 			margin-top: calc(12rem - 90vh);
-			background-color: #a664b4;
+			background-color: vars.$COLOR_T3;
 			overflow: hidden;
 			transition: 0.4s;
 
@@ -58,7 +60,7 @@
 			&::after {
 				content: '';
 				position: absolute;
-				box-shadow: inset 0 -80px 40px -40px #a664b4;
+				box-shadow: inset 0 -80px 40px -40px vars.$COLOR_T3;
 				left: 0;
 				bottom: 0;
 				width: 100%;
@@ -80,7 +82,7 @@
 				padding-bottom: 0;
 
 				&:global(.extended) {
-					box-shadow: 0 0 0 3px #fff2;
+					box-shadow: 0 0 0 3px #0002;
 					padding-bottom: 1rem;
 
 					.nav-extender {
@@ -113,7 +115,7 @@
 				flex-grow: 0;
 				border: none;
 				border-radius: 100px;
-				box-shadow: inset 0 0 0 0.66rem #a664b4;
+				box-shadow: inset 0 0 0 0.66rem vars.$COLOR_T3;
 				background-color: transparent;
 				width: calc(2.8rem + 25px);
 				padding: 0;
@@ -126,7 +128,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: #0002;
+					background-color: #ffffff17;
 				}
 			}
 
@@ -139,7 +141,7 @@
 				font-weight: 500;
 				font-size: 1.4rem;
 				line-height: 25px;
-				border-radius: 30px;
+				border-radius: 25px;
 
 				&.nav-child {
 					margin: 0 1rem;
@@ -149,7 +151,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: #0002;
+					background-color: #ffffff17;
 				}
 			}
 		}

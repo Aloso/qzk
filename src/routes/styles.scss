@@ -4,9 +4,9 @@
 @use '../../static/laila/laila.scss';
 
 :root {
-	--color-theme: #6e0cb4;
+	--color-theme: #{lighten(vars.$COLOR_T3, 8%)};
 	--color-accent: #f000ec;
-	--color-link: #8d13e4;
+	--color-link: #{vars.$COLOR_T3};
 	--color-text: #000c;
 	--link-decoration: 1.67px underline var(--color-link);
 	--link-decoration-hover: 1.67px underline var(--color-accent);

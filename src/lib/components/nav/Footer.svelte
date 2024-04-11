@@ -29,9 +29,11 @@
 </footer>
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	footer {
-		border-top: 3px solid hsl(289, 55%, 89%);
-		background-color: hsl(289, 65%, 94%);
+		border-top: 3px solid lighten(vars.$COLOR_T1, 5%);
+		background-color: lighten(vars.$COLOR_T1, 12%);
 		margin-top: 4rem;
 		padding-bottom: 2rem;
 	}
@@ -49,7 +51,11 @@
 	a {
 		font-weight: 500;
 		text-decoration: none;
-		color: var(--color-theme);
+		color: darken(vars.$COLOR_T3, 10%);
+
+		&:hover {
+			color: vars.$COLOR_T3;
+		}
 
 		@media (pointer: coarse) {
 			padding: 0.2rem 0;
