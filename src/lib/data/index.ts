@@ -4,7 +4,7 @@ import type { Document } from '@contentful/rich-text-types'
 export interface BlogPost {
 	title: string
 	slug: string
-	authors: Item<Author>[]
+	authors: Item<Person>[]
 	published: string
 	photo: Image
 	teaser: Document
@@ -14,7 +14,7 @@ export interface BlogPost {
 export interface BlogPostView {
 	title: string
 	slug: string
-	authors: AuthorPreview[]
+	authors: PersonPreview[]
 	published: string
 	photo: Image
 	content: Document
@@ -24,7 +24,7 @@ export interface BlogPostView {
 export interface BlogPostViewTransformed {
 	title: string
 	slug: string
-	authors: AuthorPreview[]
+	authors: PersonPreview[]
 	published: string
 	photo: Image
 	content: string
@@ -34,7 +34,7 @@ export interface BlogPostViewTransformed {
 export interface BlogPostPreview {
 	title: string
 	slug: string
-	authors: AuthorPreview[]
+	authors: PersonPreview[]
 	published: string
 	photo: Image
 	teaser: Document
@@ -43,33 +43,33 @@ export interface BlogPostPreview {
 export interface BlogPostPreviewTransformed {
 	title: string
 	slug: string
-	authors: AuthorPreview[]
+	authors: PersonPreview[]
 	published: string
 	photo: Image
 	teaser: string
 }
 
-export interface Author {
+export interface Person {
 	id: string
 	slug: string
 	name: string
 	role: string
-	pronouns: string
+	pronouns?: string
 	photo: Image
-	description: Document
+	description?: Document
 }
 
-export interface AuthorTransformed {
+export interface PersonTransformed {
 	id: string
 	slug: string
 	name: string
 	role: string
-	pronouns: string
+	pronouns?: string
 	photo: Image
-	description: string
+	description?: string
 }
 
-export interface AuthorPreview {
+export interface PersonPreview {
 	slug: string
 	name: string
 	role: string

@@ -1,5 +1,5 @@
 export * from './static'
 export * from './blogPost'
-export * from './author'
+export * from './person'
 export * from './allBlogPosts'
 export * from './allNavigations'

@@ -1,2 +1,2 @@
-export * from './selectAuthorPreview'
+export * from './selectPersonPreview'
 export * from './selectBlogPostPreview'

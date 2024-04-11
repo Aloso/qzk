@@ -4,7 +4,7 @@ import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Image, Item, Asset } from '$lib/contentful/types'
 import type { Entry } from 'contentful'
-import type { StaticPage, BlogPost, Author } from '$lib/data'
+import type { StaticPage, BlogPost, Person } from '$lib/data'
 
 export function renderData(data: Document, width: number): string {
 	return documentToHtmlString(data, {
@@ -36,9 +36,9 @@ export function renderData(data: Document, width: number): string {
 				} else if (sys.contentType.sys.id === 'blogPost') {
 					const { slug, published } = fields as unknown as BlogPost
 					return `<a href="/blog/${published}/${slug}">${children(content)}</a>`
-				} else if (sys.contentType.sys.id === 'author') {
-					const { slug } = fields as unknown as Author
-					return `<a href="/autor/${slug}">${children(content)}</a>`
+				} else if (sys.contentType.sys.id === 'person') {
+					const { slug } = fields as unknown as Person
+					return `<a href="/person/${slug}">${children(content)}</a>`
 				} else {
 					return '<span style="color: red">FEHLER: Nicht unterstützer Entry Type</span>'
 				}

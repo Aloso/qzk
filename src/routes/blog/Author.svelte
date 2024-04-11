@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
-	import type { AuthorPreview } from '$lib/data'
+	import type { PersonPreview } from '$lib/data'
 
 	interface Props {
-		author: AuthorPreview
+		author: PersonPreview
 		small?: boolean
 		single?: boolean
 		plus?: number
@@ -12,7 +12,7 @@
 	let { author, small, single, plus }: Props = $props()
 </script>
 
-<a class="author" class:small class:single href="/autor/{author.slug}">
+<a class="author" class:small class:single href="/person/{author.slug}">
 	<Image
 		class="BlogPost-Author-photo"
 		img={author.photo}

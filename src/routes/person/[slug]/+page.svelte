@@ -8,35 +8,39 @@
 	}
 
 	let { data }: Props = $props()
-	const { author, posts, totalPosts } = data
+	const { person, posts, totalPosts } = data
 </script>
 
 <svelte:head>
-	<title>{author.name} - Queeres Zentrum Kassel</title>
+	<title>{person.name} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <div>
-	<div class="author-layout">
+	<div class="person-layout">
 		<Image
-			img={author.photo}
-			class="Author-photo"
-			fallbackAlt="Bild von {author.name}"
+			img={person.photo}
+			class="Person-photo"
+			fallbackAlt="Bild von {person.name}"
 			width={400}
 		/>
 		<div class="content">
-			<h1 class="name">{author.name}</h1>
-			<div class="role">{author.role}</div>
-			<div class="pronouns">Pronomen: {author.pronouns}</div>
-			<div class="description">
-				{@html author.description}
-			</div>
+			<h1 class="name">{person.name}</h1>
+			<div class="role">{person.role}</div>
+			{#if person.pronouns}
+				<div class="pronouns">Pronomen: {person.pronouns}</div>
+			{/if}
+			{#if person.description}
+				<div class="description">
+					{@html person.description}
+				</div>
+			{/if}
 		</div>
 	</div>
 
 	<hr />
 	<h2>
 		{totalPosts}
-		{totalPosts === 1 ? 'Beitrag' : 'Beiträge'} von {author.name}
+		{totalPosts === 1 ? 'Beitrag' : 'Beiträge'} von {person.name}
 	</h2>
 	{#if totalPosts > 20}
 		<p>Die neuesten Beiträge werden angezeigt</p>
@@ -49,18 +53,18 @@
 </div>
 
 <style lang="scss">
-	.author-layout {
+	.person-layout {
 		display: flex;
 		flex-direction: row-reverse;
 		align-items: start;
 		gap: 2rem;
-		margin: 1rem 0;
+		margin: 2rem 0;
 
 		@media (max-width: 800px) {
 			flex-direction: column;
 		}
 
-		:global(.Author-photo) {
+		:global(.Person-photo) {
 			border-radius: 30px;
 			flex-shrink: 0;
 			max-width: 100%;

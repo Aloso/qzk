@@ -1,8 +1,8 @@
 import type { Entries, Item } from '$lib/contentful'
 import { loadAllBlogPosts, loadBlogPost } from '$lib/contentful/loader'
 import { renderData } from '$lib/contentful/render'
-import { selectAuthorPreview, selectBlogPostPreview } from '$lib/contentful/selector'
-import type { Author, BlogPost, BlogPostViewTransformed } from '$lib/data'
+import { selectPersonPreview, selectBlogPostPreview } from '$lib/contentful/selector'
+import type { Person, BlogPost, BlogPostViewTransformed } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
 import type { Tag } from 'contentful'
 
@@ -14,7 +14,7 @@ interface UrlParams extends Record<string, string> {
 export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostViewTransformed> {
 	const postItem = await loadBlogPost(params.date, params.slug)
 	const { title, slug, published, photo, content, authors: authorItems } = postItem.fields
-	const authors = authorItems.map(selectAuthorPreview)
+	const authors = authorItems.map(selectPersonPreview)
 
 	const tags = postItem.metadata?.tags.map(tag => tag.sys.id) ?? []
 	const authorIds = postItem.fields.authors.map(a => a.sys.id)
@@ -80,7 +80,7 @@ function countMatchingTags(tags: Set<string>, reference?: Tag[]) {
 	return n
 }
 
-function countMatchingAuthors(authorIds: Set<string>, reference: Item<Author>[]) {
+function countMatchingAuthors(authorIds: Set<string>, reference: Item<Person>[]) {
 	let n = 0
 	reference.forEach(item => {
 		if (authorIds.has(item.sys.id)) {
