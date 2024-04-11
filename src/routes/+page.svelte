@@ -25,8 +25,11 @@
 		const response = await fetchAllEventsWithCache()
 
 		const now = Date.now()
+		const inOneMonth = Date.now() + 30 * 24 * 60 * 60 * 1000
 		events = response.filter(e => {
-			const filteredTimes = e.time.filter(time => getEndOfTime(time) > now)
+			const filteredTimes = e.time.filter(
+				time => +time.start < inOneMonth && getEndOfTime(time) > now,
+			)
 			filteredTimes.splice(3)
 			e.time = filteredTimes
 			return e.time.length > 0
