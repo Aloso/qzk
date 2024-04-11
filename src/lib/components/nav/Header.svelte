@@ -17,7 +17,7 @@
 	<div class="header-i">
 		<div class="header-ii">
 			<a class="logo-link" href="/">
-				<img data-header-logo class="logo" src="/logo.svg" alt="Queeres Zentrum Kassel" />
+				<img data-header-logo class="logo" src="/logo-tilted.svg" alt="Queeres Zentrum Kassel" />
 			</a>
 
 			<DesktopNav {links} {url} />
@@ -67,8 +67,10 @@
 
 	.logo {
 		width: 50vw;
-		max-width: 200px;
-		aspect-ratio: 800 / 439;
+		max-width: 230px;
+		margin: -2.2% 0;
+		aspect-ratio: 887 / 485;
+		transform: rotate(3deg);
 		filter: drop-shadow(0.75px 3px #0001);
 	}
 
