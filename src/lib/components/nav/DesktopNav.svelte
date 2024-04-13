@@ -16,6 +16,12 @@
 			<span class="nav-link-inner">{@html link.text}</span>
 		</a>
 	{/each}
+
+	<button class="a" data-search-button>
+		<span class="nav-link-inner">
+			<img src="/search.svg" alt="Suche" />
+		</span>
+	</button>
 </nav>
 
 <style lang="scss">
@@ -28,7 +34,12 @@
 		margin: 0 0 0.5rem;
 	}
 
-	a {
+	a,
+	.a {
+		background-color: transparent;
+		border: none;
+		font: inherit;
+
 		display: flex;
 		position: relative;
 		flex-direction: column;
@@ -55,6 +66,11 @@
 
 	.nav-link-inner {
 		display: block;
+
+		img {
+			width: 1em;
+			height: 1em;
+		}
 	}
 
 	@media (max-width: 1200px) {

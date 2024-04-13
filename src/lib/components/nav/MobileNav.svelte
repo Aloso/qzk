@@ -12,6 +12,14 @@
 
 <nav id="mobile-nav">
 	<div class="mobile-nav-inner">
+		<div class="nav-group">
+			<div class="nav-row">
+				<button class="a nav-link" data-search-button>
+					<img src="/search.svg" alt="" /> Suche
+				</button>
+			</div>
+		</div>
+
 		{#each links as link}
 			<div class="nav-group">
 				<div class="nav-row">
@@ -132,7 +140,13 @@
 				}
 			}
 
-			a {
+			a,
+			.a {
+				border: none;
+				background-color: transparent;
+				font: inherit;
+				text-align: left;
+
 				display: block;
 				flex-grow: 1;
 				color: white;
@@ -152,6 +166,12 @@
 				&:hover,
 				&:focus {
 					background-color: #ffffff17;
+				}
+
+				img {
+					width: 1.15rem;
+					height: 1.15rem;
+					margin-right: 1rem;
 				}
 			}
 		}

@@ -13,6 +13,7 @@ declare global {
 	}
 
 	interface Window {
+		__searchInitialized?: boolean
 		__fetchEventsPromise?: Promise<WireEvent[]>
 		instgrm?: {
 			Embeds: {

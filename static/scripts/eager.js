@@ -17,7 +17,7 @@
 		mobileNav.classList.toggle('extended')
 	})
 
-	for (const anchor of mobileNav.querySelectorAll('a')) {
+	for (const anchor of mobileNav.querySelectorAll('a, .a')) {
 		anchor.addEventListener('click', () => {
 			mobileNav.classList.toggle('extended')
 		})
@@ -41,5 +41,22 @@
 			}
 			group.classList.toggle('extended')
 		})
+	}
+
+	async function startSearch() {
+		if (!window.__searchInitialized) {
+			await new Promise(resolve => {
+				window.addEventListener('message', function onMessage({ data }) {
+					if (data && typeof data === 'object' && data.type === 'search-initialized') {
+						window.removeEventListener('message', onMessage)
+						resolve(undefined)
+					}
+				})
+			})
+		}
+		window.postMessage({ type: 'search' })
+	}
+	for (const searchButton of document.querySelectorAll('[data-search-button]')) {
+		searchButton.addEventListener('click', startSearch)
 	}
 })()

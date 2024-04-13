@@ -25,7 +25,6 @@
 			<button id="burger-menu-button">
 				<img src="/burger.svg" alt="Menü" />
 			</button>
-			<script src="/scripts/nav.js"></script>
 		</div>
 	</div>
 </header>

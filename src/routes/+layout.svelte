@@ -2,6 +2,7 @@
 	import { page } from '$app/stores'
 	import Footer from '$lib/components/nav/Footer.svelte'
 	import Header from '$lib/components/nav/Header.svelte'
+	import SearchWrapper from '$lib/components/search/SearchWrapper.svelte'
 	import type { Navigations } from '$lib/data'
 	import './styles.scss'
 
@@ -20,6 +21,9 @@
 	</main>
 
 	<Footer links={data.footer} />
+
+	<SearchWrapper />
+	<script src="/scripts/eager.js"></script>
 </div>
 
 <style>

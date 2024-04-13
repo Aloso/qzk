@@ -21,6 +21,7 @@
 		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@types/eslint": "8.56.2",
+		"@types/lunr": "^2.3.7",
 		"@types/nodemailer": "^6.4.14",
 		"@typescript-eslint/eslint-plugin": "=7.2.0",
 		"@typescript-eslint/parser": "=7.2.0",
@@ -40,5 +41,11 @@
 		"typescript": "^5.4.4",
 		"vite": "^5.2.7"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@types/html-to-text": "^9.0.4",
+		"html-to-text": "^9.0.5",
+		"lunr": "^2.3.9",
+		"lunr-languages": "^1.14.0"
+	}
 }

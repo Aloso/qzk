@@ -23,7 +23,8 @@ body {
 	margin: 0;
 }
 
-a {
+a,
+.a {
 	color: var(--color-link);
 	text-decoration: var(--link-decoration);
 	text-underline-offset: 0.25rem;
