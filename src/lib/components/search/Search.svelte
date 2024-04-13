@@ -53,13 +53,14 @@
 		const indices: [string, number, number][] = []
 
 		outerLoop: for (const [term, item] of Object.entries(res.metadata)) {
-			const regExp = RegExp(optionalUmlauts(escapeRegExp(term)), 'gi')
+			const escaped = optionalUmlauts(escapeRegExp(term))
+			const regExp = RegExp(`(?<![\\wäöüß])${escaped}\\w*`, 'gi')
 
 			for (const field of Object.keys(item) as ('n' | 'a' | 'c')[]) {
 				const fieldContent = res[field]!
 				let arr: RegExpExecArray | null
 				while ((arr = regExp.exec(fieldContent)) !== null) {
-					indices.push([fieldContent, arr.index, term.length])
+					indices.push([fieldContent, arr.index, arr[0].length])
 
 					if (indices.length === limit) break outerLoop
 				}
