@@ -19,12 +19,13 @@ export interface SearchData {
 export interface SearchResult {
 	type: 'BlogPost' | 'Person' | 'StaticPage'
 	slug: string
-	name: string
-	inhalt: string
-	autor?: string
+	// use short variable names to reduce index size
+	n: string
+	c: string
+	a?: string
 }
 
-type Metadata = Record<string, Record<'name' | 'inhalt' | 'autor', object>>
+type Metadata = Record<string, Record<'n' | 'c' | 'a', object>>
 
 export interface SearchResultExt extends SearchResult {
 	metadata: Metadata

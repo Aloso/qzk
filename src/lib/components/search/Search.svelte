@@ -55,7 +55,7 @@
 		outerLoop: for (const [term, item] of Object.entries(res.metadata)) {
 			const regExp = RegExp(optionalUmlauts(escapeRegExp(term)), 'gi')
 
-			for (const field of Object.keys(item) as ('name' | 'autor' | 'inhalt')[]) {
+			for (const field of Object.keys(item) as ('n' | 'a' | 'c')[]) {
 				const fieldContent = res[field]!
 				let arr: RegExpExecArray | null
 				while ((arr = regExp.exec(fieldContent)) !== null) {
@@ -114,7 +114,7 @@
 						{:else if result.type === 'BlogPost'}
 							<b>Blog Post:</b>
 						{/if}
-						{result.name}
+						{result.n}
 					</span>
 					{#each result.matches as [before, match, after, isStart, isEnd]}
 						<span class="line">

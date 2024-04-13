@@ -39,21 +39,21 @@ async function getSearchResults(): Promise<SearchResult[]> {
 			(post): SearchResult => ({
 				type: 'BlogPost',
 				slug: `blog/${post.fields.published}/${post.fields.slug}`,
-				name: post.fields.title,
-				inhalt: makeContent([
+				n: post.fields.title,
+				c: makeContent([
 					new Date(post.fields.published).toLocaleDateString(),
 					render(post.fields.teaser),
 					render(post.fields.content),
 				]),
-				autor: post.fields.authors.map(a => a.fields.name).join(', '),
+				a: post.fields.authors.map(a => a.fields.name).join(', '),
 			}),
 		),
 		...persons.items.map(
 			(person): SearchResult => ({
 				type: 'Person',
 				slug: `person/${person.fields.slug}`,
-				name: person.fields.name,
-				inhalt: makeContent([
+				n: person.fields.name,
+				c: makeContent([
 					person.fields.pronouns,
 					person.fields.role,
 					person.fields.description ? render(person.fields.description) : undefined,
@@ -66,8 +66,8 @@ async function getSearchResults(): Promise<SearchResult[]> {
 			return {
 				type: 'StaticPage',
 				slug,
-				name: staticPage.fields.name,
-				inhalt: render(staticPage.fields.content),
+				n: staticPage.fields.name,
+				c: render(staticPage.fields.content),
 			}
 		}),
 	]
@@ -78,9 +78,9 @@ function createSearchIndex(data: SearchResult[]) {
 		// @ts-expect-error no type definitions available
 		this.use(lunr.multiLanguage('en', 'de'))
 
-		this.field('name', { boost: 3 })
-		this.field('autor', { boost: 2 })
-		this.field('inhalt', { boost: 1 })
+		this.field('n', { boost: 3 }) // name
+		this.field('a', { boost: 2 }) // authors
+		this.field('c', { boost: 1 }) // content
 
 		data.forEach((result, id) => {
 			this.add({ ...result, id })
