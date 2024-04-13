@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import Search from './Search.svelte'
 
 	let searchOpen = $state(false)
+	let lazyComponent = $state<Promise<any>>()
 
 	onMount(() => {
 		window.__searchInitialized = true
@@ -12,6 +12,9 @@
 			if (event.data && typeof event.data === 'object') {
 				if (event.data.type === 'search') {
 					searchOpen = true
+					if (!lazyComponent) {
+						lazyComponent = import('./Search.svelte')
+					}
 				}
 			}
 		}
@@ -25,6 +28,8 @@
 	}
 </script>
 
-{#if searchOpen}
-	<Search onclose={onClose} onselect={onClose} />
+{#if searchOpen && lazyComponent}
+	{#await lazyComponent then { default: Search }}
+		<Search onclose={onClose} onselect={onClose} />
+	{/await}
 {/if}
