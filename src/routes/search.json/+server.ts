@@ -62,7 +62,7 @@ async function getSearchResults(): Promise<SearchResult[]> {
 		),
 		...statics.items.flatMap((staticPage): SearchResult | never[] => {
 			const slug = getStaticSlug(staticPage.fields.slug)
-			if (!slug) return []
+			if (slug == null) return []
 			return {
 				type: 'StaticPage',
 				slug,
