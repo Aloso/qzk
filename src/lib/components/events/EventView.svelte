@@ -82,7 +82,11 @@
 	{/if}
 	{#if showPlace}
 		<div class="event-place">
-			{event.place.name}{event.place.room ? `, ${event.place.room}` : ''}
+			{#if event.place.type === 'ONLINE'}
+				Online-Veranstaltung
+			{:else}
+				{event.place.name}{event.place.room ? `, ${event.place.room}` : ''}
+			{/if}
 		</div>
 	{/if}
 </button>

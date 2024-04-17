@@ -21,7 +21,7 @@
 	let dayStart = $derived(new Date(year, month, day))
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
-	let dayEvents = $derived(allEvents.filter((event) => isBetween(event.time, dayStart, dayEnd)))
+	let dayEvents = $derived(allEvents.filter(event => isBetween(event.time, dayStart, dayEnd)))
 
 	let hasDraftEvent = $derived.by(() => {
 		if (!draftTimes) return false

@@ -8,22 +8,8 @@ export function isBetween(eventTimes: Time[], start: Date, end: Date): boolean {
 	return eventTimes.some(time => !(time.start > end || (time.end ?? time.start) < start))
 }
 
-interface TimeBounds {
-	start: Date
-	end: Date
-}
-
-export function mayIntersect(eventTimes: Time[], draftTimeBounds: TimeBounds[]): boolean {
-	return draftTimeBounds.some(eTime => isBetween(eventTimes, eTime.start, eTime.end))
-}
-
-export function getDraftTimeBounds(draftTimes: Time[]): TimeBounds[] {
-	return draftTimes.map(time => {
-		const eStart = time.start
-		const eEnd = new Date(time.end ?? time.start)
-		eEnd.setHours(23, 59, 59, 999)
-		return { start: eStart, end: eEnd }
-	})
+export function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date): boolean {
+	return !(aStart > bEnd || aEnd < bStart)
 }
 
 export function getEndOfTime(time: Time): number {
@@ -32,4 +18,20 @@ export function getEndOfTime(time: Time): number {
 		d.setHours(23, 59, 59, 999)
 	}
 	return d.getTime()
+}
+
+export function narrowTimesToDraft(times: Time[], draftTimes: Time[]): Time[] {
+	return times.filter(time =>
+		draftTimes.some(draftTime =>
+			overlaps(time.start, getMaxEnd(time), draftTime.start, getMaxEnd(draftTime)),
+		),
+	)
+}
+
+function getMaxEnd(time: Time): Date {
+	const end = new Date(time.end ?? time.start)
+	if (time.variant !== 'time-range') {
+		end.setHours(23, 59, 59, 999)
+	}
+	return end
 }

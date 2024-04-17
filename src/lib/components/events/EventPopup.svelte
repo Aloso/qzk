@@ -172,6 +172,8 @@
 						<p class="event-place-address">{event.place.address}</p>
 					{:else if event.place.url}
 						<p><a href={event.place.url}>Link zur Teilnahme</a></p>
+					{:else if event.place.type === 'ONLINE'}
+						<p>Online-Veranstaltung</p>
 					{/if}
 				</div>
 				{#if event.website}
