@@ -15,10 +15,10 @@
 
 	let initialized = $state(false)
 	let error = $state<false | string>(false)
-	let searchTerm = $state('')
+	let searchTerms = $state('')
 
 	let searchResults = $derived.by(() => {
-		return search(searchTerm).map(res => ({ ...res, matches: getMatches(res, 4) }))
+		return search(searchTerms).map(res => ({ ...res, matches: getMatches(res, 4) }))
 	})
 
 	onMount(async () => {
@@ -43,6 +43,10 @@
 		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 	}
 
+	function escapeHtml(str: string) {
+		return str.replace(/[<>&]/g, c => (c === '<' ? '&lt;' : c === '>' ? '&gt;' : '&amp;'))
+	}
+
 	function optionalUmlauts(str: string) {
 		return str.replace(/[aou]|ss/g, s =>
 			s === 'a' ? '[aä]' : s === 'o' ? '[oö]' : s === 'u' ? '[uü]' : s === 'ss' ? '(?:ss|ß)' : s,
@@ -54,7 +58,7 @@
 
 		outerLoop: for (const [term, item] of Object.entries(res.metadata)) {
 			const escaped = optionalUmlauts(escapeRegExp(term))
-			const regExp = RegExp(`(?<![\\wäöüß])${escaped}\\w*`, 'gi')
+			const regExp = RegExp(`(?<![\\wäöüß])${escaped}[\\wäöüß]{0,4}(?![\\wäöüß])`, 'gi')
 
 			for (const field of Object.keys(item) as ('n' | 'a' | 'c')[]) {
 				const fieldContent = res[field]!
@@ -76,6 +80,19 @@
 			return [excerpt1, excerpt2, excerpt3, start === 0, end === text.length] as const
 		})
 	}
+
+	function formatTitle(res: SearchResultExt) {
+		const escapedText = escapeHtml(res.n)
+
+		const terms = Object.entries(res.metadata)
+		const mappedTerms = terms.flatMap(([term, item]) => (item.n ? escapeRegExp(term) : []))
+		if (mappedTerms.length === 0) return escapedText
+
+		const escapedTerms = optionalUmlauts(mappedTerms.join('|'))
+		const regExp = RegExp(`(?<![\\wäöüß])((${escapedTerms})[\\wäöüß]{0,4})(?![\\wäöüß])`, 'gi')
+
+		return escapedText.replace(regExp, '<b>$1</b>')
+	}
 </script>
 
 <div
@@ -94,16 +111,18 @@
 		<input
 			type="text"
 			bind:this={searchBox}
-			bind:value={searchTerm}
+			bind:value={searchTerms}
 			placeholder="Website durchsuchen..."
 		/>
 
-		{#if searchResults.length}
+		{#if searchTerms.length >= 2}
 			{searchResults.length === 10
 				? '10+ Ergebnisse'
 				: searchResults.length === 1
 					? '1 Ergebnis'
-					: searchResults.length + ' Ergebnisse'}
+					: searchResults.length === 0
+						? 'Keine Ergebnisse'
+						: searchResults.length + ' Ergebnisse'}
 		{/if}
 
 		<div class="results">
@@ -111,11 +130,11 @@
 				<a class="result" href="/{result.slug}" onclick={() => onselect(result)}>
 					<span class="title a">
 						{#if result.type === 'Person'}
-							<b>Person:</b>
+							Person:
 						{:else if result.type === 'BlogPost'}
-							<b>Blog Post:</b>
+							Blog Post:
 						{/if}
-						{result.n}
+						{@html formatTitle(result)}
 					</span>
 					{#each result.matches as [before, match, after, isStart, isEnd]}
 						<span class="line">
