@@ -1,3 +1,7 @@
+@echo off
+chcp 1252
+cls
+
 echo Änderungen am Code werden abgerufen...
 echo:
 call git pull || (
