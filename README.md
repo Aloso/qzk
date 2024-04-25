@@ -1,6 +1,12 @@
+<center>
+
+<img src="./static/favicon.svg" alt="" width="30%">
+
 # Website des Queeren Zentrums Kassel
 
 Eine Sveltekit-App, die Inhalt aus Contentful bezieht.
+
+</center>
 
 ## Loslegen
 
@@ -27,7 +33,7 @@ Zum Klonen wird `git` benötigt. Um den Prozess zu vereinfachen, gibt es ein Skr
 
 3. Führe die Datei per Doppelklick aus.
 
-Wenn der Prozess abgeschlossen ist, sollte ein Ordner "Queeres Zentrum Website" erscheinen. Du kannst du das Skript dann löschen.
+Wenn der Prozess abgeschlossen ist, sollte ein Ordner "Queeres Zentrum Website" erscheinen. Du kannst das Skript dann löschen.
 
 ### Schritt 3: Geheime Datei
 
