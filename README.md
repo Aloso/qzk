@@ -41,19 +41,13 @@ Im Code fehlt eine Datei namens `.env` mit Passwörtern und vertraulichen Inform
 
 > **Wichtig**: Diese Datei darf nicht veröffentlicht werden, da sonst jeder Mensch den Inhalt der Website bearbeiten oder löschen kann.
 
-### Schritt 4: Abhängigkeiten installieren
-
-Im Ordner "Queeres Zentrum Website" befindet sich ein Ordner "scripts". Öffne ihn und führe die Datei `Installation.bat` durch einen Doppelklick aus.
-
 ## Verwendung der Skripte
 
-In dem Ordner "scripts" befinden sich noch weitere Dateien. Führe `Hilfe.bat` aus, um eine Zusammenfassung zu erhalten.
+Im Ordner "Queeres Zentrum Website" befindet sich ein Ordner "scripts" mit 2 wichtigen Dateien.
 
-Mit `Start.bat` wird die Website auf deinem PC geöffnet. Die URL dafür beginnt `localhost`, da es eine _lokale_ Website ist – sie ist nur auf deinem PC erreichbar. Wenn du Änderungen in Contentful vornimmst, werden sie lokal sofort sichtbar, du musst dafür nur die Seite neu laden. Du musst den Inhalt _nicht_ veröffentlichen, um ihn auf der lokalen Website zu sehen.
+Mit `Start.bat` wird die Website auf deinem PC geöffnet. Die URL dafür beginnt mit `localhost`, da es eine _lokale_ Website ist – sie ist nur auf deinem PC erreichbar. Wenn du Änderungen in Contentful vornimmst, werden sie lokal sofort sichtbar, du musst dafür nur die Seite neu laden. Du musst den Inhalt _nicht_ veröffentlichen, um ihn auf der lokalen Website zu sehen.
 
 Mit `Test.bat` wird die Website kompiliert. Du musst nicht verstehen, was das bedeutet. Wichtig ist, dass dabei alles auf Korrektheit überprüft wird. Wenn eine Seite einen Fehler enthält, wird er dir angezeigt. Ein besonders häufiger Fehler ist eine **ungültige URL**. Die Fehlermeldung enthält dann den Code `404`. Sie sagt dir außerdem, auf welcher Seite der Fehler aufgetreten ist, damit du ihn korrigieren kannst.
-
-Wenn etwas am Code der Website geändert wurde, musst du `Update.bat` ausführen, um die Änderungen auch lokal zu übernehmen; ansonsten verwendest du einen veralteten Stand der Website. Es ist sinnvoll, das immer vor dem Ausführen von `Start.bat` zu tun, falls das letzte Update schon einen Tag oder länger zurückliegt. Wenn du `Update.bat` ausführst, ohne dass sich der Code geändert hat, macht das nichts.
 
 ## Anleitung für Profis
 

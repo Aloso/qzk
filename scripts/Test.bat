@@ -2,12 +2,14 @@
 chcp 1252
 cls
 
-echo Website wird auf Fehler geprüft...
+cd internal
+call update.bat
+echo Website wird auf Fehler getestet...
 
 call npm run build -- --logLevel warn && (
   cls && echo Super! Die Website funktioniert.
 ) || (
-  echo: && echo ---------------------------------------- && echo: && echo Es sind Fehler aufgetreten. && echo TIPP: Suche nach einer Zeile, die mit "Error:" anfängt.
+  echo: && echo ---------------------------------------- && echo: && echo Es sind Fehler aufgetreten. && echo TIPP: Suche nach einer Zeile, die mit "Error:" beginnt.
 )
 
 echo:
