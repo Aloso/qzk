@@ -1,6 +1,5 @@
 @echo off
-chcp 1252
-cls
+chcp 1252 && cls
 
 echo Änderungen am Code werden abgerufen...
 echo:
@@ -9,10 +8,7 @@ call git pull || (
 )
 cls
 
-where /q pnpm
-IF ERRORLEVEL 1 (
-    echo pnpm wird heruntergeladen... && call npm install -g pnpm && cls
-)
+where /q pnpm || echo pnpm wird heruntergeladen... && call npm install -g pnpm && cls
 
 echo Abhängigkeiten werden heruntergeladen...
 call pnpm install

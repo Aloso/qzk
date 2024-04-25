@@ -1,6 +1,5 @@
 @echo off
-chcp 1252
-cls
+chcp 1252 && cls
 
 cd internal
 call update.bat
