@@ -4,13 +4,12 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"postbuild": "tsx scripts/build-sitemap.ts",
+		"postbuild": "tsx scripts/internal/build-sitemap.ts",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"setup": "node ./contentful/setup.js"
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240329.0",
