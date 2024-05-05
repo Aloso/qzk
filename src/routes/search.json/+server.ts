@@ -1,7 +1,7 @@
 // https://joyofcode.xyz/blazing-fast-sveltekit-search
 
 import { loadAllBlogPosts, loadAllPersons, loadAllStatics } from '$lib/contentful/loader'
-import { renderData } from '$lib/contentful/render'
+import { renderDataToString } from '$lib/contentful/render'
 import type { SearchResult } from '$lib/search'
 import type { Document } from '@contentful/rich-text-types'
 import { json } from '@sveltejs/kit'
@@ -106,7 +106,8 @@ const selectors: SelectorDefinition[] = [
 ]
 
 function render(doc: Document): string {
-	return htmlToText(renderData(doc, 900), { wordwrap: null, selectors }).replace(/\n{2,}/g, ' · ')
+	const html = renderDataToString(doc, 900)
+	return htmlToText(html, { wordwrap: null, selectors }).replace(/\n{2,}/g, ' · ')
 }
 
 function makeContent(items: (string | undefined | null)[]): string {

@@ -1,3 +1,4 @@
+import type { ExtraComponent } from '$lib/contentful/render'
 import type { Image, Item } from '$lib/contentful/types'
 import type { Document } from '@contentful/rich-text-types'
 
@@ -87,7 +88,7 @@ export interface StaticPageTransformed {
 	name: string
 	slug: string
 	description?: string
-	content: string
+	parts: (string | ExtraComponent)[]
 }
 
 export interface Navigation {

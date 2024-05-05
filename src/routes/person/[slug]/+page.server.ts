@@ -1,5 +1,5 @@
 import { loadPerson, loadAllBlogPosts } from '$lib/contentful/loader'
-import { renderData } from '$lib/contentful/render'
+import { renderDataToString } from '$lib/contentful/render'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { PersonTransformed, BlogPostPreviewTransformed } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
@@ -17,9 +17,9 @@ export async function load({ params }: LoadEvent<{ slug: string }>): Promise<Dat
 	return {
 		person: {
 			...person,
-			description: person.description ? renderData(person.description, 700) : undefined,
+			description: person.description ? renderDataToString(person.description, 700) : undefined,
 		},
-		posts: posts.map(post => ({ ...post, teaser: renderData(post.teaser, 700) })),
+		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
 		totalPosts: postEntries.total,
 	}
 }

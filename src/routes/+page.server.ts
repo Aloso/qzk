@@ -1,5 +1,5 @@
 import { loadAllBlogPosts, loadStatic } from '$lib/contentful/loader'
-import { renderData } from '$lib/contentful/render'
+import { renderDataToString } from '$lib/contentful/render'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreviewTransformed, StaticPageTransformed } from '$lib/data'
 
@@ -17,6 +17,6 @@ export async function load(): Promise<Data> {
 
 	return {
 		page,
-		posts: posts.map(post => ({ ...post, teaser: renderData(post.teaser, 700) })),
+		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
 	}
 }

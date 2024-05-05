@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Checkbox from '$lib/components/forms/Checkbox.svelte'
-	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
-	import type { StaticPageTransformed } from '$lib/data'
-
-	let { data }: { data: StaticPageTransformed } = $props()
 
 	let email = $state('')
 	let checkbox = $state(false)
@@ -15,12 +11,6 @@
 
 	let submitClicked = $state(false)
 </script>
-
-<StaticPageHeader {...data} />
-
-<section>
-	{@html data.content}
-</section>
 
 <form
 	method="POST"
@@ -67,7 +57,8 @@
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		padding: 30px;
-		max-width: 700px;
+		max-width: 44rem;
+		box-sizing: border-box;
 	}
 
 	label {

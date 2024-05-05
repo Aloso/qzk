@@ -6,8 +6,34 @@ import type { Image, Item, Asset } from '$lib/contentful/types'
 import type { Entry } from 'contentful'
 import type { StaticPage, BlogPost, Person } from '$lib/data'
 
-export function renderData(data: Document, width: number): string {
-	return documentToHtmlString(data, {
+const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup'] as const
+
+type ComponentType = (typeof allowedTypes)[number]
+
+export interface ExtraComponent {
+	type: ComponentType
+}
+
+export function renderDataToString(data: Document, width: number): string {
+	return renderData(data, width)
+		.filter(part => typeof part === 'string')
+		.join('\n')
+}
+
+export function renderData(data: Document, width: number): (string | ExtraComponent)[] {
+	let extraComponents: ExtraComponent[] = []
+	let blockLevel = 0
+
+	function inBlock(next: () => string) {
+		blockLevel += 1
+		const result = next()
+		blockLevel -= 1
+		return result
+	}
+
+	const separator = `{{separator-${Date.now()}}}`
+
+	const html = documentToHtmlString(data, {
 		preserveWhitespace: true,
 		renderNode: {
 			[BLOCKS.EMBEDDED_ASSET]: node => {
@@ -21,6 +47,37 @@ export function renderData(data: Document, width: number): string {
 				}
 				return ''
 			},
+			[BLOCKS.PARAGRAPH]: (node, children) => {
+				if (
+					blockLevel === 0 &&
+					node.content.length === 1 &&
+					node.content[0].nodeType === 'text' &&
+					node.content[0].marks.length === 0
+				) {
+					const match = /^\{\{(?<value>[a-zA-Z0-9_-]+)\}\}\s*$/.exec(node.content[0].value)
+					if (match) {
+						const { value } = match.groups!
+						if (allowedTypes.includes(value as ComponentType)) {
+							extraComponents.push({ type: value as ComponentType })
+							return separator
+						}
+					}
+				}
+				return inBlock(() => `<p>${children(node.content)}</p>`)
+			},
+
+			[BLOCKS.HEADING_1]: (node, children) => inBlock(() => `<h1>${children(node.content)}</h1>`),
+			[BLOCKS.HEADING_2]: (node, children) => inBlock(() => `<h2>${children(node.content)}</h2>`),
+			[BLOCKS.HEADING_3]: (node, children) => inBlock(() => `<h3>${children(node.content)}</h3>`),
+			[BLOCKS.HEADING_4]: (node, children) => inBlock(() => `<h4>${children(node.content)}</h4>`),
+			[BLOCKS.HEADING_5]: (node, children) => inBlock(() => `<h5>${children(node.content)}</h5>`),
+			[BLOCKS.HEADING_6]: (node, children) => inBlock(() => `<h6>${children(node.content)}</h6>`),
+			[BLOCKS.OL_LIST]: (node, children) => inBlock(() => `<ol>${children(node.content)}</ol>`),
+			[BLOCKS.UL_LIST]: (node, children) => inBlock(() => `<ul>${children(node.content)}</ul>`),
+			[BLOCKS.TABLE]: (node, children) => inBlock(() => `<table>${children(node.content)}</table>`),
+			[BLOCKS.QUOTE]: (node, children) =>
+				inBlock(() => `<blockquote>${children(node.content)}</blockquote>`),
+
 			[INLINES.ASSET_HYPERLINK]: (node, children) => {
 				const { content, data } = node as AssetHyperlink
 				const { target } = data as unknown as { target: Item<Asset> }
@@ -45,4 +102,9 @@ export function renderData(data: Document, width: number): string {
 			},
 		},
 	})
+
+	if (extraComponents.length === 0) return [html]
+
+	const parts = html.split(separator)
+	return parts.flatMap((part, i) => (extraComponents[i] ? [part, extraComponents[i]] : [part]))
 }

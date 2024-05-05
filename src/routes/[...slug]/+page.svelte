@@ -1,4 +1,5 @@
 <script lang="ts">
+	import StaticPage from '$lib/components/StaticPage.svelte'
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
 
@@ -6,13 +7,4 @@
 </script>
 
 <StaticPageHeader {...data} />
-
-<section>
-	{@html data.content}
-</section>
-
-<style lang="scss">
-	section {
-		max-width: 44rem;
-	}
-</style>
+<StaticPage {data} />

@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
-	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import type { StaticPageTransformed } from '$lib/data'
+
+	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
 
 	let subject = $state('')
 	let email = $state('')
@@ -16,18 +14,8 @@
 
 	let submitClicked = $state(false)
 
-	let { data }: { data: StaticPageTransformed } = $props()
+	let { nextLink }: { nextLink: string } = $props()
 </script>
-
-<StaticPageHeader {...data} />
-
-<section>
-	{@html data.content}
-</section>
-
-<hr />
-
-<h2>Kontaktiere uns</h2>
 
 <form
 	method="POST"
@@ -72,23 +60,10 @@
 
 	<input type="hidden" name="_template" value="box" />
 	<input type="hidden" name="_captcha" value="false" />
-	<input
-		type="hidden"
-		name="_next"
-		value="https://{$page.url
-			.host}/email/gesendet?context=CONTACT_FORM&backLink={encodeURIComponent($page.url.href)}"
-	/>
+	<input type="hidden" name="_next" value={nextLink} />
 
 	<SubmitButton disabled={submitClicked && !!formError}>Absenden</SubmitButton>
 </form>
-
-<hr />
-
-<h2>Newsletter</h2>
-
-<p>Erhalte Neuigkeiten des Queeren Zentrums per E-Mail!</p>
-
-<p><a href="/newsletter">Zur Anmeldung</a></p>
 
 <style lang="scss">
 	form {
@@ -96,6 +71,7 @@
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		padding: 30px;
-		max-width: 700px;
+		max-width: 44rem;
+		box-sizing: border-box;
 	}
 </style>

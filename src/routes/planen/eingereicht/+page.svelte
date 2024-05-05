@@ -1,5 +1,6 @@
 <script lang="ts">
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
+	import StaticPage from '$lib/components/StaticPage.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
 	import PlanningForm from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
@@ -120,7 +121,7 @@
 			und kann von dir nicht mehr bearbeitet werden.
 		</p>
 	{:else}
-		{@html data.content}
+		<StaticPage {data} />
 	{/if}
 
 	<p>

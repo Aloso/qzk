@@ -21,5 +21,5 @@ export async function loadStatic(
 	}
 
 	const page = pages.items[0].fields as unknown as StaticPage
-	return { ...page, content: renderData(page.content, width) }
+	return { ...page, parts: renderData(page.content, width) }
 }

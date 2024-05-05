@@ -5,8 +5,8 @@
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
-	import IgFeed from '$lib/components/IgFeed.svelte'
 	import { getEndOfTime } from '$lib/events/intersections'
+	import StaticPage from '$lib/components/StaticPage.svelte'
 
 	interface Props {
 		data: Data
@@ -45,10 +45,7 @@
 
 <div class="layout">
 	<section class="mainbar">
-		{@html page.content}
-
-		<hr />
-		<IgFeed />
+		<StaticPage data={page} />
 
 		<hr />
 		<h2>Neue Blog-Beiträge</h2>

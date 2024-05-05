@@ -1,5 +1,6 @@
 <script lang="ts">
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
+	import StaticPage from '$lib/components/StaticPage.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
@@ -66,7 +67,7 @@
 <StaticPageHeader {...data} />
 
 <section>
-	{@html data.content}
+	<StaticPage {data} />
 </section>
 
 <hr />
