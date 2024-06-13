@@ -3,6 +3,8 @@
 @use '../../static/asap/asap.scss';
 @use '../../static/laila/laila.scss';
 
+@use './contentful.scss';
+
 :root {
 	--color-theme: #{lighten(vars.$COLOR_T3, 8%)};
 	--color-accent: #f000ec;

@@ -1,0 +1,33 @@
+.embed {
+	display: block;
+	margin: 1rem 0;
+	padding: 1rem;
+	border: 2px solid #ddd;
+	border-radius: 1rem;
+	text-decoration: none;
+	color: inherit;
+
+	.embedTitle {
+		color: var(--color-link);
+	}
+
+	.embedDescription {
+		font-size: 1rem;
+	}
+
+	&:hover .embedTitle {
+		text-decoration: underline 2px var(--color-accent);
+	}
+
+	p {
+		margin: 0.75rem 0;
+	}
+
+	p:first-child {
+		margin-top: 0;
+	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}

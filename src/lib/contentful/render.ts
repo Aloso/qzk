@@ -36,6 +36,36 @@ export function renderData(data: Document, width: number): (string | ExtraCompon
 	const html = documentToHtmlString(data, {
 		preserveWhitespace: true,
 		renderNode: {
+			[BLOCKS.EMBEDDED_ENTRY]: node => {
+				const target = node.data.target as Item<unknown>
+				switch (target.sys.contentType?.sys.id) {
+					case 'staticPage': {
+						const { fields } = target as Item<StaticPage>
+						return `<a class="embed" href="/${fields.slug}">
+							<p class="embedTitle">${fields.name}</p>
+							<p class="embedDescription">${fields.description}</p>
+						</a>`
+					}
+					case 'blogPost': {
+						const { fields } = target as Item<BlogPost>
+						return `<a class="embed" href="/${fields.slug}">
+							<p class="embedTitle">${fields.title}</p>
+							<p class="embedDescription">Veröffentlicht: ${new Date(fields.published).toLocaleDateString('de', { dateStyle: 'long' })}</p>
+							<p class="embedDescription">Von ${fields.authors.map(author => author.fields.name).join(', ')}</p>
+						</a>`
+					}
+					case 'person': {
+						const { fields } = target as Item<Person>
+						return `<a class="embed" href="/${fields.slug}">
+							<p class="embedTitle">${fields.name}</p>
+							<p class="embedDescription">${fields.role}</p>
+							${fields.pronouns ? `<p class="embedDescription">${fields.pronouns}</p>` : ''}
+						</a>`
+					}
+					default:
+						return ''
+				}
+			},
 			[BLOCKS.EMBEDDED_ASSET]: node => {
 				const image = node.data.target as Image
 				const { contentType, url } = image.fields.file
