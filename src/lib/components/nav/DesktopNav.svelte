@@ -12,7 +12,7 @@
 
 <nav>
 	{#each links as link}
-		<a href={link.href} class:active={isNavItem(link, url)}>
+		<a href={link.href} class="a" class:active={isNavItem(link, url)}>
 			<span class="nav-link-inner">{@html link.text}</span>
 		</a>
 	{/each}
@@ -35,7 +35,6 @@
 		margin: 0 0 0.5rem;
 	}
 
-	a,
 	.a {
 		background-color: transparent;
 		border: none;

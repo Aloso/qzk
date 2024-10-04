@@ -24,7 +24,7 @@
 		"@types/nodemailer": "^6.4.16",
 		"@typescript-eslint/eslint-plugin": "~7.2.0",
 		"@typescript-eslint/parser": "~7.2.0",
-		"contentful": "^10.15.1",
+		"contentful": "~10.14.0",
 		"directory-tree": "^3.5.2",
 		"dotenv": "^16.4.5",
 		"eslint": "^8.57.1",

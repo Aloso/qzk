@@ -58,8 +58,8 @@ importers:
         specifier: ~7.2.0
         version: 7.2.0(eslint@8.57.1)(typescript@5.6.2)
       contentful:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ~10.14.0
+        version: 10.14.1
       directory-tree:
         specifier: ^3.5.2
         version: 3.5.2
@@ -112,8 +112,8 @@ packages:
   '@cloudflare/workers-types@4.20240925.0':
     resolution: {integrity: sha512-KpqyRWvanEuXgBTKYFzRp4NsWOEcswxjsPRSre1zYQcODmc8PUrraVHQUmgvkJgv3FzB+vI9xm7J6oE4MmZHCA==}
 
-  '@contentful/content-source-maps@0.11.3':
-    resolution: {integrity: sha512-RFF9reUVU6o6A/Rm1662Ez+BhyVgcATs8yvNKIVJWvXQkwsgevLLZduAn2jU7Dl/q1EgJLeJFeuOREtk8LY3zQ==}
+  '@contentful/content-source-maps@0.6.1':
+    resolution: {integrity: sha512-IjsyhakG17OC5xtIa5agVRsnjjxiJf9HZjpDIV6Ix036Pd5YHJrbyyiF4KNEmLlIqe3hQ0kHGWEs9S/HfECmRQ==}
 
   '@contentful/rich-text-html-renderer@16.6.10':
     resolution: {integrity: sha512-8PuC8l873cycCru2wCzkblb8li6pp+yWMBbgDq3XuokKOlgC+VqGluiB0lLRuAlC+ALA8TSbB92RJnQXv4blsg==}
@@ -824,8 +824,8 @@ packages:
     resolution: {integrity: sha512-L2LNWRXb1/5RLpLemCoP2Lzz6211xyE63GXh2nVXekvM4Dnswo+9N2D6JmWTne9zq89Izo88vOGAzzIAxb4Ukw==}
     engines: {node: '>=18'}
 
-  contentful@10.15.1:
-    resolution: {integrity: sha512-vPgQvpzqWHauroXrhPOW03iz/ZVqZrv6BX2Fk/vMOlMMB7a+zrhUWAuUjY9WFDVMRcAwPhZF2Lvey6Nvyyd6sQ==}
+  contentful@10.14.1:
+    resolution: {integrity: sha512-ZBmJwohQqldXW7sxBCcucKPLO6JdZK+G+aKVxA2EG2nKY13jY8DNSAk8cQS2tc7Wj9C14haQpzbzqKnErSQ8/w==}
     engines: {node: '>=18'}
 
   cookie@0.6.0:
@@ -1750,7 +1750,7 @@ snapshots:
 
   '@cloudflare/workers-types@4.20240925.0': {}
 
-  '@contentful/content-source-maps@0.11.3':
+  '@contentful/content-source-maps@0.6.1':
     dependencies:
       '@vercel/stega': 0.1.2
       json-pointer: 0.6.2
@@ -2342,9 +2342,9 @@ snapshots:
       p-throttle: 4.1.1
       qs: 6.13.0
 
-  contentful@10.15.1:
+  contentful@10.14.1:
     dependencies:
-      '@contentful/content-source-maps': 0.11.3
+      '@contentful/content-source-maps': 0.6.1
       '@contentful/rich-text-types': 16.8.5
       axios: 1.7.7
       contentful-resolve-response: 1.9.0

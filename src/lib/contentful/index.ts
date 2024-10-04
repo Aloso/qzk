@@ -1,9 +1,9 @@
-import { createClient } from 'contentful'
+import contentful from 'contentful'
 export * from './types'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-export const client = createClient({
+export const client = contentful.createClient({
 	space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
 	accessToken: isDev
 		? import.meta.env.VITE_CONTENTFUL_TOKEN_PREVIEW

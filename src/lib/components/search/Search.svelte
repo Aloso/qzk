@@ -175,10 +175,6 @@
 		padding: min(3rem, 1.5rem + 1.3vw);
 		width: calc(700px + 2vw);
 		max-width: calc(100vw - 2.4rem);
-
-		h2 {
-			margin-top: 0;
-		}
 	}
 
 	input {
@@ -210,7 +206,7 @@
 			font-weight: normal;
 			margin: 0.5rem 0;
 
-			b {
+			:global(b) {
 				font-weight: 600;
 			}
 		}

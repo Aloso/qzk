@@ -23,7 +23,7 @@
 		{#each links as link}
 			<div class="nav-group">
 				<div class="nav-row">
-					<a class="nav-link" href={link.href} class:active={isNavItem(link, url)}>
+					<a class="a nav-link" href={link.href} class:active={isNavItem(link, url)}>
 						{@html link.text}
 					</a>
 
@@ -32,7 +32,7 @@
 					{/if}
 				</div>
 				{#each link.children as child}
-					<a class="nav-child" href={child.href}>
+					<a class="a nav-child" href={child.href}>
 						{@html child.text}
 					</a>
 				{/each}
@@ -111,15 +111,6 @@
 				display: flex;
 			}
 
-			.nav-child {
-				line-height: 0;
-				padding: 0 1.4rem;
-				overflow: hidden;
-				transition:
-					line-height 0.2s,
-					padding 0.2s;
-			}
-
 			.nav-extender {
 				flex-grow: 0;
 				border: none;
@@ -142,7 +133,6 @@
 				}
 			}
 
-			a,
 			.a {
 				border: none;
 				background-color: transparent;
@@ -160,9 +150,15 @@
 				border-radius: 25px;
 
 				&.nav-child {
+					line-height: 0;
+					padding: 0 1.4rem;
 					margin: 0 0.7rem;
+					overflow: hidden;
 					border-radius: 20px;
 					font-size: 1.1rem;
+					transition:
+						line-height 0.2s,
+						padding 0.2s;
 				}
 
 				&:hover,

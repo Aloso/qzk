@@ -20,8 +20,11 @@ export interface SearchResult {
 	type: 'BlogPost' | 'Person' | 'StaticPage'
 	slug: string
 	// use short variable names to reduce index size
+	/** name */
 	n: string
+	/** content */
 	c: string
+	/** authors */
 	a?: string
 }
 

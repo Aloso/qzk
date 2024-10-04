@@ -330,8 +330,7 @@
 		gap: 1rem;
 		margin: 1rem 0 0 auto;
 
-		button,
-		a {
+		button {
 			display: block;
 			margin: 0;
 			font: inherit;

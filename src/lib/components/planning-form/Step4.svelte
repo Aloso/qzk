@@ -58,7 +58,6 @@
 		margin: 1.5rem 0 1rem 0;
 	}
 
-	select,
 	textarea,
 	input:not([type='checkbox']) {
 		background-color: white;
@@ -79,7 +78,6 @@
 		}
 	}
 
-	select,
 	textarea,
 	input[type='text'] {
 		box-sizing: border-box;

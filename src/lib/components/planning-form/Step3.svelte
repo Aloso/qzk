@@ -41,12 +41,6 @@
 		margin: 1.5rem 0 1rem 0;
 	}
 
-	.hidden {
-		display: none;
-	}
-
-	select,
-	textarea,
 	input:not([type='checkbox']) {
 		background-color: white;
 		border: 2px solid #aaa;
@@ -66,8 +60,6 @@
 		}
 	}
 
-	select,
-	textarea,
 	input[type='text'] {
 		box-sizing: border-box;
 		width: calc(100% - 150px);
@@ -75,10 +67,6 @@
 		@media (max-width: 650px) {
 			width: 100%;
 		}
-	}
-
-	.full-width {
-		width: 100% !important;
 	}
 
 	label {
@@ -89,11 +77,6 @@
 		&:hover {
 			color: var(--color-theme);
 		}
-	}
-
-	.radio-label,
-	.checkbox-label {
-		margin: 0.5rem 0;
 	}
 
 	em {

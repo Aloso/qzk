@@ -61,14 +61,6 @@
 		box-sizing: border-box;
 	}
 
-	label {
-		display: block;
-		margin: 1.5rem 0 0 0;
-		&:first-child {
-			margin-top: 0;
-		}
-	}
-
 	.input--hidden {
 		display: none;
 	}

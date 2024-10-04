@@ -122,10 +122,6 @@
 		}
 	}
 
-	.checkbox-label {
-		margin: 0.5rem 0;
-	}
-
 	em {
 		font-style: normal;
 		display: inline-block;
