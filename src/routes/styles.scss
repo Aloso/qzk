@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use './vars.scss' as vars;
 
 @use '../../static/asap/asap.scss';
@@ -6,7 +7,7 @@
 @use './contentful.scss';
 
 :root {
-	--color-theme: #{lighten(vars.$COLOR_T3, 8%)};
+	--color-theme: #{color.adjust(vars.$COLOR_T3, $lightness: 8%)};
 	--color-accent: #f000ec;
 	--color-link: #{vars.$COLOR_T3};
 	--color-text: #000c;

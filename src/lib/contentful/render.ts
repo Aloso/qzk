@@ -21,7 +21,7 @@ export function renderDataToString(data: Document, width: number): string {
 }
 
 export function renderData(data: Document, width: number): (string | ExtraComponent)[] {
-	let extraComponents: ExtraComponent[] = []
+	const extraComponents: ExtraComponent[] = []
 	let blockLevel = 0
 
 	function inBlock(next: () => string) {

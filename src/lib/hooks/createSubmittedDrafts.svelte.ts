@@ -27,10 +27,10 @@ export function createSubmittedDrafts() {
 			submittedDrafts.push({ key, name })
 		},
 		remove(key: string) {
-			submittedDrafts = submittedDrafts.filter((d) => d.key !== key)
+			submittedDrafts = submittedDrafts.filter(d => d.key !== key)
 		},
 		edit(key: string, name: string) {
-			const draft = submittedDrafts.find((d) => d.key === key)
+			const draft = submittedDrafts.find(d => d.key === key)
 			if (draft) {
 				draft.name = name
 			}

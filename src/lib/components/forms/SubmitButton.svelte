@@ -1,13 +1,16 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte'
+
 	interface Props {
 		disabled?: boolean
+		children: Snippet
 	}
 
-	let { disabled }: Props = $props()
+	let { disabled, children }: Props = $props()
 </script>
 
 <button type="submit" class:disabled>
-	<slot />
+	{@render children()}
 </button>
 
 <style lang="scss">

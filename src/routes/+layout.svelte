@@ -4,9 +4,15 @@
 	import Header from '$lib/components/nav/Header.svelte'
 	import SearchWrapper from '$lib/components/search/SearchWrapper.svelte'
 	import type { Navigations } from '$lib/data'
+	import type { Snippet } from 'svelte'
 	import './styles.scss'
 
-	let { data }: { data: Navigations } = $props()
+	interface Props {
+		data: Navigations
+		children: Snippet
+	}
+
+	let { data, children }: Props = $props()
 
 	if (globalThis.location && globalThis.location.host === 'www.queereszentrumkassel.de') {
 		globalThis.location.replace(globalThis.location.href.replace(/www\./, ''))
@@ -17,7 +23,7 @@
 	<Header url={$page.url.pathname} links={data.header} />
 
 	<main>
-		<slot />
+		{@render children()}
 	</main>
 
 	<Footer links={data.footer} />

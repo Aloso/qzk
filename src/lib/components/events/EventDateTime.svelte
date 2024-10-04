@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Time } from '$lib/events/types'
-	import { unstate } from 'svelte'
 
 	interface Props {
 		time: Time

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte'
 
 	let searchOpen = $state(false)
-	let lazyComponent = $state<Promise<any>>()
+	let lazyComponent = $state<Promise<typeof import('./Search.svelte')>>()
 
 	onMount(() => {
 		window.__searchInitialized = true

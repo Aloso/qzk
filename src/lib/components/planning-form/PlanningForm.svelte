@@ -58,7 +58,8 @@
 		}
 	})
 
-	function submitForm() {
+	function submitForm(e: SubmitEvent) {
+		e.preventDefault()
 		localStorage.setItem(
 			'submitterData',
 			JSON.stringify({ name: values.yourName, email: values.yourEmail }),
@@ -116,7 +117,7 @@
 	<form class:popup>Wird geladen...</form>
 {/if}
 
-<form on:submit|preventDefault={submitForm} class:popup class:hidden={!formLoaded}>
+<form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
 	<Progress min={1} max={4} value={step} bind:elem={progressElem} />
 
 	{#if step === 1}
@@ -133,7 +134,7 @@
 		{#if step > 1}
 			<button type="button" onclick={() => step--}>Zurück</button>
 		{:else}
-			<div />
+			<div></div>
 		{/if}
 
 		{#if step === 4}

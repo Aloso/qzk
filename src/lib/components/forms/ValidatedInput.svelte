@@ -50,10 +50,10 @@
 			{value}
 			class:invalid={errorVisible}
 			{style}
-			oninput={(e) => (value = e.currentTarget.value)}
+			oninput={e => (value = e.currentTarget.value)}
 			onfocus={() => (focused = true)}
 			onblur={() => (focused = false)}
-		/>
+		></textarea>
 	{:else}
 		<input
 			{type}
@@ -61,7 +61,7 @@
 			{value}
 			class:invalid={errorVisible}
 			{style}
-			oninput={(e) => (value = e.currentTarget.value)}
+			oninput={e => (value = e.currentTarget.value)}
 			onfocus={() => (focused = true)}
 			onblur={() => (focused = false)}
 		/>

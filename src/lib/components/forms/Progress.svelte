@@ -11,8 +11,8 @@
 </script>
 
 <div class="progress" bind:this={elem}>
-	<div class="progress-bg" />
-	<div class="progress-track" style="width: {((value - min) * 100) / range}%" />
+	<div class="progress-bg"></div>
+	<div class="progress-track" style="width: {((value - min) * 100) / range}%"></div>
 </div>
 
 <style lang="scss">

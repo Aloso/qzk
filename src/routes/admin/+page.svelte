@@ -11,7 +11,8 @@
 	let loaded = $state(false)
 	const credentials = createAdminCredentials()
 
-	function submit() {
+	function submit(e: SubmitEvent) {
+		e.preventDefault()
 		submitted = true
 		if (username === '' || password === '') return
 		localStorage.setItem('credentials', JSON.stringify({ username, password }))
@@ -38,7 +39,7 @@
 	})
 </script>
 
-<form on:submit|preventDefault={submit} class:hidden={!loaded}>
+<form onsubmit={submit} class:hidden={!loaded}>
 	<h1>Admin-Bereich</h1>
 	<label>
 		Name:

@@ -26,7 +26,7 @@
 </label>
 <label>
 	<em class="full-width required">Beschreibung</em>
-	<textarea class="full-width" bind:value={values.description} rows="10" required />
+	<textarea class="full-width" bind:value={values.description} rows="10" required></textarea>
 </label>
 <div class="hint">
 	Formatierung mit <a href="/hilfe/markdown" target="_blank">Markdown</a> unterstützt
@@ -61,7 +61,7 @@
 		placeholder={'Adresszeile 1\nAdresszeile 2'}
 		rows="2"
 		required={values.placeType === 'PHYSICAL'}
-	/>
+	></textarea>
 </label>
 <label class:hidden={values.placeType !== 'ONLINE'}>
 	<em>

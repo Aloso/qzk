@@ -8,17 +8,17 @@ const disallowed = fs
 	.readFileSync('static/robots.txt')
 	.toString('utf8')
 	.split('\n')
-	.filter((line) => line.startsWith('Disallow:'))
-	.map((line) => line.replace(/^Disallow:\s*/, ''))
+	.filter(line => line.startsWith('Disallow:'))
+	.map(line => line.replace(/^Disallow:\s*/, ''))
 
 const lessImportant = ['/datenschutz', '/impressum']
 
 function getSitemapXML(domain: string, routes: string[]) {
 	let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
 	sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-	routes.forEach((route) => {
+	routes.forEach(route => {
 		if (route === '/index') return
-		if (disallowed.includes(route + '/') || disallowed.some((d) => route.startsWith(d))) return
+		if (disallowed.includes(route + '/') || disallowed.some(d => route.startsWith(d))) return
 
 		const prio =
 			route === '/'
@@ -38,7 +38,7 @@ function getSitemapUrl(location: string, prio: string, changesOften = false) {
 }
 
 function getEndpoints(tree: dirTree.DirectoryTree, route: string) {
-	tree.children!.forEach((child) => {
+	tree.children!.forEach(child => {
 		if (child.name.endsWith('.html')) {
 			routes.push(route + child.name.replace(/\.html$/, ''))
 		}

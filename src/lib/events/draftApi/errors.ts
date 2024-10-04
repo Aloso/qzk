@@ -5,7 +5,7 @@ interface Error {
 
 export function formatErrors(msg: unknown) {
 	if (msg && typeof msg === 'object' && 'errors' in msg) {
-		return (msg as { errors: Error[] }).errors.map((e) => e.message ?? e.code).join('\n')
+		return (msg as { errors: Error[] }).errors.map(e => e.message ?? e.code).join('\n')
 	}
 	return 'Unbekannter Fehler'
 }

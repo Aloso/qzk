@@ -25,6 +25,7 @@
 </nav>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use '../../../routes/vars.scss' as vars;
 
 	nav {
@@ -56,11 +57,11 @@
 
 		&:hover,
 		&:focus {
-			background-color: lighten(vars.$COLOR_T3, 10%);
+			background-color: color.adjust(vars.$COLOR_T3, $lightness: 10%);
 		}
 
 		&.active {
-			background-color: lighten(vars.$COLOR_T3, 10%);
+			background-color: color.adjust(vars.$COLOR_T3, $lightness: 10%);
 		}
 	}
 

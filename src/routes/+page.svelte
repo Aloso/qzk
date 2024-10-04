@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EventView from '$lib/components/events/EventView.svelte'
 	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
-	import type { Event, Time } from '$lib/events/types'
+	import type { Event } from '$lib/events/types'
 	import { onMount } from 'svelte'
 	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'

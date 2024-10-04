@@ -18,7 +18,7 @@ export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 }
 
 export async function fetchAllEventsWithCache(): Promise<Event[]> {
-	const response = await (window.__fetchEventsPromise?.then((e) => e.map(wire2event)) ??
+	const response = await (window.__fetchEventsPromise?.then(e => e.map(wire2event)) ??
 		fetchAllEvents())
 	window.__fetchEventsPromise = undefined
 

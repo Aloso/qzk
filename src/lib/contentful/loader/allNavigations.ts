@@ -8,8 +8,8 @@ export async function loadAllNavigations(): Promise<Navigations> {
 
 	const { items } = navigations as unknown as Entries<Navigation>
 
-	const header = items.find((item) => item.fields.name === 'Header')
-	const footer = items.find((item) => item.fields.name === 'Footer')
+	const header = items.find(item => item.fields.name === 'Header')
+	const footer = items.find(item => item.fields.name === 'Footer')
 
 	return {
 		header: parseText(header?.fields.links ?? ''),

@@ -36,7 +36,7 @@
 			<div class="events-badge">{dayEvents.length}</div>
 		{/if}
 		{#if hasDraftEvent}
-			<div class="draft-badge" />
+			<div class="draft-badge"></div>
 		{/if}
 	</div>
 </button>

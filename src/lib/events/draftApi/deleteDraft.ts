@@ -1,4 +1,4 @@
-import { host } from "."
+import { host } from '.'
 
 export async function deleteDraft(key: string): Promise<boolean> {
 	const url = new URL(host + '/draft')

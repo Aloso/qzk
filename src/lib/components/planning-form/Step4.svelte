@@ -48,7 +48,7 @@
 
 {#if professional}
 	<div class="section-title">Notizen (nicht öffentlich)</div>
-	<textarea bind:value={values.orgaNotes} class="full-width" />
+	<textarea bind:value={values.orgaNotes} class="full-width"></textarea>
 {/if}
 
 <style lang="scss">

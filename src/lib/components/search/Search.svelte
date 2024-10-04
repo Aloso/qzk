@@ -14,7 +14,8 @@
 	let searchBox = $state<HTMLInputElement>()
 
 	let initialized = $state(false)
-	let error = $state<false | string>(false)
+	// TODO
+	// let error = $state<false | string>(false)
 	let searchTerms = $state('')
 
 	let searchResults = $derived.by(() => {
@@ -27,7 +28,7 @@
 			try {
 				data = await fetch('/search.json').then(data => data.json())
 			} catch {
-				error = 'Suche konnte nicht initialisiert werden!'
+				// error = 'Suche konnte nicht initialisiert werden!'
 				return
 			}
 			initSearchIndex(data)

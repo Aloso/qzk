@@ -1,9 +1,16 @@
 <script lang="ts">
-	let { visible }: { visible: boolean } = $props()
+	import type { Snippet } from 'svelte'
+
+	interface Props {
+		visible: boolean
+		children: Snippet
+	}
+
+	let { visible, children }: Props = $props()
 </script>
 
 <div class="error" aria-hidden={!visible} class:visible>
-	<slot />
+	{@render children()}
 </div>
 
 <style lang="scss">

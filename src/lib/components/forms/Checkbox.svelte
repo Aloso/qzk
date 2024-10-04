@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte'
 	import FormError from './FormError.svelte'
 
 	interface Props {
@@ -7,9 +8,10 @@
 		checked: boolean
 		required?: string
 		submitClicked: boolean
+		children: Snippet
 	}
 
-	let { name, value, checked = $bindable(), required, submitClicked }: Props = $props()
+	let { name, value, checked = $bindable(), required, submitClicked, children }: Props = $props()
 </script>
 
 <label>
@@ -18,10 +20,10 @@
 		{name}
 		{value}
 		{checked}
-		onchange={(e) => (checked = e.currentTarget.checked)}
+		onchange={e => (checked = e.currentTarget.checked)}
 	/>
 	<div class="label-text">
-		<slot />
+		{@render children()}
 		<FormError visible={submitClicked && !!required && !checked}>{required}</FormError>
 	</div>
 </label>
