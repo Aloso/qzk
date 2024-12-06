@@ -5,21 +5,21 @@
 	import { page } from '$app/stores'
 
 	interface Props extends HTMLImgAttributes {
+		context: string
 		img: Image
 		alt?: string
 		fallbackAlt?: string
 		width?: number
 		height?: number
 	}
-	let { img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
+	let { context, img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
 
 	if (!img.fields) {
 		const pathname = $page.url.pathname
 		import('node:fs').then(fs => {
 			fs.appendFileSync(
 				'.sveltekit-errors.txt',
-				`Fehler: Ein Asset wurde verwendet, das noch nicht auf Contentful veröffentlicht wurde: ${img.sys.id}
-Pfad: ${pathname}\n`,
+				`Fehler: Ein Bild wurde auf "${context}" verwendet, das noch nicht auf Contentful veröffentlicht wurde: \`${img.sys.id}\`\n`,
 			)
 		})
 

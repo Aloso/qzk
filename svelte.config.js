@@ -40,8 +40,9 @@ const config = {
 						fs.rmSync('.sveltekit-errors.txt')
 						if (!(errors in messageCache)) {
 							messageCache.add(errors)
+							const lines = [...new Set(errors.split('\n'))]
 							await client.sendMessage(process.env.TELEGRAM_NOTIFICATION_RECIPIENT, {
-								message: `[QZK BOT] ${errors}`,
+								message: `[QZK BOT]\n${lines.join('\n')}`,
 							})
 						}
 						throw new Error(`Http error occurred: ${event.message}`)

@@ -17,7 +17,7 @@
 		<h1>{data.title}</h1>
 		<div><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
-		<Image class="BlogPost-photo" img={data.photo} width={800} />
+		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
 		<section>
 			{@html data.content}
 		</section>

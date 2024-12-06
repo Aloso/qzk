@@ -21,6 +21,7 @@
 			img={post.photo}
 			width={small ? 150 : 250}
 			height={small ? 150 : 250}
+			context="Blog Post: {post.title}"
 		/>
 	{/if}
 	<div class="right">
