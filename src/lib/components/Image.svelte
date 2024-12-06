@@ -2,6 +2,7 @@
 	import { getHtmlSize, getSize } from './imageCalc'
 	import type { Image } from '../contentful/types'
 	import type { HTMLImgAttributes } from 'svelte/elements'
+	import { page } from '$app/stores'
 
 	interface Props extends HTMLImgAttributes {
 		img: Image
@@ -11,7 +12,17 @@
 		height?: number
 	}
 	let { img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
+
 	if (!img.fields) {
+		const pathname = $page.url.pathname
+		import('node:fs').then(fs => {
+			fs.appendFileSync(
+				'.sveltekit-errors.txt',
+				`Fehler: Ein Asset wurde verwendet, das noch nicht auf Contentful veröffentlicht wurde: ${img.sys.id}
+Pfad: ${pathname}\n`,
+			)
+		})
+
 		throw new Error(`Tried to include an asset that isn't published: ${img.sys.id}`)
 	}
 
