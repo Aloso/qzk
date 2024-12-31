@@ -74,6 +74,10 @@ export function renderData(data: Document, width: number): (string | ExtraCompon
 					return `<img src="${encodeURI(url)}?w=${size.width}&fl=progressive&fm=jpg"
           class="EmbeddedAsset-Image"
           style="aspect-ratio: ${size.width} / ${size.height}" />`
+				} else if (contentType.startsWith('video/')) {
+					return `<video controls class="EmbeddedAsset-Video">
+						<source src="${encodeURI(url)}" type="${contentType}" />
+					</video>`
 				}
 				return ''
 			},
