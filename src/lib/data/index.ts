@@ -28,7 +28,7 @@ export interface BlogPostViewTransformed {
 	authors: PersonPreview[]
 	published: string
 	photo: Image
-	content: string
+	parts: (string | ExtraComponent)[]
 	related: BlogPostPreviewTransformed[]
 }
 

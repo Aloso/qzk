@@ -1,6 +1,6 @@
 import type { Entries, Item } from '$lib/contentful'
 import { loadAllBlogPosts, loadBlogPost } from '$lib/contentful/loader'
-import { renderDataToString } from '$lib/contentful/render'
+import { renderData, renderDataToString } from '$lib/contentful/render'
 import { selectPersonPreview, selectBlogPostPreview } from '$lib/contentful/selector'
 import type { Person, BlogPost, BlogPostViewTransformed } from '$lib/data'
 import type { LoadEvent } from '@sveltejs/kit'
@@ -42,7 +42,7 @@ export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostVi
 		slug,
 		published,
 		photo,
-		content: renderDataToString(content, 900),
+		parts: renderData(content, 900),
 		authors,
 		related: related.map(related => ({
 			...related,

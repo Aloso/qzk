@@ -4,6 +4,7 @@
 	import Image from '$lib/components/Image.svelte'
 	import type { BlogPostViewTransformed } from '$lib/data'
 	import BlogPostPreview from '../../BlogPostPreview.svelte'
+	import FormattedContent from '$lib/components/FormattedContent.svelte'
 
 	let { data }: { data: BlogPostViewTransformed } = $props()
 </script>
@@ -18,9 +19,7 @@
 		<div><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
-		<section>
-			{@html data.content}
-		</section>
+		<FormattedContent parts={data.parts} />
 	</div>
 
 	{#if data.related.length > 0}
@@ -80,11 +79,11 @@
 		height: auto;
 	}
 
-	section {
+	:global(section) {
 		max-width: 44rem;
-	}
 
-	:global(section p) {
-		line-height: 1.7;
+		:global(p) {
+			line-height: 1.7;
+		}
 	}
 </style>

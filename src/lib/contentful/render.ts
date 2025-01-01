@@ -6,12 +6,13 @@ import type { Image, Item, Asset } from '$lib/contentful/types'
 import type { Entry } from 'contentful'
 import type { StaticPage, BlogPost, Person } from '$lib/data'
 
-const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup'] as const
+const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 'youtube'] as const
 
 type ComponentType = (typeof allowedTypes)[number]
 
 export interface ExtraComponent {
 	type: ComponentType
+	param?: string
 }
 
 export function renderDataToString(data: Document, width: number): string {
@@ -88,11 +89,16 @@ export function renderData(data: Document, width: number): (string | ExtraCompon
 					node.content[0].nodeType === 'text' &&
 					node.content[0].marks.length === 0
 				) {
-					const match = /^\{\{(?<value>[a-zA-Z0-9_-]+)\}\}\s*$/.exec(node.content[0].value)
+					const match = /^\{\{(?<value>[a-zA-Z0-9_-]+)(?<param> [a-zA-Z0-9_-]+)?\}\}\s*$/.exec(
+						node.content[0].value,
+					)
 					if (match) {
-						const { value } = match.groups!
+						const { value, param } = match.groups!
 						if (allowedTypes.includes(value as ComponentType)) {
-							extraComponents.push({ type: value as ComponentType })
+							extraComponents.push({
+								type: value as ComponentType,
+								param: param?.trim() || undefined,
+							})
 							return separator
 						}
 					}
