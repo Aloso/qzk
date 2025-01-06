@@ -19,6 +19,8 @@
 		onUpdate: (editingLink?: EditingLink) => void
 	}
 
+	const commonQueryParams = new Set(['q', 'p', 'query', 'page', 'sort', 'order', 'lang'])
+
 	let { editingLink, onClose, onUpdate }: Props = $props()
 
 	let overlay = $state<HTMLElement>()
@@ -83,6 +85,7 @@
 				params = [
 					...new URL(editingLink.url).searchParams
 						.entries()
+						.filter(([key]) => !commonQueryParams.has(key))
 						.map(([key, value]): Param => ({ key, value, enabled: true })),
 				]
 			} catch {
@@ -158,7 +161,7 @@
 				</label>
 				{#if error}
 					<p class="error">{error}</p>
-				{:else if params && (params.length > 1 || (params.length === 1 && params[0].key !== 'q'))}
+				{:else if params?.length}
 					{#if isEditingParams}
 						<div class="params">
 							Die URL hat Parameter, die möglicherweise dem Tracking dienen und nicht benötigt
@@ -204,7 +207,7 @@
 								<code>31801ce293e62d13</code>), Informationen über dich, über deinen Browser, oder
 								andere Websites.
 								<br /><br />
-								Oft können alle Parameter bedenkenlos entfernt werden.
+								Meistens können alle Parameter bedenkenlos entfernt werden.
 								<hr style="margin: 1rem 0 0 0" />
 							</details>
 							<br />
