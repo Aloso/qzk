@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FormValuesStep1 } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import TipTapEditor from '../TipTapEditor.svelte'
 
 	interface Props {
 		values: FormValuesStep1
@@ -7,11 +8,12 @@
 	}
 
 	let { values, valid = $bindable() }: Props = $props()
+	let showHelp = $state(false)
 
 	$effect(() => {
 		valid =
 			!!values.title &&
-			!!values.description &&
+			!!values.descHtml &&
 			(values.placeType === 'QZ'
 				? !!values.placeRoom
 				: values.placeType === 'PHYSICAL'
@@ -24,12 +26,17 @@
 	<em class="full-width required">Name der Veranstaltung</em>
 	<input class="full-width" type="text" bind:value={values.title} required />
 </label>
-<label>
+<label for="desc-input">
 	<em class="full-width required">Beschreibung</em>
-	<textarea class="full-width" bind:value={values.description} rows="10" required></textarea>
+	<TipTapEditor
+		id="desc-input"
+		bind:htmlValue={values.descHtml}
+		bind:showHelp
+		headingLevels={[2, 3, 4, 5]}
+	/>
 </label>
 <div class="hint">
-	Formatierung mit <a href="/hilfe/markdown" target="_blank">Markdown</a> unterstützt
+	<button type="button" class="a" onclick={() => (showHelp = !showHelp)}>Hilfe</button>
 </div>
 
 <label>
@@ -78,7 +85,8 @@
 
 	select,
 	textarea,
-	input:not([type='checkbox']) {
+	input:not([type='checkbox']),
+	:global(#desc-input) {
 		background-color: white;
 		border: 2px solid #aaa;
 		font: inherit;
@@ -99,17 +107,25 @@
 
 	select,
 	textarea,
-	input[type='text'] {
+	input[type='text'],
+	:global(#desc-input) {
 		box-sizing: border-box;
 		width: calc(100% - 160px);
+		color: black;
 
 		@media (max-width: 650px) {
 			width: 100%;
 		}
 	}
 
-	.full-width {
+	.full-width,
+	:global(#desc-input) {
 		width: 100% !important;
+	}
+
+	:global(#desc-input) {
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 
 	label {
@@ -141,7 +157,8 @@
 		opacity: 0.6;
 		font-size: 0.85rem;
 		text-align: right;
-		margin-top: -0.3rem;
+		margin-top: -0.8rem;
+		margin-bottom: 1rem;
 
 		&:hover,
 		&:focus-within {

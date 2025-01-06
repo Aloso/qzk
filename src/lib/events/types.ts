@@ -11,8 +11,7 @@ export interface WireDraftData {
 export interface EventCommon {
 	key?: string
 	title: string
-	description: string
-	descHtml?: string
+	descHtml: string
 	website?: string
 	place: Place
 	organizer?: Organizer

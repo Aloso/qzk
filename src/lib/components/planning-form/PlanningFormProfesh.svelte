@@ -53,7 +53,7 @@
 
 		const event: Event & WithSubmitter = {
 			title: values.title,
-			description: values.description,
+			descHtml: values.descHtml,
 			time: values.time.filter((time): time is Time => !!time.start),
 			place: getPlace(),
 			organizer: getOrganizer(),

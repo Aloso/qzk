@@ -31,6 +31,9 @@ a,
 	color: var(--color-link);
 	text-decoration: var(--link-decoration);
 	text-underline-offset: 0.25rem;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
 
 	&:hover,
 	&:focus {

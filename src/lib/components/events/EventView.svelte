@@ -4,6 +4,7 @@
 	import EventDateTime from './EventDateTime.svelte'
 	import EventPopup from './EventPopup.svelte'
 	import { replaceState } from '$app/navigation'
+	import DOMPurify from 'dompurify'
 
 	interface Props {
 		event: Event
@@ -27,14 +28,8 @@
 		onDeletedOrUnpublished,
 	}: Props = $props()
 
-	let title = $derived(
-		event.title.replace(/\bSelbstverteidigungs\B/, 'Selbst\u{ad}verteidigungs\u{ad}'),
-	)
-	let descHtml = $derived(
-		event.descHtml
-			?.replaceAll(/<a href=".*?">/g, '<span class="a">')
-			.replaceAll(/<\/a>/g, '</span>'),
-	)
+	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.title))
+	let descHtml = $derived(showDescription ? DOMPurify.sanitize(event.descHtml) : undefined)
 
 	let overlayShown = $state(false)
 
@@ -43,6 +38,9 @@
 	$effect(() => {
 		if (descElem) {
 			overflown = descElem.clientHeight < descElem.scrollHeight
+			descElem.querySelectorAll('a').forEach(a => {
+				a.style.pointerEvents = 'none'
+			})
 		}
 	})
 
@@ -69,7 +67,7 @@
 </script>
 
 <button class="event" onclick={openPopup}>
-	<div class="event-title">{title}</div>
+	<div class="event-title" class:hyphenateTitle>{event.title}</div>
 	<div class="event-times">
 		{#each event.time as time}
 			<span class="event-time">
@@ -93,7 +91,8 @@
 
 <EventPopup
 	event={overlayShown ? event : undefined}
-	{title}
+	{descHtml}
+	{hyphenateTitle}
 	{editable}
 	{published}
 	onClose={closePopup}
@@ -131,6 +130,10 @@
 		font-weight: 600;
 		font-size: 1.5rem;
 		margin: 0;
+
+		&.hyphenateTitle {
+			hyphens: auto;
+		}
 
 		@supports (font-variation-settings: normal) {
 			font-family: vars.$FONT_HEADING_VARIABLE;

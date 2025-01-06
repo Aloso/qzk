@@ -2,7 +2,7 @@ import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
 
 export interface FormValuesStep1 {
 	title: string
-	description: string
+	descHtml: string
 
 	placeType: 'QZ' | 'PHYSICAL' | 'ONLINE'
 	placeRoom: undefined | string
@@ -41,7 +41,7 @@ export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & F
 
 const emptyDefaults: FormValues = {
 	title: '',
-	description: '',
+	descHtml: '',
 	time: [{ variant: 'day' }],
 	placeType: 'QZ',
 	placeRoom: undefined,
@@ -72,7 +72,7 @@ export function createEventPlanningDefaults() {
 		setToDraft(draft: Event & WithSubmitter) {
 			defaults = {
 				title: draft.title,
-				description: draft.description,
+				descHtml: draft.descHtml,
 				time: (draft.allTimes ?? draft.time).map(time => ({ ...time })),
 				placeType: draft.place.room ? 'QZ' : draft.place.type,
 				placeRoom: draft.place.room,

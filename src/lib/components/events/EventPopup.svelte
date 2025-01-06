@@ -9,7 +9,8 @@
 
 	interface Props {
 		event?: Event
-		title: string
+		descHtml?: string
+		hyphenateTitle: boolean
 		editable?: boolean
 		published?: boolean
 		onClose: () => void
@@ -22,7 +23,8 @@
 
 	let {
 		event,
-		title,
+		descHtml,
+		hyphenateTitle,
 		editable,
 		published,
 		onClose,
@@ -135,7 +137,7 @@
 					status={editingStatus}
 				/>
 			{:else}
-				<h2>{title}</h2>
+				<h2 class:hyphenateTitle>{event.title}</h2>
 				<div class="event-times">
 					{#each event.allTimes ?? event.time as time}
 						<span class="event-time">
@@ -143,7 +145,7 @@
 						</span>
 					{/each}
 				</div>
-				<p class="event-description">{@html event.descHtml}</p>
+				<p class="event-description">{@html descHtml}</p>
 
 				<div class="event-place">
 					<p class="event-place-name">
@@ -282,6 +284,10 @@
 
 		h2 {
 			margin-top: 0;
+
+			&.hyphenateTitle {
+				hyphens: auto;
+			}
 		}
 	}
 

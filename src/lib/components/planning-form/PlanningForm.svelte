@@ -67,7 +67,7 @@
 
 		const event: Event & WithSubmitter = {
 			title: values.title,
-			description: values.description,
+			descHtml: values.descHtml,
 			time: values.time as Time[],
 			place: getPlace(),
 			organizer: getOrganizer(),
