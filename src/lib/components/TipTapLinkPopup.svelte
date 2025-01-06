@@ -66,6 +66,7 @@
 		return [undefined, 0]
 	})
 	let isEditingParams = $state(false)
+	let isTested = $state(false)
 
 	$effect(() => {
 		if (editingLink && urlInput) {
@@ -86,8 +87,9 @@
 					...new URL(editingLink.url).searchParams
 						.entries()
 						.filter(([key]) => !commonQueryParams.has(key))
-						.map(([key, value]): Param => ({ key, value, enabled: true })),
+						.map(([key, value]): Param => ({ key, value, enabled: false })),
 				]
+				isTested = false
 			} catch {
 				params = undefined
 			}
@@ -116,14 +118,6 @@
 		if (!editingLink || !cleanedUrl) throw new Error('editingLink or cleanedUrl is undefined')
 
 		onUpdate({ ...editingLink, url: cleanedUrl.href })
-	}
-
-	function removeAllCheckboxes() {
-		if (params) {
-			for (const param of params) {
-				param.enabled = false
-			}
-		}
 	}
 
 	function removeLink() {
@@ -165,9 +159,7 @@
 					{#if isEditingParams}
 						<div class="params">
 							Die URL hat Parameter, die möglicherweise dem Tracking dienen und nicht benötigt
-							werden.
-							<br /><br />
-							Entferne den Haken bei Werten, die gelöscht werden können:
+							werden:
 
 							<table>
 								<tbody>
@@ -200,26 +192,40 @@
 								</tbody>
 							</table>
 
-							<details>
-								<summary><b>Wie kann ich Tracking-Parameter erkennen?</b></summary>
+							<div class="param-help">
+								<details>
+									<summary>Die neue URL funktioniert nicht richtig?</summary>
 
-								Tracking-Parameter enthalten oft unsinnige Zeichenfolgen (z.B.
-								<code>31801ce293e62d13</code>), Informationen über dich, über deinen Browser, oder
-								andere Websites.
-								<br /><br />
-								Meistens können alle Parameter bedenkenlos entfernt werden.
-								<hr style="margin: 1rem 0 0 0" />
-							</details>
-							<br />
+									<p>
+										Dann verwendet die Website Parameter, die nicht entfernt werden können. Setze
+										einen Haken bei diesen Parametern und probiere es nochmal.
+									</p>
+								</details>
 
-							{#if cleanedUrl && cleanedCount > 0}
-								Bitte teste, ob die URL ohne die Parameter noch funktioniert:
-								<br /><br />
-								<a href={cleanedUrl.href} target="_blank" rel="noreferrer noopener">URL testen</a>
-								<br /><br />
+								<details>
+									<summary>Woran erkenne ich Tracking-Parameter?</summary>
+
+									<p>
+										Tracking-Parameter enthalten oft unsinnige Zeichenfolgen (z.B.
+										31801ce293e62d13), Informationen über dich, über deinen Browser, oder andere
+										Websites.
+									</p>
+									<p>Meistens können alle Parameter bedenkenlos entfernt werden.</p>
+								</details>
+							</div>
+
+							{#if isTested}
 								<button type="button" class="apply" onclick={cleanUrl}>Übernehmen</button>
-							{:else if cleanedUrl}
-								<button type="button" onclick={removeAllCheckboxes}>Alle entfernen</button>
+							{:else}
+								<a
+									class="button apply"
+									href={cleanedUrl!.href}
+									target="_blank"
+									rel="noreferrer noopener"
+									onclick={() => (isTested = true)}
+								>
+									URL testen
+								</a>
 							{/if}
 							<button type="button" onclick={() => (isEditingParams = false)}>Abbrechen</button>
 						</div>
@@ -309,6 +315,20 @@
 		border-radius: 15px;
 		padding: 15px;
 
+		.param-help {
+			display: flex;
+			flex-direction: column;
+			margin: 1rem 0;
+
+			p {
+				font-size: inherit;
+			}
+
+			summary {
+				font-style: italic;
+			}
+		}
+
 		table {
 			border-collapse: collapse;
 			border: 2px solid #ccc;
@@ -360,13 +380,15 @@
 		}
 	}
 	.params button,
-	.open-params button {
+	.open-params button,
+	a.button {
 		border: none;
 		color: black;
 		background-color: #0001;
 		border-radius: 8px;
 		font: inherit;
 		padding: 7px 10px;
+		text-decoration: none;
 
 		&:hover,
 		&:focus {
