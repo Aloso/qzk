@@ -400,6 +400,7 @@
 		} else {
 			editor!.chain().focus().extendMarkRange('link').setLink({ href: link.url }).run()
 		}
+		editingLink = link
 	}}
 />
 

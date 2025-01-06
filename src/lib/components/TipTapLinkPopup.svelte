@@ -7,6 +7,12 @@
 		isCreating: boolean
 	}
 
+	interface Param {
+		key: string
+		value: string
+		enabled: boolean
+	}
+
 	interface Props {
 		editingLink?: EditingLink
 		onClose: () => void
@@ -38,6 +44,26 @@
 			}
 		}
 	})
+	let params = $state<Param[]>()
+	let [cleanedUrl, cleanedCount] = $derived.by(() => {
+		if (editingLink && params) {
+			try {
+				const url = new URL(editingLink.url)
+				let count = 0
+				for (const param of params) {
+					if (!param.enabled) {
+						url.searchParams.delete(param.key, param.value)
+						count += 1
+					}
+				}
+				return [url, count]
+			} catch {
+				// do nothing
+			}
+		}
+		return [undefined, 0]
+	})
+	let isEditingParams = $state(false)
 
 	$effect(() => {
 		if (editingLink && urlInput) {
@@ -48,6 +74,20 @@
 	$effect(() => {
 		if (editingLink?.url) {
 			error = ''
+		}
+	})
+
+	$effect(() => {
+		if (editingLink) {
+			try {
+				params = [
+					...new URL(editingLink.url).searchParams
+						.entries()
+						.map(([key, value]): Param => ({ key, value, enabled: true })),
+				]
+			} catch {
+				params = undefined
+			}
 		}
 	})
 
@@ -66,6 +106,20 @@
 			onClose()
 		} catch {
 			error = 'Die URL ist ungültig!'
+		}
+	}
+
+	function cleanUrl() {
+		if (!editingLink || !cleanedUrl) throw new Error('editingLink or cleanedUrl is undefined')
+
+		onUpdate({ ...editingLink, url: cleanedUrl.href })
+	}
+
+	function removeAllCheckboxes() {
+		if (params) {
+			for (const param of params) {
+				param.enabled = false
+			}
 		}
 	}
 
@@ -104,6 +158,75 @@
 				</label>
 				{#if error}
 					<p class="error">{error}</p>
+				{:else if params && (params.length > 1 || (params.length === 1 && params[0].key !== 'q'))}
+					{#if isEditingParams}
+						<div class="params">
+							Die URL hat Parameter, die möglicherweise dem Tracking dienen und nicht benötigt
+							werden.
+							<br /><br />
+							Entferne den Haken bei Werten, die gelöscht werden können:
+
+							<table>
+								<tbody>
+									{#each params as { key, value, enabled }, i}
+										<tr>
+											<th>
+												<label>
+													<input
+														type="checkbox"
+														checked={enabled}
+														onchange={e => {
+															params![i].enabled = (e.target as HTMLInputElement).checked
+														}}
+													/>
+													{key}
+												</label>
+											</th>
+											<td>
+												{value.slice(0, 100) || '\xA0'}
+												{#if value.length > 100}
+													...
+													<details class="collapsed">
+														<summary>vollständig anzeigen</summary>
+														{value}
+													</details>
+												{/if}
+											</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+
+							<details>
+								<summary><b>Wie kann ich Tracking-Parameter erkennen?</b></summary>
+
+								Tracking-Parameter enthalten oft unsinnige Zeichenfolgen (z.B.
+								<code>31801ce293e62d13</code>), Informationen über dich, über deinen Browser, oder
+								andere Websites.
+								<br /><br />
+								Oft können alle Parameter bedenkenlos entfernt werden.
+								<hr style="margin: 1rem 0 0 0" />
+							</details>
+							<br />
+
+							{#if cleanedUrl && cleanedCount > 0}
+								Bitte teste, ob die URL ohne die Parameter noch funktioniert:
+								<br /><br />
+								<a href={cleanedUrl.href} target="_blank" rel="noreferrer noopener">URL testen</a>
+								<br /><br />
+								<button type="button" class="apply" onclick={cleanUrl}>Übernehmen</button>
+							{:else if cleanedUrl}
+								<button type="button" onclick={removeAllCheckboxes}>Alle entfernen</button>
+							{/if}
+							<button type="button" onclick={() => (isEditingParams = false)}>Abbrechen</button>
+						</div>
+					{:else}
+						<div class="open-params">
+							<button type="button" onclick={() => (isEditingParams = true)}>
+								Tracking-Parameter entfernen
+							</button>
+						</div>
+					{/if}
 				{:else if info}
 					<p class="info">{info}</p>
 				{/if}
@@ -146,7 +269,7 @@
 		background-color: white;
 		border-radius: 30px;
 		padding: min(2.5rem, 1.5rem + 1vw);
-		width: calc(400px + 2vw);
+		width: calc(600px + 2vw);
 		max-width: 95vw;
 
 		h2 {
@@ -174,6 +297,86 @@
 			&:focus {
 				border-color: var(--color-theme);
 				outline: none;
+			}
+		}
+	}
+
+	.params {
+		background-color: #eee;
+		border-radius: 15px;
+		padding: 15px;
+
+		table {
+			border-collapse: collapse;
+			border: 2px solid #ccc;
+			display: table;
+			width: calc(100% + 30px);
+			margin: 1rem -15px;
+
+			tr:nth-child(odd) {
+				background-color: white;
+			}
+
+			th {
+				padding: 0;
+				text-align: left;
+				font-weight: 600;
+				min-width: 30%;
+				position: relative;
+
+				label {
+					display: flex;
+					gap: 0.2rem;
+					padding: 3px 7px 3px 15px;
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 100%;
+					height: 100%;
+					align-items: center;
+					box-sizing: border-box;
+				}
+			}
+			td {
+				padding: 3px 15px 3px 7px;
+				word-break: break-all;
+
+				.collapsed {
+					font-size: 0.95rem;
+
+					summary {
+						color: gray;
+						margin-top: 5px;
+
+						&:hover {
+							color: black;
+						}
+					}
+				}
+			}
+		}
+	}
+	.params button,
+	.open-params button {
+		border: none;
+		color: black;
+		background-color: #0001;
+		border-radius: 8px;
+		font: inherit;
+		padding: 7px 10px;
+
+		&:hover,
+		&:focus {
+			background-color: #0002;
+		}
+
+		&.apply {
+			color: white;
+			background-color: var(--color-theme);
+
+			&:hover,
+			&:focus {
+				opacity: 0.85;
 			}
 		}
 	}
