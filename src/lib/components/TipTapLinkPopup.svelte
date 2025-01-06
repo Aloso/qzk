@@ -172,6 +172,7 @@
 														checked={enabled}
 														onchange={e => {
 															params![i].enabled = (e.target as HTMLInputElement).checked
+															isTested = false
 														}}
 													/>
 													{key}
