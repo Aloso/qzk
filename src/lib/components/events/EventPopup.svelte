@@ -46,6 +46,9 @@
 	$effect(() => {
 		if (event && overlay) {
 			overlay.focus()
+			document.body.classList.add('overlay-open')
+		} else {
+			document.body.classList.remove('overlay-open')
 		}
 	})
 

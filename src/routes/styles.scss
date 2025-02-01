@@ -30,6 +30,10 @@ main {
 	z-index: 1;
 }
 
+body.overlay-open main {
+	z-index: 3;
+}
+
 a,
 .a {
 	color: var(--color-link);
