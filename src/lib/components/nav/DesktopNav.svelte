@@ -12,9 +12,25 @@
 
 <nav>
 	{#each links as link}
-		<a href={link.href} class="a" class:active={isNavItem(link, url)}>
-			<span class="nav-link-inner">{@html link.text}</span>
-		</a>
+		{#if link.children?.length}
+			<div class="nav-group">
+				<a href={link.href} class="a" class:active={isNavItem(link, url)}>
+					<span class="nav-link-inner">{@html link.text}</span>
+				</a>
+
+				<div class="nav-dropdown">
+					{#each link.children as child}
+						<a href={child.href} class="item">
+							{@html child.text}
+						</a>
+					{/each}
+				</div>
+			</div>
+		{:else}
+			<a href={link.href} class="a" class:active={isNavItem(link, url)}>
+				<span class="nav-link-inner">{@html link.text}</span>
+			</a>
+		{/if}
 	{/each}
 
 	<button class="a" data-search-button>
@@ -33,6 +49,37 @@
 		flex-grow: 1;
 		align-items: end;
 		margin: 0 0 0.5rem;
+	}
+
+	.nav-group {
+		display: relative;
+
+		&:hover .nav-dropdown,
+		&:focus-within .nav-dropdown {
+			display: block;
+		}
+	}
+
+	.nav-dropdown {
+		display: none;
+		position: absolute;
+		z-index: 2;
+		background-color: vars.$COLOR_T3;
+		padding: 0.5rem 0;
+		border-radius: 0 0 15px 15px;
+
+		a {
+			display: block;
+			color: white;
+			padding: 0.25rem 1rem;
+
+			&:hover,
+			&:focus {
+				background-color: #fff2;
+				border: none;
+				text-decoration: none;
+			}
+		}
 	}
 
 	.a {

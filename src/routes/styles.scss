@@ -26,6 +26,10 @@ body {
 	margin: 0;
 }
 
+main {
+	z-index: 1;
+}
+
 a,
 .a {
 	color: var(--color-link);

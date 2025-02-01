@@ -37,13 +37,13 @@
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
 		overflow: hidden;
-		margin-bottom: -30vh;
-		padding-bottom: calc(30vh + 1rem);
-		z-index: 0;
-		position: relative;
+		margin-bottom: -500px;
+		padding-bottom: calc(500px + 1rem);
 	}
 
 	.header-i {
+		position: relative;
+		z-index: 2; // higher than <main>
 		margin: -200px -50px 0 -50px;
 		padding: 180px 50px 0 50px;
 		background-color: vars.$COLOR_T3;
