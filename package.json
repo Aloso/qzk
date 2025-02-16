@@ -5,6 +5,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"postbuild": "tsx scripts/internal/build-sitemap.ts",
+		"norobots": "tsx scripts/internal/norobots.ts",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
