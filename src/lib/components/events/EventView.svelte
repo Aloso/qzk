@@ -96,7 +96,7 @@
 	</div>
 
 	<div class="sidebar">
-		<button class="back" onclick={onClose}>
+		<button class="back mobile-hidden" onclick={onClose}>
 			<span class="close-icon">×</span>
 			Schließen
 		</button>
@@ -243,6 +243,12 @@
 
 			@media (max-width: 1000px) {
 				display: block;
+			}
+		}
+
+		&.mobile-hidden {
+			@media (max-width: 1000px) {
+				display: none;
 			}
 		}
 	}
