@@ -89,7 +89,7 @@
 		height: auto;
 	}
 
-	:global(section) {
+	.layout :global(section) {
 		max-width: 44rem;
 
 		:global(p) {

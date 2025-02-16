@@ -117,9 +117,16 @@
 					{#each events as event}
 						<EventViewSmall {event} onOpen={() => onOpenEvent(event)} />
 					{/each}
-					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+					<div></div>
 				{/if}
 			</div>
+			{#if events}
+				{#if events.length > 0}
+					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+				{:else}
+					Keine Veranstaltungen in den nächsten 30 Tagen
+				{/if}
+			{/if}
 		</section>
 
 		<div class="sidebar">
