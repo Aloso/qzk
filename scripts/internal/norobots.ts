@@ -1,3 +1,3 @@
 import * as fs from 'node:fs'
 
-fs.writeFileSync('build/robots.txt', 'User-agent: *\nDisallow: /')
+fs.writeFileSync('.svelte-kit/cloudflare/robots.txt', 'User-agent: *\nDisallow: /')
