@@ -8,6 +8,16 @@ export function isBetween(eventTimes: Time[], start: Date, end: Date): boolean {
 	return eventTimes.some(time => !(time.start > end || (time.end ?? time.start) < start))
 }
 
+export function isBetweenAndOverlaps(
+	eventTimes: Time[],
+	start: Date,
+	end: Date,
+): readonly [boolean, boolean, boolean] {
+	const eventTime = eventTimes.find(time => !(time.start > end || (time.end ?? time.start) < start))
+	if (!eventTime) return [false, false, false]
+	return [true, eventTime.start < start, (eventTime.end ?? 0) > end]
+}
+
 export function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date): boolean {
 	return !(aStart > bEnd || aEnd < bStart)
 }

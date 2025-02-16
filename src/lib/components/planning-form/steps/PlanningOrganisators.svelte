@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { FormValuesStep3 } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import type { FormValuesOrganisator } from '$lib/hooks/createEventPlanningDefaults.svelte'
 
 	interface Props {
-		values: FormValuesStep3
+		values: FormValuesOrganisator
 		valid: boolean
 	}
 
-	let { values, valid = $bindable() }: Props = $props()
+	let { values = $bindable(), valid = $bindable() }: Props = $props()
 
 	$effect(() => {
 		valid = true

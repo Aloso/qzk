@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { FormValuesStep2 } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import TimeSlot from './TimeSlot.svelte'
+	import type { FormValuesTime } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import TimeSlot from '../TimeSlot.svelte'
 
 	interface Props {
-		values: FormValuesStep2
+		values: FormValuesTime
 		valid: boolean
 		professional?: boolean
 	}
 
-	let { values, valid = $bindable(), professional }: Props = $props()
+	let { values = $bindable(), valid = $bindable(), professional }: Props = $props()
 
 	$effect(() => {
 		valid = values.time.every(time => !!time.start)

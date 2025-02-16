@@ -1,10 +1,11 @@
 import type { Navigation, Navigations, TypedNavigation } from '$lib/data'
 import { client, type Entries } from '..'
+import { withCache } from '../withCache'
 
 export async function loadAllNavigations(): Promise<Navigations> {
-	const navigations = await client.getEntries({
-		content_type: 'navigation',
-	})
+	const navigations = await withCache('nav', () =>
+		client.getEntries({ content_type: 'navigation' }),
+	)
 
 	const { items } = navigations as unknown as Entries<Navigation>
 

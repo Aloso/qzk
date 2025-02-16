@@ -12,14 +12,18 @@
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import { onMount } from 'svelte'
 	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
-	import EventView from '$lib/components/events/EventView.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
 	import { narrowTimesToDraft } from '$lib/events/intersections'
+	import EventView from '$lib/components/events/EventView.svelte'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
 	let status = $state<Status>({ type: 'ready' })
+	let openEvent = $state<Event>()
+	let scrollPos = $state<readonly [number, number]>([0, 0])
+
 	const defaults = createEventPlanningDefaults()
 	const submittedDrafts = createSubmittedDrafts()
 
@@ -42,17 +46,21 @@
 		}
 	}
 
+	let clickCalendarDay = $state<(date: Date) => void>()
+
 	let events = $state<Event[]>()
 	let draftTimes = $state<Time[]>()
 	let showDate = $state(new Date())
 	let intersecting = $derived.by(() => {
 		if (!events || !draftTimes) return []
 
-		return events.flatMap<Event>(event => {
-			const time = narrowTimesToDraft(event.time, draftTimes!)
-			if (time.length === 0) return []
-			return [{ ...event, time, allTimes: event.time }]
-		})
+		return events
+			.flatMap<Event>(event => {
+				const time = narrowTimesToDraft(event.time, draftTimes!)
+				if (time.length === 0) return []
+				return [{ ...event, time, allTimes: event.time }]
+			})
+			.sort((a, b) => +a.time[0].start - +b.time[0].start)
 	})
 	onMount(() => {
 		loadEvents()
@@ -61,6 +69,11 @@
 	async function loadEvents() {
 		events = await fetchAllEventsWithCache()
 		events.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
+	}
+
+	function onOpenEvent(event: Event) {
+		scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop]
+		openEvent = event
 	}
 </script>
 
@@ -77,42 +90,66 @@
 <h2>Veranstaltung einreichen</h2>
 
 <div class="form-layout">
-	<PlanningForm
-		defaults={defaults.values}
-		onSubmit={event => onSubmit(event)}
-		onTimeChange={time => {
-			draftTimes = time
-			showDate = new Date(time[0].start)
-		}}
-		{status}
-	/>
+	<div class="form-left">
+		<PlanningForm
+			defaults={defaults.values}
+			onSubmit={event => onSubmit(event)}
+			onTimeChange={time => {
+				draftTimes = time
+				showDate = new Date(time[0].start)
+			}}
+			{status}
+			bind:clickCalendarDay
+		/>
+
+		{#if !openEvent && intersecting.length > 0}
+			<h3>
+				{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im gewählten Zeitraum
+			</h3>
+			<p>Bitte überprüfe, dass kein Terminkonflikt entsteht.</p>
+			<div class="event-container">
+				{#each intersecting as event}
+					<EventViewSmall {event} showMore onOpen={() => onOpenEvent(event)} />
+				{/each}
+			</div>
+		{/if}
+	</div>
 
 	{#if events}
 		<div class="calendar">
 			<h2 class="sidebar-title">Kalender</h2>
 
-			<CalendarView {events} {showDate} {draftTimes} />
-
-			{#if intersecting.length > 0}
-				<h2 class="sidebar-title">
-					{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im Zeitraum
-				</h2>
-				{#each intersecting as event}
-					<EventView {event} showDescription={false} showPlace />
-				{/each}
-			{/if}
+			<CalendarView {events} {showDate} {draftTimes} onClickDay={clickCalendarDay} />
 		</div>
 	{/if}
 </div>
 
+{#if openEvent}
+	<hr class="big-hr" />
+	<EventView
+		previousScrollPos={scrollPos}
+		event={openEvent}
+		onClose={() => (openEvent = undefined)}
+	/>
+{/if}
+
 <style lang="scss">
 	.form-layout {
 		display: flex;
-		gap: 2rem;
+		gap: 2rem 3rem;
 		align-items: flex-start;
 
-		@media (max-width: 1280px) {
+		.form-left {
+			flex-grow: 1;
+			max-width: 44rem;
+		}
+
+		@media (max-width: 1000px) {
 			flex-direction: column;
+
+			.form-left {
+				width: 100%;
+			}
 		}
 	}
 
@@ -128,14 +165,26 @@
 	}
 
 	.calendar {
-		width: 30rem;
-		flex-grow: 1;
+		width: 21rem;
+		flex-grow: 0;
 		flex-shrink: 1;
 		box-sizing: border-box;
 
-		@media (max-width: 1280px) {
+		@media (max-width: 1000px) {
 			width: auto;
-			max-width: 40rem;
+			max-width: 27rem;
 		}
+	}
+
+	.event-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		align-items: start;
+		margin: 1rem 0;
+	}
+
+	.big-hr {
+		margin: 3rem 0;
 	}
 </style>

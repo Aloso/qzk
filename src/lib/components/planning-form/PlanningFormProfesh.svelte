@@ -2,29 +2,29 @@
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import type { FormTime, FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
-	import Step1 from './Step1.svelte'
-	import Step2 from './Step2.svelte'
-	import Step3 from './Step3.svelte'
-	import Step4 from './Step4.svelte'
+	import PlanningDescription from './steps/PlanningDescription.svelte'
+	import PlanningTime from './steps/PlanningTime.svelte'
+	import PlanningOrganisators from './steps/PlanningOrganisators.svelte'
+	import PlanningPersonalInfo from './steps/PlanningPersonalInfo.svelte'
+	import PlanningPlace from './steps/PlanningPlace.svelte'
 
 	interface Props {
 		defaults: FormValues
 		onSubmit: (event: Event & WithSubmitter) => void
-		onCancel?: () => void
+		onCancelEdit?: () => void
 		onDelete?: () => void
 		onPublish?: () => void
 		onTimeChange?: (time: Time) => void
 		status:
-			| { type: 'ready'; submitted?: boolean }
-			| { type: 'submitting' }
-			| { type: 'deleting' }
+			| { type: 'ready' | 'submitting' | 'submitted' | 'deleting' }
 			| { type: 'error'; message: string; missing?: boolean }
 	}
 
-	let { defaults, onSubmit, onCancel, onDelete, onPublish, onTimeChange, status }: Props = $props()
+	let { defaults, onSubmit, onCancelEdit, onDelete, onPublish, onTimeChange, status }: Props =
+		$props()
 
-	let values = $state(defaults)
-	let valid = $state([false, false, false, false])
+	let values = $state({ ...defaults })
+	let valid = $state([false, false, false, false, false])
 	let formLoaded = $state(false)
 
 	$effect(() => {
@@ -105,15 +105,16 @@
 	Wird geladen...
 {/if}
 
-<form onsubmit={submitForm} class:hidden={!formLoaded}>
-	<Step1 {values} bind:valid={valid[1]} />
-	<Step2 {values} bind:valid={valid[2]} professional />
-	<Step3 {values} bind:valid={valid[3]} />
-	<Step4 {values} bind:valid={valid[4]} professional />
+<form onsubmit={submitForm} class:hidden={!formLoaded} class="profesh-form">
+	<PlanningDescription bind:values bind:valid={valid[0]} />
+	<PlanningPlace bind:values bind:valid={valid[1]} />
+	<PlanningTime bind:values bind:valid={valid[2]} professional />
+	<PlanningOrganisators bind:values bind:valid={valid[3]} />
+	<PlanningPersonalInfo bind:values bind:valid={valid[4]} professional />
 
 	<button type="submit" disabled={status.type === 'error' && status.missing}>Absenden</button>
-	{#if onCancel}
-		<button type="button" class="cancel-button" onclick={onCancel}>Abbruch</button>
+	{#if onCancelEdit}
+		<button type="button" class="cancel-button" onclick={onCancelEdit}>Abbruch</button>
 	{/if}
 	{#if onDelete}
 		<button
@@ -144,12 +145,17 @@
 		<p>Wird gelöscht...</p>
 	{:else if status.type === 'error'}
 		<p class="error">{status.message}</p>
-	{:else if status.type === 'ready' && status.submitted}
+	{:else if status.type === 'submitted'}
 		<p>Gespeichert.</p>
 	{/if}
 </form>
 
 <style lang="scss">
+	.profesh-form {
+		max-width: 44rem;
+		--background: #fff;
+	}
+
 	.hidden {
 		display: none;
 	}

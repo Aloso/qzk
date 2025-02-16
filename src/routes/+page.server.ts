@@ -1,22 +1,24 @@
-import { loadAllBlogPosts, loadStatic } from '$lib/contentful/loader'
+import { loadAllBlogPosts } from '$lib/contentful/loader'
+import { loadGeneralInfo } from '$lib/contentful/loader/generalInfo'
 import { renderDataToString } from '$lib/contentful/render'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
-import type { BlogPostPreviewTransformed, StaticPageTransformed } from '$lib/data'
+import { transformGeneralInfo } from '$lib/contentful/transformGeneralInfo'
+import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '$lib/data'
 
 export const prerender = true
 
 export interface Data {
-	page: StaticPageTransformed
+	generalInfo: GeneralInfoTransformed
 	posts: BlogPostPreviewTransformed[]
 }
 
 export async function load(): Promise<Data> {
-	const page = await loadStatic(null, 900)
+	const generalInfo = await loadGeneralInfo()
 	const postItems = await loadAllBlogPosts({ limit: 2 })
 	const posts = postItems.items.map(selectBlogPostPreview)
 
 	return {
-		page,
+		generalInfo: transformGeneralInfo(generalInfo.fields),
 		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
 	}
 }

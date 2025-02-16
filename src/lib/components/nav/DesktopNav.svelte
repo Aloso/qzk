@@ -35,7 +35,7 @@
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt="Suche" />
+			<img src="/search.svg" alt="Suche" /> Suche
 		</span>
 	</button>
 </nav>
@@ -48,7 +48,8 @@
 		display: flex;
 		flex-grow: 1;
 		align-items: end;
-		margin: 0 0 0.5rem;
+		justify-content: center;
+		margin: 0.5rem 0;
 	}
 
 	.nav-group {
@@ -63,21 +64,37 @@
 	.nav-dropdown {
 		display: none;
 		position: absolute;
-		z-index: 2;
-		background-color: vars.$COLOR_T3;
-		padding: 0.5rem 0;
+		text-align: left;
+		background-color: vars.$COLOR_T0;
+		padding: 0 0 0.67rem 0;
 		border-radius: 0 0 15px 15px;
+		border: 2px solid vars.$COLOR_T2;
+		border-top: 0;
+		margin-top: 0.5rem;
+		font-size: 1.05rem;
+		font-weight: 500;
+
+		&::before {
+			content: '';
+			position: absolute;
+			display: block;
+			width: 100%;
+			height: 0.5rem;
+			left: 0;
+			top: -0.5rem;
+			background-color: transparent;
+		}
 
 		a {
 			display: block;
-			color: white;
-			padding: 0.25rem 1rem;
+			padding: 0.15rem 1rem;
+			text-decoration: none;
+			color: vars.$COLOR_T6;
 
 			&:hover,
 			&:focus {
-				background-color: #fff2;
+				background-color: vars.$COLOR_T1;
 				border: none;
-				text-decoration: none;
 			}
 		}
 	}
@@ -86,28 +103,29 @@
 		background-color: transparent;
 		border: none;
 		font: inherit;
+		color: vars.$COLOR_T6;
 
 		display: flex;
 		position: relative;
 		flex-direction: column;
-		padding: 12px 15px;
+		padding: 8px 15px;
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;
-		font-weight: 600;
+		font-weight: 500;
 		justify-content: start;
 		line-height: 1.25;
-		color: white;
-		text-shadow: 0.75px 3px #0001;
 		border-radius: 15px;
 
 		&:hover,
 		&:focus {
-			background-color: color.adjust(vars.$COLOR_T3, $lightness: 10%);
+			background-color: vars.$COLOR_T1;
 		}
 
 		&.active {
-			background-color: color.adjust(vars.$COLOR_T3, $lightness: 10%);
+			background-color: white;
+			color: vars.$COLOR_T4;
+			font-weight: 600;
 		}
 	}
 
@@ -117,10 +135,11 @@
 		img {
 			width: 1em;
 			height: 1em;
+			margin: -2px 0.33rem -2px 0;
 		}
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 1000px) {
 		nav {
 			display: none;
 		}

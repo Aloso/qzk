@@ -8,27 +8,31 @@
 
 	let { min, max, value, elem = $bindable() }: Props = $props()
 	let range = $derived(max - min)
+	let items = $derived(Array.from({ length: range + 1 }).fill(0))
 </script>
 
 <div class="progress" bind:this={elem}>
-	<div class="progress-bg"></div>
-	<div class="progress-track" style="width: {((value - min) * 100) / range}%"></div>
+	{#each items as _, index}
+		<div class="progress-part">
+			<div class="progress-track" style="width: {value - min >= index ? 100 : 0}%"></div>
+		</div>
+	{/each}
 </div>
 
 <style lang="scss">
 	.progress {
-		box-sizing: border-box;
-		display: block;
+		display: flex;
+		gap: 0.5rem;
 		height: 14px;
 		margin: 0 0 0.75rem 0;
-		padding: 2px;
-		position: relative;
 		scroll-margin-top: 3rem;
 
-		.progress-bg {
-			height: 10px;
+		.progress-part {
+			height: 14px;
+			flex-grow: 1;
 			background-color: #0002;
 			border-radius: 14px;
+			position: relative;
 		}
 
 		.progress-track {

@@ -2,7 +2,7 @@
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import StaticPage from '$lib/components/StaticPage.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
-	import PlanningForm from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
+	import PlanningFormProfesh from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
@@ -17,8 +17,7 @@
 
 	type Status =
 		| { type: 'loading' }
-		| { type: 'ready'; submitted?: boolean }
-		| { type: 'submitting' }
+		| { type: 'ready' | 'submitting' | 'submitted' }
 		| { type: 'error'; message: string; missing?: boolean }
 
 	let status = $state<Status>({ type: 'loading' })
@@ -55,7 +54,7 @@
 			if (router.key) {
 				const success = await updateDraft(event, router.key)
 				status = success
-					? { type: 'ready', submitted: true }
+					? { type: 'submitted' }
 					: {
 							type: 'error',
 							message:
@@ -140,7 +139,7 @@
 {#if status.type === 'loading'}
 	<div class="loading">Lädt...</div>
 {:else}
-	<PlanningForm
+	<PlanningFormProfesh
 		defaults={defaults.values}
 		{onSubmit}
 		{onDelete}

@@ -6,6 +6,7 @@
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import PlanningFormProfesh from '../planning-form/PlanningFormProfesh.svelte'
 	import EventDateTime from './EventDateTime.svelte'
+	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
 
 	interface Props {
 		event?: Event
@@ -37,7 +38,6 @@
 	let editingStatus = $state<
 		| { type: 'ready'; submitted?: boolean }
 		| { type: 'submitting' }
-		| { type: 'deleting' }
 		| { type: 'error'; message: string; missing?: boolean }
 	>()
 	let popupError = $state<string>()
@@ -46,9 +46,6 @@
 	$effect(() => {
 		if (event && overlay) {
 			overlay.focus()
-			document.body.classList.add('overlay-open')
-		} else {
-			document.body.classList.remove('overlay-open')
 		}
 	})
 
@@ -136,7 +133,7 @@
 				<PlanningFormProfesh
 					defaults={defaults.values}
 					{onSubmit}
-					onCancel={() => (editingStatus = undefined)}
+					onCancelEdit={() => (editingStatus = undefined)}
 					status={editingStatus}
 				/>
 			{:else}
@@ -144,7 +141,7 @@
 				<div class="event-times">
 					{#each event.allTimes ?? event.time as time}
 						<span class="event-time">
-							<EventDateTime {time} />
+							<EventDateTimeDetailed {time} withWeekday />
 						</span>
 					{/each}
 				</div>

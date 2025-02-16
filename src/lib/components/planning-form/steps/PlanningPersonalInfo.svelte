@@ -1,17 +1,17 @@
 <script lang="ts">
 	import type {
-		FormValuesStep3,
-		FormValuesStep4,
+		FormValuesOrganisator,
+		FormValuesPersonalInfo,
 	} from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
 
 	interface Props {
-		values: FormValuesStep4 & FormValuesStep3
+		values: FormValuesPersonalInfo & FormValuesOrganisator
 		valid: boolean
 		professional?: boolean
 	}
 
-	let { values, valid = $bindable(), professional }: Props = $props()
+	let { values = $bindable(), valid = $bindable(), professional }: Props = $props()
 
 	onMount(() => {
 		if (values.organizerName && !values.yourName) {

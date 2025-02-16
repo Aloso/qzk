@@ -2,6 +2,39 @@ import type { ExtraComponent } from '$lib/contentful/render'
 import type { Image, Item } from '$lib/contentful/types'
 import type { Document } from '@contentful/rich-text-types'
 
+export interface GeneralInfo {
+	id: string
+	name: string
+	openingHoursMon: string
+	openingHoursTue: string
+	openingHoursWed: string
+	openingHoursThu: string
+	openingHoursFri: string
+	openingHoursSat: string
+	openingHoursSun: string
+	specialOpeningHours: string[]
+	importantInfo: string[]
+}
+
+export interface GeneralInfoTransformed {
+	openingHours: {
+		mon: DateRange[]
+		tue: DateRange[]
+		wed: DateRange[]
+		thu: DateRange[]
+		fri: DateRange[]
+		sat: DateRange[]
+		sun: DateRange[]
+	}
+	specialOpeningHours: (readonly [Date, DateRange[]])[]
+	importantInfo: string[]
+}
+
+export interface DateRange {
+	from: string
+	to: string
+}
+
 export interface BlogPost {
 	title: string
 	slug: string

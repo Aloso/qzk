@@ -2,31 +2,38 @@
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import type { FormTime, FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { onMount } from 'svelte'
-	import Step1 from './Step1.svelte'
-	import Step2 from './Step2.svelte'
-	import Step3 from './Step3.svelte'
-	import Step4 from './Step4.svelte'
+	import PlanningDescription from './steps/PlanningDescription.svelte'
+	import PlanningTime from './steps/PlanningTime.svelte'
+	import PlanningOrganisators from './steps/PlanningOrganisators.svelte'
+	import PlanningPersonalInfo from './steps/PlanningPersonalInfo.svelte'
 	import Progress from '../forms/Progress.svelte'
+	import PlanningPlace from './steps/PlanningPlace.svelte'
 
 	interface Props {
 		defaults: FormValues
 		onSubmit: (event: Event & WithSubmitter) => void
 		onTimeChange?: (times: Time[]) => void
 		status:
-			| { type: 'ready'; submitted?: boolean }
-			| { type: 'submitting' }
-			| { type: 'deleting' }
+			| { type: 'ready' | 'submitting' | 'submitted' }
 			| { type: 'error'; message: string; missing?: boolean }
 		popup?: boolean
+		clickCalendarDay?: (date: Date) => void
 	}
 
-	let { defaults, onSubmit, onTimeChange, status, popup }: Props = $props()
+	let {
+		defaults,
+		onSubmit,
+		onTimeChange,
+		status,
+		popup,
+		clickCalendarDay = $bindable(),
+	}: Props = $props()
 
-	let values = $state(defaults)
+	let values = $state($state.snapshot(defaults))
 
 	let prevStep = $state(1)
 	let step = $state(1)
-	let valid = $state([false, false, false, false])
+	let valid = $state([false, false, false, false, false])
 
 	let progressElem = $state<HTMLElement>()
 	$effect(() => {
@@ -43,6 +50,22 @@
 		const validTimes = values.time.filter(isTimeValid)
 		if (validTimes.length) {
 			onTimeChange?.(validTimes)
+		}
+	})
+
+	$effect(() => {
+		clickCalendarDay = date => {
+			if (values.time.length === 1) {
+				const time = values.time[0]
+				if (
+					time.start === undefined &&
+					(time.end === undefined || time.variant === 'day' || time.variant === 'time')
+				) {
+					const dateNew = new Date(date)
+					dateNew.setHours(12, 0, 0, 0)
+					values.time[0] = { variant: 'day', start: dateNew }
+				}
+			}
 		}
 	})
 
@@ -121,13 +144,14 @@
 	<Progress min={1} max={4} value={step} bind:elem={progressElem} />
 
 	{#if step === 1}
-		<Step1 {values} bind:valid={valid[1]} />
+		<PlanningDescription bind:values bind:valid={valid[0]} />
+		<PlanningPlace bind:values bind:valid={valid[1]} />
 	{:else if step === 2}
-		<Step2 {values} bind:valid={valid[2]} />
+		<PlanningTime bind:values bind:valid={valid[2]} />
 	{:else if step === 3}
-		<Step3 {values} bind:valid={valid[3]} />
+		<PlanningOrganisators bind:values bind:valid={valid[3]} />
 	{:else}
-		<Step4 {values} bind:valid={valid[4]} />
+		<PlanningPersonalInfo bind:values bind:valid={valid[4]} />
 	{/if}
 
 	<div class="nav-buttons">
@@ -142,17 +166,17 @@
 				Absenden
 			</button>
 		{:else}
-			<button type="button" disabled={!valid[step]} onclick={() => step++}>Weiter</button>
+			<button type="button" disabled={!valid[0] || !valid[step]} onclick={() => step++}>
+				Weiter
+			</button>
 		{/if}
 	</div>
 
 	{#if status.type === 'submitting'}
 		<p>Wird abgesendet...</p>
-	{:else if status.type === 'deleting'}
-		<p>Wird gelöscht...</p>
 	{:else if status.type === 'error'}
 		<p class="error">{status.message}</p>
-	{:else if status.type === 'ready' && status.submitted}
+	{:else if status.type === 'submitted'}
 		<p>Gespeichert.</p>
 	{/if}
 </form>
@@ -165,7 +189,6 @@
 		border-radius: 30px;
 		padding: 30px;
 		width: 100%;
-		max-width: 40rem;
 		font-size: 105%;
 
 		&.hidden {
@@ -177,6 +200,15 @@
 			background-color: white;
 			padding: 3rem;
 			margin: auto;
+		}
+
+		@media (max-width: 700px) {
+			width: auto;
+			margin-left: -1rem;
+			margin-right: -1rem;
+			border-left-width: 0;
+			border-right-width: 0;
+			border-radius: 0;
 		}
 	}
 
@@ -193,6 +225,7 @@
 		border-radius: 15px;
 		margin: 1rem 0 0 0;
 		font: inherit;
+		cursor: pointer;
 
 		&:hover,
 		&:focus {

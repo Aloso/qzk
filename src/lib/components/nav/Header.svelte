@@ -15,11 +15,11 @@
 	<MobileNav {links} {url} />
 
 	<div class="header-i">
-		<div class="header-ii">
-			<a class="logo-link" href="/">
-				<img data-header-logo class="logo" src="/logo-tilted.svg" alt="Queeres Zentrum Kassel" />
-			</a>
+		<a class="logo-link" href="/">
+			<img data-header-logo class="logo" src="/logo-colorful.png" alt="Queeres Zentrum Kassel" />
+		</a>
 
+		<div class="header-ii">
 			<DesktopNav {links} {url} />
 
 			<button id="burger-menu-button">
@@ -30,25 +30,36 @@
 </header>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use '../../../routes/vars.scss' as vars;
 
 	header {
 		font-size: 1.2rem;
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
-		overflow: hidden;
-		margin-bottom: -500px;
-		padding-bottom: calc(500px + 1rem);
+		z-index: 2;
+		position: sticky;
+		top: -192px;
+
+		@media (max-width: 1000px) {
+			top: 0;
+		}
 	}
 
 	.header-i {
 		position: relative;
+		padding-top: 2rem;
 		z-index: 2; // higher than <main>
-		margin: -200px -50px 0 -50px;
-		padding: 180px 50px 0 50px;
-		background-color: vars.$COLOR_T3;
-		box-shadow: 0 -50px 0 50px vars.$COLOR_T3;
-		transform: rotate(-3deg);
+		background-color: vars.$COLOR_T0;
+		border-bottom: 2px solid vars.$COLOR_T2;
+		text-align: center;
+
+		@media (max-width: 1000px) {
+			text-align: left;
+			display: flex;
+			padding: 0.5rem 1rem;
+			gap: 1rem;
+		}
 	}
 
 	.header-ii {
@@ -61,30 +72,29 @@
 	}
 
 	.logo-link {
-		margin: 1rem 1rem 0.8rem 0;
-		flex-grow: 0;
+		display: block;
+		margin: 0;
+		flex-grow: 1;
 		flex-shrink: 0;
 	}
 
 	.logo {
 		width: 50vw;
-		max-width: 230px;
-		margin: -2.2% 0;
-		aspect-ratio: 887 / 485;
-		transform: rotate(3deg);
-		filter: drop-shadow(0.75px 3px #0001);
+		max-width: 270px;
+		aspect-ratio: 802 / 441;
+
+		@media (max-width: 1000px) {
+			max-width: 150px;
+		}
 	}
 
 	#burger-menu-button {
 		display: none;
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 1000px) {
 		.header-i {
-			margin: -100px 0 0 -50px;
-			padding: 100px 0 0 50px;
 			position: relative;
-			z-index: 0;
 		}
 
 		.header-ii {
@@ -99,11 +109,10 @@
 			width: 4rem;
 			height: 4rem;
 			margin: 0;
-			color: white;
+			color: black;
 			border: none;
 			border-radius: 20px;
 			transition: background-color 0.2s;
-			filter: drop-shadow(0.75px 3px #0001);
 
 			img {
 				width: 2rem;
@@ -113,7 +122,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: #ffffff17;
+				background-color: color.adjust(vars.$COLOR_T2, $lightness: +5%);
 			}
 		}
 	}

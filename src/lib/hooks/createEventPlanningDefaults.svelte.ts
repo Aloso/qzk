@@ -1,9 +1,11 @@
 import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
 
-export interface FormValuesStep1 {
+export interface FormValuesDescription {
 	title: string
 	descHtml: string
+}
 
+export interface FormValuesPlace {
 	placeType: 'QZ' | 'PHYSICAL' | 'ONLINE'
 	placeRoom: undefined | string
 	placeName: string
@@ -14,7 +16,7 @@ export interface FormValuesStep1 {
 	pictureUrl: string
 }
 
-export interface FormValuesStep2 {
+export interface FormValuesTime {
 	time: FormTime[]
 }
 
@@ -24,20 +26,24 @@ export interface FormTime {
 	end?: Date
 }
 
-export interface FormValuesStep3 {
+export interface FormValuesOrganisator {
 	organizerName: string
 	organizerEmail: string
 	organizerPhone: string
 	organizerWebsite: string
 }
 
-export interface FormValuesStep4 {
+export interface FormValuesPersonalInfo {
 	yourName: string
 	yourEmail: string
 	orgaNotes: string
 }
 
-export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & FormValuesStep4
+export type FormValues = FormValuesDescription &
+	FormValuesPlace &
+	FormValuesTime &
+	FormValuesOrganisator &
+	FormValuesPersonalInfo
 
 const emptyDefaults: FormValues = {
 	title: '',

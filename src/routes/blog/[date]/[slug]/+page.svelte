@@ -24,10 +24,12 @@
 
 	{#if data.related.length > 0}
 		<div class="sidebar">
-			<div class="sidebar-title">Mehr interessante Beiträge</div>
-			{#each data.related as post}
-				<BlogPostPreview {post} small noImage />
-			{/each}
+			<h3 class="sidebar-title">Mehr interessante Beiträge</h3>
+			<div class="blog-posts">
+				{#each data.related as post}
+					<BlogPostPreview {post} small noImage />
+				{/each}
+			</div>
 		</div>
 	{/if}
 </div>
@@ -35,7 +37,7 @@
 <style lang="scss">
 	.layout {
 		display: flex;
-		gap: 4rem;
+		gap: 2rem 4rem;
 
 		@media (max-width: 1200px) {
 			flex-direction: column;
@@ -52,16 +54,24 @@
 
 	.sidebar {
 		width: 22rem;
-		margin: 2rem 0;
+		margin: 11rem 0 2rem 0;
 		position: sticky;
 		top: 0;
 
 		@media (max-width: 900px) {
 			width: auto;
+			margin-top: 0;
+			border-top: 2px solid #ccc;
 		}
 
 		:global(h3) {
 			font-size: 1.5rem;
+		}
+
+		.blog-posts {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
 		}
 	}
 

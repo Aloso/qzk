@@ -1,5 +1,6 @@
 import type { BlogPost } from '$lib/data'
 import { client, type Entries } from '..'
+import { withCache } from '../withCache'
 
 interface Options {
 	limit?: number
@@ -31,6 +32,6 @@ export async function loadAllBlogPosts({
 		args['metadata.tags.sys.id[in]'] = tags
 	}
 
-	const posts = await client.getEntries(args)
+	const posts = await withCache('blogPostEntries', () => client.getEntries(args))
 	return posts as unknown as Entries<BlogPost>
 }

@@ -45,8 +45,6 @@
 	const permaLink = `https://www.instagram.com/${profile}/`
 </script>
 
-<h2>Instagram</h2>
-
 <div class="iframe-wrapper" class:loaded={st === 'loaded'}>
 	<blockquote
 		class="instagram-media"
@@ -94,10 +92,15 @@
 
 <style lang="scss">
 	@mixin calculated-height {
-		min-height: calc(200px + 0.6666666667 * min(43rem, 100vw - 2rem));
+		min-height: calc(154px + 0.6666666667 * min(22rem, 100vw - 2rem));
+
+		@media (max-width: 1200px) {
+			max-width: 44rem;
+			min-height: calc(200px + 0.6666666667 * min(22rem, 100vw - 2rem));
+		}
 
 		@media (max-width: 517px) {
-			min-height: calc(154px + 0.6666666667 * min(43rem, 100vw - 2rem));
+			min-height: calc(154px + 0.6666666667 * min(22rem, 100vw - 2rem));
 		}
 	}
 

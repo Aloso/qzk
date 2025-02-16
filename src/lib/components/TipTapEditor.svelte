@@ -412,6 +412,19 @@
 		gap: 0.25rem 0.6rem;
 		max-width: 800px;
 
+		position: sticky;
+		top: 75px;
+		z-index: 1;
+		background: var(--background, #eee);
+		box-shadow:
+			0 -10px 0 var(--background, #eee),
+			0 1px 4px 5px var(--background, #eee);
+
+		@media (max-width: 1000px) {
+			top: 120px;
+			margin-top: 10px;
+		}
+
 		&:not(.show-help):not(.expanded) {
 			&.xs .g3,
 			&.sm .g4,

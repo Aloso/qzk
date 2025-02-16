@@ -26,10 +26,12 @@
 	{/if}
 	<div class="right">
 		{#if small}
-			<h3><a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a></h3>
+			<div class="small-title">
+				<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
+			</div>
 			<div class="published combined">
-				<PublishDate date={post.published} />
-				<Author author={post.authors[0]} small single plus={post.authors.length - 1} />
+				<PublishDate date={post.published} /> · von {post.authors[0]?.name ?? 'unbekannt'}
+				{post.authors.length > 1 ? ', ...' : ''}
 			</div>
 		{:else}
 			<h2>{post.title}</h2>
@@ -39,11 +41,13 @@
 		<div class="teaser smaller-paragraphs">
 			{@html post.teaser}
 		</div>
-		<a href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
+		<a class="open-link" href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
 	</div>
 </div>
 
 <style lang="scss">
+	@use '../vars.scss' as vars;
+
 	.blogPost {
 		display: flex;
 		gap: 1rem 2rem;
@@ -61,19 +65,15 @@
 		flex-shrink: 1;
 	}
 
-	h2,
-	h3 {
+	h2 {
 		margin-top: 0;
-	}
-
-	h3 {
-		margin-bottom: 1rem;
 	}
 
 	.published.combined {
 		display: flex;
 		gap: 1rem;
 		align-items: center;
+		color: #777;
 	}
 
 	.title-link {
@@ -87,9 +87,29 @@
 		}
 	}
 
+	.small-title {
+		font-weight: 600;
+		margin: 0 0 0.5rem 0;
+		font-size: 1.2rem;
+	}
+
 	@media (max-width: 800px) {
 		.blogPost {
 			flex-direction: column;
+		}
+	}
+
+	.open-link {
+		color: inherit;
+		text-decoration: none;
+		display: inline-block;
+		padding: 0.5rem 0.7rem;
+		background-color: #eee;
+		border-radius: 10px;
+
+		&:hover,
+		&:focus {
+			background-color: vars.$COLOR_T0;
 		}
 	}
 </style>

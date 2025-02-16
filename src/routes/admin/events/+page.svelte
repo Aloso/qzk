@@ -2,13 +2,16 @@
 	import { goto } from '$app/navigation'
 	import MonthNav from '$lib/components/calendar/MonthNav.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
+	import PlanningFormProfesh from '$lib/components/planning-form/PlanningFormProfesh.svelte'
 	import TabBar from '$lib/components/TabBar.svelte'
 	import type { Auth } from '$lib/events'
-	import { fetchAllDrafts } from '$lib/events/draftApi'
-	import { fetchAllEvents } from '$lib/events/eventApi'
+	import { deleteDraft, fetchAllDrafts, updateDraft } from '$lib/events/draftApi'
+	import { deleteEvent, fetchAllEvents, publishDraft, updateEvent } from '$lib/events/eventApi'
 	import { getInBetween, getEndOfTime } from '$lib/events/intersections'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
+	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 
 	const pageSize = 25
 
@@ -20,6 +23,108 @@
 	let page = $state(0)
 	let loading = $state(true)
 	const credentials = createAdminCredentials()
+
+	type Status =
+		| { type: 'ready'; submitted?: boolean }
+		| { type: 'submitting' }
+		| { type: 'error'; message: string; missing?: boolean }
+
+	let openEvent = $state<Event>()
+	let isEditing = $state(false)
+	let scrollPos = $state<readonly [number, number]>([0, 0])
+	const defaults = createEventPlanningDefaults()
+	let status = $state<Status>({ type: 'ready' })
+	let viewError = $state<string>()
+
+	function clickEdit() {
+		if (openEvent && openEvent.submitter !== undefined) {
+			status = { type: 'ready' }
+			defaults.setToDraft(openEvent as Event & WithSubmitter)
+			isEditing = true
+			viewError = undefined
+		}
+	}
+
+	async function onSubmit(newEvent: Event & WithSubmitter) {
+		if (credentials.auth && newEvent?.key) {
+			const key = newEvent.key
+			try {
+				status = { type: 'submitting' }
+				if (tab !== 'drafts') {
+					newEvent = await updateEvent(credentials.auth, newEvent, key)
+				} else {
+					const updated = await updateDraft(newEvent, key)
+					if (!updated) {
+						status = { type: 'error', message: 'Fehler beim Bearbeiten!' }
+						return
+					}
+					newEvent = updated
+				}
+				openEvent = newEvent
+				isEditing = false
+				viewError = undefined
+				setEvents(tab, credentials.auth, page)
+			} catch (e) {
+				if (e instanceof Error) {
+					status = { type: 'error', message: e.message }
+				}
+			}
+		}
+	}
+
+	async function onPublish() {
+		if (credentials.auth && openEvent?.key) {
+			try {
+				await publishDraft(openEvent.key, credentials.auth)
+				isEditing = false
+				openEvent = undefined
+				viewError = undefined
+				setEvents(tab, credentials.auth, page)
+			} catch (e) {
+				if (e instanceof Error) {
+					viewError = e.message
+				}
+			}
+		}
+	}
+
+	async function onDeleteOrUnpublish() {
+		if (tab === 'drafts' && !confirm('Veranstaltung endgültig löschen?')) {
+			return
+		}
+
+		if (credentials.auth && openEvent?.key) {
+			try {
+				if (tab !== 'drafts') {
+					await deleteEvent(credentials.auth, openEvent.key)
+				} else {
+					const success = await deleteDraft(openEvent.key)
+					if (!success) {
+						viewError = 'Fehler beim Löschen!'
+						return
+					}
+				}
+				isEditing = false
+				openEvent = undefined
+				viewError = undefined
+			} catch (e) {
+				if (e instanceof Error) {
+					viewError = e.message
+				}
+			}
+		}
+	}
+
+	async function onCancelEdit() {
+		isEditing = false
+		viewError = undefined
+	}
+
+	function onOpenEvent(event: Event) {
+		scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop]
+		openEvent = event
+		isEditing = false
+	}
 
 	$effect(() => {
 		if (credentials.auth) {
@@ -110,6 +215,7 @@
 
 		filteredData = fd
 		length = fd.length
+		openEvent = undefined
 	})
 </script>
 
@@ -128,37 +234,62 @@
 	<p>Veranstaltungen werden geladen...</p>
 {/if}
 
-<div class:hidden={loading}>
-	<p class="event-count">
-		{filteredData.length}
-		{filteredData.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}
-	</p>
-	{#if tab === 'drafts' && length > 25}
-		<p>
-			Seite {page}
-			<span class="pagination">
-				<button disabled={page === 0} onclick={() => (page -= 1)}>Zurück</button>
-				<button disabled={length <= page * pageSize} onclick={() => (page += 1)}>Weiter</button>
-				{#if page > 1}
-					<button onclick={() => (page = 0)}>Zum Anfang</button>
-				{/if}
-			</span>
-		</p>
-	{:else if tab === 'months'}
-		<MonthNav bind:year bind:month />
-	{/if}
-
-	{#each filteredData as event, i}
+{#if openEvent}
+	{#if isEditing}
+		<PlanningFormProfesh defaults={defaults.values} {status} {onSubmit} {onCancelEdit} />
+	{:else}
+		{#if viewError}
+			<p style="color: red">{viewError}</p>
+		{/if}
 		<EventView
-			{event}
-			editable
+			previousScrollPos={scrollPos}
+			event={openEvent}
+			onClose={() => (openEvent = undefined)}
+			onClickEdit={clickEdit}
+			onPublished={tab === 'drafts' ? onPublish : undefined}
+			onDeletedOrUnpublished={onDeleteOrUnpublish}
 			published={tab !== 'drafts'}
+		/>
+		<!--
 			onEdited={e => (data[i] = e)}
 			onPublished={() => data.splice(i, 1)}
-			onDeletedOrUnpublished={() => data.splice(i, 1)}
-		/>
-	{/each}
-</div>
+			onDeletedOrUnpublished={() => data.splice(i, 1)} -->
+	{/if}
+{:else}
+	<div class:hidden={loading}>
+		<p class="event-count">
+			{filteredData.length}
+			{filteredData.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}
+		</p>
+		{#if tab === 'drafts' && length > 25}
+			<p>
+				Seite {page}
+				<span class="pagination">
+					<button disabled={page === 0} onclick={() => (page -= 1)}>Zurück</button>
+					<button disabled={length <= page * pageSize} onclick={() => (page += 1)}>Weiter</button>
+					{#if page > 1}
+						<button onclick={() => (page = 0)}>Zum Anfang</button>
+					{/if}
+				</span>
+			</p>
+		{:else if tab === 'months'}
+			<MonthNav bind:year bind:month />
+			<br />
+		{/if}
+
+		<div class="event-grid">
+			{#each filteredData as event, i}
+				<EventViewSmall
+					{event}
+					editable
+					published={tab !== 'drafts'}
+					onOpen={() => onOpenEvent(event)}
+				/>
+			{/each}
+			<div></div>
+		</div>
+	</div>
+{/if}
 
 <style lang="scss">
 	.hidden {
@@ -171,6 +302,13 @@
 
 	.event-count {
 		margin-top: 0;
+	}
+
+	.event-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		align-items: start;
 	}
 
 	button {

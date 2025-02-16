@@ -47,14 +47,14 @@
 			height: 40px;
 			padding: 0;
 			margin: 0;
-			background-color: #eee;
+			background-color: transparent;
 			border-radius: 100%;
 			font: inherit;
 			color: #555;
 
 			&:hover,
 			&:focus {
-				background-color: #ddd;
+				background-color: #eee;
 			}
 
 			&:first-child::after {

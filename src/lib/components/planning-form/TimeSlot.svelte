@@ -6,12 +6,30 @@
 		onRemove?: () => void
 	}
 
+	interface Values {
+		startDate?: string
+		startTime?: string
+		endDate?: string
+		endTime?: string
+		longerPeriod: boolean
+	}
+
 	let { time = $bindable(), onRemove }: Props = $props()
 
 	let prevTime = $state(time)
 	let values = $state(initialValues(time))
+	$effect(() => {
+		if (
+			time.start?.getTime() !== prevTime.start?.getTime() ||
+			time.end?.getTime() !== prevTime.end?.getTime() ||
+			time.variant !== prevTime.variant
+		) {
+			values = initialValues(time)
+			prevTime = time
+		}
+	})
 
-	function initialValues({ start, end, variant }: FormTime) {
+	function initialValues({ start, end, variant }: FormTime): Values {
 		const [startDate = ''] = start?.toISOString().split('T') ?? []
 		const [endDate = ''] = end?.toISOString().split('T') ?? []
 
@@ -23,13 +41,11 @@
 	}
 
 	$effect(() => {
-		if (
-			time.start !== prevTime.start ||
-			time.end !== prevTime.end ||
-			time.variant !== prevTime.variant
-		) {
-			prevTime = time
-			values = initialValues(time)
+		const { startDate, startTime, endDate, endTime, longerPeriod } = values
+		time = {
+			variant: longerPeriod ? 'day-range' : !startTime ? 'day' : !endTime ? 'time' : 'time-range',
+			start: longerPeriod ? dateFrom(startDate) : dateFrom(startDate, startTime),
+			end: longerPeriod ? dateFrom(endDate) : dateTimeFrom(startDate, endTime),
 		}
 	})
 
@@ -49,19 +65,6 @@
 		}
 	})
 
-	$effect(() => {
-		time = prevTime = getTime()
-	})
-
-	function getTime(): FormTime {
-		const { startDate, startTime, endDate, endTime, longerPeriod } = values
-		return {
-			variant: longerPeriod ? 'day-range' : !startTime ? 'day' : !endTime ? 'time' : 'time-range',
-			start: longerPeriod ? dateFrom(startDate) : dateFrom(startDate, startTime),
-			end: longerPeriod ? dateFrom(endDate) : dateTimeFrom(startDate, endTime),
-		}
-	}
-
 	function dateFrom(date?: string, time?: string): Date | undefined {
 		const d = date || undefined
 		const t = time || undefined
@@ -79,6 +82,9 @@
 </script>
 
 <div class="time-slot">
+	{#if onRemove}
+		<button type="button" class="remove" onclick={onRemove}>Entfernen</button>
+	{/if}
 	<label class="checkbox-label">
 		<input type="checkbox" bind:checked={values.longerPeriod} />
 		Längerer Zeitraum
@@ -99,10 +105,6 @@
 			bis <input type="time" bind:value={values.endTime} />
 		</label>
 	{/if}
-
-	{#if onRemove}
-		<button type="button" class="remove" onclick={onRemove}>Entfernen</button>
-	{/if}
 </div>
 
 <style lang="scss">
@@ -111,6 +113,7 @@
 		border-radius: 20px;
 		padding: 0.65rem 0.75rem;
 		margin: 0.75rem 0;
+		background-color: white;
 	}
 
 	input:not([type='checkbox']) {
@@ -119,7 +122,7 @@
 		font: inherit;
 		font-size: 95%;
 		margin: 0;
-		padding: 10px 12px;
+		padding: 8px 10px;
 		border-radius: 15px;
 		min-width: 50px;
 		transition: border-color 0.2s;
@@ -140,7 +143,7 @@
 
 	label {
 		display: block;
-		margin: 1rem 0;
+		margin: 0.75rem 0;
 		transition: color 0.2s;
 
 		&:last-child {
@@ -169,14 +172,16 @@
 	}
 
 	.remove {
+		float: right;
 		display: block;
 		color: white;
 		font: inherit;
+		font-weight: 500;
 		font-size: 0.83rem;
 		padding: 0.33rem 0.5rem;
 		background: #c00;
 		border: none;
-		border-radius: 15px;
+		border-radius: 8px;
 		margin: 0 0 0 auto;
 
 		&:hover {
