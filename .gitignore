@@ -5,7 +5,10 @@ node_modules
 /package
 .env
 .env.*
+.vars
+.dev.vars
 !.env.example
+wrangler.toml
 .vercel
 .wrangler
 .output

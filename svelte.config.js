@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 
-import autoAdapter from '@sveltejs/adapter-auto'
+import adapterCloudflare from '@sveltejs/adapter-cloudflare'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { createClient } from './telegram/client.js'
 import dotenv from 'dotenv'
@@ -20,7 +20,7 @@ const config = {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
 		// If your environment is not supported or you settled on a specific environment, switch out the adapter.
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		adapter: autoAdapter(),
+		adapter: adapterCloudflare(),
 
 		prerender: isDev
 			? undefined

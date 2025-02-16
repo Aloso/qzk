@@ -10,6 +10,20 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+
+		type EnvVars = {
+			[key in `USER__${string}`]: string
+		}
+
+		interface Platform {
+			env: EnvVars & {
+				DB: D1Database
+			}
+			context: {
+				waitUntil(promise: Promise<unknown>): void
+			}
+			caches: CacheStorage & { default: Cache }
+		}
 	}
 
 	interface Window {
