@@ -8,7 +8,7 @@ export async function fetchAllDrafts(
 	start?: number,
 	limit?: number,
 ): Promise<DraftData> {
-	const url = new URL(host + '/drafts')
+	const url = new URL(host() + '/drafts')
 	if (start) url.searchParams.set('start', String(start))
 	if (limit) url.searchParams.set('limit', String(limit))
 

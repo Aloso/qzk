@@ -45,9 +45,9 @@ export interface WireTime {
 
 /**
   - day:         Start date
-	- time:        Start date + start time
-	- day-range:   Start date + start time + end time
-	- time-range:  Start date + end date
+  - time:        Start date + start time
+  - day-range:   Start date + start time + end time
+  - time-range:  Start date + end date
  */
 export type TimeVariant = 'day' | 'day-range' | 'time' | 'time-range'
 
@@ -64,7 +64,7 @@ interface Place {
 }
 
 interface Organizer {
-	name: string
+	name?: string
 	phone?: string
 	email?: string
 	website?: string

@@ -3,7 +3,7 @@ import { wire2event } from '../convert'
 import type { Event, WireEvent, WithSubmitter } from '../types'
 
 export async function fetchDraft(key: string): Promise<(Event & WithSubmitter) | null> {
-	const url = new URL(host + '/draft')
+	const url = new URL(host() + '/draft')
 	url.searchParams.set('key', key)
 
 	const response = await fetch(url)

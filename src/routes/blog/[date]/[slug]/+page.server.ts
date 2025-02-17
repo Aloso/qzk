@@ -1,10 +1,7 @@
-import type { Entries, Item } from '$lib/contentful'
-import { loadAllBlogPosts, loadBlogPost } from '$lib/contentful/loader'
-import { renderData, renderDataToString } from '$lib/contentful/render'
+import data, { type BlogPost } from '$lib/contentful/data'
 import { selectPersonPreview, selectBlogPostPreview } from '$lib/contentful/selector'
-import type { Person, BlogPost, BlogPostViewTransformed } from '$lib/data'
-import type { LoadEvent } from '@sveltejs/kit'
-import type { Tag } from 'contentful'
+import type { BlogPostViewTransformed } from '$lib/data'
+import { error, type LoadEvent } from '@sveltejs/kit'
 
 interface UrlParams extends Record<string, string> {
 	date: string
@@ -12,12 +9,17 @@ interface UrlParams extends Record<string, string> {
 }
 
 export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostViewTransformed> {
-	const postItem = await loadBlogPost(params.date, params.slug)
-	const { title, slug, published, photo, content, authors: authorItems } = postItem.fields
-	const authors = authorItems.map(selectPersonPreview)
+	const postItem =
+		data.blogPost.find(p => p.fields.published === params.date && p.fields.slug === params.slug) ??
+		error(404)
+	const { title, slug, published, photo, content, authorIds } = postItem.fields
+	const authors = authorIds.map(id => {
+		const person = data.person.find(p => p.sys.id === id)
+		if (!person) error(404)
+		return selectPersonPreview(person.fields)
+	})
 
-	const tags = postItem.metadata?.tags.map(tag => tag.sys.id) ?? []
-	const authorIds = postItem.fields.authors.map(a => a.sys.id)
+	const tags = postItem.tags ?? []
 
 	const acc: Accumulator = {
 		authorIds: new Set(authorIds),
@@ -27,26 +29,26 @@ export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostVi
 	}
 
 	if (tags.length) {
-		filterAndScoreAndAddToPosts(acc, await loadAllBlogPosts({ limit: 20, tags }))
+		filterAndScoreAndAddToPosts(acc, findPostsWithTags(data.blogPost, tags))
 	}
-	filterAndScoreAndAddToPosts(acc, await loadAllBlogPosts({ limit: 6, authorIds }))
+	filterAndScoreAndAddToPosts(acc, findPostsFromAuthors(data.blogPost, authorIds))
 	if (acc.posts.length < 5) {
-		filterAndScoreAndAddToPosts(acc, await loadAllBlogPosts({ limit: 6 }))
+		filterAndScoreAndAddToPosts(acc, data.blogPost.slice(0, 5))
 	}
 
 	acc.posts.sort(([, score1], [, score2]) => score2 - score1)
-	const related = acc.posts.map(([post]) => selectBlogPostPreview(post)).slice(0, 5)
+	const related = acc.posts.map(([post]) => selectBlogPostPreview(post.fields)).slice(0, 5)
 
 	return {
 		title,
 		slug,
 		published,
 		photo,
-		parts: renderData(content, 900),
+		parts: content,
 		authors,
 		related: related.map(related => ({
 			...related,
-			teaser: renderDataToString(related.teaser, 700),
+			teaser: related.teaser,
 		})),
 	}
 }
@@ -58,37 +60,45 @@ interface Accumulator {
 	posts: ScoredBlogPost[]
 }
 
-type ScoredBlogPost = readonly [Item<BlogPost>, number]
+type ScoredBlogPost = readonly [BlogPost, number]
 
-function filterAndScoreAndAddToPosts(acc: Accumulator, posts: Entries<BlogPost>) {
-	posts.items.forEach(post => {
+function filterAndScoreAndAddToPosts(acc: Accumulator, posts: BlogPost[]) {
+	posts.forEach(post => {
 		if (!acc.existingPostIds.has(post.sys.id)) {
 			acc.existingPostIds.add(post.sys.id)
 
 			const score =
-				countMatchingTags(acc.tags, post.metadata?.tags) +
-				countMatchingAuthors(acc.authorIds, post.fields.authors)
+				countMatchingTags(acc.tags, post.tags) +
+				countMatchingAuthors(acc.authorIds, post.fields.authorIds)
 			acc.posts.push([post, score])
 		}
 	})
 }
 
-function countMatchingTags(tags: Set<string>, reference?: Tag[]) {
+function countMatchingTags(tags: Set<string>, reference?: string[]) {
 	let n = 0
 	reference?.forEach(tag => {
-		if (tags.has(tag.sys.id)) {
+		if (tags.has(tag)) {
 			n += 1
 		}
 	})
 	return n
 }
 
-function countMatchingAuthors(authorIds: Set<string>, reference: Item<Person>[]) {
+function countMatchingAuthors(authorIds: Set<string>, reference: string[]) {
 	let n = 0
 	reference.forEach(item => {
-		if (authorIds.has(item.sys.id)) {
+		if (authorIds.has(item)) {
 			n += 1
 		}
 	})
 	return n
+}
+
+function findPostsWithTags(posts: BlogPost[], tags: string[]) {
+	return posts.filter(p => p.tags?.some(t => tags.includes(t))).slice(0, 20)
+}
+
+function findPostsFromAuthors(posts: BlogPost[], authorIds: string[]) {
+	return posts.filter(p => p.fields.authorIds.some(id => authorIds.includes(id))).slice(0, 6)
 }

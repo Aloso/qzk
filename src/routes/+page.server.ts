@@ -1,24 +1,28 @@
-import { loadAllBlogPosts } from '$lib/contentful/loader'
-import { loadGeneralInfo } from '$lib/contentful/loader/generalInfo'
-import { renderDataToString } from '$lib/contentful/render'
+import data from '$lib/contentful/data.js'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
-import { transformGeneralInfo } from '$lib/contentful/transformGeneralInfo'
 import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '$lib/data'
-
-export const prerender = true
+import type { Event } from '$lib/events/types.js'
+import { error } from '@sveltejs/kit'
+import { getAllEvents } from '$lib/server/events/db.js'
+import { wire2event } from '$lib/events/convert.js'
 
 export interface Data {
 	generalInfo: GeneralInfoTransformed
 	posts: BlogPostPreviewTransformed[]
+	events: Event[]
 }
 
-export async function load(): Promise<Data> {
-	const generalInfo = await loadGeneralInfo()
-	const postItems = await loadAllBlogPosts({ limit: 2 })
-	const posts = postItems.items.map(selectBlogPostPreview)
+export async function load({ platform }): Promise<Data> {
+	if (!platform) {
+		error(500, 'Platform not available')
+	}
+
+	const events = await getAllEvents(platform.env, {}, true)
 
 	return {
-		generalInfo: transformGeneralInfo(generalInfo.fields),
-		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
+		generalInfo: data.generalInfo,
+		posts: data.blogPost.slice(0, 2).map(blogPost => selectBlogPostPreview(blogPost.fields)),
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		events: events.map(({ submitter, orgaNotes, ...rest }) => rest).map(wire2event),
 	}
 }

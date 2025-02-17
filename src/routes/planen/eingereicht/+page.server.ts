@@ -1,5 +1,5 @@
-import { loadStatic } from '$lib/contentful/loader'
+import data from '$lib/contentful/data'
 
 export async function load() {
-	return loadStatic('planen/eingereicht', 900)
+	return data.staticPage.find(p => p.fields.slug === 'planen/eingereicht')
 }

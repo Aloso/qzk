@@ -18,7 +18,11 @@
 	let { event, showMore = false, onOpen }: Props = $props()
 
 	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.title))
-	let descHtml = $derived(DOMPurify.sanitize(event.descHtml))
+	let descHtml = $derived.by(() => {
+		if (DOMPurify.isSupported) {
+			return DOMPurify.sanitize(event.descHtml)
+		}
+	})
 	let imgLabel = $derived(formatDateSoon(event.time[0].start))
 
 	let overlayShown = $state(false)

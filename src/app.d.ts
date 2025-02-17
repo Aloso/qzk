@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { Event, WireEvent } from '$lib/events/types'
+import type { D1Database } from '@cloudflare/workers-types'
 
 // for information about these interfaces
 declare global {

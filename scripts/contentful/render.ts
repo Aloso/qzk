@@ -1,27 +1,19 @@
-import { getSize } from '$lib/components/imageCalc'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
-import type { Image, Item, Asset } from '$lib/contentful/types'
 import type { Entry } from 'contentful'
-import type { StaticPage, BlogPost, Person } from '$lib/data'
+import { Asset, BlogPost, Image, Item, Person, StaticPage } from './types'
 
 const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 'youtube'] as const
 
-type ComponentType = (typeof allowedTypes)[number]
+export type ComponentType = 'contact-form' | 'instagram-profile' | 'newsletter-signup' | 'youtube'
 
 export interface ExtraComponent {
 	type: ComponentType
 	param?: string
 }
 
-export function renderDataToString(data: Document, width: number): string {
-	return renderData(data, width)
-		.filter(part => typeof part === 'string')
-		.join('\n')
-}
-
-export function renderData(data: Document, width: number): (string | ExtraComponent)[] {
+export function render(data: Document): (string | ExtraComponent)[] {
 	const extraComponents: ExtraComponent[] = []
 	let blockLevel = 0
 
@@ -41,7 +33,7 @@ export function renderData(data: Document, width: number): (string | ExtraCompon
 				const target = node.data.target as Item<unknown>
 				switch (target.sys.contentType?.sys.id) {
 					case 'staticPage': {
-						const { fields } = target as Item<StaticPage>
+						const { fields } = target as unknown as Item<StaticPage>
 						return `<a class="embed" href="/${fields.slug}">
 							<p class="embedTitle">${fields.name}</p>
 							<p class="embedDescription">${fields.description}</p>
@@ -71,10 +63,10 @@ export function renderData(data: Document, width: number): (string | ExtraCompon
 				const image = node.data.target as Image
 				const { contentType, url } = image.fields.file
 				if (contentType.startsWith('image/')) {
-					const size = getSize(image, width)
-					return `<img src="${encodeURI(url)}?w=${size.width}&fl=progressive&fm=jpg"
+					const { width, height } = image.fields.file.details.image
+					return `<img src="${encodeURI(url)}?fl=progressive&fm=jpg"
           class="EmbeddedAsset-Image"
-          style="aspect-ratio: ${size.width} / ${size.height}" />`
+          style="--width: ${width}; --height: ${height}" />`
 				} else if (contentType.startsWith('video/')) {
 					return `<video controls class="EmbeddedAsset-Video">
 						<source src="${encodeURI(url)}" type="${contentType}" />

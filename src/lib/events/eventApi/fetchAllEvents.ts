@@ -7,7 +7,7 @@ export async function fetchAllEvents(): Promise<Event[]>
 export async function fetchAllEvents(auth: Auth): Promise<(Event & WithSubmitter)[]>
 export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 	const response = await fetch(
-		host + '/events',
+		host() + '/events',
 		auth ? { headers: authorizedHeaders(auth) } : undefined,
 	)
 	if (!response.ok) {

@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
-		<link rel="preconnect" href="%sveltekit.env.VITE_PUBLIC_ENDPOINT_EVENTS%/events" />
 		<meta name="theme-color" content="#9f80ee" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
@@ -11,17 +10,6 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script type="module">
-			async function fetchAllWireEvents() {
-				const response = await fetch('%sveltekit.env.VITE_PUBLIC_ENDPOINT_EVENTS%/events')
-				if (!response.ok) {
-					throw new Error('request unsuccessful: ' + response.status, { cause: response })
-				}
-				const events = await response.json()
-				return events
-			}
-			if (location.pathname === '/') {
-				window.__fetchEventsPromise = fetchAllWireEvents()
-			}
 			setTimeout(
 				() =>
 					console.log(

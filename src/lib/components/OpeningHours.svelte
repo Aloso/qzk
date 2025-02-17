@@ -16,7 +16,7 @@
 	const todayMidnight = new Date()
 	todayMidnight.setHours(0, 0, 0, 0)
 	const special = specialOpeningHours.filter(
-		([date, ranges]) => date.getTime() >= todayMidnight.getTime(),
+		({ date }) => new Date(date).getTime() >= todayMidnight.getTime(),
 	)
 </script>
 
@@ -30,17 +30,17 @@
 
 	{#if special.length > 0}
 		<hr />
-		{#each special as [date, ranges]}
+		{#each special as { date, hours }}
 			<div class="row special">
 				<span class="label">
-					{date.toLocaleDateString('de-DE', {
+					{new Date(date).toLocaleDateString('de-DE', {
 						month: 'short',
 						day: 'numeric',
 						weekday: 'long',
 					})}
 				</span>
-				{#if ranges.length > 0}
-					<span>{ranges.map(r => `${r.from} – ${r.to} Uhr`).join(', ')}</span>
+				{#if hours.length > 0}
+					<span>{hours.map(r => `${r.from} – ${r.to} Uhr`).join(', ')}</span>
 				{:else}
 					<span class="closed">geschlossen</span>
 				{/if}

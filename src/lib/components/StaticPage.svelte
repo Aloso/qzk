@@ -13,7 +13,7 @@
 	// TODO: This is duplicated in FormattedContent.svelte
 </script>
 
-{#each data.parts as part}
+{#each data.content as part}
 	{#if typeof part === 'string'}
 		<section>
 			{@html part}

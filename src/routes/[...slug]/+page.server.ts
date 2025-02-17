@@ -1,5 +1,6 @@
-import { loadStatic } from '$lib/contentful/loader'
-import type { LoadEvent } from '@sveltejs/kit'
+import data from '$lib/contentful/data.js'
+import type { StaticPageTransformed } from '$lib/data/index.js'
+import { error, type LoadEvent } from '@sveltejs/kit'
 
 // This tells SvelteKit to pre-render the following pages, which aren't linked to from anywhere
 export function entries() {
@@ -10,6 +11,8 @@ export function entries() {
 	]
 }
 
-export async function load({ params }: LoadEvent<{ slug: string }>) {
-	return loadStatic(params.slug, 900)
+export async function load({
+	params,
+}: LoadEvent<{ slug: string }>): Promise<StaticPageTransformed> {
+	return data.staticPage.find(s => s.fields.slug === params.slug)?.fields ?? error(404)
 }

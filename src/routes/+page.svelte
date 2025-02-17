@@ -1,11 +1,8 @@
 <script lang="ts">
 	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
-	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import type { Event } from '$lib/events/types'
-	import { onMount } from 'svelte'
 	import BlogPostPreview from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
-	import { getEndOfTime } from '$lib/events/intersections'
 	import IgFeed from '$lib/components/IgFeed.svelte'
 	import OpeningHours from '$lib/components/OpeningHours.svelte'
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
@@ -17,35 +14,10 @@
 	}
 
 	const { data }: Props = $props()
-	const { generalInfo, posts } = data
+	const { generalInfo, posts, events } = data
 
-	let events = $state<Event[]>()
 	let openEvent = $state<Event>()
 	let scrollPos = $state<readonly [number, number]>([0, 0])
-
-	onMount(() => {
-		loadEvents()
-	})
-
-	async function loadEvents() {
-		const response = await fetchAllEventsWithCache()
-
-		const now = Date.now()
-		const inOneMonth = Date.now() + 30 * 24 * 60 * 60 * 1000
-		events = response.filter(e => {
-			const filteredTimes = e.time.filter(
-				time => +time.start < inOneMonth && getEndOfTime(time) > now,
-			)
-			filteredTimes.splice(3)
-			e.time = filteredTimes
-			return e.time.length > 0
-		})
-		events.sort((a, b) => +a.time[0].start - +b.time[0].start)
-
-		if (location.hash !== '') {
-			hashChange({ newURL: location.href })
-		}
-	}
 
 	function onOpenEvent(event: Event) {
 		const url = new URL(location.href)

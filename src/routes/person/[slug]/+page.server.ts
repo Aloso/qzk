@@ -1,8 +1,7 @@
-import { loadPerson, loadAllBlogPosts } from '$lib/contentful/loader'
-import { renderDataToString } from '$lib/contentful/render'
+import data from '$lib/contentful/data'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { PersonTransformed, BlogPostPreviewTransformed } from '$lib/data'
-import type { LoadEvent } from '@sveltejs/kit'
+import { error, type LoadEvent } from '@sveltejs/kit'
 
 export interface Data {
 	person: PersonTransformed
@@ -11,15 +10,17 @@ export interface Data {
 }
 
 export async function load({ params }: LoadEvent<{ slug: string }>): Promise<Data> {
-	const { fields: person, sys } = await loadPerson(params.slug)
-	const postEntries = await loadAllBlogPosts({ authorIds: [sys.id] })
-	const posts = postEntries.items.map(selectBlogPostPreview)
+	const person = data.person.find(p => p.fields.slug === params.slug)
+	if (!person) error(404)
+
+	const postEntries = data.blogPost.filter(p => p.fields.authorIds.includes(person.sys.id))
+	const posts = postEntries
+		.slice(0, 20)
+		.map(e => e.fields)
+		.map(selectBlogPostPreview)
 	return {
-		person: {
-			...person,
-			description: person.description ? renderDataToString(person.description, 700) : undefined,
-		},
-		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
-		totalPosts: postEntries.total,
+		person: person.fields,
+		posts: posts,
+		totalPosts: postEntries.length,
 	}
 }

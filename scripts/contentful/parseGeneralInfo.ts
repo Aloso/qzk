@@ -1,6 +1,28 @@
-import type { DateRange, GeneralInfo, GeneralInfoTransformed } from '$lib/data'
+import { GeneralInfo } from './types'
 
-export function transformGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {
+export interface DateRange {
+	from: string
+	to: string
+}
+
+export interface GeneralInfoTransformed {
+	openingHours: {
+		mon: DateRange[]
+		tue: DateRange[]
+		wed: DateRange[]
+		thu: DateRange[]
+		fri: DateRange[]
+		sat: DateRange[]
+		sun: DateRange[]
+	}
+	specialOpeningHours: {
+		date: string
+		hours: DateRange[]
+	}[]
+	importantInfo: string[]
+}
+
+export function getGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {
 	return {
 		openingHours: {
 			mon: info.openingHoursMon ? transformOpeningHours(info.openingHoursMon, 'Montag') : [],
@@ -38,7 +60,7 @@ function parseRange(range: string, context: string): DateRange {
 	}
 }
 
-function transformSpecialOpeningHours(dayAndHours: string): readonly [Date, DateRange[]] {
+function transformSpecialOpeningHours(dayAndHours: string): { date: string; hours: DateRange[] } {
 	const parts = dayAndHours.split(':', 2)
 	if (parts.length !== 2) {
 		throw new Error(
@@ -47,8 +69,8 @@ function transformSpecialOpeningHours(dayAndHours: string): readonly [Date, Date
 	}
 	const [date, hours] = parts.map(p => p.trim())
 	const [day, month, year] = date.split('.').map(n => Number(n.trim()))
-	return [
-		new Date(year, month - 1, day, 12),
-		transformOpeningHours(hours, `${day}.${month}.${year}`),
-	]
+	return {
+		date: new Date(year, month - 1, day, 12).toISOString(),
+		hours: transformOpeningHours(hours, `${day}.${month}.${year}`),
+	}
 }

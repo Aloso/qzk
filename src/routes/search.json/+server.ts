@@ -1,11 +1,7 @@
 // https://joyofcode.xyz/blazing-fast-sveltekit-search
 
-import { loadAllBlogPosts, loadAllPersons, loadAllStatics } from '$lib/contentful/loader'
-import { renderDataToString } from '$lib/contentful/render'
 import type { SearchResult } from '$lib/search'
-import type { Document } from '@contentful/rich-text-types'
 import { json } from '@sveltejs/kit'
-import { htmlToText, type SelectorDefinition } from 'html-to-text'
 
 import lunr from 'lunr'
 // @ts-expect-error no type definitions available
@@ -14,6 +10,7 @@ import addStemmerSupport from 'lunr-languages/lunr.stemmer.support'
 import addMultiLanguageSupport from 'lunr-languages/lunr.multi'
 // @ts-expect-error no type definitions available
 import addGermanSupport from 'lunr-languages/lunr.de'
+import data from '$lib/contentful/data'
 
 addStemmerSupport(lunr)
 addMultiLanguageSupport(lunr)
@@ -28,27 +25,23 @@ export async function GET() {
 }
 
 async function getSearchResults(): Promise<SearchResult[]> {
-	const [blogPosts, persons, statics] = await Promise.all([
-		loadAllBlogPosts({}),
-		loadAllPersons(),
-		loadAllStatics(),
-	])
-
 	return [
-		...blogPosts.items.map(
+		...data.blogPost.map(
 			(post): SearchResult => ({
 				type: 'BlogPost',
 				slug: `blog/${post.fields.published}/${post.fields.slug}`,
 				n: post.fields.title,
 				c: makeContent([
 					new Date(post.fields.published).toLocaleDateString(),
-					render(post.fields.teaser),
-					render(post.fields.content),
+					post.fields.teaser,
+					...post.fields.content.filter(c => typeof c === 'string'),
 				]),
-				a: post.fields.authors.map(a => a.fields.name).join(', '),
+				a: post.fields.authorIds
+					.map(id => data.person.find(p => p.sys.id === id)!.fields.name)
+					.join(', '),
 			}),
 		),
-		...persons.items.map(
+		...data.person.map(
 			(person): SearchResult => ({
 				type: 'Person',
 				slug: `person/${person.fields.slug}`,
@@ -56,18 +49,18 @@ async function getSearchResults(): Promise<SearchResult[]> {
 				c: makeContent([
 					person.fields.pronouns,
 					person.fields.role,
-					person.fields.description ? render(person.fields.description) : undefined,
+					...(person.fields.description?.filter(d => typeof d === 'string') ?? []),
 				]),
 			}),
 		),
-		...statics.items.flatMap((staticPage): SearchResult | never[] => {
+		...data.staticPage.flatMap((staticPage): SearchResult | never[] => {
 			const slug = getStaticSlug(staticPage.fields.slug)
 			if (slug == null) return []
 			return {
 				type: 'StaticPage',
 				slug,
 				n: staticPage.fields.name,
-				c: render(staticPage.fields.content),
+				c: staticPage.fields.content.filter(c => typeof c === 'string').join('\n'),
 			}
 		}),
 	]
@@ -97,17 +90,6 @@ function getStaticSlug(slug: string): string | null {
 		default:
 			return slug
 	}
-}
-
-const selectors: SelectorDefinition[] = [
-	...['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map(selector => ({ selector, format: 'block' })),
-	{ selector: 'a', format: 'inline' },
-	{ selector: 'hr', format: 'skip' },
-]
-
-function render(doc: Document): string {
-	const html = renderDataToString(doc, 900)
-	return htmlToText(html, { wordwrap: null, selectors }).replace(/\n{2,}/g, ' · ')
 }
 
 function makeContent(items: (string | undefined | null)[]): string {

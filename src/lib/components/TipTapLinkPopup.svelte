@@ -395,15 +395,16 @@
 		&:focus {
 			background-color: #0002;
 		}
+	}
 
-		&.apply {
-			color: white;
-			background-color: var(--color-theme);
+	.params button.apply,
+	a.button.apply {
+		color: white;
+		background-color: var(--color-theme);
 
-			&:hover,
-			&:focus {
-				opacity: 0.85;
-			}
+		&:hover,
+		&:focus {
+			opacity: 0.85;
 		}
 	}
 

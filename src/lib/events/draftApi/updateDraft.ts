@@ -7,7 +7,7 @@ export async function updateDraft(
 	draft: Event & WithSubmitter,
 	key: string,
 ): Promise<(Event & WithSubmitter) | false> {
-	const url = new URL(host + '/draft')
+	const url = new URL(host() + '/draft')
 	url.searchParams.set('key', key)
 	const response = await fetch(url, {
 		method: 'PUT',

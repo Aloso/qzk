@@ -1,8 +1,7 @@
-import type { Image } from '../contentful/types'
+import type { Image } from '$lib/data'
 
 function getIdealWidth(img: Image, width?: number, height?: number): number {
-	const { image } = img.fields.file.details
-	const aspectRatio = image.width / image.height
+	const aspectRatio = img.width / img.height
 	const factor = (width && width < 70) || (height && height < 70) ? 2 : 1.5
 
 	if (width !== undefined && height !== undefined) {
@@ -18,7 +17,7 @@ function getIdealWidth(img: Image, width?: number, height?: number): number {
 	} else if (height !== undefined) {
 		return height * aspectRatio * factor
 	} else {
-		return Math.min(image.width, 1920)
+		return Math.min(img.width, 1920)
 	}
 }
 
@@ -28,10 +27,9 @@ interface Size {
 }
 
 export function getSize(img: Image, width?: number, height?: number): Size {
-	const { image } = img.fields.file.details
 	const idealWidth = Math.round(getIdealWidth(img, width, height))
-	const clampedWidth = Math.min(image.width, idealWidth)
-	const clampedHeight = Math.round((image.height * clampedWidth) / image.width)
+	const clampedWidth = Math.min(img.width, idealWidth)
+	const clampedHeight = Math.round((img.height * clampedWidth) / img.width)
 	return {
 		width: clampedWidth,
 		height: clampedHeight,

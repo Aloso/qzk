@@ -1,5 +1,4 @@
-import { loadAllBlogPosts } from '$lib/contentful/loader'
-import { renderDataToString } from '$lib/contentful/render'
+import data from '$lib/contentful/data'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreviewTransformed } from '$lib/data'
 
@@ -8,9 +7,7 @@ export interface Data {
 }
 
 export async function load(): Promise<Data> {
-	const postItems = await loadAllBlogPosts({ limit: 20 })
-	const posts = postItems.items.map(selectBlogPostPreview)
 	return {
-		posts: posts.map(post => ({ ...post, teaser: renderDataToString(post.teaser, 700) })),
+		posts: data.blogPost.slice(0, 20).map(p => selectBlogPostPreview(p.fields)),
 	}
 }

@@ -5,7 +5,7 @@
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
-	import { createSubmittedDrafts } from '../../lib/hooks/createSubmittedDrafts.svelte'
+	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { goto } from '$app/navigation'
 	import SubmittedList from './SubmittedList.svelte'

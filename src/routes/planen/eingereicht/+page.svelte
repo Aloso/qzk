@@ -2,7 +2,7 @@
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import StaticPage from '$lib/components/StaticPage.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
-	import PlanningFormProfesh from '../../../lib/components/planning-form/PlanningFormProfesh.svelte'
+	import PlanningFormProfesh from '$lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { deleteDraft, updateDraft, fetchDraft } from '$lib/events/draftApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'

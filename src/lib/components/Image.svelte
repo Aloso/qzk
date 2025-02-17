@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { getHtmlSize, getSize } from './imageCalc'
-	import type { Image } from '../contentful/types'
 	import type { HTMLImgAttributes } from 'svelte/elements'
-	import { page } from '$app/stores'
+	import type { Image } from '$lib/data'
 
 	interface Props extends HTMLImgAttributes {
 		context: string
@@ -14,16 +13,15 @@
 	}
 	let { context, img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
 
-	if (!img.fields) {
-		const pathname = $page.url.pathname
+	if (!img.url) {
 		import('node:fs').then(fs => {
 			fs.appendFileSync(
 				'.sveltekit-errors.txt',
-				`Fehler: Ein Bild wurde auf "${context}" verwendet, das noch nicht auf Contentful veröffentlicht wurde: \`${img.sys.id}\`\n`,
+				`Fehler: Ein Bild wurde auf "${context}" verwendet, das noch nicht auf Contentful veröffentlicht wurde: \`${img.id}\`\n`,
 			)
 		})
 
-		throw new Error(`Tried to include an asset that isn't published: ${img.sys.id}`)
+		throw new Error(`Tried to include an asset that isn't published: ${img.id}`)
 	}
 
 	const size = getSize(img, width, height)
@@ -31,10 +29,10 @@
 </script>
 
 <img
-	src="{img.fields.file.url}?w={size.width}&fl=progressive&fm=jpg"
+	src="{img.url}?w={size.width}&fl=progressive&fm=jpg"
 	width={cssSize.width}
 	height={cssSize.height}
-	alt={alt ?? img.fields.description ?? fallbackAlt}
+	alt={alt ?? img.description ?? fallbackAlt}
 	{...rest}
 />
 

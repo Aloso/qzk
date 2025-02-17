@@ -6,7 +6,7 @@ import { formatErrors } from './errors'
 export async function submitDraft(
 	draft: Event & WithSubmitter,
 ): Promise<Event & WithSubmitter & WithKey> {
-	const response = await fetch(host + '/draft', {
+	const response = await fetch(host() + '/draft', {
 		method: 'POST',
 		body: JSON.stringify(event2wire(draft)),
 	})

@@ -1,9 +1,13 @@
 import type { BlogPost, BlogPostPreview } from '$lib/data'
-import type { Item } from '..'
 import { selectPersonPreview } from '.'
+import data from '../data'
 
-export function selectBlogPostPreview(blogPost: Item<BlogPost>): BlogPostPreview {
-	const { title, slug, published, photo, teaser, authors: authorItems } = blogPost.fields
-	const authors = authorItems.map(selectPersonPreview)
+export function selectBlogPostPreview(blogPost: BlogPost): BlogPostPreview {
+	const { title, slug, published, photo, teaser, authorIds } = blogPost
+	const authors = authorIds.map(id => {
+		const person = data.person.find(p => p.sys.id === id)
+		if (!person) throw new Error(`Person with id ${id} not found`)
+		return selectPersonPreview(person.fields)
+	})
 	return { title, slug, published, photo, teaser, authors }
 }

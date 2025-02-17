@@ -1,16 +1,19 @@
-import type { Navigation, Navigations, TypedNavigation } from '$lib/data'
-import { client, type Entries } from '..'
-import { withCache } from '../withCache'
+import { Item, Navigation } from './types'
 
-export async function loadAllNavigations(): Promise<Navigations> {
-	const navigations = await withCache('nav', () =>
-		client.getEntries({ content_type: 'navigation' }),
-	)
+export interface Navigations {
+	header: TypedNavigation[]
+	footer: TypedNavigation[]
+}
 
-	const { items } = navigations as unknown as Entries<Navigation>
+export interface TypedNavigation {
+	href?: string
+	text: string
+	children: TypedNavigation[]
+}
 
-	const header = items.find(item => item.fields.name === 'Header')
-	const footer = items.find(item => item.fields.name === 'Footer')
+export function getAllNavigations(navs: Item<Navigation>[]): Navigations {
+	const header = navs.find(item => item.fields.name === 'Header')
+	const footer = navs.find(item => item.fields.name === 'Footer')
 
 	return {
 		header: parseText(header?.fields.links ?? ''),
