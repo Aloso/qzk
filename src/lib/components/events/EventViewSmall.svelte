@@ -21,6 +21,9 @@
 	let descHtml = $derived.by(() => {
 		if (DOMPurify.isSupported) {
 			return DOMPurify.sanitize(event.descHtml)
+		} else {
+			// on the server, we trust that the HTML
+			return event.descHtml
 		}
 	})
 	let imgLabel = $derived(formatDateSoon(event.time[0].start))
