@@ -109,7 +109,7 @@
 				</div>
 			{/each}
 		</div>
-		{#if event.time[0].start.getTime() > Date.now()}
+		{#if event.time[0].start.getTime() > Date.now() && !event.time[0].variant.startsWith('day')}
 			<EventCountDown time={event.time[0].start} />
 		{/if}
 
