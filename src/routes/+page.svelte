@@ -35,7 +35,7 @@
 		if (hash === '') {
 			openEvent = undefined
 			document.title = 'Queeres Zentrum Kassel'
-		} else if (events) {
+		} else {
 			const event = events.find(event => event.key === hash)
 			if (event) {
 				scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop]
@@ -80,17 +80,10 @@
 			<h1>Veranstaltungen</h1>
 
 			<div class="event-container">
-				{#if events === undefined}
-					<div class="event-skeleton">Lädt...</div>
-					<div class="event-skeleton">Lädt...</div>
-					<div class="event-skeleton">Lädt...</div>
-					<div class="event-skeleton">Lädt...</div>
-				{:else}
-					{#each events as event}
-						<EventViewSmall {event} onOpen={() => onOpenEvent(event)} />
-					{/each}
-					<div></div>
-				{/if}
+				{#each events as event}
+					<EventViewSmall {event} onOpen={() => onOpenEvent(event)} />
+				{/each}
+				<div></div>
 			</div>
 			{#if events}
 				{#if events.length > 0}
@@ -207,25 +200,5 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
-	}
-
-	.event-skeleton {
-		height: 450px;
-		border-radius: 25px;
-		background-color: #eee;
-		animation: wobble 2s ease-in-out alternate infinite;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #0005;
-	}
-
-	@keyframes wobble {
-		0% {
-			background-color: #eee;
-		}
-		100% {
-			background-color: #ddd;
-		}
 	}
 </style>

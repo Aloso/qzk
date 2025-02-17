@@ -111,6 +111,7 @@
 				{#each intersecting as event}
 					<EventViewSmall {event} showMore onOpen={() => onOpenEvent(event)} />
 				{/each}
+				<div></div>
 			</div>
 		{/if}
 	</div>
