@@ -16,10 +16,6 @@
 	const { data }: Props = $props()
 	const { generalInfo, posts, events } = data
 
-	console.log(generalInfo)
-	console.log(posts)
-	console.log(events)
-
 	let openEvent = $state<Event>()
 	let scrollPos = $state<readonly [number, number]>([0, 0])
 
