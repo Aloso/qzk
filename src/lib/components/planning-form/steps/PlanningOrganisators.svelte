@@ -9,7 +9,7 @@
 	let { values = $bindable(), valid = $bindable() }: Props = $props()
 
 	$effect(() => {
-		valid = true
+		valid = values.organizerWebsite === '' || /^https?:\/\//.test(values.organizerWebsite)
 	})
 </script>
 
@@ -32,6 +32,9 @@
 <label>
 	<em>Website</em>
 	<input type="text" bind:value={values.organizerWebsite} />
+	{#if !valid}
+		<div class="error">Muss mit <b>https://</b> oder <b>http://</b> beginnen</div>
+	{/if}
 </label>
 
 <style lang="scss">
@@ -100,5 +103,10 @@
 		&.optional {
 			color: green;
 		}
+	}
+
+	.error {
+		color: darkred;
+		font-size: 93%;
 	}
 </style>
