@@ -1,5 +1,7 @@
 import data from '$lib/contentful/data'
+import type { StaticPageTransformed } from '$lib/data'
+import { error } from '@sveltejs/kit'
 
-export async function load() {
-	return data.staticPage.find(p => p.fields.slug === 'planen')
+export async function load(): Promise<StaticPageTransformed> {
+	return data.staticPage.find(p => p.fields.slug === 'planen')?.fields ?? error(404)
 }

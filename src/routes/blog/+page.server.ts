@@ -2,6 +2,8 @@ import data from '$lib/contentful/data'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreviewTransformed } from '$lib/data'
 
+export const prerender = true
+
 export interface Data {
 	posts: BlogPostPreviewTransformed[]
 }

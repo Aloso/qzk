@@ -3,6 +3,8 @@ import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { PersonTransformed, BlogPostPreviewTransformed } from '$lib/data'
 import { error, type LoadEvent } from '@sveltejs/kit'
 
+export const prerender = true
+
 export interface Data {
 	person: PersonTransformed
 	posts: BlogPostPreviewTransformed[]

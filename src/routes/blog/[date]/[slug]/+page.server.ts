@@ -3,6 +3,8 @@ import { selectPersonPreview, selectBlogPostPreview } from '$lib/contentful/sele
 import type { BlogPostViewTransformed } from '$lib/data'
 import { error, type LoadEvent } from '@sveltejs/kit'
 
+export const prerender = true
+
 interface UrlParams extends Record<string, string> {
 	date: string
 	slug: string
