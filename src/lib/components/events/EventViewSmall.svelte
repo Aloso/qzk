@@ -166,11 +166,14 @@
 		:global(ul),
 		:global(ol),
 		:global(li),
-		:global(blockquote) {
+		:global(blockquote),
+		:global(h1),
+		:global(h2),
+		:global(h3),
+		:global(h4),
+		:global(h5),
+		:global(h6) {
 			font-size: inherit;
-		}
-
-		:global(p) {
 			margin: 0.5rem 0;
 		}
 
