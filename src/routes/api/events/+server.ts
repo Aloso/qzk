@@ -22,6 +22,7 @@ export async function GET({ request, platform }: Ctx): Promise<Response> {
 		events.forEach(event => {
 			delete event.submitter
 			delete event.orgaNotes
+			delete event.key
 		})
 	}
 	return json(events)

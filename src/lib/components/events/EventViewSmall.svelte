@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { Event } from '$lib/events/types'
-	import { onMount } from 'svelte'
 	import EventDateTime from './EventDateTime.svelte'
-	import { replaceState } from '$app/navigation'
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
 	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
@@ -28,15 +26,6 @@
 	})
 	let imgLabel = $derived(formatDateSoon(event.time[0].start))
 
-	let overlayShown = $state(false)
-
-	onMount(() => {
-		const hash = location.hash.replace(/^#event-/, '')
-		if (hash === event.key) {
-			openPopup()
-		}
-	})
-
 	function formatDateSoon(d: Date) {
 		const days = daysUntil(d)
 		if (days >= 0 && days < 6) {
@@ -45,17 +34,17 @@
 			else return d.toLocaleDateString('de-DE', { weekday: 'long' })
 		}
 	}
-
-	function openPopup() {
-		overlayShown = true
-		const url = new URL(location.href)
-		url.hash = `#event-${event.key}`
-		replaceState(url, {})
-	}
 </script>
 
 <div class="event">
-	<div class="event-img">
+	<div
+		class="event-img"
+		style={event.decoration
+			? `--gradient1: oklch(0.83 0.15 ${event.decoration.colors[0]});
+			   --gradient2: oklch(0.83 0.15 ${event.decoration.colors[1]});
+			   --image: url('/banner/${event.decoration.blendImage.replace(/\P{Alpha}/gu, '')}.png')`
+			: undefined}
+	>
 		{#if imgLabel}
 			<div class="event-img-label">
 				{imgLabel}
@@ -121,8 +110,10 @@
 		margin: -1.5rem -1.5rem 1.5rem -1.5rem;
 		padding: 0.8rem 0;
 		min-height: 3.4rem;
-		background-image: url('/banner/sew.png'), linear-gradient(to right in oklab, #6fb0c9, #db71dd);
-		background-size: 100px, auto;
+		background-image:
+			var(--image, url('/banner/confetti.png')),
+			linear-gradient(to right in oklab, var(--gradient1, #6fb0c9), var(--gradient2, #db71dd));
+		background-size: 120px, auto;
 
 		.event-img-label {
 			display: inline-block;

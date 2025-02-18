@@ -46,8 +46,8 @@
 	}
 
 	async function onSubmit(newEvent: Event & WithSubmitter) {
-		if (credentials.auth && newEvent?.key) {
-			const key = newEvent.key
+		if (credentials.auth && openEvent?.key) {
+			const key = openEvent.key
 			try {
 				status = { type: 'submitting' }
 				if (tab !== 'drafts') {

@@ -39,11 +39,18 @@ export interface FormValuesPersonalInfo {
 	orgaNotes: string
 }
 
+export interface FormValuesDecoration {
+	color1: number
+	color2: number
+	blendImage: string
+}
+
 export type FormValues = FormValuesDescription &
 	FormValuesPlace &
 	FormValuesTime &
 	FormValuesOrganisator &
-	FormValuesPersonalInfo
+	FormValuesPersonalInfo &
+	FormValuesDecoration
 
 const emptyDefaults: FormValues = {
 	title: '',
@@ -63,6 +70,9 @@ const emptyDefaults: FormValues = {
 	yourName: '',
 	yourEmail: '',
 	orgaNotes: '',
+	color1: -1,
+	color2: -1,
+	blendImage: 'confetti',
 }
 
 export function createEventPlanningDefaults() {
@@ -94,6 +104,9 @@ export function createEventPlanningDefaults() {
 				yourName: draft.submitter.name,
 				yourEmail: draft.submitter.email,
 				orgaNotes: draft.orgaNotes ?? '',
+				color1: draft.decoration?.colors[0] ?? -1,
+				color2: draft.decoration?.colors[1] ?? -1,
+				blendImage: draft.decoration?.blendImage ?? 'confetti',
 			}
 		},
 	}

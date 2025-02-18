@@ -18,6 +18,7 @@ export interface EventCommon {
 	pictureUrl?: string
 	tags: string[]
 	submitter?: Submitter
+	decoration?: Decoration
 }
 
 export interface WithKey extends EventCommon {
@@ -73,4 +74,9 @@ interface Organizer {
 export interface Submitter {
 	name: string
 	email: string
+}
+
+export interface Decoration {
+	colors: number[]
+	blendImage: string
 }

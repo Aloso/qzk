@@ -7,6 +7,7 @@
 	import PlanningOrganisators from './steps/PlanningOrganisators.svelte'
 	import PlanningPersonalInfo from './steps/PlanningPersonalInfo.svelte'
 	import PlanningPlace from './steps/PlanningPlace.svelte'
+	import PlanningDecoration from './steps/PlanningDecoration.svelte'
 
 	interface Props {
 		defaults: FormValues
@@ -24,7 +25,7 @@
 		$props()
 
 	let values = $state({ ...defaults })
-	let valid = $state([false, false, false, false, false])
+	let valid = $state([false, false, false, false, false, false])
 	let formLoaded = $state(false)
 
 	$effect(() => {
@@ -65,6 +66,10 @@
 				email: values.yourEmail,
 			},
 			orgaNotes: values.orgaNotes === '' ? undefined : values.orgaNotes,
+			decoration: {
+				colors: [values.color1, values.color2],
+				blendImage: values.blendImage,
+			},
 		}
 
 		onSubmit(event)
@@ -111,6 +116,7 @@
 	<PlanningTime bind:values bind:valid={valid[2]} professional />
 	<PlanningOrganisators bind:values bind:valid={valid[3]} />
 	<PlanningPersonalInfo bind:values bind:valid={valid[4]} professional />
+	<PlanningDecoration bind:values bind:valid={valid[5]} />
 
 	<button type="submit" disabled={status.type === 'error' && status.missing}>Absenden</button>
 	{#if onCancelEdit}

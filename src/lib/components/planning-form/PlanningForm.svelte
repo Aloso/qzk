@@ -8,6 +8,7 @@
 	import PlanningPersonalInfo from './steps/PlanningPersonalInfo.svelte'
 	import Progress from '../forms/Progress.svelte'
 	import PlanningPlace from './steps/PlanningPlace.svelte'
+	import PlanningDecoration from './steps/PlanningDecoration.svelte'
 
 	interface Props {
 		defaults: FormValues
@@ -33,7 +34,7 @@
 
 	let prevStep = $state(1)
 	let step = $state(1)
-	let valid = $state([false, false, false, false, false])
+	let valid = $state([false, false, false, false, false, false])
 
 	let progressElem = $state<HTMLElement>()
 	$effect(() => {
@@ -101,6 +102,10 @@
 				name: values.yourName,
 				email: values.yourEmail,
 			},
+			decoration: {
+				colors: [values.color1, values.color2],
+				blendImage: values.blendImage,
+			},
 		}
 		onSubmit(event)
 	}
@@ -141,7 +146,7 @@
 {/if}
 
 <form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
-	<Progress min={1} max={4} value={step} bind:elem={progressElem} />
+	<Progress min={1} max={5} value={step} bind:elem={progressElem} />
 
 	{#if step === 1}
 		<PlanningDescription bind:values bind:valid={valid[0]} />
@@ -150,8 +155,10 @@
 		<PlanningTime bind:values bind:valid={valid[2]} />
 	{:else if step === 3}
 		<PlanningOrganisators bind:values bind:valid={valid[3]} />
-	{:else}
+	{:else if step === 4}
 		<PlanningPersonalInfo bind:values bind:valid={valid[4]} />
+	{:else}
+		<PlanningDecoration bind:values bind:valid={valid[5]} />
 	{/if}
 
 	<div class="nav-buttons">
@@ -161,7 +168,7 @@
 			<div></div>
 		{/if}
 
-		{#if step === 4}
+		{#if step === 5}
 			<button type="submit" disabled={!valid[step] || (status.type === 'error' && status.missing)}>
 				Absenden
 			</button>

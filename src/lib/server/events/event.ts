@@ -15,6 +15,7 @@ export interface Event {
 	submitter: Submitter
 	orgaNotes?: string
 	colors?: string[]
+	decoration?: Decoration
 }
 
 interface Time {
@@ -52,6 +53,11 @@ interface Submitter {
 	email: string
 }
 
+interface Decoration {
+	colors: number[]
+	blendImage: string
+}
+
 const timeSchema = z.object({
 	start: z.string().min(1, 'Bitte Beginn der Veranstaltung angeben'),
 	end: z.string().optional(),
@@ -82,6 +88,11 @@ const submitterSchema = z.object({
 		.email('Ungültige E-Mail-Adresse angegeben'),
 })
 
+const decorationSchema = z.object({
+	colors: z.array(z.number().min(0).max(360)).length(2),
+	blendImage: z.string(),
+})
+
 const schema = z.object({
 	key: z.string().optional(),
 	title: z.string().min(1, 'Bitte Titel der Veranstaltung angeben'),
@@ -95,6 +106,7 @@ const schema = z.object({
 	submitter: submitterSchema,
 	orgaNotes: z.string().optional(),
 	colors: z.array(z.string()).length(2).optional(),
+	decoration: decorationSchema.optional(),
 })
 
 export function parseEvent(data: unknown): Event {
