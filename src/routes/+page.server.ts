@@ -23,6 +23,6 @@ export async function load({ platform }): Promise<Data> {
 		generalInfo: data.generalInfo,
 		posts: data.blogPost.slice(0, 2).map(blogPost => selectBlogPostPreview(blogPost.fields)),
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		events: events.map(({ submitter, orgaNotes, ...rest }) => rest).map(wire2event),
+		events: events.map(({ submitter, orgaNotes, key, ...rest }) => rest).map(wire2event),
 	}
 }
