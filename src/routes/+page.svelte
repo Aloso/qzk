@@ -8,6 +8,7 @@
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
 	import EventView from '$lib/components/events/EventView.svelte'
 	import { pushState, beforeNavigate } from '$app/navigation'
+	import { onMount } from 'svelte'
 
 	interface Props {
 		data: Data
@@ -45,6 +46,17 @@
 			}
 		}
 	}
+
+	onMount(() => {
+		const hash = location.hash.replace(/^#(event|veranstaltung)-/, '')
+		if (!hash) {
+			return
+		}
+		const event = events.find(e => e.key === hash)
+		if (event) {
+			openEvent = event
+		}
+	})
 
 	beforeNavigate(change => {
 		if (change.to && change.from) {
