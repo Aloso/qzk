@@ -30,7 +30,6 @@ export async function load({ platform }): Promise<Data> {
 		const filteredTimes = (Array.isArray(e.time) ? e.time : [e.time]).filter(
 			time => +time.start < inOneMonth && getEndOfTime(time) > now,
 		)
-		filteredTimes.splice(3)
 		e.time = filteredTimes
 		return e.time.length > 0
 	})

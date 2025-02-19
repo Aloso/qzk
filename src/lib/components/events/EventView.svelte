@@ -22,6 +22,9 @@
 		onDeletedOrUnpublished,
 	}: Props = $props()
 
+	let times = event.allTimes ?? event.time
+	const now = new Date()
+
 	function formatAppointment(time: Time) {
 		switch (time.variant) {
 			case 'day':
@@ -101,10 +104,10 @@
 	</div>
 
 	<div class="sidebar">
-		<div class="sidebar-title">Termin{event.time.length > 1 ? 'e' : ''}</div>
+		<div class="sidebar-title">Termin{times.length > 1 ? 'e' : ''}</div>
 		<div class="appointments">
-			{#each event.time as time}
-				<div class="row">
+			{#each times as time}
+				<div class="row" class:in-past={(time.end ?? time.start) < now}>
 					{@html formatAppointment(time)}
 				</div>
 			{/each}
@@ -180,6 +183,8 @@
 
 <style lang="scss">
 	@use '../../../routes/vars.scss' as vars;
+
+	// TODO: Align main headline and sidebar headline
 
 	.layout {
 		display: flex;
@@ -310,14 +315,19 @@
 		width: 100%;
 		background-color: #eee;
 		border: 2px solid #0001;
-		padding: 0.7rem 1rem;
+		padding: 0.67rem 1rem;
 		border-radius: 15px;
+		font-size: 1.05rem;
 
 		.row {
 			display: flex;
 			gap: 1rem;
-			padding: 5px 0;
+			padding: 7px 0;
 			justify-content: space-between;
+
+			&.in-past {
+				opacity: 0.6;
+			}
 		}
 	}
 
