@@ -1,9 +1,10 @@
 <script lang="ts">
 	interface Props {
 		time: Date
+		showLabel?: boolean
 	}
 
-	let { time }: Props = $props()
+	let { time, showLabel }: Props = $props()
 	let now = $state(new Date())
 
 	let [daysTotal, hours, minutes, seconds] = $derived.by(() => {
@@ -27,7 +28,9 @@
 </script>
 
 <div class="next">
-	Nächster Termin:
+	{#if showLabel}
+		Nächster Termin:
+	{/if}
 
 	<div class="countdown">
 		{#if daysTotal > 0}

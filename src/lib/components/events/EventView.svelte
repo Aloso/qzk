@@ -58,11 +58,11 @@
 			.replace(/(\d).(?=\d)/g, '. ')
 	}
 
-	let layoutElem = $state<HTMLDivElement>()
+	let controlsElem = $state<HTMLDivElement>()
 
 	$effect(() => {
-		if (layoutElem) {
-			layoutElem.scrollIntoView()
+		if (controlsElem) {
+			controlsElem.scrollIntoView()
 			return () => {
 				setTimeout(() => {
 					const [left, top] = previousScrollPos
@@ -73,40 +73,35 @@
 	})
 </script>
 
-<div class="layout" bind:this={layoutElem}>
-	<div class="main">
-		<button class="back mobile-only" onclick={onClose}>
-			<span class="close-icon">×</span>
-			Schließen
-		</button>
-		{#if onClickEdit || onPublished || onDeletedOrUnpublished}
-			<div class="admin-bar">
-				{#if onClickEdit}
-					<button class="admin-button edit" onclick={onClickEdit}>Bearbeiten</button>
-				{/if}
-				{#if onPublished}
-					<button class="admin-button publish" onclick={onPublished}>Veröffentlichen</button>
-				{/if}
-				{#if onDeletedOrUnpublished}
-					<button class="admin-button delete" onclick={onDeletedOrUnpublished}>
-						{published ? 'Als Entwurf markieren' : 'Löschen'}
-					</button>
-				{/if}
-			</div>
-		{/if}
+<div class="controls" bind:this={controlsElem}>
+	<button class="back" onclick={onClose}>
+		<span style="vertical-align: 12px;">×</span>
+	</button>
 
+	<div class="admin-bar">
+		{#if onClickEdit}
+			<button class="admin-button edit" onclick={onClickEdit}>Bearbeiten</button>
+		{/if}
+		{#if onPublished}
+			<button class="admin-button publish" onclick={onPublished}>Veröffentlichen</button>
+		{/if}
+		{#if onDeletedOrUnpublished}
+			<button class="admin-button delete" onclick={onDeletedOrUnpublished}>
+				{published ? 'Als Entwurf markieren' : 'Löschen'}
+			</button>
+		{/if}
+	</div>
+</div>
+
+<div class="layout">
+	<div class="main">
 		<h1>{event.title}</h1>
 
 		<div class="event-description">{@html event.descHtml}</div>
 	</div>
 
 	<div class="sidebar">
-		<button class="back mobile-hidden" onclick={onClose}>
-			<span class="close-icon">×</span>
-			Schließen
-		</button>
-
-		<div class="sidebar-title">Termine</div>
+		<div class="sidebar-title">Termin{event.time.length > 1 ? 'e' : ''}</div>
 		<div class="appointments">
 			{#each event.time as time}
 				<div class="row">
@@ -115,7 +110,7 @@
 			{/each}
 		</div>
 		{#if event.time[0].start.getTime() > Date.now() && !event.time[0].variant.startsWith('day')}
-			<EventCountDown time={event.time[0].start} />
+			<EventCountDown showLabel={event.time.length > 1} time={event.time[0].start} />
 		{/if}
 
 		<div class="sidebar-title">Ort</div>
@@ -197,9 +192,26 @@
 		}
 	}
 
+	.controls {
+		display: flex;
+		flex-direction: row-reverse;
+		margin-bottom: 2rem;
+		gap: 1rem;
+		align-items: center;
+
+		@media (max-width: 1000px) {
+			flex-direction: column;
+			align-items: start;
+		}
+	}
+
 	.main {
 		flex-grow: 1;
 		max-width: 44rem;
+
+		:global(h1) {
+			margin-top: 0;
+		}
 	}
 
 	.sidebar {
@@ -207,7 +219,6 @@
 		width: 21rem;
 		min-width: 21rem;
 		max-width: 100%;
-		margin-top: 3.2rem;
 
 		@media (max-width: 1000px) {
 			width: 44rem;
@@ -217,51 +228,31 @@
 	}
 
 	.back {
-		display: block;
-		width: 100%;
-		margin-bottom: 1rem;
+		align-self: end;
+		box-sizing: border-box;
+		display: inline-block;
+		width: 3rem;
+		height: 3rem;
 		border: none;
-		background-color: var(--color-theme);
-		color: white;
-		padding: 0.6rem 1rem;
-		border-radius: 15px;
+		background-color: transparent;
+		color: #777;
+		padding: 0;
+		border-radius: 3rem;
 		font-family: inherit;
-		font-size: 1.1rem;
+		font-size: 3em;
+		line-height: 1rem;
 		cursor: pointer;
 
 		&:hover {
-			background-color: var(--color-link);
-		}
-
-		.close-icon {
-			display: inline-block;
-			font-size: 1.5em;
-			margin: -15px 5px -5px 0;
-		}
-
-		@media (max-width: 1000px) {
-			width: auto;
-		}
-
-		&.mobile-only {
-			display: none;
-
-			@media (max-width: 1000px) {
-				display: block;
-			}
-		}
-
-		&.mobile-hidden {
-			@media (max-width: 1000px) {
-				display: none;
-			}
+			background-color: #eee;
 		}
 	}
 
 	.admin-bar {
-		margin: 3rem 0 1rem;
 		display: flex;
 		gap: 0.5rem;
+		flex-grow: 1;
+		flex-wrap: wrap;
 	}
 
 	.admin-button {
