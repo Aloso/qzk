@@ -32,6 +32,7 @@
 		try {
 			const { key } = await submitDraft(event)
 			const date = new Date().toLocaleString('de-DE', {
+				timeZone: 'Europe/Berlin',
 				month: 'numeric',
 				day: 'numeric',
 				hour: '2-digit',

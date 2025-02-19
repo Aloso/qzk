@@ -27,17 +27,25 @@
 		if (days >= 0 && days < 6) {
 			if (days === 0) return '<em>Heute</em>'
 			else if (days === 1) return '<em>Morgen</em>'
-			else return `<em>${d.toLocaleDateString('de-DE', { weekday: 'long' })}</em>`
+			else {
+				return `<em>${d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })}</em>`
+			}
 		}
 
 		return d
-			.toLocaleDateString('de-DE', { month: 'numeric', day: 'numeric', weekday: 'short' })
+			.toLocaleDateString('de-DE', {
+				timeZone: 'Europe/Berlin',
+				month: 'numeric',
+				day: 'numeric',
+				weekday: 'short',
+			})
 			.replace(/^(\w\w)\./, '$1')
 			.replace(/(\d)\.(\d)/, '$1. $2')
 	}
 
 	function formatTime(d: Date) {
 		return d.toLocaleTimeString('de-DE', {
+			timeZone: 'Europe/Berlin',
 			hour: '2-digit',
 			minute: '2-digit',
 		})

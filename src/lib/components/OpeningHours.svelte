@@ -34,6 +34,7 @@
 			<div class="row special">
 				<span class="label">
 					{new Date(date).toLocaleDateString('de-DE', {
+						timeZone: 'Europe/Berlin',
 						month: 'short',
 						day: 'numeric',
 						weekday: 'long',

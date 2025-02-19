@@ -26,6 +26,7 @@
 	function formatDate(d: Date, withWeekday: boolean) {
 		return d
 			.toLocaleDateString('de-DE', {
+				timeZone: 'Europe/Berlin',
 				year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
 				month: 'numeric',
 				day: 'numeric',
@@ -37,6 +38,7 @@
 
 	function formatTime(d: Date) {
 		return d.toLocaleTimeString('de-DE', {
+			timeZone: 'Europe/Berlin',
 			hour: '2-digit',
 			minute: '2-digit',
 		})

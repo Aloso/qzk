@@ -31,7 +31,7 @@
 		if (days >= 0 && days < 6) {
 			if (days === 0) return 'Heute'
 			else if (days === 1) return 'Morgen'
-			else return d.toLocaleDateString('de-DE', { weekday: 'long' })
+			else return d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })
 		}
 	}
 </script>

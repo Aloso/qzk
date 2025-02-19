@@ -33,7 +33,7 @@
 		const [startDate = ''] = start?.toISOString().split('T') ?? []
 		const [endDate = ''] = end?.toISOString().split('T') ?? []
 
-		const format = { hour: '2-digit', minute: '2-digit' } as const
+		const format = { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' } as const
 		const startTime = variant.startsWith('time') ? start!.toLocaleTimeString('de-DE', format) : ''
 		const endTime = variant === 'time-range' ? end!.toLocaleTimeString('de-DE', format) : ''
 

@@ -43,7 +43,7 @@ export function render(data: Document): (string | ExtraComponent)[] {
 						const { fields } = target as Item<BlogPost>
 						return `<a class="embed" href="/${fields.slug}">
 							<p class="embedTitle">${fields.title}</p>
-							<p class="embedDescription">Veröffentlicht: ${new Date(fields.published).toLocaleDateString('de', { dateStyle: 'long' })}</p>
+							<p class="embedDescription">Veröffentlicht: ${new Date(fields.published).toLocaleDateString('de', { timeZone: 'Europe/Berlin', dateStyle: 'long' })}</p>
 							<p class="embedDescription">Von ${fields.authors.map(author => author.fields.name).join(', ')}</p>
 						</a>`
 					}

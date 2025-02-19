@@ -36,7 +36,11 @@
 	}
 
 	function formatTime(date: Date) {
-		return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+		return date.toLocaleTimeString('de-DE', {
+			timeZone: 'Europe/Berlin',
+			hour: '2-digit',
+			minute: '2-digit',
+		})
 	}
 
 	function formatDate(date: Date) {
@@ -44,6 +48,7 @@
 
 		return date
 			.toLocaleDateString('de-DE', {
+				timeZone: 'Europe/Berlin',
 				weekday: withYear ? undefined : 'short',
 				day: 'numeric',
 				month: withYear ? 'numeric' : 'long',

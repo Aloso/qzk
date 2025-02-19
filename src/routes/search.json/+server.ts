@@ -32,7 +32,9 @@ async function getSearchResults(): Promise<SearchResult[]> {
 				slug: `blog/${post.fields.published}/${post.fields.slug}`,
 				n: post.fields.title,
 				c: makeContent([
-					new Date(post.fields.published).toLocaleDateString(),
+					new Date(post.fields.published).toLocaleDateString('de-DE', {
+						timeZone: 'Europe/Berlin',
+					}),
 					post.fields.teaser,
 					...post.fields.content.filter(c => typeof c === 'string'),
 				]),
