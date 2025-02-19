@@ -100,11 +100,37 @@
 	<div class="main">
 		<h1>{event.title}</h1>
 
+		<div class="quick-links">
+			<a
+				href="#termine"
+				onclick={e => {
+					e.preventDefault()
+					document.getElementById('termine')?.scrollIntoView({ behavior: 'smooth' })
+				}}
+			>
+				Termine
+				<svg class="arrow-down" viewBox="0 0 24 24">
+					<path d="M4,14L12,22L20,14M12,22L12,2z" />
+				</svg>
+			</a>
+			<a
+				href="#ort"
+				onclick={e => {
+					e.preventDefault()
+					document.getElementById('ort')?.scrollIntoView({ behavior: 'smooth' })
+				}}
+			>
+				Ort <svg class="arrow-down" viewBox="0 0 24 24">
+					<path d="M4,14L12,22L20,14M12,22L12,2z" />
+				</svg>
+			</a>
+		</div>
+
 		<div class="event-description">{@html event.descHtml}</div>
 	</div>
 
 	<div class="sidebar">
-		<div class="sidebar-title">Termin{times.length > 1 ? 'e' : ''}</div>
+		<div class="sidebar-title" id="termine">Termin{times.length > 1 ? 'e' : ''}</div>
 		<div class="appointments">
 			{#each times as time}
 				<div class="row" class:in-past={(time.end ?? time.start) < now}>
@@ -116,7 +142,7 @@
 			<EventCountDown showLabel={event.time.length > 1} time={event.time[0].start} />
 		{/if}
 
-		<div class="sidebar-title">Ort</div>
+		<div class="sidebar-title" id="ort">Ort</div>
 
 		{#if event.place.type === 'PHYSICAL'}
 			{#if event.place.room}
@@ -216,6 +242,38 @@
 
 		:global(h1) {
 			margin-top: 0;
+		}
+	}
+
+	.quick-links {
+		display: none;
+
+		@media (max-width: 1000px) {
+			display: flex;
+			margin: 0 0 1.5rem 0;
+			gap: 0.5rem;
+		}
+
+		a {
+			text-decoration: none;
+			color: inherit;
+			display: inline-block;
+			padding: 0.5rem 0.6rem;
+			background: #eee;
+			border-radius: 10px;
+			font-size: 1.1rem;
+			font-weight: 500;
+		}
+
+		.arrow-down {
+			vertical-align: -1px;
+			stroke: currentColor;
+			fill: none;
+			width: 16px;
+			height: 16px;
+			stroke-linejoin: round;
+			stroke-linecap: round;
+			stroke-width: 2.5;
 		}
 	}
 
