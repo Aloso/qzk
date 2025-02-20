@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit'
-import { putEvent, setEventPublished } from '$lib/server/events/db'
+import { deleteEvent, putEvent, setEventPublished } from '$lib/server/events/db'
 import { parseEvent } from '$lib/server/events/event'
 import { authenticate, queryKey } from '$lib/server/events/http'
 import { sanitizeHtml } from '$lib/utils/sanitize'
@@ -42,7 +42,7 @@ export async function PUT({ request, platform }): Promise<Response> {
 	return json(event)
 }
 
-// unpublish
+// delete
 export async function DELETE({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
@@ -52,6 +52,7 @@ export async function DELETE({ request, platform }): Promise<Response> {
 	if (!key) {
 		throw new Response('Missing key', { status: 401 })
 	}
-	await setEventPublished(platform.env, key, false)
+	await deleteEvent(platform.env, key, true)
+	// await setEventPublished(platform.env, key, false)
 	return new Response('OK')
 }
