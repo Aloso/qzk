@@ -49,6 +49,20 @@ export async function getEvent(env: Env, key: string, published: boolean): Promi
 	return JSON.parse(jsonData)
 }
 
+export async function getEventOrDraft(
+	env: Env,
+	key: string,
+): Promise<{ event: Event; isPublished: boolean }> {
+	const query = 'SELECT jsonData, isPublished FROM events WHERE id = ?'
+
+	const result = await env.DB.prepare(query)
+		.bind(key)
+		.first<{ jsonData: string; isPublished: number }>()
+	const { jsonData, isPublished } = result ?? error(404, 'Event not found')
+
+	return { event: JSON.parse(jsonData), isPublished: isPublished !== 0 }
+}
+
 export async function addEvent(
 	env: Env,
 	key: string,

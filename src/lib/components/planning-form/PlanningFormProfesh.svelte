@@ -47,11 +47,6 @@
 	function submitForm(ev: SubmitEvent) {
 		ev.preventDefault()
 
-		localStorage.setItem(
-			'submitterData',
-			JSON.stringify({ name: values.yourName, email: values.yourEmail }),
-		)
-
 		const event: Event & WithSubmitter = {
 			title: values.title,
 			descHtml: values.descHtml,

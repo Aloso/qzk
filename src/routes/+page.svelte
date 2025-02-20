@@ -1,14 +1,10 @@
 <script lang="ts">
 	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
-	import type { Event } from '$lib/events/types'
 	import BlogPostPreview from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 	import IgFeed from '$lib/components/IgFeed.svelte'
 	import OpeningHours from '$lib/components/OpeningHours.svelte'
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
-	import EventView from '$lib/components/events/EventView.svelte'
-	import { pushState, beforeNavigate } from '$app/navigation'
-	import { onMount } from 'svelte'
 
 	interface Props {
 		data: Data
@@ -16,67 +12,6 @@
 
 	const { data }: Props = $props()
 	const { generalInfo, posts, events } = data
-
-	let openEvent = $state<Event>()
-	let scrollPos = $state<readonly [number, number]>([0, 0])
-
-	function onOpenEvent(event: Event) {
-		const url = new URL(location.href)
-		url.hash = `#veranstaltung-${event.key}`
-		pushState(url, {})
-		hashChange({ newURL: url.toString() })
-	}
-
-	function onCloseEvent() {
-		history.back()
-	}
-
-	function hashChange(change: { newURL: string }) {
-		const hash = new URL(change.newURL).hash.replace('#', '').replace(/^(veranstaltung|event)-/, '')
-		if (hash === '') {
-			openEvent = undefined
-			document.title = 'Queeres Zentrum Kassel'
-		} else {
-			const event = events.find(event => event.key === hash)
-			if (event) {
-				scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop]
-
-				openEvent = event
-				document.title = `${event.title} – Queeres Zentrum Kassel`
-			}
-		}
-	}
-
-	onMount(() => {
-		const hash = location.hash.replace(/^#(event|veranstaltung)-/, '')
-		if (!hash) {
-			return
-		}
-		const event = events.find(e => e.key === hash)
-		if (event) {
-			openEvent = event
-		}
-	})
-
-	beforeNavigate(change => {
-		if (change.to && change.from) {
-			const fromUrl = new URL(change.from.url)
-			const toUrl = new URL(change.to.url)
-			fromUrl.hash = ''
-			toUrl.hash = ''
-			if (fromUrl.toString() === toUrl.toString()) {
-				change.cancel()
-				hashChange({ newURL: change.to.url.toString() })
-			}
-		}
-	})
-
-	$effect(() => {
-		window.addEventListener('hashchange', hashChange)
-		return () => {
-			window.removeEventListener('hashchange', hashChange)
-		}
-	})
 </script>
 
 <svelte:head>
@@ -84,56 +19,52 @@
 	<meta name="description" content="Dies ist die Startseite des Queeren Zentrums Kassel" />
 </svelte:head>
 
-{#if openEvent}
-	<EventView previousScrollPos={scrollPos} event={openEvent} onClose={onCloseEvent} />
-{:else}
-	<div class="layout">
-		<section class="mainbar">
-			<h1>Veranstaltungen</h1>
+<div class="layout">
+	<section class="mainbar">
+		<h1>Veranstaltungen</h1>
 
-			<div class="event-container">
-				{#each events as event}
-					<EventViewSmall {event} onOpen={() => onOpenEvent(event)} />
-				{/each}
-				<div></div>
-				<div></div>
-			</div>
-			{#if events}
-				{#if events.length > 0}
-					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
-				{:else}
-					Keine Veranstaltungen in den nächsten 30 Tagen
-				{/if}
+		<div class="event-container">
+			{#each events as event}
+				<EventViewSmall {event} />
+			{/each}
+			<div></div>
+			<div></div>
+		</div>
+		{#if events}
+			{#if events.length > 0}
+				Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+			{:else}
+				Keine Veranstaltungen in den nächsten 30 Tagen
 			{/if}
-		</section>
+		{/if}
+	</section>
 
-		<div class="sidebar">
-			<h2 class="sidebar-title">Öffnungszeiten</h2>
-			<OpeningHours {...generalInfo} />
+	<div class="sidebar">
+		<h2 class="sidebar-title">Öffnungszeiten</h2>
+		<OpeningHours {...generalInfo} />
 
-			{#if generalInfo.importantInfo.length > 0}
-				<h2 class="sidebar-title">Wichtig</h2>
-				<ImportantInfo {...generalInfo} />
-			{/if}
+		{#if generalInfo.importantInfo.length > 0}
+			<h2 class="sidebar-title">Wichtig</h2>
+			<ImportantInfo {...generalInfo} />
+		{/if}
 
-			<h2 class="sidebar-title">Instagram</h2>
-			<IgFeed />
+		<h2 class="sidebar-title">Instagram</h2>
+		<IgFeed />
 
-			<h2 class="sidebar-title">Veranstaltung planen</h2>
-			<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
+		<h2 class="sidebar-title">Veranstaltung planen</h2>
+		<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
 
-			<a href="/planen" class="add-event">Neue Veranstaltung</a>
+		<a href="/planen" class="add-event">Neue Veranstaltung</a>
 
-			<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
+		<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
 
-			<div class="blog-posts">
-				{#each posts as post}
-					<BlogPostPreview {post} small noImage />
-				{/each}
-			</div>
+		<div class="blog-posts">
+			{#each posts as post}
+				<BlogPostPreview {post} small noImage />
+			{/each}
 		</div>
 	</div>
-{/if}
+</div>
 
 <style lang="scss">
 	.layout {
@@ -168,7 +99,6 @@
 	.sidebar {
 		width: 22rem;
 		margin: 3rem 0 2rem 0;
-		position: sticky;
 		top: 0;
 
 		@media (max-width: 1200px) {

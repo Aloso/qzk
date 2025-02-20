@@ -17,7 +17,6 @@ export interface EventCommon {
 	organizer?: Organizer
 	pictureUrl?: string
 	tags: string[]
-	submitter?: Submitter
 	decoration?: Decoration
 }
 

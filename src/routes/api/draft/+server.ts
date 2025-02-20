@@ -4,6 +4,7 @@ import { queryKey } from '$lib/server/events/http'
 import { json } from '@sveltejs/kit'
 import { addEvent, getEvent, putEvent, deleteEvent } from '$lib/server/events/db'
 import { parseEvent } from '$lib/server/events/event'
+import { error } from '@sveltejs/kit'
 
 /*
 	The permissions for drafts are opposite to published event permissions:
@@ -16,13 +17,10 @@ import { parseEvent } from '$lib/server/events/event'
 	list of drafts (including keys), and therefore edit/delete everything.
 */
 
-interface Ctx {
-	request: Request
-	platform: App.Platform
-}
-
 // fetch
-export async function GET({ request, platform }: Ctx): Promise<Response> {
+export async function GET({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
+
 	const key = queryKey(request)
 	if (!key) {
 		return new Response('Missing key', { status: 401 })
@@ -33,7 +31,9 @@ export async function GET({ request, platform }: Ctx): Promise<Response> {
 }
 
 // create
-export async function POST({ request, platform }: Ctx): Promise<Response> {
+export async function POST({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
+
 	const event = parseEvent(await request.json())
 	const key = uuidv4()
 	event.key = key
@@ -44,7 +44,9 @@ export async function POST({ request, platform }: Ctx): Promise<Response> {
 }
 
 // edit
-export async function PUT({ request, platform }: Ctx): Promise<Response> {
+export async function PUT({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
+
 	const key = queryKey(request)
 	if (!key) {
 		return new Response('Missing key', { status: 401 })
@@ -59,7 +61,9 @@ export async function PUT({ request, platform }: Ctx): Promise<Response> {
 }
 
 // delete
-export async function DELETE({ request, platform }: Ctx): Promise<Response> {
+export async function DELETE({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
+
 	const key = queryKey(request)
 	if (!key) {
 		return new Response('Missing key', { status: 401 })

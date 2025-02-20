@@ -8,21 +8,18 @@
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { goto } from '$app/navigation'
-	import SubmittedList from './SubmittedList.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
-	import { onMount } from 'svelte'
-	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
 	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
 	import { narrowTimesToDraft } from '$lib/events/intersections'
-	import EventView from '$lib/components/events/EventView.svelte'
+	import SubmittedList from '$lib/components/events/SubmittedList.svelte'
+	import { onMount } from 'svelte'
+	import { fetchAllEvents } from '$lib/events/eventApi'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
 	let status = $state<Status>({ type: 'ready' })
-	let openEvent = $state<Event>()
-	let scrollPos = $state<readonly [number, number]>([0, 0])
 
 	const defaults = createEventPlanningDefaults()
 	const submittedDrafts = createSubmittedDrafts()
@@ -39,11 +36,9 @@
 				minute: '2-digit',
 			})
 			submittedDrafts.add(key, `${date} - ${event.title}`)
-			goto('/planen/eingereicht?key=' + encodeURIComponent(key))
+			goto('/veranstaltungen/' + encodeURIComponent(key))
 		} catch (e) {
-			if (e instanceof Error) {
-				status = { type: 'error', message: e.message }
-			}
+			status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
 		}
 	}
 
@@ -68,13 +63,8 @@
 	})
 
 	async function loadEvents() {
-		events = await fetchAllEventsWithCache()
+		events = await fetchAllEvents()
 		events.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
-	}
-
-	function onOpenEvent(event: Event) {
-		scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop]
-		openEvent = event
 	}
 </script>
 
@@ -103,14 +93,14 @@
 			bind:clickCalendarDay
 		/>
 
-		{#if !openEvent && intersecting.length > 0}
+		{#if intersecting.length > 0}
 			<h3>
 				{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im gewählten Zeitraum
 			</h3>
 			<p>Bitte überprüfe, dass kein Terminkonflikt entsteht.</p>
 			<div class="event-container">
 				{#each intersecting as event}
-					<EventViewSmall {event} showMore onOpen={() => onOpenEvent(event)} />
+					<EventViewSmall {event} showMore openInNewTab />
 				{/each}
 				<div></div>
 			</div>
@@ -125,15 +115,6 @@
 		</div>
 	{/if}
 </div>
-
-{#if openEvent}
-	<hr class="big-hr" />
-	<EventView
-		previousScrollPos={scrollPos}
-		event={openEvent}
-		onClose={() => (openEvent = undefined)}
-	/>
-{/if}
 
 <style lang="scss">
 	.form-layout {
@@ -184,9 +165,5 @@
 		gap: 2rem;
 		align-items: start;
 		margin: 1rem 0;
-	}
-
-	.big-hr {
-		margin: 3rem 0;
 	}
 </style>

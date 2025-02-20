@@ -1,6 +1,5 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { Event, WireEvent } from '$lib/events/types'
 import type { D1Database } from '@cloudflare/workers-types'
 
 // for information about these interfaces
@@ -29,7 +28,6 @@ declare global {
 
 	interface Window {
 		__searchInitialized?: boolean
-		__fetchEventsPromise?: Promise<WireEvent[]> | Event[]
 		instgrm?: {
 			Embeds: {
 				process: () => void

@@ -87,8 +87,6 @@ function getStaticSlug(slug: string): string | null {
 	switch (slug) {
 		case 'index':
 			return ''
-		case 'planen/eingereicht':
-			return null
 		default:
 			return slug
 	}

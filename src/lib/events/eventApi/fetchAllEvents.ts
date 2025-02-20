@@ -16,16 +16,3 @@ export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 	const events: WireEvent[] = await response.json()
 	return events.map(wire2event)
 }
-
-export async function fetchAllEventsWithCache(): Promise<Event[]> {
-	if (window.__fetchEventsPromise) {
-		if (Array.isArray(window.__fetchEventsPromise)) {
-			return window.__fetchEventsPromise
-		}
-		const response = (await window.__fetchEventsPromise).map(wire2event)
-		window.__fetchEventsPromise = response
-		return response
-	}
-	const response = await fetchAllEvents()
-	return response
-}

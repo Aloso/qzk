@@ -13,9 +13,10 @@
 	<title>{data.title} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
+<h1>{data.title}</h1>
+
 <div class="layout">
 	<div class="mainbar">
-		<h1>{data.title}</h1>
 		<div><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
@@ -54,12 +55,11 @@
 
 	.sidebar {
 		width: 22rem;
-		margin: 11rem 0 2rem 0;
-		position: sticky;
-		top: 0;
+		margin: 2rem 0;
 
-		@media (max-width: 900px) {
+		@media (max-width: 1200px) {
 			width: auto;
+			max-width: 44rem;
 			margin-top: 0;
 			border-top: 2px solid #ccc;
 		}

@@ -10,10 +10,10 @@
 		showMore?: boolean
 		editable?: boolean
 		published?: boolean
-		onOpen: () => void
+		openInNewTab?: boolean
 	}
 
-	let { event, showMore = false, onOpen }: Props = $props()
+	let { event, showMore = false, openInNewTab }: Props = $props()
 
 	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.title))
 	let descHtml = $derived.by(() => {
@@ -79,7 +79,13 @@
 				<span class="omitted-times">···</span>
 			{/if}
 		</div>
-		<button class="open-button" onclick={onOpen}>Mehr Infos</button>
+		<a
+			class="open-button"
+			href="/veranstaltungen/{event.key}"
+			target={openInNewTab ? '_blank' : undefined}
+		>
+			Mehr Infos
+		</a>
 	</div>
 </div>
 
@@ -209,6 +215,7 @@
 			font-family: inherit;
 			font-size: 1rem;
 			padding: 0.4rem 0.6rem;
+			text-decoration: none;
 
 			margin: 0;
 

@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit'
 import { getAllEvents, getEventNumber } from '$lib/server/events/db'
 import { authenticate, queryNumber } from '$lib/server/events/http'
+import { error } from '@sveltejs/kit'
 
 /*
 	The permissions for drafts are opposite to published event permissions:
@@ -13,13 +14,10 @@ import { authenticate, queryNumber } from '$lib/server/events/http'
 	list of drafts (including keys), and therefore edit/delete everything.
 */
 
-interface Ctx {
-	request: Request
-	platform: App.Platform
-}
-
 // fetch all
-export async function GET({ request, platform }: Ctx): Promise<Response> {
+export async function GET({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
+
 	authenticate(request, platform.env)
 
 	const params = new URL(request.url).searchParams
