@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation'
+	import { goto } from '$app/navigation'
 	import MonthNav from '$lib/components/calendar/MonthNav.svelte'
 	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
 	import TabBar from '$lib/components/TabBar.svelte'
@@ -127,6 +127,10 @@
 		length = fd.length
 	})
 </script>
+
+<svelte:head>
+	<title>Admin: Veranstaltungen - Queeres Zentrum Kassel</title>
+</svelte:head>
 
 <h1>Veranstaltungen</h1>
 <TabBar

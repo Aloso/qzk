@@ -36,6 +36,7 @@
 			<option value="Gelber Raum">Gelber Raum</option>
 			<option value="Blauer Raum">Blauer Raum</option>
 			<option value="Rückzugsraum">Rückzugsraum</option>
+			<option value="Ganzes Zentrum">Ganzes Zentrum</option>
 		</select>
 	</label>
 	<label class:hidden={values.placeType !== 'PHYSICAL'}>

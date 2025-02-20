@@ -33,7 +33,7 @@
 <div class="section-title">Farben</div>
 
 {#if automated}
-	<p>Für die Darstellung wurden zwei Farben zufällig ausgewählt. Du kannst sie noch bearbeiten:</p>
+	<p>Es wurden zwei Farben zufällig ausgewählt. Du kannst sie noch bearbeiten:</p>
 {/if}
 
 <div

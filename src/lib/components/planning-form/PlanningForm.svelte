@@ -156,9 +156,9 @@
 	{:else if step === 3}
 		<PlanningOrganisators bind:values bind:valid={valid[3]} />
 	{:else if step === 4}
-		<PlanningPersonalInfo bind:values bind:valid={valid[4]} />
+		<PlanningDecoration bind:values bind:valid={valid[4]} />
 	{:else}
-		<PlanningDecoration bind:values bind:valid={valid[5]} />
+		<PlanningPersonalInfo bind:values bind:valid={valid[5]} />
 	{/if}
 
 	<div class="nav-buttons">
