@@ -22,6 +22,9 @@
 		<div class="header-ii">
 			<DesktopNav {links} {url} />
 
+			<button id="search-button" data-search-button>
+				<img src="/search.svg" alt="Suche" />
+			</button>
 			<button id="burger-menu-button">
 				<img src="/burger.svg" alt="Menü" />
 			</button>
@@ -74,7 +77,6 @@
 	.logo-link {
 		display: block;
 		margin: 0;
-		flex-grow: 1;
 		flex-shrink: 0;
 	}
 
@@ -88,7 +90,8 @@
 		}
 	}
 
-	#burger-menu-button {
+	#burger-menu-button,
+	#search-button {
 		display: none;
 	}
 
@@ -101,22 +104,24 @@
 			display: flex;
 			justify-content: space-evenly;
 			align-items: center;
+			margin: 0 0 0 auto;
 		}
 
-		#burger-menu-button {
+		#burger-menu-button,
+		#search-button {
 			display: block;
 			background-color: transparent;
-			width: 4rem;
-			height: 4rem;
+			width: 3rem;
+			height: 3rem;
 			margin: 0;
 			color: black;
 			border: none;
-			border-radius: 20px;
+			border-radius: 15px;
 			transition: background-color 0.2s;
 
 			img {
-				width: 2rem;
-				height: 2rem;
+				width: 1.5rem;
+				height: 1.5rem;
 				vertical-align: middle;
 			}
 

@@ -1,43 +1,44 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
-	import Authors from './Authors.svelte'
-	import Author from './Author.svelte'
-	import type { BlogPostPreviewTransformed } from '$lib/data'
+	import type { BlogPostPreviewTransformed, PersonPreview } from '$lib/data'
 
 	interface Props {
 		post: BlogPostPreviewTransformed
-		small?: boolean
-		noImage?: boolean
+		withImage?: boolean
 	}
 
-	let { post, small, noImage }: Props = $props()
+	let { post, withImage }: Props = $props()
+
+	function createAuthors(authors: PersonPreview[]) {
+		let authorsConcat = authors
+			.slice(0, 2)
+			.map(a => a.name)
+			.join(', ')
+		if (authors.length > 2) {
+			authorsConcat += ', …'
+		}
+		return authorsConcat || 'unbekannt'
+	}
 </script>
 
-<div class="blogPost" class:small>
-	{#if !noImage}
+<div class="blogPost" class:withImage>
+	{#if withImage}
 		<Image
 			class="BlogPostPreview-photo"
 			img={post.photo}
-			width={small ? 150 : 250}
-			height={small ? 150 : 250}
+			width={250}
+			height={250}
 			context="Blog Post: {post.title}"
 		/>
 	{/if}
 	<div class="right">
-		{#if small}
-			<div class="small-title">
-				<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
-			</div>
-			<div class="published combined">
-				<PublishDate date={post.published} /> · von {post.authors[0]?.name ?? 'unbekannt'}
-				{post.authors.length > 1 ? ', ...' : ''}
-			</div>
-		{:else}
-			<h2>{post.title}</h2>
-			<div class="published"><PublishDate date={post.published} /></div>
-			<Authors authors={post.authors} small />
-		{/if}
+		<div class="small-title">
+			<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
+		</div>
+		<div class="published">
+			<PublishDate date={post.published} /> · von {createAuthors(post.authors)}
+		</div>
 		<div class="teaser smaller-paragraphs">
 			{@html post.teaser}
 		</div>
@@ -65,14 +66,7 @@
 		flex-shrink: 1;
 	}
 
-	h2 {
-		margin-top: 0;
-	}
-
-	.published.combined {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
+	.published {
 		color: #777;
 	}
 
@@ -90,7 +84,15 @@
 	.small-title {
 		font-weight: 600;
 		margin: 0 0 0.5rem 0;
-		font-size: 1.2rem;
+		font-size: 1.4rem;
+
+		@media (min-width: 1201px) {
+			font-size: 1.2rem;
+
+			.withImage & {
+				font-size: 1.4rem;
+			}
+		}
 	}
 
 	@media (max-width: 800px) {

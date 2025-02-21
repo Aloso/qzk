@@ -103,6 +103,7 @@
 					<EventViewSmall {event} showMore openInNewTab />
 				{/each}
 				<div></div>
+				<div></div>
 			</div>
 		{/if}
 	</div>
@@ -162,8 +163,8 @@
 	.event-container {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
+		gap: 0 2rem;
 		align-items: start;
-		margin: 1rem 0;
+		margin: 1rem 0 0 0;
 	}
 </style>

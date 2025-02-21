@@ -25,7 +25,7 @@ export async function load({ platform }): Promise<Data> {
 		.map<Event>(wire2event)
 
 	const now = Date.now()
-	const inOneMonth = Date.now() + 30 * 24 * 60 * 60 * 1000
+	const inOneMonth = now + 30 * 24 * 60 * 60 * 1000
 	const events = eventsParsed.filter(e => {
 		const filteredTimes = (Array.isArray(e.time) ? e.time : [e.time]).filter(
 			time => +time.start < inOneMonth && getEndOfTime(time) > now,

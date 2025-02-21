@@ -12,14 +12,6 @@
 
 <nav id="mobile-nav">
 	<div class="mobile-nav-inner">
-		<div class="nav-group">
-			<div class="nav-row">
-				<button class="a nav-link" data-search-button>
-					<img src="/search.svg" alt="" /> Suche
-				</button>
-			</div>
-		</div>
-
 		{#each links as link}
 			<div class="nav-group">
 				<div class="nav-row">
@@ -165,12 +157,6 @@
 				&:hover,
 				&:focus {
 					background-color: vars.$COLOR_T1;
-				}
-
-				img {
-					width: 1.15rem;
-					height: 1.15rem;
-					margin-right: 1rem;
 				}
 			}
 		}

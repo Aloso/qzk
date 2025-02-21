@@ -16,7 +16,7 @@
 {:else}
 	<section>
 		{#each posts as post}
-			<BlogPostPreview {post} />
+			<BlogPostPreview {post} withImage />
 		{/each}
 	</section>
 {/if}

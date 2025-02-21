@@ -24,8 +24,9 @@
 
 	function formatDate(d: Date) {
 		const days = daysUntil(d)
-		if (days >= 0 && days < 6) {
-			if (days === 0) return '<em>Heute</em>'
+		if (days >= -1 && days < 6) {
+			if (days === -1) return 'Gestern'
+			else if (days === 0) return '<em>Heute</em>'
 			else if (days === 1) return '<em>Morgen</em>'
 			else {
 				return `<em>${d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })}</em>`

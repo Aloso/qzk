@@ -17,7 +17,7 @@
 
 <div class="layout">
 	<div class="mainbar">
-		<div><PublishDate date={data.published} withDescription /></div>
+		<div class="published"><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
 		<FormattedContent parts={data.parts} />
@@ -25,10 +25,10 @@
 
 	{#if data.related.length > 0}
 		<div class="sidebar">
-			<h3 class="sidebar-title">Mehr interessante Beiträge</h3>
+			<h2 class="sidebar-title">Mehr interessante Beiträge</h2>
 			<div class="blog-posts">
 				{#each data.related as post}
-					<BlogPostPreview {post} small noImage />
+					<BlogPostPreview {post} />
 				{/each}
 			</div>
 		</div>
@@ -40,13 +40,22 @@
 		display: flex;
 		gap: 2rem 4rem;
 
+		:global(p) {
+			line-height: 1.7;
+		}
+
 		@media (max-width: 1200px) {
 			flex-direction: column;
 		}
 	}
 
+	.published {
+		margin-bottom: 1rem;
+	}
+
 	.mainbar {
 		width: 44rem;
+		max-width: 44rem;
 
 		@media (max-width: 1200px) {
 			width: auto;
@@ -55,7 +64,7 @@
 
 	.sidebar {
 		width: 22rem;
-		margin: 2rem 0;
+		margin: 2.8rem 0 0;
 
 		@media (max-width: 1200px) {
 			width: auto;
@@ -75,10 +84,12 @@
 		}
 	}
 
-	.sidebar-title {
-		font-size: 1.33rem;
-		font-weight: 600;
-		margin-bottom: 1em;
+	@media (min-width: 1201px) {
+		.sidebar-title {
+			font-size: 1.33rem;
+			font-weight: 600;
+			margin-bottom: 1em;
+		}
 	}
 
 	:global(.BlogPost-photo) {
@@ -87,13 +98,5 @@
 		width: 100%;
 		max-width: 44rem;
 		height: auto;
-	}
-
-	.layout :global(section) {
-		max-width: 44rem;
-
-		:global(p) {
-			line-height: 1.7;
-		}
 	}
 </style>

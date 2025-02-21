@@ -20,8 +20,18 @@
 </svelte:head>
 
 <div class="layout">
-	<section class="mainbar">
-		<h1>Veranstaltungen</h1>
+	<section class="important">
+		<h2 class="sidebar-title">Öffnungszeiten</h2>
+		<OpeningHours {...generalInfo} />
+
+		{#if generalInfo.importantInfo.length > 0}
+			<h2 class="sidebar-title">Wichtig</h2>
+			<ImportantInfo {...generalInfo} />
+		{/if}
+	</section>
+
+	<section class="events">
+		<h2>Veranstaltungen</h2>
 
 		<div class="event-container">
 			{#each events as event}
@@ -39,15 +49,7 @@
 		{/if}
 	</section>
 
-	<div class="sidebar">
-		<h2 class="sidebar-title">Öffnungszeiten</h2>
-		<OpeningHours {...generalInfo} />
-
-		{#if generalInfo.importantInfo.length > 0}
-			<h2 class="sidebar-title">Wichtig</h2>
-			<ImportantInfo {...generalInfo} />
-		{/if}
-
+	<section class="social-and-blog">
 		<h2 class="sidebar-title">Instagram</h2>
 		<IgFeed />
 
@@ -60,50 +62,51 @@
 
 		<div class="blog-posts">
 			{#each posts as post}
-				<BlogPostPreview {post} small noImage />
+				<BlogPostPreview {post} />
 			{/each}
 		</div>
-	</div>
+	</section>
 </div>
 
 <style lang="scss">
 	.layout {
-		display: flex;
-		gap: 1rem 3rem;
+		display: grid;
+		grid-template: 'events important' 'events social-and-blog' / 2fr 1fr;
+		gap: 0 3rem;
 
 		@media (max-width: 1200px) {
-			flex-direction: column;
+			grid-template: 'important' 'events' 'social-and-blog' / 1fr;
+			max-width: 44rem;
 		}
 	}
 
-	.mainbar {
-		width: 44rem;
+	.important {
+		grid-area: important;
+	}
+	.events {
+		grid-area: events;
+	}
+	.social-and-blog {
+		grid-area: social-and-blog;
+	}
 
-		@media (max-width: 1200px) {
-			width: auto;
-		}
-
-		h1 {
-			margin-bottom: 20px;
-		}
+	.events h2 {
+		margin-bottom: 20px;
 	}
 
 	.event-container {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
+		gap: 0 2rem;
 		align-items: start;
-		margin: 1rem 0;
+		margin: 1rem 0 0 0;
 	}
 
-	.sidebar {
-		width: 22rem;
-		margin: 3rem 0 2rem 0;
-		top: 0;
+	.important {
+		margin-top: 1.8rem;
 
 		@media (max-width: 1200px) {
-			width: auto;
-			border-top: 2px solid #ccc;
+			margin-top: 0;
 		}
 	}
 
@@ -133,10 +136,6 @@
 		&:focus {
 			background-color: var(--color-link);
 		}
-	}
-
-	section {
-		max-width: 44rem;
 	}
 
 	.blog-posts {

@@ -24,6 +24,8 @@
 
 	const event = data.event
 	const now = Date.now()
+	const todayUtc = new Date()
+	todayUtc.setUTCHours(0, 0, 0, 0)
 
 	const pastTimes = $derived(event.time.filter(t => getEndOfTime(t) <= now))
 	const futureTimes = $derived(event.time.filter(t => getEndOfTime(t) > now))
@@ -68,6 +70,16 @@
 			})
 			.replace('.,', ',')
 			.replace(/(\d).(?=\d)/g, '. ')
+	}
+
+	function formatRelativeDate(date: Date) {
+		const today = new Date()
+		today.setHours(0, 0, 0, 0)
+		const dateCopy = new Date(date)
+		dateCopy.setHours(0, 0, 0, 0)
+		// rounding should help with issues due to DST
+		const diff = Math.round((dateCopy.getTime() - today.getTime()) / (24 * 60 * 60 * 1000))
+		return diff === 0 ? '<b>Heute</b>' : diff === 1 ? '<b>Morgen</b>' : `in <b>${diff}</b> Tagen`
 	}
 
 	function scrollToAppointments(e: MouseEvent) {
@@ -215,11 +227,21 @@
 				<button class="show-all-times" onclick={() => (showAll = true)}>Alle anzeigen</button>
 			{/if}
 		</div>
-		{#if futureTimes.length > 0 && !futureTimes[0].variant.startsWith('day')}
-			<EventCountDown
-				showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
-				time={futureTimes[0].start}
-			/>
+		{#if futureTimes.length > 0}
+			{#if futureTimes[0].variant === 'day-range'}
+				{#if futureTimes[0].start >= todayUtc}
+					<p>Beginnt {@html formatRelativeDate(futureTimes[0].start)}</p>
+				{:else}
+					<p>Endet {@html formatRelativeDate(futureTimes[0].end)}</p>
+				{/if}
+			{:else if futureTimes[0].variant === 'day'}
+				<p>Findet {@html formatRelativeDate(futureTimes[0].start)} statt</p>
+			{:else}
+				<EventCountDown
+					showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
+					time={futureTimes[0].start}
+				/>
+			{/if}
 		{/if}
 
 		<div class="sidebar-title" id="ort">Ort</div>
@@ -290,13 +312,11 @@
 <style lang="scss">
 	@use '../../../routes/vars.scss' as vars;
 
-	// TODO: Align main headline and sidebar headline
-
 	.layout {
 		display: flex;
 		gap: 2rem 3rem;
 		align-items: flex-start;
-		min-height: 100vh;
+		min-height: 80vh;
 
 		@media (max-width: 1000px) {
 			flex-direction: column;
@@ -353,7 +373,7 @@
 		width: 21rem;
 		min-width: 21rem;
 		max-width: 100%;
-		margin: 2rem 0;
+		margin: 2rem 0 0 0;
 
 		@media (max-width: 1000px) {
 			width: 44rem;

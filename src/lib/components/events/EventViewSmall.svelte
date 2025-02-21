@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Event } from '$lib/events/types'
+	import type { Event, Time } from '$lib/events/types'
 	import EventDateTime from './EventDateTime.svelte'
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
@@ -24,14 +24,17 @@
 			return event.descHtml
 		}
 	})
-	let imgLabel = $derived(formatDateSoon(event.time[0].start))
+	let imgLabel = $derived(formatDateSoon(event.time[0]))
 
-	function formatDateSoon(d: Date) {
-		const days = daysUntil(d)
+	function formatDateSoon({ start, end }: Time) {
+		const days = daysUntil(start)
+		if (days < 0 && end && daysUntil(end) >= 0) {
+			return 'Aktuell'
+		}
 		if (days >= 0 && days < 6) {
 			if (days === 0) return 'Heute'
 			else if (days === 1) return 'Morgen'
-			else return d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })
+			else return start.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })
 		}
 	}
 </script>
@@ -75,14 +78,14 @@
 					<EventDateTime time={event.time[0]} />
 				{/if}
 			</span>
-			{#if !showMore && event.time.length > 1}
-				<span class="omitted-times">···</span>
-			{/if}
 		</div>
 		<a
 			class="open-button"
 			href="/veranstaltungen/{event.key}"
 			target={openInNewTab ? '_blank' : undefined}
+			style={event.decoration
+				? `--bg: oklch(0.6 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.5 0.15 ${event.decoration.colors[1]})`
+				: undefined}
 		>
 			Mehr Infos
 		</a>
@@ -99,7 +102,7 @@
 		box-sizing: border-box;
 		height: 450px;
 		border: none;
-		margin: 0;
+		margin: 0 0 2rem 0;
 		padding: 1.5rem;
 		background-color: #f4f4f4;
 		box-shadow: inset 0 0 0 2px #0000000a;
@@ -201,14 +204,10 @@
 			gap: 0.33rem;
 		}
 
-		.omitted-times {
-			opacity: 0.7;
-		}
-
 		.open-button {
 			align-self: flex-end;
 			border: none;
-			background-color: color.adjust(vars.$COLOR_T4, $lightness: +8%);
+			background-color: var(--bg, color.adjust(vars.$COLOR_T4, $lightness: +8%));
 			color: white;
 			transition: background-color 0.2s;
 			border-radius: 8px;
@@ -221,7 +220,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: vars.$COLOR_T4;
+				background-color: var(--bg-focus, vars.$COLOR_T4);
 			}
 		}
 	}

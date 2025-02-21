@@ -48,7 +48,7 @@
 	{/if}
 	<div class="blog-posts">
 		{#each posts as post}
-			<BlogPostPreview {post} small />
+			<BlogPostPreview {post} withImage />
 		{/each}
 	</div>
 </div>
