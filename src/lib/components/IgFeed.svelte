@@ -80,8 +80,6 @@
 	</blockquote>
 
 	{#if st === 'loading'}
-		<!-- bug: https://github.com/sveltejs/svelte/issues/11082 -->
-		{' '}
 		<script
 			src="https://www.instagram.com/embed.js"
 			onload={handleScriptLoad}

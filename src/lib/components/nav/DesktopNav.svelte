@@ -35,7 +35,7 @@
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt="Suche" /> Suche
+			<img src="/search.svg" alt=" " /> Suche
 		</span>
 	</button>
 </nav>

@@ -33,9 +33,9 @@
 		/>
 	{/if}
 	<div class="right">
-		<div class="small-title">
+		<h3 class="small-title">
 			<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
-		</div>
+		</h3>
 		<div class="published">
 			<PublishDate date={post.published} /> · von {createAuthors(post.authors)}
 		</div>
@@ -82,6 +82,7 @@
 	}
 
 	.small-title {
+		font-family: inherit;
 		font-weight: 600;
 		margin: 0 0 0.5rem 0;
 		font-size: 1.4rem;

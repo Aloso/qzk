@@ -55,12 +55,12 @@
 		{/if}
 	</div>
 
-	<div class="event-title" class:hyphenateTitle>{event.title}</div>
+	<h3 class="event-title" class:hyphenateTitle>{event.title}</h3>
 
 	<div class="event-description">{@html descHtml}</div>
 
 	{#if showMore}
-		<div class="event-place">
+		<div class="event-place" aria-label="Ort">
 			{#if event.place.type === 'ONLINE'}
 				Online-Veranstaltung
 			{:else}
@@ -70,7 +70,7 @@
 	{/if}
 
 	<div class="bottom">
-		<div class="event-times">
+		<div class="event-times" aria-label="Termin">
 			<span class="event-time">
 				{#if showMore}
 					<EventDateTimeDetailed time={event.time[0]} />
@@ -140,6 +140,7 @@
 	}
 
 	.event-title {
+		font-family: inherit;
 		font-weight: 600;
 		font-size: 1.15rem;
 		margin: 0 0 0.33rem 0;
