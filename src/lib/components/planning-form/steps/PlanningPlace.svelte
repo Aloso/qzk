@@ -4,10 +4,10 @@
 	interface Props {
 		values: FormValuesPlace
 		valid: boolean
-		profesh?: boolean
+		professional?: boolean
 	}
 
-	let { values = $bindable(), valid = $bindable(), profesh }: Props = $props()
+	let { values = $bindable(), valid = $bindable(), professional }: Props = $props()
 
 	$effect(() => {
 		valid =
@@ -19,7 +19,10 @@
 	})
 </script>
 
-<div class:profesh>
+{#if professional}
+	<div class="section-title">Ort</div>
+{/if}
+<div class:professional>
 	<label>
 		<em class="required">Ort</em>
 		<select bind:value={values.placeType}>
@@ -62,6 +65,12 @@
 </div>
 
 <style lang="scss">
+	.section-title {
+		font-weight: 600;
+		font-size: 1.5rem;
+		margin: 1.5rem 0 1rem 0;
+	}
+
 	label {
 		display: block;
 		margin: 1rem 0;
@@ -72,7 +81,7 @@
 		}
 	}
 
-	.profesh label {
+	.professional label {
 		width: 100%;
 	}
 
