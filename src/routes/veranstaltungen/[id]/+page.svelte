@@ -155,7 +155,10 @@
 				{#if credentials.auth || !isPublished}
 					<a
 						class="admin-button edit"
-						href="/veranstaltungen/bearbeiten?{new URLSearchParams({ key: event.key! })}"
+						href="/veranstaltungen/bearbeiten?{new URLSearchParams({
+							key: event.key!,
+							isPublished: String(isPublished),
+						})}"
 					>
 						Bearbeiten
 					</a>

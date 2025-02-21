@@ -37,7 +37,7 @@
 			try {
 				status = { type: 'submitting' }
 				if (isPublished && credentials.auth) {
-					newEvent = await updateEvent(credentials.auth, newEvent, key)
+					await updateEvent(credentials.auth, newEvent, key)
 				} else {
 					const updated = await updateDraft(newEvent, key)
 					if (!updated) {
