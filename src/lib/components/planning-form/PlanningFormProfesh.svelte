@@ -85,7 +85,7 @@
 
 <form onsubmit={submitForm} class="profesh-form">
 	<div class="mainbar">
-		<PlanningDescription bind:values bind:valid={valid[0]} />
+		<PlanningDescription bind:values bind:valid={valid[0]} professional />
 	</div>
 	<div class="sidebar">
 		<PlanningTime bind:values bind:valid={valid[2]} professional />

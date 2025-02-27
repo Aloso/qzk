@@ -71,9 +71,8 @@
 	</div>
 </div>
 
-<div class="section-title">Motiv</div>
-
-<p>
+<label class="select-label">
+	<em>Motiv</em>
 	<select bind:value={values.blendImage}>
 		<option value="confetti">Konfetti</option>
 		<option value="sew">Nähen und Basteln</option>
@@ -81,7 +80,7 @@
 		<option value="community">Community</option>
 		<option value="sport">Sport</option>
 	</select>
-</p>
+</label>
 
 <style lang="scss">
 	.section-title {
@@ -142,6 +141,23 @@
 		padding: 0;
 		height: 100%;
 		opacity: 0.7;
+	}
+
+	.select-label {
+		display: block;
+		margin: 0.75rem 0;
+		transition: color 0.2s;
+
+		&:hover {
+			color: var(--color-theme);
+		}
+	}
+
+	em {
+		font-style: normal;
+		display: inline-block;
+		width: 70px;
+		padding: 10px 0;
 	}
 
 	select {

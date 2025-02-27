@@ -19,9 +19,7 @@
 	})
 </script>
 
-{#if professional}
-	<div class="section-title">Ort</div>
-{/if}
+<div class="section-title">Ort</div>
 <div class:professional>
 	<label>
 		<em class="required">Ort</em>

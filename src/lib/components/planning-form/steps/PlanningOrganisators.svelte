@@ -74,7 +74,7 @@
 
 	label {
 		display: block;
-		margin: 1rem 0;
+		margin: 0.75rem 0;
 		transition: color 0.2s;
 
 		&:hover {

@@ -5,9 +5,10 @@
 	interface Props {
 		values: FormValuesDescription
 		valid: boolean
+		professional?: boolean
 	}
 
-	let { values = $bindable(), valid = $bindable() }: Props = $props()
+	let { values = $bindable(), valid = $bindable(), professional }: Props = $props()
 	let showHelp = $state(false)
 
 	$effect(() => {
@@ -31,6 +32,19 @@
 <div class="hint">
 	<button type="button" class="a" onclick={() => (showHelp = !showHelp)}>Hilfe</button>
 </div>
+
+{#if !professional}
+	<p>
+		Bitte gib eine aussagekräftige Beschreibung an. Sie sollte alle wichtigen Fragen beantworten,
+		zum Beispiel:
+	</p>
+	<ul>
+		<li>Was erwartet mich bei der Veranstaltung?</li>
+		<li>Wer kann teilnehmen? Gibt es eine Altersgrenze?</li>
+		<li>Muss ich mich dafür vorbereiten oder etwas mitbringen?</li>
+	</ul>
+	<p>Ort und Zeit müssen <b>nicht</b> in der Beschreibung stehen.</p>
+{/if}
 
 <style lang="scss">
 	input,
@@ -98,5 +112,10 @@
 		&:focus-within {
 			opacity: 1;
 		}
+	}
+
+	p,
+	ul {
+		font-size: 1rem;
 	}
 </style>

@@ -146,16 +146,17 @@
 {/if}
 
 <form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
-	<Progress min={1} max={5} value={step} bind:elem={progressElem} />
+	<Progress min={1} max={6} value={step} bind:elem={progressElem} />
 
 	{#if step === 1}
 		<PlanningDescription bind:values bind:valid={valid[0]} />
-		<PlanningPlace bind:values bind:valid={valid[1]} />
 	{:else if step === 2}
-		<PlanningTime bind:values bind:valid={valid[2]} />
+		<PlanningPlace bind:values bind:valid={valid[1]} />
 	{:else if step === 3}
-		<PlanningOrganisators bind:values bind:valid={valid[3]} />
+		<PlanningTime bind:values bind:valid={valid[2]} />
 	{:else if step === 4}
+		<PlanningOrganisators bind:values bind:valid={valid[3]} />
+	{:else if step === 5}
 		<PlanningDecoration bind:values bind:valid={valid[4]} />
 	{:else}
 		<PlanningPersonalInfo bind:values bind:valid={valid[5]} />
@@ -168,14 +169,15 @@
 			<div></div>
 		{/if}
 
-		{#if step === 5}
-			<button type="submit" disabled={!valid[step] || (status.type === 'error' && status.missing)}>
+		{#if step === 6}
+			<button
+				type="submit"
+				disabled={!valid[step - 1] || (status.type === 'error' && status.missing)}
+			>
 				Absenden
 			</button>
 		{:else}
-			<button type="button" disabled={!valid[0] || !valid[step]} onclick={() => step++}>
-				Weiter
-			</button>
+			<button type="button" disabled={!valid[step - 1]} onclick={() => step++}>Weiter</button>
 		{/if}
 	</div>
 

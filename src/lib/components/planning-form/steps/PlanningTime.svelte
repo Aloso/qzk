@@ -113,8 +113,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		background: #0001;
-		border: 2px solid #0002;
+		background: #eee;
+		border: 2px solid #0001;
 		border-radius: 20px;
 		padding: 1rem;
 	}
