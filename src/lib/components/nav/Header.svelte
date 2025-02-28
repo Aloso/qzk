@@ -42,7 +42,7 @@
 		letter-spacing: 0.03rem;
 		z-index: 2;
 		position: sticky;
-		top: -192px;
+		top: -182px;
 
 		@media (max-width: 1000px) {
 			top: 0;
@@ -75,7 +75,6 @@
 	}
 
 	.logo-link {
-		display: block;
 		margin: 0;
 		flex-shrink: 0;
 	}
@@ -83,7 +82,7 @@
 	.logo {
 		width: 50vw;
 		max-width: 270px;
-		aspect-ratio: 802 / 441;
+		aspect-ratio: 868 / 440;
 
 		@media (max-width: 1000px) {
 			max-width: 150px;

@@ -7,13 +7,13 @@
 	let { time, showLabel }: Props = $props()
 	let now = $state(new Date())
 
-	let [daysTotal, hours, minutes, seconds] = $derived.by(() => {
+	let [diff, daysTotal, hours, minutes, seconds] = $derived.by(() => {
 		let diff = Math.floor((time.getTime() - now.getTime()) / 1000)
 		const seconds = diff % 60
 		const minutes = Math.floor(diff / 60) % 60
 		const hours = Math.floor(diff / 3600) % 24
 		const daysTotal = Math.floor(diff / 86400)
-		return [daysTotal, hours, minutes, seconds]
+		return [diff, daysTotal, hours, minutes, seconds]
 	})
 
 	$effect(() => {
@@ -32,26 +32,30 @@
 		Nächster Termin:
 	{/if}
 
-	<div class="countdown">
-		{#if daysTotal > 0}
+	{#if diff > 0}
+		<div class="countdown">
+			{#if daysTotal !== 0}
+				<div class="item">
+					<em>{daysTotal}</em>
+					{daysTotal !== 1 ? 'Tage' : 'Tag'}
+				</div>
+			{/if}
 			<div class="item">
-				<em>{daysTotal}</em>
-				{daysTotal !== 1 ? 'Tage' : 'Tag'}
+				<em>{String(hours).padStart(2, '0')}</em>
+				Std.
 			</div>
-		{/if}
-		<div class="item">
-			<em>{String(hours).padStart(2, '0')}</em>
-			Std.
+			<div class="item">
+				<em>{String(minutes).padStart(2, '0')}</em>
+				Min.
+			</div>
+			<div class="item">
+				<em>{String(seconds).padStart(2, '0')}</em>
+				Sek.
+			</div>
 		</div>
-		<div class="item">
-			<em>{String(minutes).padStart(2, '0')}</em>
-			Min.
-		</div>
-		<div class="item">
-			<em>{String(seconds).padStart(2, '0')}</em>
-			Sek.
-		</div>
-	</div>
+	{:else}
+		Bereits begonnen
+	{/if}
 </div>
 
 <style lang="scss">

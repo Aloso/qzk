@@ -10,7 +10,8 @@ import addStemmerSupport from 'lunr-languages/lunr.stemmer.support'
 import addMultiLanguageSupport from 'lunr-languages/lunr.multi'
 // @ts-expect-error no type definitions available
 import addGermanSupport from 'lunr-languages/lunr.de'
-import data from '$lib/contentful/data'
+import data, { type RichText } from '$lib/contentful/data'
+import sanitize from 'sanitize-html'
 
 addStemmerSupport(lunr)
 addMultiLanguageSupport(lunr)
@@ -36,11 +37,13 @@ async function getSearchResults(): Promise<SearchResult[]> {
 						timeZone: 'Europe/Berlin',
 					}),
 					post.fields.teaser,
-					...post.fields.content.filter(c => typeof c === 'string'),
+					...processRichText(post.fields.content),
 				]),
-				a: post.fields.authorIds
-					.map(id => data.person.find(p => p.sys.id === id)!.fields.name)
-					.join(', '),
+				a:
+					'Von ' +
+					post.fields.authorIds
+						.map(id => data.person.find(p => p.sys.id === id)!.fields.name)
+						.join(', '),
 			}),
 		),
 		...data.person.map(
@@ -49,9 +52,9 @@ async function getSearchResults(): Promise<SearchResult[]> {
 				slug: `person/${person.fields.slug}`,
 				n: person.fields.name,
 				c: makeContent([
-					person.fields.pronouns,
+					'Pronomen: ' + person.fields.pronouns,
 					person.fields.role,
-					...(person.fields.description?.filter(d => typeof d === 'string') ?? []),
+					...processRichText(person.fields.description ?? []),
 				]),
 			}),
 		),
@@ -62,7 +65,7 @@ async function getSearchResults(): Promise<SearchResult[]> {
 				type: 'StaticPage',
 				slug,
 				n: staticPage.fields.name,
-				c: staticPage.fields.content.filter(c => typeof c === 'string').join('\n'),
+				c: processRichText(staticPage.fields.content).join(' · '),
 			}
 		}),
 	]
@@ -94,4 +97,12 @@ function getStaticSlug(slug: string): string | null {
 
 function makeContent(items: (string | undefined | null)[]): string {
 	return items.filter(s => !!s).join(' · ')
+}
+
+function processRichText(richText: RichText): string[] {
+	const output = richText
+		.filter(c => typeof c === 'string')
+		.map(html => sanitize(html, { allowedTags: [], textFilter: text => text + ' ' }))
+
+	return output
 }

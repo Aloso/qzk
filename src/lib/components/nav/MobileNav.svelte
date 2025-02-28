@@ -113,7 +113,7 @@
 				width: calc(2rem + 19px);
 				margin: 3px;
 				padding: 0;
-				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: rgb(83, 51, 167); stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
+				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: rgb(136, 50, 168); stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
 				background-repeat: no-repeat;
 				background-size: 25px;
 				background-position: center center;
@@ -131,7 +131,7 @@
 				background-color: transparent;
 				font: inherit;
 				text-align: left;
-				color: vars.$COLOR_T6;
+				color: vars.$COLOR_T4;
 
 				display: block;
 				flex-grow: 1;

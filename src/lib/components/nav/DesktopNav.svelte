@@ -89,7 +89,7 @@
 			display: block;
 			padding: 0.15rem 1rem;
 			text-decoration: none;
-			color: vars.$COLOR_T6;
+			color: vars.$COLOR_T4;
 
 			&:hover,
 			&:focus {
@@ -103,7 +103,7 @@
 		background-color: transparent;
 		border: none;
 		font: inherit;
-		color: vars.$COLOR_T6;
+		color: vars.$COLOR_T4;
 
 		display: flex;
 		position: relative;

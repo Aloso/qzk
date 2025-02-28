@@ -8,6 +8,7 @@
 	color: inherit;
 
 	.embedTitle {
+		font-weight: 500;
 		color: var(--color-link);
 	}
 
@@ -32,6 +33,8 @@
 	}
 }
 
-.EmbeddedAsset-Video {
+.EmbeddedAsset-Video,
+.EmbeddedAsset-Image {
+	margin: 1em 0;
 	width: 100%;
 }

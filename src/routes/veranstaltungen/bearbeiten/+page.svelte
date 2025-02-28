@@ -55,6 +55,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Bearbeiten - {event?.title ?? 'Lädt...'} - Queeres Zentrum Kassel</title>
+</svelte:head>
+
 {#if event}
 	<PlanningFormProfesh {status} defaults={defaults.values} {onSubmit} />
 {:else}

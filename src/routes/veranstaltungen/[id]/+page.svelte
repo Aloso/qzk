@@ -132,6 +132,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{event.title} - Queeres Zentrum Kassel</title>
+</svelte:head>
+
 {#if credentials.auth || !isPublished}
 	<div
 		class="admin-bar"
@@ -210,7 +214,12 @@
 
 	<div class="sidebar">
 		<div class="sidebar-title" id="termine">Termin{event.time.length > 1 ? 'e' : ''}</div>
-		<div class="appointments">
+		<div
+			class="appointments"
+			style={event.decoration
+				? `--gradient1: oklch(0.95 0.07 ${event.decoration.colors[0]}deg); --gradient2: oklch(0.95 0.07 ${event.decoration.colors[1]}deg);`
+				: undefined}
+		>
 			{#if showAll || futureTimes.length === 0}
 				{#each showAll ? pastTimes : pastTimes.slice(-5) as time}
 					<div class="row in-past">
@@ -254,7 +263,7 @@
 					{event.place.address}
 				</p>
 				<p>
-					<a class="button-link" href="/wegbeschreibung" target="_blank">Wegbeschreibung</a>
+					<a class="button-link" href="/wegbeschreibung">Wegbeschreibung</a>
 					<a
 						class="button-link"
 						href="https://maps.app.goo.gl/UcrvgAGBe8dn5b9F6"
@@ -479,8 +488,13 @@
 		box-sizing: border-box;
 		width: 100%;
 		background-color: #eee;
-		border: 2px solid #0001;
-		padding: 0.67rem 1rem;
+		background-image: linear-gradient(
+			to right in oklab,
+			var(--gradient1, transparent),
+			var(--gradient2, transparent)
+		);
+		box-shadow: inset 0 0 0 2px #0001;
+		padding: 0.7rem 1rem;
 		border-radius: 15px;
 		font-size: 1.05rem;
 
@@ -503,6 +517,7 @@
 			padding: 0.3rem 0.6rem;
 			margin-top: 0.5rem;
 			border-radius: 10px;
+			font-family: inherit;
 			font-size: 0.9rem;
 			align-self: center;
 
