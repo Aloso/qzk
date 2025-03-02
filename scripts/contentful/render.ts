@@ -1,4 +1,4 @@
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { CommonNode, documentToHtmlString, Next } from '@contentful/rich-text-html-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful'
@@ -8,12 +8,23 @@ const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 
 
 export type ComponentType = 'contact-form' | 'instagram-profile' | 'newsletter-signup' | 'youtube'
 
+interface Heading {
+	level: 1 | 2 | 3 | 4 | 5 | 6
+	text: string
+	id: string
+}
+
 export interface ExtraComponent {
 	type: ComponentType
 	param?: string
 }
 
-export function render(data: Document): (string | ExtraComponent)[] {
+export interface RenderedHtml {
+	content: (string | ExtraComponent)[]
+	headings: Heading[]
+}
+
+export function render(data: Document): RenderedHtml {
 	const extraComponents: ExtraComponent[] = []
 	let blockLevel = 0
 
@@ -25,6 +36,9 @@ export function render(data: Document): (string | ExtraComponent)[] {
 	}
 
 	const separator = `{{separator-${Date.now()}}}`
+
+	const headings: Heading[] = []
+	const ids: string[] = []
 
 	const html = documentToHtmlString(data, {
 		preserveWhitespace: true,
@@ -98,12 +112,18 @@ export function render(data: Document): (string | ExtraComponent)[] {
 				return inBlock(() => `<p>${children(node.content)}</p>`)
 			},
 
-			[BLOCKS.HEADING_1]: (node, children) => inBlock(() => `<h1>${children(node.content)}</h1>`),
-			[BLOCKS.HEADING_2]: (node, children) => inBlock(() => `<h2>${children(node.content)}</h2>`),
-			[BLOCKS.HEADING_3]: (node, children) => inBlock(() => `<h3>${children(node.content)}</h3>`),
-			[BLOCKS.HEADING_4]: (node, children) => inBlock(() => `<h4>${children(node.content)}</h4>`),
-			[BLOCKS.HEADING_5]: (node, children) => inBlock(() => `<h5>${children(node.content)}</h5>`),
-			[BLOCKS.HEADING_6]: (node, children) => inBlock(() => `<h6>${children(node.content)}</h6>`),
+			[BLOCKS.HEADING_1]: (node, children) =>
+				inBlock(() => createHeading(1, node.content, children, ids, headings)),
+			[BLOCKS.HEADING_2]: (node, children) =>
+				inBlock(() => createHeading(2, node.content, children, ids, headings)),
+			[BLOCKS.HEADING_3]: (node, children) =>
+				inBlock(() => createHeading(3, node.content, children, ids, headings)),
+			[BLOCKS.HEADING_4]: (node, children) =>
+				inBlock(() => createHeading(4, node.content, children, ids, headings)),
+			[BLOCKS.HEADING_5]: (node, children) =>
+				inBlock(() => createHeading(5, node.content, children, ids, headings)),
+			[BLOCKS.HEADING_6]: (node, children) =>
+				inBlock(() => createHeading(6, node.content, children, ids, headings)),
 			[BLOCKS.OL_LIST]: (node, children) => inBlock(() => `<ol>${children(node.content)}</ol>`),
 			[BLOCKS.UL_LIST]: (node, children) => inBlock(() => `<ul>${children(node.content)}</ul>`),
 			[BLOCKS.TABLE]: (node, children) => inBlock(() => `<table>${children(node.content)}</table>`),
@@ -135,8 +155,61 @@ export function render(data: Document): (string | ExtraComponent)[] {
 		},
 	})
 
-	if (extraComponents.length === 0) return [html]
+	if (extraComponents.length === 0) return { content: [html], headings }
 
 	const parts = html.split(separator)
-	return parts.flatMap((part, i) => (extraComponents[i] ? [part, extraComponents[i]] : [part]))
+	return {
+		content: parts.flatMap((part, i) => (extraComponents[i] ? [part, extraComponents[i]] : [part])),
+		headings,
+	}
+}
+
+function createHeading(
+	level: 1 | 2 | 3 | 4 | 5 | 6,
+	content: CommonNode[],
+	children: Next,
+	ids: string[],
+	headings: Heading[],
+): string {
+	const text = contentText(content)
+	const id = createId(text, ids)
+	ids.push(id)
+	const heading: Heading = { level, text, id }
+	headings.push(heading)
+	return `<h${level} id="${id}">${children(content)}</h${level}>`
+}
+
+function contentText(items: CommonNode[]): string {
+	return items
+		.map(content => {
+			if ('value' in content) return content.value
+			else return contentText(content.content)
+		})
+		.join('')
+}
+
+function createId(string: string, previousIds: string[]): string {
+	const id = string
+		.toLocaleLowerCase('de-DE')
+		.replace(/\W/g, s => {
+			if (s === 'ä') return 'ae'
+			else if (s === 'ö') return 'oe'
+			else if (s === 'ü') return 'ue'
+			else if (s === 'ß') return 'ss'
+			else return ' '
+		})
+		.trim()
+		.replace(/ +/g, '-')
+
+	if (previousIds.includes(id)) {
+		let n = 0
+		let idNumbered: string
+		do {
+			n++
+			idNumbered = `${id}-${n}`
+		} while (previousIds.includes(idNumbered))
+		return idNumbered
+	} else {
+		return id
+	}
 }

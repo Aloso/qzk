@@ -35,6 +35,14 @@
 
 .EmbeddedAsset-Video,
 .EmbeddedAsset-Image {
+	display: block;
+	box-sizing: border-box;
 	margin: 1em 0;
+	border-radius: 30px;
 	width: 100%;
+	color: #777;
+	line-height: 1.5rem;
+	background-color: #eee;
+	text-align: center;
+	aspect-ratio: var(--width, auto) / var(--height, auto);
 }

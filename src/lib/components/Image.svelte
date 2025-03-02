@@ -38,7 +38,12 @@
 
 <style>
 	img {
+		display: block;
 		object-fit: cover;
 		background-color: #eee;
+		text-align: center;
+		line-height: 1.5rem;
+		color: #777;
+		overflow: hidden;
 	}
 </style>

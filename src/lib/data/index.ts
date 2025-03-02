@@ -1,4 +1,4 @@
-import type { RichText } from '$lib/contentful/data'
+import type { Heading, RichText } from '$lib/contentful/data'
 
 export interface Image {
 	id: string
@@ -136,6 +136,7 @@ export interface StaticPageTransformed {
 	slug: string
 	description?: string
 	content: RichText
+	headings: Heading[]
 }
 
 export interface Navigation {

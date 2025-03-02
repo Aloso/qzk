@@ -16,6 +16,12 @@ export interface Image {
 	description?: string
 }
 
+export interface Heading {
+	level: 1 | 2 | 3 | 4 | 5 | 6
+	text: string
+	id: string
+}
+
 interface GenericEntry<ContentType extends string> {
 	tags?: string[]
 	sys: {
@@ -71,6 +77,7 @@ export interface StaticPage extends GenericEntry<'staticPage'> {
 		slug: string
 		description: string
 		content: RichText
+		headings: Heading[]
 	}
 }
 

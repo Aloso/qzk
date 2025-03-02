@@ -64,13 +64,14 @@ function transform(entry: Entry<EntrySkeletonType>) {
 				role,
 				pronouns,
 				photo: transformImage(photo),
-				description: description ? render(description) : undefined,
+				description: description ? render(description).content : undefined,
 			}
 			break
 		}
 		case 'blogPost': {
 			const { title, slug, published, authors, photo, teaser, content } =
 				entry.fields as unknown as BlogPost
+			const rendered = render(content)
 			fields = {
 				title,
 				slug,
@@ -78,15 +79,22 @@ function transform(entry: Entry<EntrySkeletonType>) {
 				authorIds: authors.map(a => a.sys.id),
 				photo: transformImage(photo),
 				teaser: render(teaser)
-					.filter(e => typeof e === 'string')
+					.content.filter(e => typeof e === 'string')
 					.join('\n'),
-				content: render(content),
+				content: rendered.content,
 			}
 			break
 		}
 		case 'staticPage': {
 			const { name, slug, description, content } = entry.fields as unknown as StaticPage
-			fields = { name, slug, description, content: render(content) }
+			const rendered = render(content)
+			fields = {
+				name,
+				slug,
+				description,
+				content: rendered.content,
+				headings: rendered.headings,
+			}
 			break
 		}
 		case 'navigation': {

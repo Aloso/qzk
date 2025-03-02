@@ -69,10 +69,7 @@
 </script>
 
 <StaticPageHeader {...data} />
-
-<section>
-	<StaticPage {data} />
-</section>
+<StaticPage {data} />
 
 <hr />
 

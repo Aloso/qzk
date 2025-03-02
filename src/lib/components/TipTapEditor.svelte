@@ -413,7 +413,7 @@
 		max-width: 800px;
 
 		position: sticky;
-		top: 75px;
+		top: 73px;
 		z-index: 1;
 		background: var(--background, #eee);
 		box-shadow:

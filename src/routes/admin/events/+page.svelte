@@ -10,9 +10,20 @@
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
+	type Tab = 'drafts' | 'published' | 'past' | 'months'
+
 	const pageSize = 25
 
-	let tab = $state<'drafts' | 'published' | 'past' | 'months'>('drafts')
+	let tab = $state<Tab>('drafts')
+	let oldTab = $state<Tab>('drafts')
+
+	$effect(() => {
+		if (oldTab !== tab) {
+			setTimeout(() => {
+				oldTab = tab
+			}, 800)
+		}
+	})
 
 	let data = $state<(Event & WithSubmitter)[]>([])
 	let filteredData = $state<(Event & WithSubmitter)[]>([])
@@ -61,6 +72,7 @@
 		}
 
 		loading = false
+		oldTab = tab
 	}
 
 	function getSortTime(event: Event): number {
@@ -136,18 +148,18 @@
 <TabBar
 	tabs={[
 		['drafts', 'Entwürfe'],
-		['published', 'Veröffentlicht'],
+		['published', 'Öffentlich'],
 		['past', 'Ehemalig'],
 		['months', 'Nach Monat'],
 	]}
 	bind:active={tab}
 />
 
-{#if loading}
-	<p>Veranstaltungen werden geladen...</p>
+{#if loading && oldTab === tab}
+	<p style="margin:0">Veranstaltungen werden geladen...</p>
 {/if}
 
-<div class:hidden={loading}>
+<div class:hidden={loading && oldTab === tab}>
 	<p class="event-count">
 		{filteredData.length}
 		{filteredData.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}
