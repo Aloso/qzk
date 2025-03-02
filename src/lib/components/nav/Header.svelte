@@ -9,9 +9,12 @@
 	}
 
 	let { url, links }: Props = $props()
+	let y = $state(0)
 </script>
 
-<header>
+<svelte:window bind:scrollY={y} />
+
+<header class:smaller={y > 0}>
 	<MobileNav {links} {url} />
 
 	<div class="header-i">
@@ -43,9 +46,14 @@
 		z-index: 2;
 		position: sticky;
 		top: -182px;
+		transition: margin-bottom 0.5s;
 
 		@media (max-width: 1000px) {
 			top: 0;
+
+			&.smaller {
+				margin-bottom: 51px;
+			}
 		}
 	}
 
@@ -60,7 +68,7 @@
 		@media (max-width: 1000px) {
 			text-align: left;
 			display: flex;
-			padding: 0.5rem 1rem;
+			padding: 0.6rem 0 0.6rem 1rem;
 			gap: 1rem;
 		}
 	}
@@ -69,23 +77,34 @@
 		display: flex;
 		align-items: stretch;
 		max-width: 70rem;
-		padding: 0 1rem 0 1rem;
+		padding: 10px 1rem 0;
 		box-sizing: border-box;
 		margin: 0 auto;
 	}
 
 	.logo-link {
-		margin: 0;
-		flex-shrink: 0;
+		display: block;
+		width: fit-content;
+		margin: 0 auto;
+
+		@media (max-width: 1000px) {
+			margin: 0;
+		}
 	}
 
 	.logo {
+		display: block;
 		width: 50vw;
 		max-width: 270px;
 		aspect-ratio: 868 / 440;
+		transition: width 0.5s;
 
 		@media (max-width: 1000px) {
-			max-width: 150px;
+			width: 200px;
+
+			.smaller & {
+				width: 100px;
+			}
 		}
 	}
 
@@ -104,6 +123,7 @@
 			justify-content: space-evenly;
 			align-items: center;
 			margin: 0 0 0 auto;
+			padding: 0 1rem;
 		}
 
 		#burger-menu-button,

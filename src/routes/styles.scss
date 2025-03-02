@@ -16,7 +16,7 @@
 	font-family: vars.$FONT_BODY;
 	color: var(--color-text);
 	font-size: min(18px, 15.5px + 0.3vw);
-	scroll-padding-top: 125px;
+	scroll-padding-top: 85px;
 
 	@media (min-width: 1000px) {
 		scroll-padding-top: 75px;

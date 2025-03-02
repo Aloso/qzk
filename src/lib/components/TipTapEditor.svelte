@@ -421,7 +421,7 @@
 			0 1px 4px 5px var(--background, #eee);
 
 		@media (max-width: 1000px) {
-			top: 120px;
+			top: 81px;
 			margin-top: 10px;
 		}
 
