@@ -12,7 +12,7 @@
 
 	let omitFirst = $derived(data.headings[0]?.level === 1 && data.headings[0].text === data.name)
 	let tocItems = $derived(omitFirst ? data.headings.slice(1) : data.headings)
-	let hasToc = $derived(tocItems.length > 1)
+	let hasToc = $derived(tocItems.length > 3)
 	let tocHasH1 = $derived(tocItems.some(it => it.level === 1))
 
 	let expanded = $state(false)
@@ -115,8 +115,9 @@
 		display: none;
 		gap: 0.5rem;
 		font-family: inherit;
-		font-size: 1rem;
-		padding: 0.7rem 0.9rem;
+		font-size: 1.1rem;
+		font-weight: 500;
+		padding: 0.5rem 0.6rem;
 		margin: 0;
 		color: #333;
 		background-color: #eee;
@@ -162,6 +163,10 @@
 			line-height: 1.3rem;
 			padding-left: calc(22px * var(--level, 0));
 
+			&:last-child {
+				margin-bottom: 0;
+			}
+
 			a {
 				text-decoration: none;
 
@@ -184,7 +189,7 @@
 			position: static;
 			background-color: #eee;
 			border: 2px solid #ddd;
-			border-radius: 30px;
+			border-radius: 20px;
 			padding: 1rem 1.2rem;
 			width: auto;
 
