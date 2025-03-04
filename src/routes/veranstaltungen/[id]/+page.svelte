@@ -5,7 +5,6 @@
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Time } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
-	import { onMount } from 'svelte'
 	import type { Data } from './+page.server'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 
@@ -217,7 +216,7 @@
 		<div
 			class="appointments"
 			style={event.decoration
-				? `--gradient1: oklch(0.95 0.07 ${event.decoration.colors[0]}deg); --gradient2: oklch(0.95 0.07 ${event.decoration.colors[1]}deg);`
+				? `--gradient1: oklch(0.97 0.06 ${event.decoration.colors[0]}deg); --gradient2: oklch(0.97 0.06 ${event.decoration.colors[1]}deg);`
 				: undefined}
 		>
 			{#if showAll || futureTimes.length === 0}
@@ -337,7 +336,7 @@
 		max-width: 44rem;
 
 		:global(h1) {
-			margin-bottom: 0.2rem;
+			margin-bottom: 0.65rem;
 		}
 	}
 
@@ -350,7 +349,7 @@
 
 		@media (max-width: 1000px) {
 			display: flex;
-			margin: 1.5rem 0;
+			margin: 1rem 0 1.5rem 0;
 			gap: 0.5rem;
 		}
 
@@ -481,6 +480,10 @@
 		}
 	}
 
+	#termine {
+		margin-top: 1.5rem;
+	}
+
 	.appointments {
 		display: flex;
 		flex-direction: column;
@@ -512,7 +515,7 @@
 		.show-all-times {
 			border: none;
 			color: black;
-			background-color: #0001;
+			background-color: #0000000c;
 			display: inline-block;
 			padding: 0.3rem 0.6rem;
 			margin-top: 0.5rem;
@@ -523,7 +526,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: #0002;
+				background-color: #0000001a;
 			}
 		}
 	}
