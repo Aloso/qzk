@@ -81,9 +81,9 @@
 	textarea,
 	input[type='text'] {
 		box-sizing: border-box;
-		width: calc(100% - 150px);
+		width: calc(100% - 7.4rem);
 
-		@media (max-width: 650px) {
+		@media (max-width: 33rem) {
 			width: 100%;
 		}
 	}
@@ -105,10 +105,10 @@
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 140px;
+		width: 7rem;
 		padding: 10px 0;
 
-		@media (max-width: 650px) {
+		@media (max-width: 33rem) {
 			display: block;
 			padding: 0;
 			margin: 0.5rem 0 0.3rem;

@@ -120,7 +120,7 @@
 		gap: 0 3rem;
 		--background: #fff;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			grid-template: 'main' 'side' 'bottom' / 1fr;
 		}
 	}

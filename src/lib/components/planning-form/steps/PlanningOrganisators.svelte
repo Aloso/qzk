@@ -65,11 +65,7 @@
 
 	input[type='text'] {
 		box-sizing: border-box;
-		width: calc(100% - 150px);
-
-		@media (max-width: 650px) {
-			width: 100%;
-		}
+		width: calc(100% - 5.4rem);
 	}
 
 	label {
@@ -85,15 +81,8 @@
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 140px;
+		width: 5rem;
 		padding: 10px 0;
-
-		@media (max-width: 650px) {
-			display: block;
-			padding: 0;
-			margin: 0.5rem 0 0.3rem;
-			width: auto;
-		}
 	}
 
 	p {

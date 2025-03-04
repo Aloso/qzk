@@ -53,10 +53,10 @@
 		display: inline-flex;
 		flex-direction: column;
 		align-items: stretch;
-		height: 60px;
+		height: 3.2rem;
 		width: calc(100% / 7);
 		font-family: inherit;
-		padding: 12px 5px 0;
+		padding: 0.7rem 5px 0;
 		border: none;
 		border-radius: 10px;
 		background-color: transparent;
@@ -107,16 +107,16 @@
 				border-radius: 15px;
 
 				&.notFirst {
-					margin-left: -5px;
-					padding-left: 5px;
+					margin-left: -6px;
+					padding-left: 6px;
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 					border-left-width: 0;
 				}
 
 				&.notLast {
-					margin-right: -5px;
-					padding-right: 5px;
+					margin-right: -6px;
+					padding-right: 6px;
 					border-top-right-radius: 0;
 					border-bottom-right-radius: 0;
 					border-right-width: 0;
@@ -134,9 +134,9 @@
 		.events-badge {
 			display: inline-block;
 			background-color: vars.$COLOR_T3;
-			border-radius: 9px;
-			height: 9px;
-			width: 9px;
+			border-radius: 0.5rem;
+			height: 0.5rem;
+			width: 0.5rem;
 		}
 	}
 </style>

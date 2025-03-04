@@ -73,7 +73,7 @@
 <style lang="scss">
 	.calendar {
 		border: 2px solid #d6d6d6;
-		border-radius: 22px;
+		border-radius: 1.1rem;
 		overflow: hidden;
 	}
 

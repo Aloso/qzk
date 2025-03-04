@@ -87,7 +87,7 @@
 		margin: 0 0 0.5rem 0;
 		font-size: 1.4rem;
 
-		@media (min-width: 1201px) {
+		@media (min-width: 78.01rem) {
 			font-size: 1.2rem;
 
 			.withImage & {
@@ -96,7 +96,7 @@
 		}
 	}
 
-	@media (max-width: 800px) {
+	@media (max-width: 48rem) {
 		.blogPost {
 			flex-direction: column;
 		}

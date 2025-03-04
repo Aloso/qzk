@@ -326,7 +326,7 @@
 		align-items: flex-start;
 		min-height: 80vh;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 78rem) {
 			flex-direction: column;
 		}
 	}
@@ -347,7 +347,7 @@
 	.quick-links {
 		display: none;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			display: flex;
 			margin: 1rem 0 1.5rem 0;
 			gap: 0.5rem;
@@ -368,8 +368,8 @@
 			vertical-align: -1px;
 			stroke: currentColor;
 			fill: none;
-			width: 16px;
-			height: 16px;
+			width: 0.88rem;
+			height: 0.88rem;
 			stroke-linejoin: round;
 			stroke-linecap: round;
 			stroke-width: 2.5;
@@ -383,7 +383,7 @@
 		max-width: 100%;
 		margin: 2rem 0 0 0;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			width: 44rem;
 			min-width: unset;
 			margin-top: 0;

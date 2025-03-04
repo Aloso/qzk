@@ -48,7 +48,7 @@
 		top: -182px;
 		transition: margin-bottom 0.5s;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			top: 0;
 
 			&.smaller {
@@ -65,7 +65,7 @@
 		border-bottom: 2px solid vars.$COLOR_T2;
 		text-align: center;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			text-align: left;
 			display: flex;
 			padding: 0.6rem 0 0.6rem 1rem;
@@ -87,7 +87,7 @@
 		width: fit-content;
 		margin: 0 auto;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			margin: 0;
 		}
 	}
@@ -99,7 +99,7 @@
 		aspect-ratio: 868 / 440;
 		transition: width 0.5s;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			width: 200px;
 
 			.smaller & {
@@ -113,7 +113,7 @@
 		display: none;
 	}
 
-	@media (max-width: 1000px) {
+	@media (max-width: 60rem) {
 		.header-i {
 			position: relative;
 		}
@@ -122,7 +122,7 @@
 			display: flex;
 			justify-content: space-evenly;
 			align-items: center;
-			margin: 0 0 0 auto;
+			margin: -0.4rem 0 -0.4rem auto;
 			padding: 0 1rem;
 		}
 

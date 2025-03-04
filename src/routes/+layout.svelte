@@ -47,7 +47,6 @@
 		width: 100%;
 		max-width: 70rem;
 		margin: 0 auto;
-		box-sizing: border-box;
 		position: relative;
 		z-index: 1;
 	}

@@ -71,6 +71,7 @@
 		border: 2px solid vars.$COLOR_T2;
 		border-top: 0;
 		margin-top: 0.5rem;
+		margin-left: calc(-0.2rem - 2px);
 		font-size: 1.05rem;
 		font-weight: 500;
 
@@ -108,7 +109,7 @@
 		display: flex;
 		position: relative;
 		flex-direction: column;
-		padding: 8px 15px;
+		padding: 8px 0.8rem;
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;
@@ -139,7 +140,7 @@
 		}
 	}
 
-	@media (max-width: 1000px) {
+	@media (max-width: 60rem) {
 		nav {
 			display: none;
 		}

@@ -42,7 +42,7 @@
 ></div>
 
 <div class="slider-section">
-	<label for="color1">Farbe 1</label>
+	<label class="color-label" for="color1">Farbe 1</label>
 	<div class="slider">
 		<input
 			type="range"
@@ -57,7 +57,7 @@
 </div>
 
 <div class="slider-section">
-	<label for="color2">Farbe 2</label>
+	<label class="color-label" for="color2">Farbe 2</label>
 	<div class="slider">
 		<input
 			type="range"
@@ -72,7 +72,7 @@
 </div>
 
 <label class="select-label">
-	<em>Motiv</em>
+	<em class="motif-label">Motiv</em>
 	<select bind:value={values.blendImage}>
 		<option value="confetti">Konfetti</option>
 		<option value="sew">Nähen und Basteln</option>
@@ -97,7 +97,6 @@
 	.gradient {
 		height: 3.5rem;
 		border-radius: 15px;
-		max-width: 500px;
 		background:
 			var(--image),
 			linear-gradient(to right in oklab, var(--gradient1, #6fb0c9), var(--gradient2, #db71dd));
@@ -106,10 +105,13 @@
 
 	.slider-section {
 		display: flex;
-		gap: 1rem;
 		margin: 1rem 0;
-		max-width: 500px;
 		width: auto;
+	}
+
+	.color-label,
+	.motif-label {
+		width: 5rem;
 	}
 
 	.slider {
@@ -144,7 +146,7 @@
 	}
 
 	.select-label {
-		display: block;
+		display: flex;
 		margin: 0.75rem 0;
 		transition: color 0.2s;
 

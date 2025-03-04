@@ -72,8 +72,7 @@
 
 	form {
 		display: block;
-		max-width: 400px;
-		margin: 10vh auto;
+		margin: max(0px, 45vh - 500px) auto 0;
 	}
 
 	label {

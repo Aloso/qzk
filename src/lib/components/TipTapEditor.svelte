@@ -9,6 +9,7 @@
 	import type { EditingLink } from './TipTapLinkPopup.svelte'
 	import TipTapLinkPopup from './TipTapLinkPopup.svelte'
 	import { parseUrl } from './parseUrl'
+	import { browser } from '$app/environment'
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		htmlValue: string
@@ -30,6 +31,12 @@
 	let s = $state<ReturnType<typeof getState>>()
 	let expanded = $state(false)
 	let clientWidth = $state(1000)
+	let relativeWidth = $derived.by(() => {
+		if (browser) {
+			return clientWidth / Number(getComputedStyle(document.body).fontSize.replace('px', ''))
+		}
+		return clientWidth / 18
+	})
 	let editingLink = $state<EditingLink>()
 
 	onMount(() => {
@@ -144,9 +151,9 @@
 	<div
 		class="control-group"
 		class:expanded
-		class:md={clientWidth < 560}
-		class:sm={clientWidth < 490}
-		class:xs={clientWidth < 390}
+		class:md={relativeWidth < 32}
+		class:sm={relativeWidth < 28}
+		class:xs={relativeWidth < 22}
 		class:show-help={showHelp}
 		bind:clientWidth
 	>
@@ -410,7 +417,6 @@
 		flex-wrap: wrap;
 		margin: 0 0 0.4rem 0;
 		gap: 0.25rem 0.6rem;
-		max-width: 800px;
 
 		position: sticky;
 		top: 73px;
@@ -420,7 +426,7 @@
 			0 -10px 0 var(--background, #eee),
 			0 1px 4px 5px var(--background, #eee);
 
-		@media (max-width: 1000px) {
+		@media (max-width: 60rem) {
 			top: 81px;
 			margin-top: 10px;
 		}
@@ -483,7 +489,10 @@
 		}
 
 		svg {
-			margin: 4px 0 -4px 0;
+			display: block;
+			width: 1.25rem;
+			height: 1.25rem;
+			margin: 0 auto;
 		}
 	}
 

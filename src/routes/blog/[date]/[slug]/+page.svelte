@@ -44,7 +44,7 @@
 			line-height: 1.7;
 		}
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			flex-direction: column;
 		}
 	}
@@ -57,7 +57,7 @@
 		width: 44rem;
 		max-width: 44rem;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			width: auto;
 		}
 	}
@@ -66,7 +66,7 @@
 		width: 22rem;
 		margin: 2.8rem 0 0;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			width: auto;
 			max-width: 44rem;
 			margin-top: 0;
@@ -84,7 +84,7 @@
 		}
 	}
 
-	@media (min-width: 1201px) {
+	@media (min-width: 78.01rem) {
 		.sidebar-title {
 			font-size: 1.33rem;
 			font-weight: 600;

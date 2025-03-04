@@ -60,7 +60,7 @@
 		max-width: 44rem;
 		box-sizing: border-box;
 
-		@media (max-width: 700px) {
+		@media (max-width: 38rem) {
 			width: auto;
 			margin-left: -1rem;
 			margin-right: -1rem;

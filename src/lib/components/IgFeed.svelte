@@ -90,15 +90,15 @@
 
 <style lang="scss">
 	@mixin calculated-height {
-		min-height: calc(154px + 0.6666666667 * min(22rem, 100vw - 2rem));
+		min-height: calc(194px + 14.6666666667rem);
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			max-width: 44rem;
-			min-height: calc(200px + 0.6666666667 * min(22rem, 100vw - 2rem));
+			min-height: calc(221px + 0.6666666667 * min(44rem, 100vw - 2rem));
 		}
 
 		@media (max-width: 517px) {
-			min-height: calc(154px + 0.6666666667 * min(22rem, 100vw - 2rem));
+			min-height: calc(194px + 0.6666666667 * (100vw - 2rem));
 		}
 	}
 

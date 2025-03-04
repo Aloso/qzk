@@ -61,7 +61,7 @@
 		gap: 2rem;
 		margin: 2rem 0;
 
-		@media (max-width: 800px) {
+		@media (max-width: 48rem) {
 			flex-direction: column;
 		}
 

@@ -139,6 +139,7 @@
 		text-align: center;
 		padding-left: 0.25rem;
 		padding-right: 0.25rem;
+		max-width: 2.75rem;
 	}
 
 	label {
@@ -162,13 +163,9 @@
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 140px;
+		width: 6rem;
 		padding: 10px 0;
 		vertical-align: middle;
-
-		@media (max-width: 650px) {
-			width: 90px;
-		}
 	}
 
 	.remove {

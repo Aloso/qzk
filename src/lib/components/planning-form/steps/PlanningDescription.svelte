@@ -92,13 +92,6 @@
 		font-style: normal;
 		display: inline-block;
 		padding: 10px 0;
-
-		@media (max-width: 650px) {
-			display: block;
-			padding: 0;
-			margin: 0.5rem 0 0.3rem;
-			width: auto;
-		}
 	}
 
 	.hint {

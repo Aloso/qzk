@@ -205,7 +205,7 @@
 
 	.event-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 		gap: 0 2rem;
 		align-items: start;
 	}

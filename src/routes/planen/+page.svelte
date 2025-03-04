@@ -125,7 +125,7 @@
 			max-width: 44rem;
 		}
 
-		@media (max-width: 1000px) {
+		@media (max-width: 78rem) {
 			flex-direction: column;
 
 			.form-left {
@@ -151,7 +151,7 @@
 		flex-shrink: 1;
 		box-sizing: border-box;
 
-		@media (max-width: 1000px) {
+		@media (max-width: 78rem) {
 			width: auto;
 			max-width: 27rem;
 		}
@@ -159,7 +159,7 @@
 
 	.event-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 		gap: 0 2rem;
 		align-items: start;
 		margin: 1rem 0 0 0;

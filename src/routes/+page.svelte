@@ -74,7 +74,7 @@
 		grid-template: 'events important' 'events social-and-blog' / 2fr 1fr;
 		gap: 0 3rem;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			grid-template: 'important' 'events' 'social-and-blog' / 1fr;
 			max-width: 44rem;
 		}
@@ -96,21 +96,21 @@
 
 	.event-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 		gap: 0 2rem;
 		align-items: start;
-		margin: 1rem 0 0 0;
+		margin: 1.25rem 0 0;
 	}
 
 	.important {
 		margin-top: 1.8rem;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			margin-top: 0;
 		}
 	}
 
-	@media (min-width: 1201px) {
+	@media (min-width: 78.01rem) {
 		.sidebar-title {
 			font-size: 1.33rem;
 			font-weight: 600;

@@ -26,7 +26,7 @@
 
 {#if hasToc}
 	<button class="toc-button" onclick={() => (expanded = !expanded)}>
-		<svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		<svg class="toc-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 			<path
 				stroke="currentColor"
 				stroke-linecap="round"
@@ -83,7 +83,7 @@
 <style lang="scss">
 	@use '../../routes/vars.scss' as vars;
 
-	@media (max-width: 1200px) {
+	@media (max-width: 78rem) {
 		.mobile-hidden {
 			display: none;
 		}
@@ -126,12 +126,17 @@
 		align-self: start;
 		align-items: center;
 
+		.toc-icon {
+			width: 0.75rem;
+			height: 0.75rem;
+		}
+
 		&:hover,
 		&:focus {
 			background-color: #ddd;
 		}
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			display: flex;
 		}
 	}
@@ -179,7 +184,7 @@
 		}
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 78rem) {
 		.layout.hasToc {
 			flex-direction: column;
 			align-items: start;

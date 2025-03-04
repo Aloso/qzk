@@ -41,7 +41,7 @@
 		display: none;
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 78rem) {
 		#mobile-nav {
 			position: relative;
 			z-index: 1;

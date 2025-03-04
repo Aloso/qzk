@@ -112,27 +112,16 @@
 	textarea,
 	input[type='text'] {
 		box-sizing: border-box;
-		width: calc(100% - 160px);
+		width: calc(100% - 4.4rem);
 		color: black;
-
-		@media (max-width: 650px) {
-			width: 100%;
-		}
 	}
 
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 150px;
+		width: 4rem;
 		padding: 10px 0;
 		vertical-align: middle;
-
-		@media (max-width: 650px) {
-			display: block;
-			padding: 0;
-			margin: 0.5rem 0 0.3rem;
-			width: auto;
-		}
 	}
 
 	.optional {

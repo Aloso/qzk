@@ -37,14 +37,14 @@
 
 <style lang="scss">
 	.month-nav {
-		height: 40px;
-		line-height: 40px;
+		height: 2.2rem;
+		line-height: 2.2rem;
 		display: flex;
 
 		button {
 			border: none;
-			width: 40px;
-			height: 40px;
+			width: 2.2rem;
+			height: 2.2rem;
 			padding: 0;
 			margin: 0;
 			background-color: transparent;
@@ -59,24 +59,24 @@
 
 			&:first-child::after {
 				content: '';
-				width: 10px;
-				height: 10px;
+				width: 0.5rem;
+				height: 0.5rem;
 				display: inline-block;
 				border: 2px solid #0008;
-				border-width: 0 0 2px 2px;
+				border-width: 0 0 0.11rem 0.11rem;
 				transform: rotate(45deg);
-				margin-right: -5px;
+				margin-right: -0.3rem;
 			}
 
 			&:last-child::after {
 				content: '';
-				width: 10px;
-				height: 10px;
+				width: 0.5rem;
+				height: 0.5rem;
 				display: inline-block;
 				border: 2px solid #0007;
-				border-width: 0 2px 2px 0;
+				border-width: 0 0.11rem 0.11rem 0;
 				transform: rotate(-45deg);
-				margin-left: -5px;
+				margin-left: -0.3rem;
 			}
 		}
 

@@ -211,7 +211,7 @@
 			margin: auto;
 		}
 
-		@media (max-width: 700px) {
+		@media (max-width: 38rem) {
 			width: auto;
 			margin-left: -1rem;
 			margin-right: -1rem;

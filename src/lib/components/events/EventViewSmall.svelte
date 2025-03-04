@@ -100,7 +100,7 @@
 		display: flex;
 		flex-direction: column;
 		box-sizing: border-box;
-		height: 450px;
+		height: 25rem;
 		border: none;
 		margin: 0 0 2rem 0;
 		padding: 1.5rem;
