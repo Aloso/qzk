@@ -33,7 +33,7 @@ export function getGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {
 			sat: info.openingHoursSat ? transformOpeningHours(info.openingHoursSat, 'Samstag') : [],
 			sun: info.openingHoursSun ? transformOpeningHours(info.openingHoursSun, 'Sonntag') : [],
 		},
-		specialOpeningHours: info.specialOpeningHours.map(transformSpecialOpeningHours),
+		specialOpeningHours: info.specialOpeningHours?.map(transformSpecialOpeningHours) ?? [],
 		importantInfo: info.importantInfo,
 	}
 }
