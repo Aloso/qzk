@@ -1,7 +1,0 @@
-export * from './static'
-export * from './blogPost'
-export * from './person'
-export * from './allBlogPosts'
-export * from './allNavigations'
-export * from './allPersons'
-export * from './allStatics'

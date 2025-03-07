@@ -4,24 +4,22 @@
 
 	interface Props {
 		authors: PersonPreview[]
-		small?: boolean
 	}
 
-	let { authors, small }: Props = $props()
+	let { authors }: Props = $props()
 </script>
 
-<div class="authors" class:small>
+<div class="authors">
 	{#each authors as author}
-		<AuthorComponent {author} {small} />
+		<AuthorComponent {author} />
 	{/each}
 </div>
 
 <style lang="scss">
 	.authors {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
 		margin-bottom: 2rem;
-
-		&.small {
-			margin-bottom: 1rem;
-		}
 	}
 </style>

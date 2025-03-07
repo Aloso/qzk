@@ -1,9 +1,11 @@
 import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
 
-export interface FormValuesStep1 {
+export interface FormValuesDescription {
 	title: string
 	descHtml: string
+}
 
+export interface FormValuesPlace {
 	placeType: 'QZ' | 'PHYSICAL' | 'ONLINE'
 	placeRoom: undefined | string
 	placeName: string
@@ -14,7 +16,7 @@ export interface FormValuesStep1 {
 	pictureUrl: string
 }
 
-export interface FormValuesStep2 {
+export interface FormValuesTime {
 	time: FormTime[]
 }
 
@@ -24,20 +26,31 @@ export interface FormTime {
 	end?: Date
 }
 
-export interface FormValuesStep3 {
+export interface FormValuesOrganisator {
 	organizerName: string
 	organizerEmail: string
 	organizerPhone: string
 	organizerWebsite: string
 }
 
-export interface FormValuesStep4 {
+export interface FormValuesPersonalInfo {
 	yourName: string
 	yourEmail: string
 	orgaNotes: string
 }
 
-export type FormValues = FormValuesStep1 & FormValuesStep2 & FormValuesStep3 & FormValuesStep4
+export interface FormValuesDecoration {
+	color1: number
+	color2: number
+	blendImage: string
+}
+
+export type FormValues = FormValuesDescription &
+	FormValuesPlace &
+	FormValuesTime &
+	FormValuesOrganisator &
+	FormValuesPersonalInfo &
+	FormValuesDecoration
 
 const emptyDefaults: FormValues = {
 	title: '',
@@ -57,6 +70,9 @@ const emptyDefaults: FormValues = {
 	yourName: '',
 	yourEmail: '',
 	orgaNotes: '',
+	color1: -1,
+	color2: -1,
+	blendImage: 'confetti',
 }
 
 export function createEventPlanningDefaults() {
@@ -88,6 +104,9 @@ export function createEventPlanningDefaults() {
 				yourName: draft.submitter.name,
 				yourEmail: draft.submitter.email,
 				orgaNotes: draft.orgaNotes ?? '',
+				color1: draft.decoration?.colors[0] ?? -1,
+				color2: draft.decoration?.colors[1] ?? -1,
+				blendImage: draft.decoration?.blendImage ?? 'confetti',
 			}
 		},
 	}

@@ -39,6 +39,10 @@
 	})
 </script>
 
+<svelte:head>
+	<title>Administration - Queeres Zentrum Kassel</title>
+</svelte:head>
+
 <form onsubmit={submit} class:hidden={!loaded}>
 	<h1>Admin-Bereich</h1>
 	<label>
@@ -68,8 +72,7 @@
 
 	form {
 		display: block;
-		max-width: 400px;
-		margin: 10vh auto;
+		margin: max(0px, 45vh - 500px) auto 0;
 	}
 
 	label {

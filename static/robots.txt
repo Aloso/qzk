@@ -5,4 +5,3 @@ Disallow: /email/
 Disallow: /newsletter/angemeldet
 Disallow: /newsletter/abgemeldet
 Disallow: /newsletter/double-opt-in
-Disallow: /planen/eingereicht

@@ -6,7 +6,7 @@
 	import IgFeed from './IgFeed.svelte'
 	import NewsletterSignup from './NewsletterSignup.svelte'
 	import YouTubeVideo from './YouTubeVideo.svelte'
-	import type { ExtraComponent } from '$lib/contentful/render'
+	import type { ExtraComponent } from '$lib/data'
 
 	let { parts }: { parts: (string | ExtraComponent)[] } = $props()
 </script>

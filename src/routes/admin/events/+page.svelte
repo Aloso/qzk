@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import MonthNav from '$lib/components/calendar/MonthNav.svelte'
-	import EventView from '$lib/components/events/EventView.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
 	import TabBar from '$lib/components/TabBar.svelte'
 	import type { Auth } from '$lib/events'
 	import { fetchAllDrafts } from '$lib/events/draftApi'
@@ -10,9 +10,20 @@
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
+	type Tab = 'drafts' | 'published' | 'past' | 'months'
+
 	const pageSize = 25
 
-	let tab = $state<'drafts' | 'published' | 'past' | 'months'>('drafts')
+	let tab = $state<Tab>('drafts')
+	let oldTab = $state<Tab>('drafts')
+
+	$effect(() => {
+		if (oldTab !== tab) {
+			setTimeout(() => {
+				oldTab = tab
+			}, 800)
+		}
+	})
 
 	let data = $state<(Event & WithSubmitter)[]>([])
 	let filteredData = $state<(Event & WithSubmitter)[]>([])
@@ -27,6 +38,21 @@
 			setEvents(tab, credentials.auth, page)
 		} else {
 			goto('/admin', { replaceState: true })
+		}
+	})
+
+	$effect(() => {
+		function onFocus() {
+			if (credentials.auth) {
+				loading = true
+				setEvents(tab, credentials.auth, page)
+			} else {
+				goto('/admin', { replaceState: true })
+			}
+		}
+		window.addEventListener('focus', onFocus)
+		return () => {
+			window.removeEventListener('focus', onFocus)
 		}
 	})
 
@@ -46,6 +72,7 @@
 		}
 
 		loading = false
+		oldTab = tab
 	}
 
 	function getSortTime(event: Event): number {
@@ -113,22 +140,26 @@
 	})
 </script>
 
+<svelte:head>
+	<title>Admin: Veranstaltungen - Queeres Zentrum Kassel</title>
+</svelte:head>
+
 <h1>Veranstaltungen</h1>
 <TabBar
 	tabs={[
 		['drafts', 'Entwürfe'],
-		['published', 'Veröffentlicht'],
+		['published', 'Öffentlich'],
 		['past', 'Ehemalig'],
 		['months', 'Nach Monat'],
 	]}
 	bind:active={tab}
 />
 
-{#if loading}
-	<p>Veranstaltungen werden geladen...</p>
+{#if loading && oldTab === tab}
+	<p style="margin:0">Veranstaltungen werden geladen...</p>
 {/if}
 
-<div class:hidden={loading}>
+<div class:hidden={loading && oldTab === tab}>
 	<p class="event-count">
 		{filteredData.length}
 		{filteredData.length === 1 ? 'Veranstaltung' : 'Veranstaltungen'}
@@ -146,18 +177,17 @@
 		</p>
 	{:else if tab === 'months'}
 		<MonthNav bind:year bind:month />
+		<br />
 	{/if}
 
-	{#each filteredData as event, i}
-		<EventView
-			{event}
-			editable
-			published={tab !== 'drafts'}
-			onEdited={e => (data[i] = e)}
-			onPublished={() => data.splice(i, 1)}
-			onDeletedOrUnpublished={() => data.splice(i, 1)}
-		/>
-	{/each}
+	<div class="event-grid">
+		{#each filteredData as event}
+			<EventViewSmall {event} editable published={tab !== 'drafts'} openInNewTab />
+		{/each}
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
 </div>
 
 <style lang="scss">
@@ -171,6 +201,13 @@
 
 	.event-count {
 		margin-top: 0;
+	}
+
+	.event-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+		gap: 0 2rem;
+		align-items: start;
 	}
 
 	button {

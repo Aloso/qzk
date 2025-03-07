@@ -9,7 +9,7 @@ export async function updateEvent(
 	event: Event & WithSubmitter,
 	key: string,
 ): Promise<Event & WithSubmitter> {
-	const url = new URL(host + '/event')
+	const url = new URL(host() + '/event')
 	url.searchParams.set('key', key)
 
 	const response = await fetch(url, {

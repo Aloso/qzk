@@ -1,15 +1,64 @@
-import type { ExtraComponent } from '$lib/contentful/render'
-import type { Image, Item } from '$lib/contentful/types'
-import type { Document } from '@contentful/rich-text-types'
+import type { Heading, RichText } from '$lib/contentful/data'
+
+export interface Image {
+	id: string
+	url: string
+	description?: string
+	width: number
+	height: number
+}
+
+export type ComponentType = 'contact-form' | 'instagram-profile' | 'newsletter-signup' | 'youtube'
+
+export interface ExtraComponent {
+	type: ComponentType
+	param?: string
+}
+
+export interface GeneralInfo {
+	id: string
+	name: string
+	openingHoursMon: string
+	openingHoursTue: string
+	openingHoursWed: string
+	openingHoursThu: string
+	openingHoursFri: string
+	openingHoursSat: string
+	openingHoursSun: string
+	specialOpeningHours: string[]
+	importantInfo: string[]
+}
+
+export interface GeneralInfoTransformed {
+	openingHours: {
+		mon: DateRange[]
+		tue: DateRange[]
+		wed: DateRange[]
+		thu: DateRange[]
+		fri: DateRange[]
+		sat: DateRange[]
+		sun: DateRange[]
+	}
+	specialOpeningHours: {
+		date: string
+		hours: DateRange[]
+	}[]
+	importantInfo: string[]
+}
+
+export interface DateRange {
+	from: string
+	to: string
+}
 
 export interface BlogPost {
 	title: string
 	slug: string
-	authors: Item<Person>[]
+	authorIds: string[]
 	published: string
 	photo: Image
-	teaser: Document
-	content: Document
+	teaser: string
+	content: RichText
 }
 
 export interface BlogPostView {
@@ -18,7 +67,7 @@ export interface BlogPostView {
 	authors: PersonPreview[]
 	published: string
 	photo: Image
-	content: Document
+	content: RichText
 	related: BlogPostPreview[]
 }
 
@@ -28,7 +77,7 @@ export interface BlogPostViewTransformed {
 	authors: PersonPreview[]
 	published: string
 	photo: Image
-	parts: (string | ExtraComponent)[]
+	parts: RichText
 	related: BlogPostPreviewTransformed[]
 }
 
@@ -38,7 +87,7 @@ export interface BlogPostPreview {
 	authors: PersonPreview[]
 	published: string
 	photo: Image
-	teaser: Document
+	teaser: string
 }
 
 export interface BlogPostPreviewTransformed {
@@ -51,23 +100,21 @@ export interface BlogPostPreviewTransformed {
 }
 
 export interface Person {
-	id: string
 	slug: string
 	name: string
 	role: string
 	pronouns?: string
 	photo: Image
-	description?: Document
+	description?: RichText
 }
 
 export interface PersonTransformed {
-	id: string
 	slug: string
 	name: string
 	role: string
 	pronouns?: string
 	photo: Image
-	description?: string
+	description?: RichText
 }
 
 export interface PersonPreview {
@@ -81,14 +128,15 @@ export interface StaticPage {
 	name: string
 	slug: string
 	description?: string
-	content: Document
+	content: RichText
 }
 
 export interface StaticPageTransformed {
 	name: string
 	slug: string
 	description?: string
-	parts: (string | ExtraComponent)[]
+	content: RichText
+	headings: Heading[]
 }
 
 export interface Navigation {

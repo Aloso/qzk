@@ -5,21 +5,22 @@
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
 	import { submitDraft } from '$lib/events/draftApi'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
-	import { createSubmittedDrafts } from '../../lib/hooks/createSubmittedDrafts.svelte'
+	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { goto } from '$app/navigation'
-	import SubmittedList from './SubmittedList.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
-	import { onMount } from 'svelte'
-	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
-	import EventView from '$lib/components/events/EventView.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
 	import { narrowTimesToDraft } from '$lib/events/intersections'
+	import SubmittedList from '$lib/components/events/SubmittedList.svelte'
+	import { onMount } from 'svelte'
+	import { fetchAllEvents } from '$lib/events/eventApi'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
 	let status = $state<Status>({ type: 'ready' })
+
 	const defaults = createEventPlanningDefaults()
 	const submittedDrafts = createSubmittedDrafts()
 
@@ -28,19 +29,20 @@
 		try {
 			const { key } = await submitDraft(event)
 			const date = new Date().toLocaleString('de-DE', {
+				timeZone: 'Europe/Berlin',
 				month: 'numeric',
 				day: 'numeric',
 				hour: '2-digit',
 				minute: '2-digit',
 			})
 			submittedDrafts.add(key, `${date} - ${event.title}`)
-			goto('/planen/eingereicht?key=' + encodeURIComponent(key))
+			goto('/veranstaltungen/' + encodeURIComponent(key))
 		} catch (e) {
-			if (e instanceof Error) {
-				status = { type: 'error', message: e.message }
-			}
+			status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
 		}
 	}
+
+	let clickCalendarDay = $state<(date: Date) => void>()
 
 	let events = $state<Event[]>()
 	let draftTimes = $state<Time[]>()
@@ -48,27 +50,26 @@
 	let intersecting = $derived.by(() => {
 		if (!events || !draftTimes) return []
 
-		return events.flatMap<Event>(event => {
-			const time = narrowTimesToDraft(event.time, draftTimes!)
-			if (time.length === 0) return []
-			return [{ ...event, time, allTimes: event.time }]
-		})
+		return events
+			.flatMap<Event>(event => {
+				const time = narrowTimesToDraft(event.time, draftTimes!)
+				if (time.length === 0) return []
+				return [{ ...event, time, allTimes: event.time }]
+			})
+			.sort((a, b) => +a.time[0].start - +b.time[0].start)
 	})
 	onMount(() => {
 		loadEvents()
 	})
 
 	async function loadEvents() {
-		events = await fetchAllEventsWithCache()
+		events = await fetchAllEvents()
 		events.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
 	}
 </script>
 
 <StaticPageHeader {...data} />
-
-<section>
-	<StaticPage {data} />
-</section>
+<StaticPage {data} />
 
 <hr />
 
@@ -77,30 +78,38 @@
 <h2>Veranstaltung einreichen</h2>
 
 <div class="form-layout">
-	<PlanningForm
-		defaults={defaults.values}
-		onSubmit={event => onSubmit(event)}
-		onTimeChange={time => {
-			draftTimes = time
-			showDate = new Date(time[0].start)
-		}}
-		{status}
-	/>
+	<div class="form-left">
+		<PlanningForm
+			defaults={defaults.values}
+			onSubmit={event => onSubmit(event)}
+			onTimeChange={time => {
+				draftTimes = time
+				showDate = new Date(time[0].start)
+			}}
+			{status}
+			bind:clickCalendarDay
+		/>
+
+		{#if intersecting.length > 0}
+			<h3>
+				{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im gewählten Zeitraum
+			</h3>
+			<p>Bitte überprüfe, dass kein Terminkonflikt entsteht.</p>
+			<div class="event-container">
+				{#each intersecting as event}
+					<EventViewSmall {event} showMore openInNewTab />
+				{/each}
+				<div></div>
+				<div></div>
+			</div>
+		{/if}
+	</div>
 
 	{#if events}
 		<div class="calendar">
 			<h2 class="sidebar-title">Kalender</h2>
 
-			<CalendarView {events} {showDate} {draftTimes} />
-
-			{#if intersecting.length > 0}
-				<h2 class="sidebar-title">
-					{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im Zeitraum
-				</h2>
-				{#each intersecting as event}
-					<EventView {event} showDescription={false} showPlace />
-				{/each}
-			{/if}
+			<CalendarView {events} {showDate} {draftTimes} onClickDay={clickCalendarDay} />
 		</div>
 	{/if}
 </div>
@@ -108,11 +117,20 @@
 <style lang="scss">
 	.form-layout {
 		display: flex;
-		gap: 2rem;
+		gap: 2rem 3rem;
 		align-items: flex-start;
 
-		@media (max-width: 1280px) {
+		.form-left {
+			flex-grow: 1;
+			max-width: 44rem;
+		}
+
+		@media (max-width: 78rem) {
 			flex-direction: column;
+
+			.form-left {
+				width: 100%;
+			}
 		}
 	}
 
@@ -128,14 +146,22 @@
 	}
 
 	.calendar {
-		width: 30rem;
-		flex-grow: 1;
+		width: 21rem;
+		flex-grow: 0;
 		flex-shrink: 1;
 		box-sizing: border-box;
 
-		@media (max-width: 1280px) {
+		@media (max-width: 78rem) {
 			width: auto;
-			max-width: 40rem;
+			max-width: 27rem;
 		}
+	}
+
+	.event-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+		gap: 0 2rem;
+		align-items: start;
+		margin: 1rem 0 0 0;
 	}
 </style>

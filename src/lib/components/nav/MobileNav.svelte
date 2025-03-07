@@ -12,14 +12,6 @@
 
 <nav id="mobile-nav">
 	<div class="mobile-nav-inner">
-		<div class="nav-group">
-			<div class="nav-row">
-				<button class="a nav-link" data-search-button>
-					<img src="/search.svg" alt="" /> Suche
-				</button>
-			</div>
-		</div>
-
 		{#each links as link}
 			<div class="nav-group">
 				<div class="nav-row">
@@ -42,13 +34,14 @@
 </nav>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use '../../../routes/vars.scss' as vars;
 
 	#mobile-nav {
 		display: none;
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 78rem) {
 		#mobile-nav {
 			position: relative;
 			z-index: 1;
@@ -57,7 +50,7 @@
 			box-sizing: border-box;
 			height: calc(92vh - 12rem);
 			margin-top: calc(12rem - 92vh);
-			background-color: vars.$COLOR_T3;
+			background-color: vars.$COLOR_T0;
 			overflow: hidden;
 			transition: 0.4s;
 
@@ -68,7 +61,7 @@
 			&::after {
 				content: '';
 				position: absolute;
-				box-shadow: inset 0 -80px 40px -40px vars.$COLOR_T3;
+				box-shadow: inset 0 -80px 40px -40px vars.$COLOR_T0;
 				left: 0;
 				bottom: 0;
 				width: 100%;
@@ -91,7 +84,7 @@
 				padding-bottom: 0;
 
 				&:global(.extended) {
-					box-shadow: 0 0 0 3px #0002;
+					box-shadow: 0 0 0 3px color.adjust(vars.$COLOR_T2, $lightness: +5%);
 					padding-bottom: 0.7rem;
 
 					.nav-extender {
@@ -115,12 +108,12 @@
 				flex-grow: 0;
 				border: none;
 				border-radius: 100px;
-				box-shadow: inset 0 0 0 0.33rem vars.$COLOR_T3;
+				box-shadow: inset 0 0 0 0.33rem vars.$COLOR_T0;
 				background-color: transparent;
 				width: calc(2rem + 19px);
 				margin: 3px;
 				padding: 0;
-				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: white; stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
+				background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8"><path style="fill: none; stroke: rgb(136, 50, 168); stroke-linejoin: round; stroke-linecap: round" d="M1 3 L 4 6 L 7 3" /></svg>');
 				background-repeat: no-repeat;
 				background-size: 25px;
 				background-position: center center;
@@ -129,7 +122,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: #ffffff17;
+					background-color: color.adjust(vars.$COLOR_T2, $lightness: +5%);
 				}
 			}
 
@@ -138,10 +131,10 @@
 				background-color: transparent;
 				font: inherit;
 				text-align: left;
+				color: vars.$COLOR_T4;
 
 				display: block;
 				flex-grow: 1;
-				color: white;
 				padding: 1rem 1.4rem;
 				text-decoration: none;
 				font-weight: 500;
@@ -163,13 +156,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: #ffffff17;
-				}
-
-				img {
-					width: 1.15rem;
-					height: 1.15rem;
-					margin-right: 1rem;
+					background-color: vars.$COLOR_T1;
 				}
 			}
 		}

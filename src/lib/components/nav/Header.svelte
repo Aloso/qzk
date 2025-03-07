@@ -9,19 +9,25 @@
 	}
 
 	let { url, links }: Props = $props()
+	let y = $state(0)
 </script>
 
-<header>
+<svelte:window bind:scrollY={y} />
+
+<header class:smaller={y > 0}>
 	<MobileNav {links} {url} />
 
 	<div class="header-i">
-		<div class="header-ii">
-			<a class="logo-link" href="/">
-				<img data-header-logo class="logo" src="/logo-tilted.svg" alt="Queeres Zentrum Kassel" />
-			</a>
+		<a class="logo-link" href="/">
+			<img data-header-logo class="logo" src="/logo-colorful.png" alt="Queeres Zentrum Kassel" />
+		</a>
 
+		<div class="header-ii">
 			<DesktopNav {links} {url} />
 
+			<button id="search-button" data-search-button>
+				<img src="/search.svg" alt="Suche" />
+			</button>
 			<button id="burger-menu-button">
 				<img src="/burger.svg" alt="Menü" />
 			</button>
@@ -30,90 +36,117 @@
 </header>
 
 <style lang="scss">
+	@use 'sass:color';
 	@use '../../../routes/vars.scss' as vars;
 
 	header {
 		font-size: 1.2rem;
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
-		overflow: hidden;
-		margin-bottom: -500px;
-		padding-bottom: calc(500px + 1rem);
+		z-index: 2;
+		position: sticky;
+		top: -182px;
+		transition: margin-bottom 0.5s;
+
+		@media (max-width: 60rem) {
+			top: 0;
+
+			&.smaller {
+				margin-bottom: 51px;
+			}
+		}
 	}
 
 	.header-i {
 		position: relative;
+		padding-top: 2rem;
 		z-index: 2; // higher than <main>
-		margin: -200px -50px 0 -50px;
-		padding: 180px 50px 0 50px;
-		background-color: vars.$COLOR_T3;
-		box-shadow: 0 -50px 0 50px vars.$COLOR_T3;
-		transform: rotate(-3deg);
+		background-color: vars.$COLOR_T0;
+		border-bottom: 2px solid vars.$COLOR_T2;
+		text-align: center;
+
+		@media (max-width: 60rem) {
+			text-align: left;
+			display: flex;
+			padding: 0.6rem 0 0.6rem 1rem;
+			gap: 1rem;
+		}
 	}
 
 	.header-ii {
 		display: flex;
 		align-items: stretch;
 		max-width: 70rem;
-		padding: 0 1rem 0 1rem;
+		padding: 10px 1rem 0;
 		box-sizing: border-box;
 		margin: 0 auto;
 	}
 
 	.logo-link {
-		margin: 1rem 1rem 0.8rem 0;
-		flex-grow: 0;
-		flex-shrink: 0;
+		display: block;
+		width: fit-content;
+		margin: 0 auto;
+
+		@media (max-width: 60rem) {
+			margin: 0;
+		}
 	}
 
 	.logo {
+		display: block;
 		width: 50vw;
-		max-width: 230px;
-		margin: -2.2% 0;
-		aspect-ratio: 887 / 485;
-		transform: rotate(3deg);
-		filter: drop-shadow(0.75px 3px #0001);
+		max-width: 270px;
+		aspect-ratio: 868 / 440;
+		transition: width 0.5s;
+
+		@media (max-width: 60rem) {
+			width: 200px;
+
+			.smaller & {
+				width: 100px;
+			}
+		}
 	}
 
-	#burger-menu-button {
+	#burger-menu-button,
+	#search-button {
 		display: none;
 	}
 
-	@media (max-width: 1200px) {
+	@media (max-width: 60rem) {
 		.header-i {
-			margin: -100px 0 0 -50px;
-			padding: 100px 0 0 50px;
 			position: relative;
-			z-index: 0;
 		}
 
 		.header-ii {
 			display: flex;
 			justify-content: space-evenly;
 			align-items: center;
+			margin: -0.4rem 0 -0.4rem auto;
+			padding: 0 1rem;
 		}
 
-		#burger-menu-button {
+		#burger-menu-button,
+		#search-button {
 			display: block;
 			background-color: transparent;
-			width: 4rem;
-			height: 4rem;
+			width: 3rem;
+			height: 3rem;
 			margin: 0;
-			color: white;
+			color: black;
 			border: none;
-			border-radius: 20px;
+			border-radius: 15px;
 			transition: background-color 0.2s;
-			filter: drop-shadow(0.75px 3px #0001);
 
 			img {
-				width: 2rem;
-				height: 2rem;
+				width: 1.5rem;
+				height: 1.5rem;
 				vertical-align: middle;
 			}
 
 			&:hover,
 			&:focus {
-				background-color: #ffffff17;
+				background-color: color.adjust(vars.$COLOR_T2, $lightness: +5%);
 			}
 		}
 	}

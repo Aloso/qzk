@@ -1,49 +1,54 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
-	import Authors from './Authors.svelte'
-	import Author from './Author.svelte'
-	import type { BlogPostPreviewTransformed } from '$lib/data'
+	import type { BlogPostPreviewTransformed, PersonPreview } from '$lib/data'
 
 	interface Props {
 		post: BlogPostPreviewTransformed
-		small?: boolean
-		noImage?: boolean
+		withImage?: boolean
 	}
 
-	let { post, small, noImage }: Props = $props()
+	let { post, withImage }: Props = $props()
+
+	function createAuthors(authors: PersonPreview[]) {
+		let authorsConcat = authors
+			.slice(0, 2)
+			.map(a => a.name)
+			.join(', ')
+		if (authors.length > 2) {
+			authorsConcat += ', …'
+		}
+		return authorsConcat || 'unbekannt'
+	}
 </script>
 
-<div class="blogPost" class:small>
-	{#if !noImage}
+<div class="blogPost" class:withImage>
+	{#if withImage}
 		<Image
 			class="BlogPostPreview-photo"
 			img={post.photo}
-			width={small ? 150 : 250}
-			height={small ? 150 : 250}
+			width={250}
+			height={250}
 			context="Blog Post: {post.title}"
 		/>
 	{/if}
 	<div class="right">
-		{#if small}
-			<h3><a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a></h3>
-			<div class="published combined">
-				<PublishDate date={post.published} />
-				<Author author={post.authors[0]} small single plus={post.authors.length - 1} />
-			</div>
-		{:else}
-			<h2>{post.title}</h2>
-			<div class="published"><PublishDate date={post.published} /></div>
-			<Authors authors={post.authors} small />
-		{/if}
+		<h3 class="small-title">
+			<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
+		</h3>
+		<div class="published">
+			<PublishDate date={post.published} /> · von {createAuthors(post.authors)}
+		</div>
 		<div class="teaser smaller-paragraphs">
 			{@html post.teaser}
 		</div>
-		<a href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
+		<a class="open-link" href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
 	</div>
 </div>
 
 <style lang="scss">
+	@use '../vars.scss' as vars;
+
 	.blogPost {
 		display: flex;
 		gap: 1rem 2rem;
@@ -61,19 +66,8 @@
 		flex-shrink: 1;
 	}
 
-	h2,
-	h3 {
-		margin-top: 0;
-	}
-
-	h3 {
-		margin-bottom: 1rem;
-	}
-
-	.published.combined {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
+	.published {
+		color: #777;
 	}
 
 	.title-link {
@@ -87,9 +81,38 @@
 		}
 	}
 
-	@media (max-width: 800px) {
+	.small-title {
+		font-family: inherit;
+		font-weight: 600;
+		margin: 0 0 0.5rem 0;
+		font-size: 1.4rem;
+
+		@media (min-width: 78.01rem) {
+			font-size: 1.2rem;
+
+			.withImage & {
+				font-size: 1.4rem;
+			}
+		}
+	}
+
+	@media (max-width: 48rem) {
 		.blogPost {
 			flex-direction: column;
+		}
+	}
+
+	.open-link {
+		color: inherit;
+		text-decoration: none;
+		display: inline-block;
+		padding: 0.5rem 0.7rem;
+		background-color: #eee;
+		border-radius: 10px;
+
+		&:hover,
+		&:focus {
+			background-color: vars.$COLOR_T0;
 		}
 	}
 </style>

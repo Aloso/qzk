@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isBetween } from '$lib/events/intersections'
+	import { isBetween, isBetweenAndOverlaps } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
 
 	interface Props {
@@ -9,9 +9,10 @@
 		isCurrentMonth?: boolean
 		allEvents: Event[]
 		draftTimes?: Time[]
+		onClick?: (date: Date) => void
 	}
 
-	let { day, month, year, isCurrentMonth, allEvents, draftTimes }: Props = $props()
+	let { day, month, year, isCurrentMonth, allEvents, draftTimes, onClick }: Props = $props()
 
 	let now = new Date()
 	let isToday = $derived(
@@ -23,127 +24,119 @@
 
 	let dayEvents = $derived(allEvents.filter(event => isBetween(event.time, dayStart, dayEnd)))
 
-	let hasDraftEvent = $derived.by(() => {
-		if (!draftTimes) return false
-		return isBetween(draftTimes, dayStart, dayEnd)
+	let [hasDraftEvent, notFirst, notLast] = $derived.by(() => {
+		if (!draftTimes || !isBetween(draftTimes, dayStart, dayEnd)) return [false, false, false]
+		return isBetweenAndOverlaps(draftTimes, dayStart, dayEnd)
 	})
 </script>
 
-<button type="button" class="calendar-day" class:isCurrentMonth class:isToday>
-	<div class="day-label">{day}</div>
+<button
+	type="button"
+	class="calendar-day"
+	class:isCurrentMonth
+	class:isToday
+	onclick={() => onClick?.(dayStart)}
+>
+	<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 	<div class="badges">
-		{#if dayEvents.length > 0}
-			<div class="events-badge">{dayEvents.length}</div>
-		{/if}
-		{#if hasDraftEvent}
-			<div class="draft-badge"></div>
-		{/if}
+		{#each dayEvents.slice(0, 3)}
+			<div class="events-badge"></div>
+		{/each}
 	</div>
 </button>
 
 <style lang="scss">
+	@use '../../../routes/vars.scss' as vars;
+
 	.calendar-day {
-		display: inline-flex;
-		flex-wrap: wrap;
-		align-content: flex-start;
 		box-sizing: border-box;
-		height: 70px;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: stretch;
+		height: 3.2rem;
 		width: calc(100% / 7);
-		vertical-align: top;
-		text-align: left;
 		font-family: inherit;
-		padding: 0;
-		border: 2px solid #d6d6d6;
-		border-width: 0 2px 2px 0;
-		background-color: #eee;
+		padding: 0.7rem 5px 0;
+		border: none;
+		border-radius: 10px;
+		background-color: transparent;
 		transition:
 			background-color 0.1s,
 			border-color 0.1s,
 			box-shadow 0.1s;
 
-		&:hover {
-			background-color: #e3e3e3;
-			border-color: #b6b6b6;
-			box-shadow: -1px -1px 0 1px #b6b6b6;
+		&:nth-child(7n) {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+		&:nth-child(7n + 1) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+		&:nth-child(n + 36) {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
 		}
 
-		&.isCurrentMonth {
-			background-color: white;
+		&:hover {
+			background-color: #e3e3e3;
+		}
 
-			.day-label {
-				color: #0009;
-			}
-
-			&:hover {
-				background-color: #f5f5f5;
-			}
+		&.isCurrentMonth .day-label {
+			color: black;
 		}
 
 		&.isToday {
 			background-color: #fad2e3;
-			border-color: #e26caf;
-			box-shadow: -1px -1px 0 1px #e26caf;
 
 			&:hover {
 				background-color: #ffc3dc;
-				border-color: #dc4f9f;
-				box-shadow: -1px -1px 0 1px #dc4f9f;
 			}
 		}
 
 		.day-label {
-			box-sizing: border-box;
-			color: #0006;
-			font-size: 1.25rem;
-			padding: 0.3rem 0.5rem;
-			flex: 1 0 100%;
+			color: #0005;
+			font-size: 1.14rem;
+			padding: 0.05rem 0;
+			border: 2px solid transparent;
+
+			&.hasDraftEvent {
+				background-color: #00da8e;
+				border-color: #00c17d;
+				color: white;
+				border-radius: 15px;
+
+				&.notFirst {
+					margin-left: -6px;
+					padding-left: 6px;
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+					border-left-width: 0;
+				}
+
+				&.notLast {
+					margin-right: -6px;
+					padding-right: 6px;
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
+					border-right-width: 0;
+				}
+			}
 		}
 
 		.badges {
 			display: flex;
-			padding: 0 8px;
-
-			@media (max-width: 600px) {
-				padding: 0 6px;
-			}
+			padding: 3px 5px 0;
+			justify-content: center;
+			gap: 4px;
 		}
 
-		.events-badge,
-		.draft-badge {
+		.events-badge {
 			display: inline-block;
-			background-color: var(--color-theme);
-			color: white;
-			padding: 2px 4px;
-			text-align: center;
-			border-radius: 100px;
-			font-size: 0.95rem;
-			font-weight: 600;
-			height: 1.25rem;
-			min-width: 1.25rem;
-			box-sizing: border-box;
-			vertical-align: top;
-			z-index: 1;
-
-			@media (max-width: 600px) {
-				font-size: 0.85rem;
-				padding: 1px 3px;
-				height: 1.15rem;
-				min-width: 1.15rem;
-			}
-		}
-
-		.draft-badge {
-			background-color: #00da8e;
-			box-shadow: inset 0 0 0 2px #0002;
-		}
-
-		.events-badge + .draft-badge {
-			margin-left: 4px;
-
-			@media (max-width: 600px) {
-				margin-left: -6px;
-				z-index: 0;
-			}
+			background-color: vars.$COLOR_T3;
+			border-radius: 0.5rem;
+			height: 0.5rem;
+			width: 0.5rem;
 		}
 	}
 </style>

@@ -7,7 +7,7 @@ export async function fetchAllEvents(): Promise<Event[]>
 export async function fetchAllEvents(auth: Auth): Promise<(Event & WithSubmitter)[]>
 export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 	const response = await fetch(
-		host + '/events',
+		host() + '/events',
 		auth ? { headers: authorizedHeaders(auth) } : undefined,
 	)
 	if (!response.ok) {
@@ -15,12 +15,4 @@ export async function fetchAllEvents(auth?: Auth): Promise<Event[]> {
 	}
 	const events: WireEvent[] = await response.json()
 	return events.map(wire2event)
-}
-
-export async function fetchAllEventsWithCache(): Promise<Event[]> {
-	const response = await (window.__fetchEventsPromise?.then(e => e.map(wire2event)) ??
-		fetchAllEvents())
-	window.__fetchEventsPromise = undefined
-
-	return response
 }

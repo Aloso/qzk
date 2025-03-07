@@ -2,7 +2,7 @@ import { host } from '.'
 import { authorizedHeaders, type Auth } from '..'
 
 export async function publishDraft(key: string, auth: Auth): Promise<boolean> {
-	const url = new URL(host + '/event')
+	const url = new URL(host() + '/event')
 	url.searchParams.set('key', key)
 
 	const response = await fetch(url, {

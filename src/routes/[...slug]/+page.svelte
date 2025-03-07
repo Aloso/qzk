@@ -3,7 +3,11 @@
 	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
 
-	export let data: StaticPageTransformed
+	interface Props {
+		data: StaticPageTransformed
+	}
+
+	let { data }: Props = $props()
 </script>
 
 <StaticPageHeader {...data} />

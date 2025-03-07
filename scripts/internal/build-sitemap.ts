@@ -48,9 +48,9 @@ function getEndpoints(tree: dirTree.DirectoryTree, route: string) {
 	})
 }
 
-const tree = dirTree('./build')
+const tree = dirTree('./.svelte-kit/cloudflare')
 getEndpoints(tree, baseRoute)
 
 const sitemap = getSitemapXML('https://queereszentrumkassel.de', routes)
 
-fs.writeFileSync('build/sitemap.xml', sitemap)
+fs.writeFileSync('.svelte-kit/cloudflare/sitemap.xml', sitemap)

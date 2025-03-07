@@ -7,15 +7,20 @@
 @use './contentful.scss';
 
 :root {
-	--color-theme: #{color.adjust(vars.$COLOR_T3, $lightness: 8%)};
+	--color-theme: #{color.adjust(vars.$COLOR_T4, $lightness: 8%)};
 	--color-accent: #f000ec;
-	--color-link: #{vars.$COLOR_T3};
+	--color-link: #{vars.$COLOR_T4};
 	--color-text: #000c;
 	--link-decoration: 1.67px underline var(--color-link);
 	--link-decoration-hover: 1.67px underline var(--color-accent);
 	font-family: vars.$FONT_BODY;
 	color: var(--color-text);
-	font-size: min(18px, 15.5px + 0.3vw);
+	font-size: min(118.75%, 98% + 0.3vw);
+	scroll-padding-top: 85px;
+
+	@media (min-width: 1000px) {
+		scroll-padding-top: 75px;
+	}
 
 	@supports (font-variation-settings: normal) {
 		font-family: AsapVariable, sans-serif;
@@ -28,10 +33,6 @@ body {
 
 main {
 	z-index: 1;
-}
-
-body.overlay-open main {
-	z-index: 3;
 }
 
 a,

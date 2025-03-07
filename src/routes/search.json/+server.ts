@@ -1,11 +1,7 @@
 // https://joyofcode.xyz/blazing-fast-sveltekit-search
 
-import { loadAllBlogPosts, loadAllPersons, loadAllStatics } from '$lib/contentful/loader'
-import { renderDataToString } from '$lib/contentful/render'
 import type { SearchResult } from '$lib/search'
-import type { Document } from '@contentful/rich-text-types'
 import { json } from '@sveltejs/kit'
-import { htmlToText, type SelectorDefinition } from 'html-to-text'
 
 import lunr from 'lunr'
 // @ts-expect-error no type definitions available
@@ -14,6 +10,8 @@ import addStemmerSupport from 'lunr-languages/lunr.stemmer.support'
 import addMultiLanguageSupport from 'lunr-languages/lunr.multi'
 // @ts-expect-error no type definitions available
 import addGermanSupport from 'lunr-languages/lunr.de'
+import data, { type RichText } from '$lib/contentful/data'
+import sanitize from 'sanitize-html'
 
 addStemmerSupport(lunr)
 addMultiLanguageSupport(lunr)
@@ -28,46 +26,46 @@ export async function GET() {
 }
 
 async function getSearchResults(): Promise<SearchResult[]> {
-	const [blogPosts, persons, statics] = await Promise.all([
-		loadAllBlogPosts({}),
-		loadAllPersons(),
-		loadAllStatics(),
-	])
-
 	return [
-		...blogPosts.items.map(
+		...data.blogPost.map(
 			(post): SearchResult => ({
 				type: 'BlogPost',
 				slug: `blog/${post.fields.published}/${post.fields.slug}`,
 				n: post.fields.title,
 				c: makeContent([
-					new Date(post.fields.published).toLocaleDateString(),
-					render(post.fields.teaser),
-					render(post.fields.content),
+					new Date(post.fields.published).toLocaleDateString('de-DE', {
+						timeZone: 'Europe/Berlin',
+					}),
+					post.fields.teaser,
+					...processRichText(post.fields.content),
 				]),
-				a: post.fields.authors.map(a => a.fields.name).join(', '),
+				a:
+					'Von ' +
+					post.fields.authorIds
+						.map(id => data.person.find(p => p.sys.id === id)!.fields.name)
+						.join(', '),
 			}),
 		),
-		...persons.items.map(
+		...data.person.map(
 			(person): SearchResult => ({
 				type: 'Person',
 				slug: `person/${person.fields.slug}`,
 				n: person.fields.name,
 				c: makeContent([
-					person.fields.pronouns,
+					'Pronomen: ' + person.fields.pronouns,
 					person.fields.role,
-					person.fields.description ? render(person.fields.description) : undefined,
+					...processRichText(person.fields.description ?? []),
 				]),
 			}),
 		),
-		...statics.items.flatMap((staticPage): SearchResult | never[] => {
+		...data.staticPage.flatMap((staticPage): SearchResult | never[] => {
 			const slug = getStaticSlug(staticPage.fields.slug)
 			if (slug == null) return []
 			return {
 				type: 'StaticPage',
 				slug,
 				n: staticPage.fields.name,
-				c: render(staticPage.fields.content),
+				c: processRichText(staticPage.fields.content).join(' · '),
 			}
 		}),
 	]
@@ -92,24 +90,19 @@ function getStaticSlug(slug: string): string | null {
 	switch (slug) {
 		case 'index':
 			return ''
-		case 'planen/eingereicht':
-			return null
 		default:
 			return slug
 	}
 }
 
-const selectors: SelectorDefinition[] = [
-	...['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map(selector => ({ selector, format: 'block' })),
-	{ selector: 'a', format: 'inline' },
-	{ selector: 'hr', format: 'skip' },
-]
-
-function render(doc: Document): string {
-	const html = renderDataToString(doc, 900)
-	return htmlToText(html, { wordwrap: null, selectors }).replace(/\n{2,}/g, ' · ')
-}
-
 function makeContent(items: (string | undefined | null)[]): string {
 	return items.filter(s => !!s).join(' · ')
+}
+
+function processRichText(richText: RichText): string[] {
+	const output = richText
+		.filter(c => typeof c === 'string')
+		.map(html => sanitize(html, { allowedTags: [], textFilter: text => text + ' ' }))
+
+	return output
 }

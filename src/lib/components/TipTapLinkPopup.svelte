@@ -279,7 +279,7 @@
 		background-color: white;
 		border-radius: 30px;
 		padding: min(2.5rem, 1.5rem + 1vw);
-		width: calc(600px + 2vw);
+		width: calc(33rem + 2vw);
 		max-width: 95vw;
 
 		h2 {
@@ -395,15 +395,16 @@
 		&:focus {
 			background-color: #0002;
 		}
+	}
 
-		&.apply {
-			color: white;
-			background-color: var(--color-theme);
+	.params button.apply,
+	a.button.apply {
+		color: white;
+		background-color: var(--color-theme);
 
-			&:hover,
-			&:focus {
-				opacity: 0.85;
-			}
+		&:hover,
+		&:focus {
+			opacity: 0.85;
 		}
 	}
 

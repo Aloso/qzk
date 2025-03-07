@@ -1,5 +1,5 @@
-import { loadAllNavigations } from '$lib/contentful/loader'
+import data from '$lib/contentful/data'
 
 export async function load() {
-	return loadAllNavigations()
+	return data.navigations
 }

@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { WireEvent } from '$lib/events/types'
+import type { D1Database } from '@cloudflare/workers-types'
 
 // for information about these interfaces
 declare global {
@@ -10,11 +10,24 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+
+		type EnvVars = {
+			[key in `USER__${string}`]: string
+		}
+
+		interface Platform {
+			env: EnvVars & {
+				DB: D1Database
+			}
+			context: {
+				waitUntil(promise: Promise<unknown>): void
+			}
+			caches: CacheStorage & { default: Cache }
+		}
 	}
 
 	interface Window {
 		__searchInitialized?: boolean
-		__fetchEventsPromise?: Promise<WireEvent[]>
 		instgrm?: {
 			Embeds: {
 				process: () => void

@@ -1,41 +1,17 @@
 <script lang="ts">
-	import EventView from '$lib/components/events/EventView.svelte'
-	import { fetchAllEventsWithCache } from '$lib/events/eventApi'
-	import type { Event } from '$lib/events/types'
-	import { onMount } from 'svelte'
-	import BlogPostPreview_ from './blog/BlogPostPreview.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
+	import BlogPostPreview from './blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
-	import { getEndOfTime } from '$lib/events/intersections'
-	import StaticPage from '$lib/components/StaticPage.svelte'
+	import IgFeed from '$lib/components/IgFeed.svelte'
+	import OpeningHours from '$lib/components/OpeningHours.svelte'
+	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
 
 	interface Props {
 		data: Data
 	}
 
 	const { data }: Props = $props()
-	const { page, posts } = data
-
-	let events = $state<Event[]>()
-
-	onMount(() => {
-		loadEvents()
-	})
-
-	async function loadEvents() {
-		const response = await fetchAllEventsWithCache()
-
-		const now = Date.now()
-		const inOneMonth = Date.now() + 30 * 24 * 60 * 60 * 1000
-		events = response.filter(e => {
-			const filteredTimes = e.time.filter(
-				time => +time.start < inOneMonth && getEndOfTime(time) > now,
-			)
-			filteredTimes.splice(3)
-			e.time = filteredTimes
-			return e.time.length > 0
-		})
-		events.sort((a, b) => +a.time[0].start - +b.time[0].start)
-	}
+	const { generalInfo, posts, events } = data
 </script>
 
 <svelte:head>
@@ -44,65 +20,98 @@
 </svelte:head>
 
 <div class="layout">
-	<section class="mainbar">
-		<StaticPage data={page} />
+	<section class="important">
+		<h2 class="sidebar-title">Öffnungszeiten</h2>
+		<OpeningHours {...generalInfo} />
 
-		<hr />
-		<h2>Neue Blog-Beiträge</h2>
+		{#if generalInfo.importantInfo.length > 0}
+			<h2 class="sidebar-title">Wichtig</h2>
+			<ImportantInfo {...generalInfo} />
+		{/if}
+	</section>
 
-		<div class="blogPosts">
+	<section class="events">
+		<h2>Veranstaltungen</h2>
+
+		<div class="event-container">
+			{#each events as event}
+				<EventViewSmall {event} />
+			{/each}
+			<div></div>
+			<div></div>
+		</div>
+		{#if events}
+			{#if events.length > 0}
+				Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+			{:else}
+				Keine Veranstaltungen in den nächsten 30 Tagen
+			{/if}
+		{/if}
+	</section>
+
+	<section class="social-and-blog">
+		<h2 class="sidebar-title">Instagram</h2>
+		<IgFeed />
+
+		<h2 class="sidebar-title">Veranstaltung planen</h2>
+		<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
+
+		<a href="/planen" class="add-event">Neue Veranstaltung</a>
+
+		<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
+
+		<div class="blog-posts">
 			{#each posts as post}
-				<BlogPostPreview_ {post} small />
+				<BlogPostPreview {post} />
 			{/each}
 		</div>
 	</section>
-
-	<div class="sidebar">
-		<h2 class="sidebar-title">Veranstaltungen</h2>
-		{#if events === undefined}
-			Wird geladen...
-		{:else}
-			{#each events as event}
-				<EventView {event} />
-			{/each}
-			<a href="/planen" class="add-event">Neue Veranstaltung</a>
-		{/if}
-	</div>
 </div>
 
 <style lang="scss">
 	.layout {
-		display: flex;
-		gap: 1rem 4rem;
+		display: grid;
+		grid-template: 'events important' 'events social-and-blog' / 2fr 1fr;
+		gap: 0 3rem;
 
-		@media (max-width: 1200px) {
-			flex-direction: column;
+		@media (max-width: 78rem) {
+			grid-template: 'important' 'events' 'social-and-blog' / 1fr;
+			max-width: 44rem;
 		}
 	}
 
-	.mainbar {
-		width: 44rem;
+	.important {
+		grid-area: important;
+	}
+	.events {
+		grid-area: events;
+	}
+	.social-and-blog {
+		grid-area: social-and-blog;
+	}
 
-		@media (max-width: 1200px) {
-			width: auto;
+	.events h2 {
+		margin-bottom: 20px;
+	}
+
+	.event-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+		gap: 0 2rem;
+		align-items: start;
+		margin: 1.25rem 0 0;
+	}
+
+	.important {
+		margin-top: 1.8rem;
+
+		@media (max-width: 78rem) {
+			margin-top: 0;
 		}
 	}
 
-	.sidebar {
-		width: 22rem;
-		margin: 2rem 0;
-		position: sticky;
-		top: 0;
-
-		@media (max-width: 1200px) {
-			width: auto;
-			border-top: 2px solid #ccc;
-		}
-	}
-
-	@media (min-width: 1201px) {
+	@media (min-width: 78.01rem) {
 		.sidebar-title {
-			font-family: inherit;
 			font-size: 1.33rem;
 			font-weight: 600;
 			margin-bottom: 1em;
@@ -129,13 +138,9 @@
 		}
 	}
 
-	section {
-		max-width: 44rem;
-	}
-
-	.blogPosts {
+	.blog-posts {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1.5rem;
 	}
 </style>

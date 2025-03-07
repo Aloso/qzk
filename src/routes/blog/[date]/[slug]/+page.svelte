@@ -13,10 +13,11 @@
 	<title>{data.title} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
+<h1>{data.title}</h1>
+
 <div class="layout">
 	<div class="mainbar">
-		<h1>{data.title}</h1>
-		<div><PublishDate date={data.published} withDescription /></div>
+		<div class="published"><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
 		<FormattedContent parts={data.parts} />
@@ -24,10 +25,12 @@
 
 	{#if data.related.length > 0}
 		<div class="sidebar">
-			<div class="sidebar-title">Mehr interessante Beiträge</div>
-			{#each data.related as post}
-				<BlogPostPreview {post} small noImage />
-			{/each}
+			<h2 class="sidebar-title">Mehr interessante Beiträge</h2>
+			<div class="blog-posts">
+				{#each data.related as post}
+					<BlogPostPreview {post} />
+				{/each}
+			</div>
 		</div>
 	{/if}
 </div>
@@ -35,40 +38,58 @@
 <style lang="scss">
 	.layout {
 		display: flex;
-		gap: 4rem;
+		gap: 2rem 4rem;
 
-		@media (max-width: 1200px) {
+		:global(p) {
+			line-height: 1.7;
+		}
+
+		@media (max-width: 78rem) {
 			flex-direction: column;
 		}
 	}
 
+	.published {
+		margin-bottom: 1rem;
+	}
+
 	.mainbar {
 		width: 44rem;
+		max-width: 44rem;
 
-		@media (max-width: 1200px) {
+		@media (max-width: 78rem) {
 			width: auto;
 		}
 	}
 
 	.sidebar {
 		width: 22rem;
-		margin: 2rem 0;
-		position: sticky;
-		top: 0;
+		margin: 2.8rem 0 0;
 
-		@media (max-width: 900px) {
+		@media (max-width: 78rem) {
 			width: auto;
+			max-width: 44rem;
+			margin-top: 0;
+			border-top: 2px solid #ccc;
 		}
 
 		:global(h3) {
 			font-size: 1.5rem;
 		}
+
+		.blog-posts {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
 	}
 
-	.sidebar-title {
-		font-size: 1.33rem;
-		font-weight: 600;
-		margin-bottom: 1em;
+	@media (min-width: 78.01rem) {
+		.sidebar-title {
+			font-size: 1.33rem;
+			font-weight: 600;
+			margin-bottom: 1em;
+		}
 	}
 
 	:global(.BlogPost-photo) {
@@ -77,13 +98,5 @@
 		width: 100%;
 		max-width: 44rem;
 		height: auto;
-	}
-
-	:global(section) {
-		max-width: 44rem;
-
-		:global(p) {
-			line-height: 1.7;
-		}
 	}
 </style>
