@@ -10,10 +10,6 @@
 	}
 
 	menuButton.addEventListener('click', () => {
-		if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
-			// document.scrollingElement.scrollTo({ top: 0, behavior: 'smooth' })
-		}
-
 		mobileNav.classList.toggle('extended')
 	})
 

@@ -67,6 +67,11 @@
 			padding: 5px 0;
 			justify-content: space-between;
 
+			@media (max-width: 22rem) {
+				flex-direction: column;
+				gap: 0;
+			}
+
 			&.special {
 				font-style: italic;
 			}

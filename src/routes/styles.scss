@@ -156,9 +156,8 @@ body.show-paragraphs {
 	}
 }
 
-@media (max-width: 450px) {
+@media (max-width: 28rem) {
 	// avoid vertical scrolling due to very long words
-
 	h1,
 	h2,
 	h3,

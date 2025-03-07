@@ -14,7 +14,7 @@
 
 <svelte:window bind:scrollY={y} />
 
-<header class:smaller={y > 0}>
+<header class:smaller={y > 10}>
 	<MobileNav {links} {url} />
 
 	<div class="header-i">
@@ -101,6 +101,7 @@
 
 		@media (max-width: 60rem) {
 			width: 200px;
+			max-width: calc(100vw - 10rem);
 
 			.smaller & {
 				width: 100px;

@@ -52,7 +52,7 @@
 		</div>
 	{/if}
 
-	<section>
+	<section class="main-section">
 		{#each data.content as part, i}
 			{#if typeof part === 'string'}
 				<section class:omitFirst={omitFirst && i === 0}>
@@ -102,6 +102,10 @@
 		}
 	}
 
+	.main-section {
+		max-width: calc(100vw - 2rem);
+	}
+
 	section {
 		flex-grow: 2;
 		max-width: 44rem;
@@ -125,10 +129,12 @@
 		border: none;
 		align-self: start;
 		align-items: center;
+		text-align: left;
 
 		.toc-icon {
 			width: 0.75rem;
 			height: 0.75rem;
+			flex-shrink: 0;
 		}
 
 		&:hover,

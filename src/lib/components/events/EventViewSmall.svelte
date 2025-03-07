@@ -111,6 +111,15 @@
 		color: inherit;
 		font: inherit;
 		overflow: hidden;
+		max-width: calc(100vw - 2rem);
+
+		@media (max-width: 22rem) {
+			margin: 0 -1rem;
+			padding: 1rem;
+			border-radius: 0;
+			box-shadow: none;
+			max-width: 100vw;
+		}
 	}
 
 	.event-img {
@@ -123,6 +132,10 @@
 			var(--image, url('/banner/confetti.png')),
 			linear-gradient(to right in oklab, var(--gradient1, #6fb0c9), var(--gradient2, #db71dd));
 		background-size: 120px, auto;
+
+		@media (max-width: 22rem) {
+			margin: -1rem -1rem 1rem -1rem;
+		}
 
 		.event-img-label {
 			display: inline-block;

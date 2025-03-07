@@ -41,11 +41,13 @@
 			<div></div>
 		</div>
 		{#if events}
-			{#if events.length > 0}
-				Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
-			{:else}
-				Keine Veranstaltungen in den nächsten 30 Tagen
-			{/if}
+			<div class="label-bottom">
+				{#if events.length > 0}
+					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+				{:else}
+					Keine Veranstaltungen in den nächsten 30 Tagen
+				{/if}
+			</div>
 		{/if}
 	</section>
 
@@ -82,12 +84,15 @@
 
 	.important {
 		grid-area: important;
+		max-width: calc(100vw - 2rem);
 	}
 	.events {
 		grid-area: events;
+		max-width: calc(100vw - 2rem);
 	}
 	.social-and-blog {
 		grid-area: social-and-blog;
+		max-width: calc(100vw - 2rem);
 	}
 
 	.events h2 {
@@ -100,6 +105,12 @@
 		gap: 0 2rem;
 		align-items: start;
 		margin: 1.25rem 0 0;
+	}
+
+	.label-bottom {
+		@media (max-width: 22rem) {
+			margin: 1rem 0 0 0;
+		}
 	}
 
 	.important {
