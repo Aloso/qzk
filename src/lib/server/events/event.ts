@@ -6,6 +6,7 @@ export interface Event {
 	key?: string
 	title: string
 	descHtml: string
+	description?: string // deprecated
 	website?: string
 	time: Time | Time[]
 	place: Place

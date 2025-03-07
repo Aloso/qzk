@@ -19,9 +19,9 @@ export async function load({ platform }): Promise<Data> {
 	}
 
 	const eventsRaw = await getAllEvents(platform.env, {}, true)
+
 	const eventsParsed = eventsRaw
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.map(({ submitter, orgaNotes, ...rest }) => rest)
+		.map(({ submitter: _0, orgaNotes: _1, description: _3, ...rest }) => rest)
 		.map<Event>(wire2event)
 
 	const now = Date.now()

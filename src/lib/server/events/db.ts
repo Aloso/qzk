@@ -87,6 +87,12 @@ export async function putEvent(
 ): Promise<void> {
 	const query = 'UPDATE events SET jsonData = ? WHERE id = ? AND isPublished = ?'
 
+	// TODO
+	//
+	// if ('description' in event) {
+	// 	delete event.description
+	// }
+
 	const result = await env.DB.prepare(query)
 		.bind(JSON.stringify(event), key, published ? 1 : 0)
 		.run()

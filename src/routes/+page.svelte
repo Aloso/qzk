@@ -12,6 +12,8 @@
 
 	const { data }: Props = $props()
 	const { generalInfo, posts, events } = data
+
+	console.log({ eventLength: events.length })
 </script>
 
 <svelte:head>
@@ -24,7 +26,7 @@
 		<h2 class="sidebar-title">Öffnungszeiten</h2>
 		<OpeningHours {...generalInfo} />
 
-		{#if generalInfo.importantInfo.length > 0}
+		{#if generalInfo.importantInfo?.length > 0}
 			<h2 class="sidebar-title">Wichtig</h2>
 			<ImportantInfo {...generalInfo} />
 		{/if}
