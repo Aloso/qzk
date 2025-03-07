@@ -155,3 +155,15 @@ body.show-paragraphs {
 		opacity: 1;
 	}
 }
+
+@media (max-width: 450px) {
+	// avoid vertical scrolling due to very long words
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		hyphens: auto;
+		hyphenate-limit-chars: 14 5 5; // not yet widely supported, but works in Chrome
+	}
+}
