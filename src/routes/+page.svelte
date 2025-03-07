@@ -12,8 +12,6 @@
 
 	const { data }: Props = $props()
 	const { generalInfo, posts, events } = data
-
-	console.log({ eventLength: events.length })
 </script>
 
 <svelte:head>
@@ -73,7 +71,7 @@
 <style lang="scss">
 	.layout {
 		display: grid;
-		grid-template: 'events important' 'events social-and-blog' / 2fr 1fr;
+		grid-template: 'events important' 0fr 'events social-and-blog' 1fr / 2fr 1fr;
 		gap: 0 3rem;
 
 		@media (max-width: 78rem) {
