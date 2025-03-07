@@ -139,7 +139,7 @@
 		text-align: center;
 		padding-left: 0.25rem;
 		padding-right: 0.25rem;
-		max-width: 2.75rem;
+		max-width: 3.5rem;
 	}
 
 	label {
