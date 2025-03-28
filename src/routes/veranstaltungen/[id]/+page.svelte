@@ -64,11 +64,10 @@
 				timeZone: 'Europe/Berlin',
 				weekday: withYear ? undefined : 'short',
 				day: 'numeric',
-				month: withYear ? 'numeric' : 'long',
+				month: withYear ? 'short' : 'long',
 				year: withYear ? 'numeric' : undefined,
 			})
 			.replace('.,', ',')
-			.replace(/(\d).(?=\d)/g, '. ')
 	}
 
 	function formatRelativeDate(date: Date) {
