@@ -53,7 +53,18 @@ export interface GeneralInfo {
 
 export interface Navigation {
 	name: string
-	links: string
+	links?: string
+	linksObject?: TopLevelNavItem[]
+}
+
+export interface TopLevelNavItem extends NavItem {
+	children: NavItem[]
+}
+
+export interface NavItem {
+	path: string
+	name: string
+	nameEn: string
 }
 
 export interface Asset<D extends Details = Details> {
