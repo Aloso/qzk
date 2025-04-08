@@ -1,4 +1,4 @@
-import { Item, Navigation } from './types'
+import { Item, Navigation, TopLevelNavItem } from './types'
 
 export interface Navigations {
 	header: TypedNavigation[]
@@ -16,43 +16,19 @@ export function getAllNavigations(navs: Item<Navigation>[]): Navigations {
 	const footer = navs.find(item => item.fields.name === 'Footer')
 
 	return {
-		header: parseText(header?.fields.links ?? ''),
-		footer: parseText(footer?.fields.links ?? ''),
+		header: header?.fields.linksObject?.map(transform) ?? [],
+		footer: footer?.fields.linksObject?.map(transform) ?? [],
 	}
 }
 
-function parseText(text: string) {
-	const items: TypedNavigation[] = []
-	let currentItem: TypedNavigation | undefined = undefined
-
-	for (const line of text.split('\n')) {
-		const trimmed = line.trim()
-		if (trimmed === '') {
-			continue
-		}
-
-		if (line.startsWith(':')) {
-			const text = line.slice(1).trim()
-			currentItem = { text, children: [] }
-			items.push(currentItem)
-		} else {
-			const [href, text] = splitOnce(trimmed, ' ')
-			if (line.startsWith('  ')) {
-				if (currentItem === undefined) continue
-
-				currentItem.children.push({ href, text, children: [] })
-			} else {
-				currentItem = { href, text, children: [] }
-				items.push(currentItem)
-			}
-		}
+function transform(item: TopLevelNavItem): TypedNavigation {
+	return {
+		text: item.name,
+		href: item.path === '' ? undefined : item.path,
+		children: item.children.map(c => ({
+			text: c.name,
+			href: c.path === '' ? undefined : c.path,
+			children: [],
+		})),
 	}
-	return items
-}
-
-function splitOnce(text: string, char: string) {
-	const splitPos = text.indexOf(char)
-	const p1 = text.slice(0, splitPos)
-	const p2 = text.slice(splitPos + 1)
-	return [p1, p2] as const
 }

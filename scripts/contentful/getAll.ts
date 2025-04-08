@@ -98,9 +98,8 @@ function transform(entry: Entry<EntrySkeletonType>) {
 			break
 		}
 		case 'navigation': {
-			const { name, links } = entry.fields as unknown as Navigation
-			// TODO
-			fields = { name, links }
+			const { name, linksObject } = entry.fields as unknown as Navigation
+			fields = { name, linksObject }
 			break
 		}
 		case 'generalInfo': {
