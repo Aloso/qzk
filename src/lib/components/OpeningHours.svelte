@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GeneralInfoTransformed } from '$lib/data'
+	import type { DateRange, GeneralInfoTransformed } from '$lib/data'
 
 	let { openingHours, specialOpeningHours }: GeneralInfoTransformed = $props()
 
@@ -18,13 +18,18 @@
 	const special = specialOpeningHours.filter(
 		({ date }) => new Date(date).getTime() >= todayMidnight.getTime(),
 	)
+
+	const trailingZeroes = /:00$/
+	function formatTimeRange(range: DateRange): string {
+		return `${range.from.replace(trailingZeroes, '')} – ${range.to.replace(trailingZeroes, '')} Uhr`
+	}
 </script>
 
 <div class="opening-hours">
 	{#each Object.entries(openingHours).filter(([_, ranges]) => ranges.length > 0) as [name, ranges]}
 		<div class="row">
 			<span class="label">{weekDayTranslations[name]}</span>
-			<span>{ranges.map(r => `${r.from} – ${r.to} Uhr`).join(', ')}</span>
+			<span>{ranges.map(formatTimeRange).join(', ')}</span>
 		</div>
 	{/each}
 
@@ -41,7 +46,7 @@
 					})}
 				</span>
 				{#if hours.length > 0}
-					<span>{hours.map(r => `${r.from} – ${r.to} Uhr`).join(', ')}</span>
+					<span>{hours.map(formatTimeRange).join(', ')}</span>
 				{:else}
 					<span class="closed">geschlossen</span>
 				{/if}

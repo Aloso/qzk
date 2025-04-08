@@ -38,8 +38,17 @@ export interface Person {
 	description?: Document
 }
 
+export interface DateRange {
+	from: string
+	to: string
+}
+
 export interface GeneralInfo {
 	name: string
+	openingHours: {
+		regular: Record<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun', DateRange[]>
+		special: { date: string; hours: DateRange[] }[]
+	}
 	openingHoursMon?: string
 	openingHoursTue?: string
 	openingHoursWed?: string
