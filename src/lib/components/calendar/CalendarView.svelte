@@ -72,9 +72,14 @@
 
 <style lang="scss">
 	.calendar {
+		box-sizing: border-box;
 		border: 2px solid #d6d6d6;
-		border-radius: 1.1rem;
+		border-radius: 25px;
 		overflow: hidden;
+		height: 25rem;
+		display: flex;
+		flex-direction: column;
+		margin: 0 0 2rem 0;
 	}
 
 	.weekday-labels {
@@ -90,5 +95,11 @@
 			font-weight: 600;
 			color: #444;
 		}
+	}
+
+	.days {
+		flex-grow: 1;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 	}
 </style>

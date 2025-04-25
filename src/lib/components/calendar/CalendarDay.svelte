@@ -22,7 +22,9 @@
 	let dayStart = $derived(new Date(year, month, day))
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
-	let dayEvents = $derived(allEvents.filter(event => isBetween(event.time, dayStart, dayEnd)))
+	let dayEvents = $derived(
+		allEvents.filter(event => isBetween(event.allTimes ?? event.time, dayStart, dayEnd)),
+	)
 
 	let [hasDraftEvent, notFirst, notLast] = $derived.by(() => {
 		if (!draftTimes || !isBetween(draftTimes, dayStart, dayEnd)) return [false, false, false]
@@ -50,11 +52,10 @@
 
 	.calendar-day {
 		box-sizing: border-box;
-		display: inline-flex;
+		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		height: 3.2rem;
-		width: calc(100% / 7);
+		min-height: 3rem;
 		font-family: inherit;
 		padding: 0.7rem 5px 0;
 		border: none;

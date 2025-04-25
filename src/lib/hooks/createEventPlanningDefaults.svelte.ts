@@ -75,8 +75,17 @@ const emptyDefaults: FormValues = {
 	blendImage: 'confetti',
 }
 
-export function createEventPlanningDefaults() {
+interface Options {
+	preselectedDate?: string | null
+}
+
+export function createEventPlanningDefaults({ preselectedDate }: Options) {
 	let defaults = $state(emptyDefaults)
+	if (preselectedDate) {
+		const start = new Date(preselectedDate)
+		start.setHours(12, 0, 0, 0)
+		defaults.time[0] = { variant: 'day', start }
+	}
 
 	return {
 		get values() {
