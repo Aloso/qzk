@@ -46,7 +46,7 @@
 			case 'time':
 				return formatDate(time.start)
 			case 'time-range':
-				return `${formatDate(time.start)} – ${formatDate(time.end)}`
+				return `${formatDate(time.start)} – ${formatDate(time.end)}`
 		}
 	}
 
