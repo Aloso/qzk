@@ -19,7 +19,7 @@
 			case 'day-range':
 				return `<i class="lone">${formatDateSpan(time.start, time.end!, withWeekday)}</i>`
 			case 'time-range':
-				return `<i>${formatDate(time.start, withWeekday)}</i>${formatTime(time.start)} – ${formatTime(time.end!)}`
+				return `<i>${formatDate(time.start, withWeekday)}</i>${formatTime(time.start)} – ${formatTime(time.end!)}`
 		}
 	})
 

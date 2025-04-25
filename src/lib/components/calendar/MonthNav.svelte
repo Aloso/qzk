@@ -30,21 +30,21 @@
 </script>
 
 <div class="month-nav">
-	<button onclick={toPreviousMonth} aria-label="Vorheriger Monat"></button>
+	<button type="button" onclick={toPreviousMonth} aria-label="Vorheriger Monat"></button>
 	<div>{monthName} {year}</div>
-	<button onclick={toNextMonth} aria-label="Nächster Monat"></button>
+	<button type="button" onclick={toNextMonth} aria-label="Nächster Monat"></button>
 </div>
 
 <style lang="scss">
 	.month-nav {
-		height: 2.2rem;
-		line-height: 2.2rem;
+		height: 2.4rem;
+		line-height: 2.4rem;
 		display: flex;
 
 		button {
 			border: none;
-			width: 2.2rem;
-			height: 2.2rem;
+			width: 2.4rem;
+			height: 2.4rem;
 			padding: 0;
 			margin: 0;
 			background-color: transparent;

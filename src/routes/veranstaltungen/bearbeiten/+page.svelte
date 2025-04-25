@@ -15,7 +15,7 @@
 		| { type: 'submitting' }
 		| { type: 'error'; message: string; missing?: boolean }
 
-	const defaults = createEventPlanningDefaults()
+	const defaults = createEventPlanningDefaults({})
 	const credentials = createAdminCredentials()
 
 	let event = $state<Event & WithSubmitter>()

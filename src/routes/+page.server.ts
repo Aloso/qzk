@@ -26,14 +26,26 @@ export async function load({ platform }): Promise<Data> {
 
 	const now = Date.now()
 	const inOneMonth = now + 30 * 24 * 60 * 60 * 1000
-	const events = eventsParsed.filter(e => {
-		const filteredTimes = (Array.isArray(e.time) ? e.time : [e.time]).filter(
-			time => +time.start < inOneMonth && getEndOfTime(time) > now,
-		)
-		e.time = filteredTimes
-		return e.time.length > 0
+	// const events = eventsParsed.filter(e => {
+	// 	const filteredTimes = (Array.isArray(e.time) ? e.time : [e.time]).filter(
+	// 		time => +time.start < inOneMonth && getEndOfTime(time) > now,
+	// 	)
+	// 	e.time = filteredTimes
+	// 	return e.time.length > 0
+	// })
+	const events = eventsParsed.map(e => {
+		e.allTimes = Array.isArray(e.time) ? e.time : [e.time]
+		e.time = e.allTimes.filter(time => +time.start < inOneMonth && getEndOfTime(time) > now)
+		if (e.time.length === 0) {
+			e.descHtml = ''
+		}
+		return e
 	})
-	events.sort((a, b) => +a.time[0].start - +b.time[0].start)
+	events.sort((a, b) => {
+		const aTime = a.time[0] ?? a.allTimes![0]
+		const bTime = b.time[0] ?? b.allTimes![0]
+		return +aTime.start - +bTime.start
+	})
 
 	return {
 		generalInfo: data.generalInfo,

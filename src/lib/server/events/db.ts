@@ -69,6 +69,8 @@ export async function addEvent(
 	event: Event,
 	published: boolean,
 ): Promise<void> {
+	sortEventTimes(event)
+
 	const query = 'INSERT INTO events (id, isPublished, jsonData) VALUES (?, ?, ?)'
 
 	const result = await env.DB.prepare(query)
@@ -85,6 +87,8 @@ export async function putEvent(
 	event: Event,
 	published: boolean,
 ): Promise<void> {
+	sortEventTimes(event)
+
 	const query = 'UPDATE events SET jsonData = ? WHERE id = ? AND isPublished = ?'
 
 	// TODO
@@ -123,5 +127,13 @@ export async function setEventPublished(env: Env, key: string, published: boolea
 	if (!result.success) {
 		await getEvent(env, key, !published) // throws 404 if the event doesn't exist
 		error(500, 'Failed to delete event')
+	}
+}
+
+function sortEventTimes(event: Event) {
+	if (Array.isArray(event.time)) {
+		event.time.sort((t1, t2) => {
+			return +new Date(t1.start) - +new Date(t2.start)
+		})
 	}
 }

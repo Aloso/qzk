@@ -5,6 +5,8 @@
 	import IgFeed from '$lib/components/IgFeed.svelte'
 	import OpeningHours from '$lib/components/OpeningHours.svelte'
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
+	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
+	import DayDetail from '$lib/components/calendar/DayDetail.svelte'
 
 	interface Props {
 		data: Data
@@ -12,6 +14,11 @@
 
 	const { data }: Props = $props()
 	const { generalInfo, posts, events } = data
+
+	const today = new Date()
+	const filteredEvents = events?.filter(e => e.time.length > 0)
+
+	let openCalendarDay = $state<Date>()
 </script>
 
 <svelte:head>
@@ -34,15 +41,38 @@
 		<h2>Veranstaltungen</h2>
 
 		<div class="event-container">
-			{#each events as event}
+			<div class="calendar-wrapper" class:is-expanded={openCalendarDay !== undefined}>
+				<CalendarView
+					{events}
+					showDate={today}
+					colorCoded
+					onClickDay={day => {
+						if (day === openCalendarDay) {
+							openCalendarDay = undefined
+						} else {
+							openCalendarDay = day
+						}
+					}}
+				/>
+			</div>
+
+			{#if openCalendarDay}
+				<DayDetail
+					day={openCalendarDay}
+					allEvents={events}
+					onClose={() => (openCalendarDay = undefined)}
+				/>
+			{/if}
+
+			{#each filteredEvents as event}
 				<EventViewSmall {event} />
 			{/each}
 			<div></div>
 			<div></div>
 		</div>
-		{#if events}
+		{#if filteredEvents}
 			<div class="label-bottom">
-				{#if events.length > 0}
+				{#if filteredEvents.length > 0}
 					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
 				{:else}
 					Keine Veranstaltungen in den nächsten 30 Tagen
@@ -56,9 +86,12 @@
 		<IgFeed />
 
 		<h2 class="sidebar-title">Veranstaltung planen</h2>
+		<p>Wähle einen Tag im Kalender, um eine Veranstaltung zu erstellen.</p>
+		<!--
 		<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
 
 		<a href="/planen" class="add-event">Neue Veranstaltung</a>
+		-->
 
 		<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
 
@@ -107,6 +140,12 @@
 		margin: 1.25rem 0 0;
 	}
 
+	.calendar-wrapper.is-expanded {
+		@media (max-width: 750px) {
+			display: none;
+		}
+	}
+
 	.label-bottom {
 		@media (max-width: 22rem) {
 			margin: 1rem 0 0 0;
@@ -129,6 +168,7 @@
 		}
 	}
 
+	/*
 	.add-event {
 		display: inline-block;
 		background-color: var(--color-theme);
@@ -148,6 +188,7 @@
 			background-color: var(--color-link);
 		}
 	}
+	*/
 
 	.blog-posts {
 		display: flex;

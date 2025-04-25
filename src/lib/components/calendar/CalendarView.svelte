@@ -7,10 +7,11 @@
 		events: Event[]
 		showDate: Date
 		draftTimes?: Time[]
+		colorCoded?: boolean
 		onClickDay?: (date: Date) => void
 	}
 
-	let { events, showDate, draftTimes, onClickDay }: Props = $props()
+	let { events, showDate, draftTimes, colorCoded, onClickDay }: Props = $props()
 
 	let draftEventYear = $derived(showDate.getFullYear())
 	let draftEventMonth = $derived(showDate.getMonth())
@@ -65,16 +66,21 @@
 	</div>
 	<div class="days">
 		{#each days as day}
-			<CalendarDay {...day} allEvents={events} {draftTimes} onClick={onClickDay} />
+			<CalendarDay {...day} allEvents={events} {draftTimes} {colorCoded} onClick={onClickDay} />
 		{/each}
 	</div>
 </div>
 
 <style lang="scss">
 	.calendar {
+		box-sizing: border-box;
 		border: 2px solid #d6d6d6;
-		border-radius: 1.1rem;
+		border-radius: 25px;
 		overflow: hidden;
+		height: 25rem;
+		display: flex;
+		flex-direction: column;
+		margin: 0 0 2rem 0;
 	}
 
 	.weekday-labels {
@@ -90,5 +96,11 @@
 			font-weight: 600;
 			color: #444;
 		}
+	}
+
+	.days {
+		flex-grow: 1;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 	}
 </style>

@@ -3,15 +3,17 @@
 
 	let { openingHours, specialOpeningHours }: GeneralInfoTransformed = $props()
 
-	const weekDayTranslations: Record<string, string> = {
-		mon: 'Montags',
-		tue: 'Dienstags',
-		wed: 'Mittwochs',
-		thu: 'Donnerstags',
-		fri: 'Freitags',
-		sat: 'Samstags',
-		sun: 'Sonntags',
-	}
+	type WeekDayKey = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+
+	const weekDayTranslations: [WeekDayKey, string][] = [
+		['mon', 'Montags'],
+		['tue', 'Dienstags'],
+		['wed', 'Mittwochs'],
+		['thu', 'Donnerstags'],
+		['fri', 'Freitags'],
+		['sat', 'Samstags'],
+		['sun', 'Sonntags'],
+	]
 
 	const todayMidnight = new Date()
 	todayMidnight.setHours(0, 0, 0, 0)
@@ -26,10 +28,10 @@
 </script>
 
 <div class="opening-hours">
-	{#each Object.entries(openingHours).filter(([_, ranges]) => ranges.length > 0) as [name, ranges]}
+	{#each weekDayTranslations.filter(([key, _]) => openingHours[key]?.length > 0) as [key, label]}
 		<div class="row">
-			<span class="label">{weekDayTranslations[name]}</span>
-			<span>{ranges.map(formatTimeRange).join(', ')}</span>
+			<span class="label">{label}</span>
+			<span>{openingHours[key].map(formatTimeRange).join(', ')}</span>
 		</div>
 	{/each}
 

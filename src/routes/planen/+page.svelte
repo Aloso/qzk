@@ -17,11 +17,16 @@
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
+	let preselectedDate =
+		'window' in globalThis && window.location.search
+			? new URLSearchParams(window.location.search).get('date')
+			: null
+
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
 	let status = $state<Status>({ type: 'ready' })
 
-	const defaults = createEventPlanningDefaults()
+	const defaults = createEventPlanningDefaults({ preselectedDate })
 	const submittedDrafts = createSubmittedDrafts()
 
 	async function onSubmit(event: Event & WithSubmitter) {
@@ -152,7 +157,7 @@
 		box-sizing: border-box;
 
 		@media (max-width: 78rem) {
-			width: auto;
+			width: 100%;
 			max-width: 27rem;
 		}
 	}

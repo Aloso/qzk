@@ -9,10 +9,12 @@
 		isCurrentMonth?: boolean
 		allEvents: Event[]
 		draftTimes?: Time[]
+		colorCoded?: boolean
 		onClick?: (date: Date) => void
 	}
 
-	let { day, month, year, isCurrentMonth, allEvents, draftTimes, onClick }: Props = $props()
+	let { day, month, year, isCurrentMonth, allEvents, draftTimes, colorCoded, onClick }: Props =
+		$props()
 
 	let now = new Date()
 	let isToday = $derived(
@@ -22,7 +24,9 @@
 	let dayStart = $derived(new Date(year, month, day))
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
-	let dayEvents = $derived(allEvents.filter(event => isBetween(event.time, dayStart, dayEnd)))
+	let dayEvents = $derived(
+		allEvents.filter(event => isBetween(event.allTimes ?? event.time, dayStart, dayEnd)),
+	)
 
 	let [hasDraftEvent, notFirst, notLast] = $derived.by(() => {
 		if (!draftTimes || !isBetween(draftTimes, dayStart, dayEnd)) return [false, false, false]
@@ -39,8 +43,13 @@
 >
 	<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 	<div class="badges">
-		{#each dayEvents.slice(0, 3)}
-			<div class="events-badge"></div>
+		{#each dayEvents.slice(0, 3) as event}
+			<div
+				class="events-badge"
+				style={colorCoded && event.decoration
+					? `--badge-bg: oklch(0.65 0.15 ${event.decoration.colors[1]})`
+					: undefined}
+			></div>
 		{/each}
 	</div>
 </button>
@@ -50,11 +59,10 @@
 
 	.calendar-day {
 		box-sizing: border-box;
-		display: inline-flex;
+		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		height: 3.2rem;
-		width: calc(100% / 7);
+		min-height: 3rem;
 		font-family: inherit;
 		padding: 0.7rem 5px 0;
 		border: none;
@@ -133,7 +141,7 @@
 
 		.events-badge {
 			display: inline-block;
-			background-color: vars.$COLOR_T3;
+			background-color: var(--badge-bg, vars.$COLOR_T3);
 			border-radius: 0.5rem;
 			height: 0.5rem;
 			width: 0.5rem;

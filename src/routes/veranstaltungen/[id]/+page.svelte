@@ -44,7 +44,7 @@
 			case 'day-range':
 				return `<span>${formatDate(time.start)} – ${formatDate(time.end)}</span>`
 			case 'time-range':
-				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)} – ${formatTime(time.end)}</span>`
+				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)} – ${formatTime(time.end)}</span>`
 		}
 	}
 
