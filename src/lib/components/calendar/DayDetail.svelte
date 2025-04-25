@@ -70,7 +70,7 @@
 	</div>
 	<ul class="event-list">
 		{#each dayEvents as event}
-			<li>
+			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
 				<a href="/veranstaltungen/{event.key}" class="title">{event.title}</a><br />
 				{[formatPlace(event.place), formatTimes(event.time[0])]
 					.filter(s => s !== undefined)
@@ -146,6 +146,22 @@
 		font-size: 1rem;
 		overflow: auto;
 		flex-grow: 1;
+
+		li {
+			position: relative;
+			padding-left: 15px;
+
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 7px;
+				width: 5px;
+				bottom: 7px;
+				border-radius: 5px;
+				background-color: var(--badge-bg);
+			}
+		}
 
 		.title {
 			font-size: 1.1rem;
