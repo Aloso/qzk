@@ -45,6 +45,7 @@
 				<CalendarView
 					{events}
 					showDate={today}
+					colorCoded
 					onClickDay={day => {
 						if (day === openCalendarDay) {
 							openCalendarDay = undefined

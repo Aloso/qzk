@@ -9,10 +9,12 @@
 		isCurrentMonth?: boolean
 		allEvents: Event[]
 		draftTimes?: Time[]
+		colorCoded?: boolean
 		onClick?: (date: Date) => void
 	}
 
-	let { day, month, year, isCurrentMonth, allEvents, draftTimes, onClick }: Props = $props()
+	let { day, month, year, isCurrentMonth, allEvents, draftTimes, colorCoded, onClick }: Props =
+		$props()
 
 	let now = new Date()
 	let isToday = $derived(
@@ -41,8 +43,13 @@
 >
 	<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 	<div class="badges">
-		{#each dayEvents.slice(0, 3)}
-			<div class="events-badge"></div>
+		{#each dayEvents.slice(0, 3) as event}
+			<div
+				class="events-badge"
+				style={colorCoded && event.decoration
+					? `--badge-bg: oklch(0.65 0.15 ${event.decoration.colors[1]})`
+					: undefined}
+			></div>
 		{/each}
 	</div>
 </button>
@@ -134,7 +141,7 @@
 
 		.events-badge {
 			display: inline-block;
-			background-color: vars.$COLOR_T3;
+			background-color: var(--badge-bg, vars.$COLOR_T3);
 			border-radius: 0.5rem;
 			height: 0.5rem;
 			width: 0.5rem;

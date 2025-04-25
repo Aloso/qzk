@@ -7,10 +7,11 @@
 		events: Event[]
 		showDate: Date
 		draftTimes?: Time[]
+		colorCoded?: boolean
 		onClickDay?: (date: Date) => void
 	}
 
-	let { events, showDate, draftTimes, onClickDay }: Props = $props()
+	let { events, showDate, draftTimes, colorCoded, onClickDay }: Props = $props()
 
 	let draftEventYear = $derived(showDate.getFullYear())
 	let draftEventMonth = $derived(showDate.getMonth())
@@ -65,7 +66,7 @@
 	</div>
 	<div class="days">
 		{#each days as day}
-			<CalendarDay {...day} allEvents={events} {draftTimes} onClick={onClickDay} />
+			<CalendarDay {...day} allEvents={events} {draftTimes} {colorCoded} onClick={onClickDay} />
 		{/each}
 	</div>
 </div>
