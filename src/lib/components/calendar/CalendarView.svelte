@@ -8,16 +8,23 @@
 		showDate: Date
 		draftTimes?: Time[]
 		colorCoded?: boolean
+		highlightedDate?: Date
 		onClickDay?: (date: Date) => void
 	}
 
-	let { events, showDate, draftTimes, colorCoded, onClickDay }: Props = $props()
+	let { events, showDate, draftTimes, colorCoded, highlightedDate, onClickDay }: Props = $props()
+
+	let highlightedYear = $derived(highlightedDate?.getFullYear())
+	let highlightedMonth = $derived(highlightedDate?.getMonth())
+	let highlightedDay = $derived(highlightedDate?.getDate())
 
 	let draftEventYear = $derived(showDate.getFullYear())
 	let draftEventMonth = $derived(showDate.getMonth())
 
-	let year = $state(0)
-	let month = $state(0)
+	// svelte-ignore state_referenced_locally
+	let year = $state(draftEventYear)
+	// svelte-ignore state_referenced_locally
+	let month = $state(draftEventMonth)
 
 	$effect(() => {
 		year = draftEventYear
@@ -64,11 +71,20 @@
 			<div>{weekDay}</div>
 		{/each}
 	</div>
-	<div class="days">
+	<ul class="days">
 		{#each days as day}
-			<CalendarDay {...day} allEvents={events} {draftTimes} {colorCoded} onClick={onClickDay} />
+			<CalendarDay
+				{...day}
+				allEvents={events}
+				{draftTimes}
+				{colorCoded}
+				isHighlighted={day.day === highlightedDay &&
+					day.month === highlightedMonth &&
+					day.year === highlightedYear}
+				onClick={onClickDay}
+			/>
 		{/each}
-	</div>
+	</ul>
 </div>
 
 <style lang="scss">
@@ -102,5 +118,8 @@
 		flex-grow: 1;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		list-style: none;
+		margin: 0;
+		padding: 0;
 	}
 </style>

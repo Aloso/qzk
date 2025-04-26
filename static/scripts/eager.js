@@ -10,12 +10,24 @@
 	}
 
 	menuButton.addEventListener('click', () => {
-		mobileNav.classList.toggle('extended')
+		if (mobileNav.classList.contains('collapsing') || mobileNav.classList.contains('hidden')) {
+			mobileNav.classList.remove('hidden')
+			mobileNav.classList.remove('collapsing')
+		} else {
+			mobileNav.classList.add('collapsing')
+		}
+	})
+
+	mobileNav.addEventListener('transitionend', () => {
+		if (mobileNav.classList.contains('collapsing')) {
+			mobileNav.classList.add('hidden')
+			mobileNav.classList.remove('collapsing')
+		}
 	})
 
 	for (const anchor of mobileNav.querySelectorAll('a, .a')) {
 		anchor.addEventListener('click', () => {
-			mobileNav.classList.toggle('extended')
+			mobileNav.classList.add('collapsing')
 		})
 	}
 

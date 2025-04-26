@@ -10,7 +10,7 @@
 	let { url, links }: Props = $props()
 </script>
 
-<nav id="mobile-nav">
+<nav id="mobile-nav" class="hidden">
 	<div class="mobile-nav-inner">
 		{#each links as link}
 			<div class="nav-group">
@@ -49,13 +49,26 @@
 			flex-direction: column;
 			box-sizing: border-box;
 			height: calc(92vh - 12rem);
-			margin-top: calc(12rem - 92vh);
 			background-color: vars.$COLOR_T0;
 			overflow: hidden;
 			transition: 0.4s;
+			animation: ease-out 0.4s open-menu;
 
-			&:global(.extended) {
-				margin-top: 0;
+			@keyframes open-menu {
+				0% {
+					margin-top: calc(12rem - 92vh);
+				}
+				100% {
+					margin-top: 0;
+				}
+			}
+
+			&:global(.hidden) {
+				display: none;
+			}
+
+			&:global(.collapsing) {
+				margin-top: calc(12rem - 92vh);
 			}
 
 			&::after {

@@ -20,7 +20,7 @@
 
 				<div class="nav-dropdown">
 					{#each link.children as child}
-						<a href={child.href} class="item">
+						<a href={child.href}>
 							{@html child.text}
 						</a>
 					{/each}
@@ -53,11 +53,21 @@
 	}
 
 	.nav-group {
-		display: relative;
+		position: relative;
 
 		&:hover .nav-dropdown,
 		&:focus-within .nav-dropdown {
 			display: block;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			display: block;
+			width: 100%;
+			height: 0.5rem;
+			left: 0;
+			background-color: transparent;
 		}
 	}
 
@@ -72,23 +82,18 @@
 		border-top: 0;
 		margin-top: 0.5rem;
 		margin-left: calc(-0.2rem - 2px);
+		max-width: 450px;
+		max-height: calc(100vh - 300px);
+		overflow: auto;
 		font-size: 1.05rem;
 		font-weight: 500;
-
-		&::before {
-			content: '';
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 0.5rem;
-			left: 0;
-			top: -0.5rem;
-			background-color: transparent;
-		}
 
 		a {
 			display: block;
 			padding: 0.15rem 1rem;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 			text-decoration: none;
 			color: vars.$COLOR_T4;
 
