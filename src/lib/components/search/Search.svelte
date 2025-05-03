@@ -13,7 +13,7 @@
 	let searchBox = $state<HTMLInputElement>()
 
 	let searchQuery = $state('')
-	let trimmedQuery = $derived(searchQuery.trim())
+	let debouncedQuery = $state('')
 
 	let abortController: AbortController | undefined = undefined
 	let searchResults = $state<SearchResponse>()
@@ -23,7 +23,19 @@
 	})
 
 	$effect(() => {
-		if (trimmedQuery.length > 1) search(trimmedQuery)
+		const prevValue = searchQuery
+
+		const handler = setTimeout(() => {
+			if (searchQuery === prevValue) {
+				debouncedQuery = searchQuery.trim()
+			}
+		}, 500)
+
+		return () => clearTimeout(handler)
+	})
+
+	$effect(() => {
+		if (debouncedQuery.length > 1) search(debouncedQuery)
 		else searchResults = undefined
 	})
 
@@ -64,6 +76,10 @@
 			bind:value={searchQuery}
 			placeholder="Website durchsuchen..."
 		/>
+
+		{#if error}
+			Bei der Suche ist ein Fehler aufgetreten!
+		{/if}
 
 		{#if searchResults}
 			{searchResults.nbHits === 1
