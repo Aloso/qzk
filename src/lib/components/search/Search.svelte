@@ -19,7 +19,7 @@
 	let searchTerms = $state('')
 
 	let searchResults = $derived.by(() => {
-		return search(searchTerms).map(res => ({ ...res, matches: getMatches(res, 4) }))
+		return search(searchTerms).map(res => ({ ...res, matches: getMatches(res, 3) }))
 	})
 
 	onMount(async () => {
@@ -129,7 +129,7 @@
 		<div class="results">
 			{#each searchResults as result}
 				<a class="result" href="/{result.slug}" onclick={() => onselect(result)}>
-					<span class="title a">
+					<span class="title">
 						{#if result.type === 'Person'}
 							Person:
 						{:else if result.type === 'BlogPost'}
@@ -159,11 +159,12 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #0005;
+		background-color: #0004;
 		animation: 0.3s fade-in;
+		backdrop-filter: blur(6px);
 		z-index: 1000;
 		overflow: auto;
-		padding: 4rem 0;
+		padding: 6rem 0;
 	}
 
 	.search-popup {
@@ -197,22 +198,27 @@
 
 	.result {
 		display: block;
-		margin: 1rem 0;
+		margin: 1.5rem 0;
 		color: inherit;
 		text-decoration: none;
 
 		.title {
 			display: block;
 			font-weight: normal;
+			font-size: 1.2rem;
 			margin: 0.5rem 0;
+			color: var(--color-link);
+			cursor: pointer;
 
 			:global(b) {
 				font-weight: 600;
 			}
 		}
 
-		&:hover .title {
-			text-decoration-color: var(--color-accent);
+		&:hover .title,
+		&:focus .title {
+			text-decoration: underline 2px var(--color-accent);
+			text-underline-offset: 0.25rem;
 		}
 
 		.line {
@@ -225,7 +231,8 @@
 		}
 
 		mark {
-			background-color: #ffff41;
+			background-color: transparent;
+			font-weight: 600;
 		}
 	}
 </style>

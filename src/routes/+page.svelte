@@ -46,6 +46,7 @@
 					{events}
 					showDate={today}
 					colorCoded
+					highlightedDate={openCalendarDay}
 					onClickDay={day => {
 						if (day === openCalendarDay) {
 							openCalendarDay = undefined
@@ -87,6 +88,9 @@
 
 		<h2 class="sidebar-title">Veranstaltung planen</h2>
 		<p>Wähle einen Tag im Kalender, um eine Veranstaltung zu erstellen.</p>
+		<noscript>
+			<p>Für diese Funktion wird JavaScript benötigt!</p>
+		</noscript>
 		<!--
 		<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
 

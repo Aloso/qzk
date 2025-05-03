@@ -163,6 +163,6 @@ body.show-paragraphs {
 	h3,
 	h4 {
 		hyphens: auto;
-		hyphenate-limit-chars: 14 5 5; // not yet widely supported, but works in Chrome
+		hyphenate-limit-chars: 14 5 5; // not yet supported in Safari
 	}
 }
