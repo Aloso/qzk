@@ -6,30 +6,18 @@ import { render } from './render'
 import { BlogPost, GeneralInfo, Image, Navigation, Person, StaticPage } from './types'
 import { getAllNavigations } from './parseNav'
 import { getGeneralInfo } from './parseGeneralInfo'
+import { fetchContentfulEntries } from './fetchContentfulEntries'
 
 config()
 
-export const client = createClient({
+const contentfulClient = createClient({
 	space: process.env.CONTENTFUL_SPACE_ID!,
 	accessToken: process.env.CONTENTFUL_TOKEN!,
 	host: 'cdn.contentful.com',
 })
+const items = await fetchContentfulEntries(contentfulClient)
 
-const items: Entry<EntrySkeletonType>[] = []
-const pageSize = 100
-
-for (let page = 0; ; page += 1) {
-	const entries = await client.getEntries({
-		skip: page * pageSize,
-		limit: pageSize,
-	})
-	items.push(...entries.items)
-	if (entries.total <= (page + 1) * pageSize) {
-		break
-	}
-}
-
-const result: Record<string, ReturnType<typeof transform>[]> = {
+const data: Record<string, ReturnType<typeof transform>[]> = {
 	person: [],
 	blogPost: [],
 	staticPage: [],
@@ -39,19 +27,21 @@ const result: Record<string, ReturnType<typeof transform>[]> = {
 
 for (const entry of items) {
 	const item = transform(entry)
-	result[item.sys.contentType].push(item)
+	data[item.sys.contentType].push(item)
 }
 
-;(result as any).navigations = getAllNavigations(result.navigation as any[])
-;(result as any).generalInfo = getGeneralInfo(result.generalInfo[0].fields as any)
+;(data as any).navigations = getAllNavigations(data.navigation as any[])
+;(data as any).generalInfo = getGeneralInfo(data.generalInfo[0].fields as any)
 
-result.blogPost.sort((a, b) => {
+delete data.navigation
+
+data.blogPost.sort((a, b) => {
 	return a.fields.published === b.fields.published
 		? a.fields.title.localeCompare(b.fields.title)
 		: -a.fields.published.localeCompare(b.fields.published)
 })
 
-fs.writeFileSync('src/lib/contentful/data.json', JSON.stringify(result, undefined, '\t'))
+fs.writeFileSync('src/lib/contentful/data.json', JSON.stringify(data, undefined, '\t'))
 
 function transform(entry: Entry<EntrySkeletonType>) {
 	let fields: any
@@ -103,9 +93,7 @@ function transform(entry: Entry<EntrySkeletonType>) {
 			break
 		}
 		case 'generalInfo': {
-			const fieldsOrig = entry.fields as unknown as GeneralInfo
-			// TODO
-			fields = fieldsOrig
+			fields = entry.fields as unknown as GeneralInfo
 			break
 		}
 		default:

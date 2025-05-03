@@ -8,7 +8,7 @@ export interface Navigations {
 export interface TypedNavigation {
 	href?: string
 	text: string
-	children: TypedNavigation[]
+	children?: TypedNavigation[]
 }
 
 export function getAllNavigations(navs: Item<Navigation>[]): Navigations {
@@ -22,13 +22,10 @@ export function getAllNavigations(navs: Item<Navigation>[]): Navigations {
 }
 
 function transform(item: TopLevelNavItem): TypedNavigation {
-	return {
-		text: item.name,
-		href: item.path === '' ? undefined : item.path,
-		children: item.children.map(c => ({
-			text: c.name,
-			href: c.path === '' ? undefined : c.path,
-			children: [],
-		})),
-	}
+	const href = item.path === '' ? undefined : item.path
+	const children = item.children.map(c => ({
+		text: c.name,
+		href: c.path === '' ? undefined : c.path,
+	}))
+	return children.length > 0 ? { text: item.name, href, children } : { text: item.name, href }
 }

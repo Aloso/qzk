@@ -23,7 +23,7 @@
 						<button data-nav-extender="" class="nav-extender" aria-label="Erweitern"></button>
 					{/if}
 				</div>
-				{#each link.children as child}
+				{#each link.children ?? [] as child}
 					<a class="a nav-child" href={child.href}>
 						{@html child.text}
 					</a>

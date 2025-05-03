@@ -5,14 +5,6 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
 		port: 4506,
-		proxy: {
-			'/events-api': {
-				target: 'https://events.queereszentrumkassel.de',
-				changeOrigin: true,
-				secure: false,
-				rewrite: path => path.replace(/^\/events-api/, ''),
-			},
-		},
 	},
 	css: {
 		preprocessorOptions: {

@@ -31,7 +31,7 @@
 		<h2 class="sidebar-title">Offenes Wohnzimmer</h2>
 		<OpeningHours {...generalInfo} />
 
-		{#if generalInfo.importantInfo?.length > 0}
+		{#if generalInfo.importantInfo?.length}
 			<h2 class="sidebar-title">Wichtig</h2>
 			<ImportantInfo {...generalInfo} />
 		{/if}

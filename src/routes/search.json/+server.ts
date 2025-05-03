@@ -102,7 +102,16 @@ function makeContent(items: (string | undefined | null)[]): string {
 function processRichText(richText: RichText): string[] {
 	const output = richText
 		.filter(c => typeof c === 'string')
-		.map(html => sanitize(html, { allowedTags: [], textFilter: text => text + ' ' }))
+		.map(html => {
+			const processed = html
+				.replace(/(<\/(?:p|ul|ol|h[1-6]|blockquote|hr|table)>)/g, '$1<br /><br />')
+				.replace(/<li>/g, '<li><br />• ')
+
+			return sanitize(processed, { allowedTags: ['br'] })
+				.replace(/<br \/>/g, '\n')
+				.replace(/\n{3,}/g, '\n\n')
+				.trim()
+		})
 
 	return output
 }
