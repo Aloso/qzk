@@ -45,7 +45,7 @@ data.blogPost.sort((a, b) => {
 console.log('writing data.json...')
 fs.writeFileSync('src/lib/contentful/data.json', JSON.stringify(data, undefined, '\t'))
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.ALGOLIA_INDEX === '1') {
 	console.log('updating search index...')
 	await updateSearchIndex(data as any)
 }
