@@ -14,6 +14,8 @@
 
 	let searchQuery = $state('')
 	let trimmedQuery = $derived(searchQuery.trim())
+
+	let abortController: AbortController | undefined = undefined
 	let searchResults = $state<SearchResponse>()
 
 	$effect(() => {
@@ -26,14 +28,20 @@
 	})
 
 	async function search(query: string) {
+		if (abortController) abortController.abort()
+
 		const url = new URL('/api/search', window.location.href)
 		url.searchParams.set('q', query)
 		try {
-			const response = await fetch(url, { method: 'GET' })
+			abortController = new AbortController()
+
+			const response = await fetch(url, { method: 'GET', signal: abortController.signal })
 			searchResults = (await response.json()).results[0]
 		} catch {
 			error = true
 		}
+
+		abortController = undefined
 	}
 </script>
 
