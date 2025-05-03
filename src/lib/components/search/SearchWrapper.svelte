@@ -5,9 +5,6 @@
 	let lazyComponent = $state<Promise<typeof import('./Search.svelte')>>()
 
 	onMount(() => {
-		window.__searchInitialized = true
-		window.postMessage({ type: 'search-initialized' })
-
 		function messageListener(event: MessageEvent) {
 			if (event.data && typeof event.data === 'object') {
 				if (event.data.type === 'search') {

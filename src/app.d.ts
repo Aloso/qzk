@@ -29,7 +29,6 @@ declare global {
 	}
 
 	interface Window {
-		__searchInitialized?: boolean
 		instgrm?: {
 			Embeds: {
 				process: () => void

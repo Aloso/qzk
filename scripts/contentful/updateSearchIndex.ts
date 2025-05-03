@@ -18,6 +18,10 @@ export async function updateSearchIndex(data: typeof dataObj) {
 	const objects: IndexObject[] = []
 
 	for (const staticPage of data.staticPage) {
+		if (shouldSkip(staticPage.fields.slug)) {
+			continue
+		}
+
 		objects.push({
 			objectID: `/${staticPage.fields.slug}`,
 			title: staticPage.fields.name,
@@ -76,4 +80,8 @@ function cleanRichText(richText: RichText): string {
 		.replace(/<br \/>/g, '\n')
 		.replace(/\n{3,}/g, '\n\n')
 		.trim()
+}
+
+function shouldSkip(slug: string) {
+	return slug === 'index' || slug.startsWith('email/') || slug.startsWith('newsletter/')
 }
