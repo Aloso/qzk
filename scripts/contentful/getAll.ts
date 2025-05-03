@@ -7,6 +7,7 @@ import { BlogPost, GeneralInfo, Image, Navigation, Person, StaticPage } from './
 import { getAllNavigations } from './parseNav'
 import { getGeneralInfo } from './parseGeneralInfo'
 import { fetchContentfulEntries } from './fetchContentfulEntries'
+import { updateSearchIndex } from './updateSearchIndex'
 
 config()
 
@@ -41,7 +42,13 @@ data.blogPost.sort((a, b) => {
 		: -a.fields.published.localeCompare(b.fields.published)
 })
 
+console.log('writing data.json...')
 fs.writeFileSync('src/lib/contentful/data.json', JSON.stringify(data, undefined, '\t'))
+
+if (process.env.NODE_ENV === 'production') {
+	console.log('updating search index...')
+	await updateSearchIndex(data as any)
+}
 
 function transform(entry: Entry<EntrySkeletonType>) {
 	let fields: any
