@@ -20,7 +20,9 @@
 		if (DOMPurify.isSupported) {
 			return DOMPurify.sanitize(event.descHtml)
 		} else {
-			// on the server, we trust that the HTML
+			// on the server, we trust that the HTML is okay
+			// this may cause hydration mismatches, because DOMPurify may
+			// insert HTML entities and remove `target="_blank" from links.
 			return event.descHtml
 		}
 	})

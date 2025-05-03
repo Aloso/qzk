@@ -51,20 +51,9 @@
 		})
 	}
 
-	async function startSearch() {
-		if (!window.__searchInitialized) {
-			await new Promise(resolve => {
-				window.addEventListener('message', function onMessage({ data }) {
-					if (data && typeof data === 'object' && data.type === 'search-initialized') {
-						window.removeEventListener('message', onMessage)
-						resolve(undefined)
-					}
-				})
-			})
-		}
-		window.postMessage({ type: 'search' })
-	}
 	for (const searchButton of document.querySelectorAll('[data-search-button]')) {
-		searchButton.addEventListener('click', startSearch)
+		searchButton.addEventListener('click', () => {
+			window.postMessage({ type: 'search' })
+		})
 	}
 })()

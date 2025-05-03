@@ -19,7 +19,7 @@ export interface GeneralInfoTransformed {
 		date: string
 		hours: DateRange[]
 	}[]
-	importantInfo: string[]
+	importantInfo?: string[]
 }
 
 export function getGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {

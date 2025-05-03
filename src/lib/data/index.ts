@@ -26,7 +26,7 @@ export interface GeneralInfo {
 	openingHoursSat: string
 	openingHoursSun: string
 	specialOpeningHours: string[]
-	importantInfo: string[]
+	importantInfo?: string[]
 }
 
 export interface GeneralInfoTransformed {
@@ -43,7 +43,7 @@ export interface GeneralInfoTransformed {
 		date: string
 		hours: DateRange[]
 	}[]
-	importantInfo: string[]
+	importantInfo?: string[]
 }
 
 export interface DateRange {
@@ -152,5 +152,5 @@ export interface Navigations {
 export interface TypedNavigation {
 	href?: string
 	text: string
-	children: TypedNavigation[]
+	children?: TypedNavigation[]
 }

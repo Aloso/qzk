@@ -18,6 +18,8 @@ declare global {
 		interface Platform {
 			env: EnvVars & {
 				DB: D1Database
+				ALGOLIA_APP_ID: string
+				ALGOLIA_API_KEY: string
 			}
 			context: {
 				waitUntil(promise: Promise<unknown>): void
@@ -27,7 +29,6 @@ declare global {
 	}
 
 	interface Window {
-		__searchInitialized?: boolean
 		instgrm?: {
 			Embeds: {
 				process: () => void

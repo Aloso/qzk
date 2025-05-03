@@ -67,7 +67,7 @@ export interface GeneralInfo extends GenericEntry<'generalInfo'> {
 		openingHoursSat?: string
 		openingHoursSun?: string
 		specialOpeningHours: string[]
-		importantInfo: string[]
+		importantInfo?: string[]
 	}
 }
 

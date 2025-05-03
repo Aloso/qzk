@@ -1,98 +1,47 @@
 <script lang="ts">
-	import { initSearchIndex, search } from '$lib/search'
-	import type { SearchData, SearchResult, SearchResultExt } from '$lib/search'
-	import { onMount } from 'svelte'
+	import type { HighlightResultOption, SearchResponse, SnippetResultOption } from 'algoliasearch'
 
 	interface Props {
 		onclose: () => void
-		onselect: (result: SearchResult) => void
+		onselect: () => void
 	}
 
 	let { onclose, onselect }: Props = $props()
 
+	let error = $state(false)
 	let overlay = $state<HTMLDivElement>()
 	let searchBox = $state<HTMLInputElement>()
 
-	let initialized = $state(false)
-	// TODO
-	// let error = $state<false | string>(false)
-	let searchTerms = $state('')
+	let searchQuery = $state('')
+	let trimmedQuery = $derived(searchQuery.trim())
 
-	let searchResults = $derived.by(() => {
-		return search(searchTerms).map(res => ({ ...res, matches: getMatches(res, 3) }))
-	})
-
-	onMount(async () => {
-		if (!initialized) {
-			let data: SearchData
-			try {
-				data = await fetch('/search.json').then(data => data.json())
-			} catch {
-				// error = 'Suche konnte nicht initialisiert werden!'
-				return
-			}
-			initSearchIndex(data)
-			initialized = true
-		}
-	})
+	let abortController: AbortController | undefined = undefined
+	let searchResults = $state<SearchResponse>()
 
 	$effect(() => {
 		searchBox?.focus()
 	})
 
-	function escapeRegExp(str: string) {
-		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-	}
+	$effect(() => {
+		if (trimmedQuery.length > 1) search(trimmedQuery)
+		else searchResults = undefined
+	})
 
-	function escapeHtml(str: string) {
-		return str.replace(/[<>&]/g, c => (c === '<' ? '&lt;' : c === '>' ? '&gt;' : '&amp;'))
-	}
+	async function search(query: string) {
+		if (abortController) abortController.abort()
 
-	function optionalUmlauts(str: string) {
-		return str.replace(/[aou]|ss/g, s =>
-			s === 'a' ? '[aä]' : s === 'o' ? '[oö]' : s === 'u' ? '[uü]' : s === 'ss' ? '(?:ss|ß)' : s,
-		)
-	}
+		const url = new URL('/api/search', window.location.href)
+		url.searchParams.set('q', query)
+		try {
+			abortController = new AbortController()
 
-	function getMatches(res: SearchResultExt, limit = 1) {
-		const indices: [string, number, number][] = []
-
-		outerLoop: for (const [term, item] of Object.entries(res.metadata)) {
-			const escaped = optionalUmlauts(escapeRegExp(term))
-			const regExp = RegExp(`(?<![\\wäöüß])${escaped}[\\wäöüß]{0,4}(?![\\wäöüß])`, 'gi')
-
-			for (const field of Object.keys(item) as ('n' | 'a' | 'c')[]) {
-				const fieldContent = res[field]!
-				let arr: RegExpExecArray | null
-				while ((arr = regExp.exec(fieldContent)) !== null) {
-					indices.push([fieldContent, arr.index, arr[0].length])
-
-					if (indices.length === limit) break outerLoop
-				}
-			}
+			const response = await fetch(url, { method: 'GET', signal: abortController.signal })
+			searchResults = (await response.json()).results[0]
+		} catch {
+			error = true
 		}
 
-		return indices.map(([text, index, len]) => {
-			const start = index - 20
-			const end = index + 100
-			const excerpt1 = text.substring(start, index).trimStart()
-			const excerpt2 = text.substring(index, index + len)
-			const excerpt3 = text.substring(index + len, end).trimEnd()
-			return [excerpt1, excerpt2, excerpt3, start === 0, end === text.length] as const
-		})
-	}
-
-	function formatTitle(res: SearchResultExt) {
-		const escapedText = escapeHtml(res.n)
-
-		const terms = Object.entries(res.metadata)
-		const mappedTerms = terms.flatMap(([term, item]) => (item.n ? escapeRegExp(term) : []))
-		if (mappedTerms.length === 0) return escapedText
-
-		const escapedTerms = optionalUmlauts(mappedTerms.join('|'))
-		const regExp = RegExp(`(?<![\\wäöüß])((${escapedTerms})[\\wäöüß]{0,4})(?![\\wäöüß])`, 'gi')
-
-		return escapedText.replace(regExp, '<b>$1</b>')
+		abortController = undefined
 	}
 </script>
 
@@ -110,41 +59,53 @@
 >
 	<div class="search-popup">
 		<input
-			type="text"
+			type="search"
 			bind:this={searchBox}
-			bind:value={searchTerms}
+			bind:value={searchQuery}
 			placeholder="Website durchsuchen..."
 		/>
 
-		{#if searchTerms.length >= 2}
-			{searchResults.length === 10
-				? '10+ Ergebnisse'
-				: searchResults.length === 1
-					? '1 Ergebnis'
-					: searchResults.length === 0
-						? 'Keine Ergebnisse'
-						: searchResults.length + ' Ergebnisse'}
+		{#if searchResults}
+			{searchResults.nbHits === 1
+				? '1 Ergebnis'
+				: searchResults.nbHits === 0
+					? 'Keine Ergebnisse'
+					: searchResults.nbHits + ' Ergebnisse'}
 		{/if}
 
 		<div class="results">
-			{#each searchResults as result}
-				<a class="result" href="/{result.slug}" onclick={() => onselect(result)}>
+			{#each searchResults?.hits ?? [] as hit}
+				<a class="result" href={hit.objectID} onclick={() => onselect()}>
 					<span class="title">
-						{#if result.type === 'Person'}
+						{#if hit.objectID.startsWith('/person/')}
 							Person:
-						{:else if result.type === 'BlogPost'}
-							Blog Post:
+						{:else if hit.objectID.startsWith('/blog/')}
+							Blog:
 						{/if}
-						{@html formatTitle(result)}
+						{@html (hit._highlightResult!.title as HighlightResultOption).value}
 					</span>
-					{#each result.matches as [before, match, after, isStart, isEnd]}
+					{#if hit._highlightResult?.authors && (hit._highlightResult.authors as HighlightResultOption).matchLevel !== 'none'}
 						<span class="line">
-							{isStart ? '' : '...'}{before}<mark>{match}</mark>{after}{isEnd ? '' : '...'}
+							Autor*innen: {@html (hit._highlightResult!.authors as HighlightResultOption).value}
 						</span>
-					{/each}
+					{/if}
+					{#if hit._snippetResult?.description && (hit._snippetResult.description as SnippetResultOption).matchLevel !== 'none'}
+						<span class="line">
+							{@html (hit._snippetResult!.description as SnippetResultOption).value}
+						</span>
+					{/if}
+					{#if hit._snippetResult?.textContent && (hit._snippetResult.textContent as SnippetResultOption).matchLevel !== 'none'}
+						<span class="line">
+							{@html (hit._snippetResult!.textContent as SnippetResultOption).value}
+						</span>
+					{/if}
 				</a>
 			{/each}
 		</div>
+
+		{#if searchResults?.nbHits && searchResults.nbHits > searchResults.hits.length}
+			Es werden die ersten {searchResults.hits.length} Ergebnisse angezeigt.
+		{/if}
 	</div>
 </div>
 
@@ -230,9 +191,10 @@
 			line-height: 1.25rem;
 		}
 
-		mark {
+		:global(em) {
 			background-color: transparent;
 			font-weight: 600;
+			font-style: normal;
 		}
 	}
 </style>

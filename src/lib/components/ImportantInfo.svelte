@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { GeneralInfoTransformed } from '$lib/data'
 
-	let { importantInfo }: GeneralInfoTransformed = $props()
+	let { importantInfo = [] }: GeneralInfoTransformed = $props()
 </script>
 
 {#each importantInfo as info}

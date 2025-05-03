@@ -57,7 +57,7 @@ export interface GeneralInfo {
 	openingHoursSat?: string
 	openingHoursSun?: string
 	specialOpeningHours: string[]
-	importantInfo: string[]
+	importantInfo?: string[]
 }
 
 export interface Navigation {
