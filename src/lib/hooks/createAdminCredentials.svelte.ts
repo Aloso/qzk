@@ -1,8 +1,9 @@
 import type { Auth } from '$lib/events'
 import { onMount } from 'svelte'
 
+let credentials = $state<Auth>()
+
 export function createAdminCredentials() {
-	let credentials = $state<Auth>()
 	let isInit = $state(false)
 
 	onMount(() => {

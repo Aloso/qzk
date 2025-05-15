@@ -1,11 +1,14 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
+	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 
 	interface Props {
 		links: Navigations['footer']
 	}
 
 	let { links }: Props = $props()
+
+	let credentials = createAdminCredentials()
 </script>
 
 <footer>
@@ -17,11 +20,25 @@
 				{:else}
 					<div class="title">{section.text}</div>
 				{/if}
-				{#each section.children as link}
+				{#each section.children ?? [] as link}
 					<a href={link.href}>{link.text}</a>
 				{/each}
 			</div>
 		{/each}
+		{#if credentials.auth}
+			<div class="link-section">
+				<div class="title">Admin</div>
+				<a href="/admin/events">Event-Verwaltung</a>
+				<button
+					class="a"
+					onclick={() => {
+						credentials.reset()
+					}}
+				>
+					Logout ({credentials.auth.username})
+				</button>
+			</div>
+		{/if}
 	</div>
 	<div class="hidden">
 		<a href="/wegbeschreibung">Wegbeschreibung</a>
@@ -49,10 +66,16 @@
 		flex-wrap: wrap;
 	}
 
-	a {
+	a,
+	.a {
+		font-size: inherit;
 		font-weight: 500;
 		text-decoration: none;
 		color: color.adjust(vars.$COLOR_T4, $lightness: -10%);
+		align-self: start;
+		font-family: inherit;
+		font-size: inherit;
+		padding: 0;
 
 		&:hover {
 			color: vars.$COLOR_T4;
