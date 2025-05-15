@@ -2,9 +2,10 @@
 	interface Props {
 		month: number
 		year: number
+		onChange?: (year: number, month: number) => void
 	}
 
-	let { month = $bindable(), year = $bindable() }: Props = $props()
+	let { month = $bindable(), year = $bindable(), onChange }: Props = $props()
 
 	let monthName = $derived(
 		new Intl.DateTimeFormat('de-DE', { month: 'long' }).format(new Date(year, month, 2)),
@@ -17,6 +18,7 @@
 		} else {
 			month--
 		}
+		onChange?.(year, month)
 	}
 
 	function toNextMonth() {
@@ -26,6 +28,7 @@
 		} else {
 			month++
 		}
+		onChange?.(year, month)
 	}
 </script>
 

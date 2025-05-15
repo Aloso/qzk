@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit'
 import { deleteEvent, putEvent, setEventPublished } from '$lib/server/events/db'
 import { parseEvent } from '$lib/server/events/event'
-import { authenticate, queryKey } from '$lib/server/events/http'
+import { queryKey, tryAuthentication } from '$lib/server/events/http'
 import { sanitizeHtml } from '$lib/utils/sanitize'
 import { error } from '@sveltejs/kit'
 
@@ -14,7 +14,9 @@ import { error } from '@sveltejs/kit'
 export async function POST({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	authenticate(request, platform.env)
+	if (!tryAuthentication(request, platform.env)) {
+		return error(401, 'Keine Berechtigung')
+	}
 
 	const key = queryKey(request)
 	if (!key) {
@@ -28,7 +30,9 @@ export async function POST({ request, platform }): Promise<Response> {
 export async function PUT({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	authenticate(request, platform.env)
+	if (!tryAuthentication(request, platform.env)) {
+		return error(401, 'Keine Berechtigung')
+	}
 
 	const event = parseEvent(await request.json())
 	const key = queryKey(request) ?? event.key
@@ -46,7 +50,9 @@ export async function PUT({ request, platform }): Promise<Response> {
 export async function DELETE({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	authenticate(request, platform.env)
+	if (!tryAuthentication(request, platform.env)) {
+		return error(401, 'Keine Berechtigung')
+	}
 
 	const key = queryKey(request)
 	if (!key) {

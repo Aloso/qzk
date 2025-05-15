@@ -4,9 +4,9 @@
 	import { deleteEvent, publishDraft } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Time } from '$lib/events/types'
-	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import type { Data } from './+page.server'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
+	import { onMount } from 'svelte'
 
 	interface Props {
 		data: Data
@@ -32,7 +32,11 @@
 	let showAll = $state(false)
 	let status = $state<Status>({ type: 'ready' })
 
-	const credentials = createAdminCredentials()
+	let loggedIn = $state<boolean>()
+	onMount(() => {
+		loggedIn = !!localStorage.loggedIn
+	})
+
 	const submittedDrafts = createSubmittedDrafts()
 
 	function formatAppointment(time: Time) {
@@ -91,10 +95,10 @@
 	}
 
 	async function publish() {
-		if (credentials.auth && event?.key) {
+		if (loggedIn && event?.key) {
 			status = { type: 'submitting' }
 			try {
-				await publishDraft(event.key, credentials.auth)
+				await publishDraft(event.key)
 				isPublished = true
 				status = { type: 'ready' }
 			} catch (e) {
@@ -108,10 +112,10 @@
 			return
 		}
 
-		if (event?.key && (credentials.auth || !isPublished)) {
+		if (event?.key && (loggedIn || !isPublished)) {
 			try {
-				if (isPublished && credentials.auth) {
-					await deleteEvent(credentials.auth, event.key)
+				if (isPublished && loggedIn) {
+					await deleteEvent(event.key)
 					status = { type: 'deleted' }
 
 					submittedDrafts.remove(event.key)
@@ -134,7 +138,7 @@
 	<title>{event.title} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
-{#if credentials.auth || !isPublished}
+{#if loggedIn || !isPublished}
 	<div
 		class="admin-bar"
 		class:published={status.type === 'submitting' || (isPublished && status.type === 'ready')}
@@ -151,7 +155,7 @@
 			<p>Wird veröffentlicht...</p>
 		{:else if isPublished}
 			<p>Veröffentlichte Veranstaltung</p>
-		{:else if credentials.initialized && !credentials.auth}
+		{:else if loggedIn === false}
 			<p>
 				Die Veranstaltung wurde eingereicht. Wir informieren dich, wenn wir die Veranstaltung
 				akzeptieren und auf der Website veröffentlichen. Bis dahin kannst du sie noch bearbeiten.
@@ -166,7 +170,7 @@
 
 		{#if status.type === 'ready' && event}
 			<div class="admin-controls">
-				{#if credentials.auth || !isPublished}
+				{#if loggedIn || !isPublished}
 					<a
 						class="admin-button edit"
 						href="/veranstaltungen/bearbeiten?{new URLSearchParams({
@@ -177,10 +181,10 @@
 						Bearbeiten
 					</a>
 				{/if}
-				{#if credentials.auth || !isPublished}
+				{#if loggedIn || !isPublished}
 					<button class="admin-button delete" onclick={remove}>Löschen</button>
 				{/if}
-				{#if credentials.auth && !isPublished}
+				{#if loggedIn && !isPublished}
 					<button class="admin-button publish" onclick={publish}>Veröffentlichen</button>
 				{/if}
 			</div>

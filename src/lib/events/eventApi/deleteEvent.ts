@@ -1,17 +1,18 @@
+import { goto } from '$app/navigation'
 import { host } from '.'
-import { authorizedHeaders, type Auth } from '..'
 
-export async function deleteEvent(auth: Auth, key: string): Promise<void> {
+export async function deleteEvent(key: string): Promise<void> {
 	const url = new URL(host() + '/event')
 	url.searchParams.set('key', key)
 
-	const response = await fetch(url, {
-		method: 'DELETE',
-		headers: authorizedHeaders(auth),
-	})
+	const response = await fetch(url, { method: 'DELETE' })
 	if (!response.ok) {
-		throw new Error(`request unsuccessful: ${response.status} ${response.statusText}`, {
-			cause: response,
-		})
+		if (response.status === 401) {
+			goto('/admin?m=loginFailed')
+		} else {
+			throw new Error(`request unsuccessful: ${response.status} ${response.statusText}`, {
+				cause: response,
+			})
+		}
 	}
 }

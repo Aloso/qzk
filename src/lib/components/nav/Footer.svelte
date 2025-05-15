@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
-	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
+	import { onMount } from 'svelte'
 
 	interface Props {
 		links: Navigations['footer']
@@ -8,7 +8,10 @@
 
 	let { links }: Props = $props()
 
-	let credentials = createAdminCredentials()
+	let loggedIn = $state(false)
+	onMount(() => {
+		loggedIn = !!localStorage.loggedIn
+	})
 </script>
 
 <footer>
@@ -25,18 +28,11 @@
 				{/each}
 			</div>
 		{/each}
-		{#if credentials.auth}
+		{#if loggedIn}
 			<div class="link-section">
 				<div class="title">Admin</div>
-				<a href="/admin/events">Event-Verwaltung</a>
-				<button
-					class="a"
-					onclick={() => {
-						credentials.reset()
-					}}
-				>
-					Logout ({credentials.auth.username})
-				</button>
+				<a href="/admin/events/drafts/1">Event-Verwaltung</a>
+				<a href="/admin/logout">Logout</a>
 			</div>
 		{/if}
 	</div>
@@ -66,8 +62,7 @@
 		flex-wrap: wrap;
 	}
 
-	a,
-	.a {
+	a {
 		font-size: inherit;
 		font-weight: 500;
 		text-decoration: none;

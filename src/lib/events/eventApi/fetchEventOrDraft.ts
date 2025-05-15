@@ -1,22 +1,21 @@
-import { error } from '@sveltejs/kit'
 import { host } from '.'
-import { authorizedHeaders, type Auth } from '..'
 import { wire2event } from '../convert'
 import type { Event, WireEvent, WithSubmitter } from '../types'
+import { goto } from '$app/navigation'
 
-export async function fetchEventOrDraft(key: string, auth?: Auth): Promise<Event & WithSubmitter> {
+export async function fetchEventOrDraft(key: string): Promise<Event & WithSubmitter> {
 	const url = new URL(host() + '/eventOrDraft')
 	url.searchParams.set('key', key)
 
-	const response = await fetch(url, auth ? { headers: authorizedHeaders(auth) } : undefined)
+	const response = await fetch(url)
 	if (!response.ok) {
-		throw new Error('request unsuccessful: ' + response.status, { cause: response })
+		if (response.status === 401) {
+			goto('/admin?m=loginFailed')
+		} else {
+			throw new Error('request unsuccessful: ' + response.status, { cause: response })
+		}
 	}
 	const wireEvent: WireEvent = await response.json()
 	const event = wire2event(wireEvent)
-	if ('submitter' in event) {
-		return event as Event & WithSubmitter
-	} else {
-		error(401, 'Du darfst diese Veranstaltung nicht bearbeiten')
-	}
+	return event as Event & WithSubmitter
 }

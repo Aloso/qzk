@@ -1,11 +1,9 @@
 import { host } from '.'
-import { authorizedHeaders, type Auth } from '..'
 import { event2wire, wire2event } from '../convert'
 import { formatErrors } from '../draftApi/errors'
 import type { Event, WireEvent, WithSubmitter } from '../types'
 
 export async function updateEvent(
-	auth: Auth,
 	event: Event & WithSubmitter,
 	key: string,
 ): Promise<Event & WithSubmitter> {
@@ -14,7 +12,6 @@ export async function updateEvent(
 
 	const response = await fetch(url, {
 		method: 'PUT',
-		headers: authorizedHeaders(auth),
 		body: JSON.stringify(event2wire(event)),
 	})
 	if (!response.ok) {
