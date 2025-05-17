@@ -14,7 +14,7 @@ export interface Data {
 	events: (Event & WithSubmitter)[]
 }
 
-const limit = 25
+const limit = 24
 
 export async function load({ params, platform, request }): Promise<Data> {
 	if (!platform) error(500, 'Platform not available')
