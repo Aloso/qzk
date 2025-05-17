@@ -1,12 +1,10 @@
-<script lang="ts" generics="T extends string">
-	type NoInfer<A extends any> = [A][A extends any ? 0 : never]
-
+<script lang="ts">
 	interface Props {
-		tabs: [NoInfer<T>, string][]
-		active: T
+		urls: [string, string, string][]
+		active: string
 	}
 
-	let { tabs, active = $bindable() }: Props = $props()
+	let { urls, active }: Props = $props()
 
 	let elemWidth = $state(0)
 	let refWidth = $state(0)
@@ -24,8 +22,8 @@
 
 <div class="tabs" class:vertical bind:clientWidth={elemWidth}>
 	<div class="tabs-inner" bind:clientWidth={refWidth}>
-		{#each tabs as [tabType, name]}
-			<button class:active={active === tabType} onclick={() => (active = tabType)}>{name}</button>
+		{#each urls as [url, id, name]}
+			<a class:active={active === id} href={url}>{name}</a>
 		{/each}
 	</div>
 </div>
@@ -43,7 +41,7 @@
 				align-items: start;
 			}
 
-			button {
+			a {
 				margin: 0 0 -2px 0;
 				width: 100%;
 
@@ -63,7 +61,7 @@
 			display: flex;
 		}
 
-		button {
+		a {
 			margin: 0 -2px 0 0;
 			background-color: #eee;
 			border: 2px solid #ccc;
@@ -72,6 +70,7 @@
 			color: black;
 			font: inherit;
 			font-size: 1.1rem;
+			text-decoration: none;
 			transition:
 				background-color 0.2s,
 				border-color 0.2s;

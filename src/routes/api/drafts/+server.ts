@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit'
 import { getAllEvents, getEventNumber } from '$lib/server/events/db'
-import { authenticate, queryNumber } from '$lib/server/events/http'
+import { queryNumber, tryAuthentication } from '$lib/server/events/http'
 import { error } from '@sveltejs/kit'
 
 /*
@@ -18,7 +18,9 @@ import { error } from '@sveltejs/kit'
 export async function GET({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	authenticate(request, platform.env)
+	if (!tryAuthentication(request, platform.env)) {
+		return error(401, 'Keine Berechtigung')
+	}
 
 	const params = new URL(request.url).searchParams
 	const start = queryNumber(params, 'start')

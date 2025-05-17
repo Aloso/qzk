@@ -1,40 +1,36 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { fetchAllDrafts } from '$lib/events/draftApi'
-	import { createAdminCredentials } from '$lib/hooks/createAdminCredentials.svelte'
 	import { onMount } from 'svelte'
 
 	let username = $state('')
 	let password = $state('')
 	let submitted = $state(false)
 	let loginFailed = $state(false)
-	let loaded = $state(false)
-	const credentials = createAdminCredentials()
 
 	function submit(e: SubmitEvent) {
-		e.preventDefault()
-		submitted = true
-		if (username === '' || password === '') return
-		localStorage.setItem('credentials', JSON.stringify({ username, password }))
-		actualSubmit(username, password)
-	}
-
-	async function actualSubmit(username: string, password: string) {
-		try {
-			await fetchAllDrafts({ username, password }, 0, 1)
-			goto('/admin/events', { replaceState: true })
-		} catch {
-			loginFailed = true
-			loaded = true
+		if (username === '' || password === '') {
+			e.preventDefault()
+			return
 		}
 	}
 
 	onMount(() => {
-		if (credentials.auth) {
-			const { username, password } = credentials.auth
-			actualSubmit(username, password)
-		} else {
-			loaded = true
+		if ('credentials' in localStorage) {
+			delete localStorage.credentials
+		}
+
+		const url = new URL(window.location.href)
+
+		if (url.searchParams.get('m') === 'loginFailed') {
+			loginFailed = true
+			delete localStorage.loggedIn
+		} else if (url.searchParams.get('m') === 'loginSuccessful') {
+			localStorage.loggedIn = 'true'
+			goto('/admin/events/drafts/1', { replaceState: true })
+		} else if (url.searchParams.get('m') === 'loggedOut') {
+			delete localStorage.loggedIn
+		} else if (localStorage.loggedIn) {
+			goto('/admin/events/drafts/1', { replaceState: true })
 		}
 	})
 </script>
@@ -43,15 +39,25 @@
 	<title>Administration - Queeres Zentrum Kassel</title>
 </svelte:head>
 
-<form onsubmit={submit} class:hidden={!loaded}>
+<form onsubmit={submit} method="POST" action="/admin/login">
 	<h1>Admin-Bereich</h1>
 	<label>
 		Name:
-		<input type="text" bind:value={username} class:error={submitted && username === ''} />
+		<input
+			name="user"
+			type="text"
+			bind:value={username}
+			class:error={submitted && username === ''}
+		/>
 	</label>
 	<label>
 		Passwort:
-		<input type="password" bind:value={password} class:error={submitted && password === ''} />
+		<input
+			name="password"
+			type="password"
+			bind:value={password}
+			class:error={submitted && password === ''}
+		/>
 	</label>
 	<button type="submit" class:error={submitted && (username === '' || password === '')}>
 		Anmelden
@@ -62,10 +68,6 @@
 </form>
 
 <style lang="scss">
-	.hidden {
-		display: none;
-	}
-
 	h1 {
 		text-align: center;
 	}
