@@ -45,35 +45,63 @@
 
 <div class="section-title">Zeit</div>
 <p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
-{#each values.time as _, i}
-	<TimeSlot
-		bind:time={values.time[i]}
-		onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}
-	/>
-{/each}
-{#if professional || values.time.length < 10}
-	{#if isAddingTimes}
-		<div class="add-slot-area">
-			Nächster Termin:
-			<div class="add-slot-options">
-				<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(7)}>
-					nach 1 Woche
-				</button>
-				<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(14)}>
-					nach 2 Wochen
-				</button>
-				<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(21)}>
-					nach 3 Wochen
-				</button>
-				<button type="button" class="add-slot-action" onclick={addCustomSlot}>Anderes Datum</button>
+<div>
+	{#each values.time as _, i}
+		<TimeSlot
+			bind:time={values.time[i]}
+			onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}
+		/>
+	{/each}
+	{#if (professional || values.time.length < 10) && values.time[0]?.variant !== 'day-range'}
+		{#if isAddingTimes}
+			<div class="add-slot-area">
+				Nächster Termin:
+				<div class="add-slot-options">
+					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(7)}>
+						nach 1 Woche
+					</button>
+					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(14)}>
+						nach 2 Wochen
+					</button>
+					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(21)}>
+						nach 3 Wochen
+					</button>
+					<button type="button" class="add-slot-action" onclick={addCustomSlot}
+						>Anderes Datum</button
+					>
+				</div>
 			</div>
-		</div>
-	{:else}
-		<button type="button" class="add-slot" onclick={() => (isAddingTimes = true)}>
-			Weiteren Termin hinzufügen
-		</button>
+		{:else}
+			<button type="button" class="add-slot" onclick={() => (isAddingTimes = true)}>
+				Weiteren Termin hinzufügen
+			</button>
+		{/if}
 	{/if}
-{:else}
+</div>
+
+{#if values.time.length === 1}
+	<label class="checkbox-label">
+		<input
+			type="checkbox"
+			checked={values.time[0].variant === 'day-range'}
+			onchange={e => {
+				if (e.currentTarget.checked) {
+					values.time[0] = {
+						variant: 'day-range',
+						start: values.time[0].start,
+						end: values.time[0].start,
+					}
+				} else {
+					values.time[0] = {
+						variant: 'day',
+						start: values.time[0].start,
+					}
+				}
+			}}
+		/>
+		Einzelne Veranstaltung über mehrere Tage
+	</label>
+{:else if !professional && values.time.length === 10}
 	<p>Maximal 10 Termine können hinzugefügt werden.</p>
 {/if}
 
@@ -96,13 +124,15 @@
 	}
 
 	.add-slot {
+		display: block;
+		width: 100%;
 		color: inherit;
 		font: inherit;
 		font-size: 0.9rem;
 		padding: 0.5rem 0.67rem;
 		background: #0001;
-		border: 2px solid #0002;
-		border-radius: 20px;
+		border: 2px solid #aaa;
+		border-radius: 0 0 20px 20px;
 
 		&:hover {
 			background: #0002;
@@ -114,9 +144,9 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		background: #eee;
-		border: 2px solid #0001;
-		border-radius: 20px;
-		padding: 1rem;
+		border: 2px solid #aaa;
+		border-radius: 0 0 20px 20px;
+		padding: 0.75rem 1rem 1rem 1rem;
 	}
 
 	.add-slot-options {
@@ -139,5 +169,10 @@
 		&:focus {
 			background-color: #0002;
 		}
+	}
+
+	.checkbox-label {
+		display: block;
+		margin: 1rem 0;
 	}
 </style>
