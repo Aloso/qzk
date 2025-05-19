@@ -74,6 +74,12 @@
 		<div></div>
 		<div></div>
 	</div>
+
+	<Pagination
+		page={data.page}
+		maxPage={data.maxPage}
+		createUrl={page => `/admin/events/${data.type}/${page}`}
+	/>
 </div>
 
 <style lang="scss">

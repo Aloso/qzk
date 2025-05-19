@@ -82,17 +82,11 @@
 </script>
 
 <div class="time-slot">
-	{#if onRemove}
-		<button type="button" class="remove" onclick={onRemove}>Entfernen</button>
-	{/if}
-	<label class="checkbox-label">
-		<input type="checkbox" bind:checked={values.longerPeriod} />
-		Längerer Zeitraum
-	</label>
 	<label>
 		<em class="required">{values.longerPeriod ? 'Startdatum' : 'Datum'}</em>
 		<input type="date" bind:value={values.startDate} required />
 	</label>
+
 	{#if values.longerPeriod}
 		<label>
 			<em class="required">Enddatum</em>
@@ -101,32 +95,70 @@
 	{:else}
 		<label>
 			<em class="required">Uhrzeit</em>
-			<input type="time" bind:value={values.startTime} />
-			bis <input type="time" bind:value={values.endTime} />
+			<div class="times">
+				<input type="time" bind:value={values.startTime} />
+				bis <input type="time" bind:value={values.endTime} />
+			</div>
 		</label>
+	{/if}
+
+	<div class="filler"></div>
+
+	{#if onRemove}
+		<button type="button" class="remove" onclick={onRemove} aria-label="Löschen">
+			<svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor">
+				<path d="M2,2 L14,14 M 2,14 L 14,2" stroke-width="2" />
+			</svg>
+		</button>
 	{/if}
 </div>
 
 <style lang="scss">
 	.time-slot {
-		border: 2px solid #0002;
-		border-radius: 20px;
-		padding: 0.65rem 0.75rem;
-		margin: 0.75rem 0;
+		display: flex;
+		gap: 0.75rem;
+		border: 2px solid #aaa;
+		padding: 0.8rem;
+		margin: 0 0 -2px 0;
 		background-color: white;
+
+		&:first-child {
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+		&:last-child {
+			border-bottom-left-radius: 20px;
+			border-bottom-right-radius: 20px;
+		}
 	}
 
-	input:not([type='checkbox']) {
-		background-color: white;
-		border: 2px solid #aaa;
+	label {
+		display: flex;
+		flex-direction: column;
+		transition: color 0.2s;
+
+		&:hover,
+		&:focus-within {
+			color: var(--color-theme);
+		}
+
+		em {
+			display: block;
+			font-style: normal;
+			font-size: 0.85rem;
+		}
+	}
+
+	input {
+		background-color: transparent;
+		border: none;
 		font: inherit;
 		font-size: 95%;
-		margin: 0;
-		padding: 8px 10px;
-		border-radius: 15px;
+		margin: 0 0 -0.4rem 0;
+		padding: 0.4rem 0;
 		min-width: 50px;
 		transition: border-color 0.2s;
-		vertical-align: middle;
+		vertical-align: baseline;
 
 		&:hover,
 		&:focus {
@@ -136,53 +168,33 @@
 	}
 
 	input[type='time'] {
-		text-align: center;
-		padding-left: 0.25rem;
-		padding-right: 0.25rem;
 		max-width: 3.5rem;
+		min-width: 0;
 	}
 
-	label {
-		display: block;
-		margin: 0.75rem 0;
-		transition: color 0.2s;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
-
-		&:hover {
-			color: var(--color-theme);
-		}
-	}
-
-	.checkbox-label {
-		margin: 0 0 0.5rem 0;
-	}
-
-	em {
-		font-style: normal;
-		display: inline-block;
-		width: 6rem;
-		padding: 10px 0;
-		vertical-align: middle;
+	.filler {
+		flex-grow: 1;
 	}
 
 	.remove {
-		float: right;
 		display: block;
-		color: white;
-		font: inherit;
-		font-weight: 500;
-		font-size: 0.83rem;
-		padding: 0.33rem 0.5rem;
-		background: #c00;
+		width: 32px;
+		height: 32px;
+		padding: 8px;
+		color: #b00;
+		background: transparent;
 		border: none;
-		border-radius: 8px;
-		margin: 0 0 0 auto;
+		border-radius: 12px;
+		margin: -8px -8px 0 -32px;
+		cursor: pointer;
+
+		svg {
+			display: block;
+		}
 
 		&:hover {
-			background: #b00;
+			color: #f00;
+			background-color: #0001;
 		}
 	}
 </style>
