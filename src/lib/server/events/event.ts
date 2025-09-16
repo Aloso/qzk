@@ -68,8 +68,8 @@ const placeSchema = z.object({
 	name: z.string(),
 	room: z.string().optional(),
 	address: z.string().optional(),
-	url: z.string().url('Die Teilnahme-URL ist ungültig').optional(),
-	type: z.enum(['PHYSICAL', 'ONLINE'], { invalid_type_error: 'Ungültiger Typ des Orts' }),
+	url: z.url('Die Teilnahme-URL ist ungültig').optional(),
+	type: z.enum(['PHYSICAL', 'ONLINE'], { error: 'Ungültiger Typ des Orts' }),
 })
 
 const phoneRegex = /^\s*\+?[0-9 /()-]+\s*$/
@@ -77,16 +77,13 @@ const phoneRegex = /^\s*\+?[0-9 /()-]+\s*$/
 const organizerSchema = z.object({
 	name: z.string().min(1, 'Bitte Name der Organisator*innen angeben').optional(),
 	phone: z.string().regex(phoneRegex, 'Ungültige Telefonnummer angegeben').optional(),
-	email: z.string().email('Ungültige E-Mail-Adresse bei Organisator*innen angegeben').optional(),
-	website: z.string().url('Ungültige URL bei Organisator*innen angegeben').optional(),
+	email: z.email('Ungültige E-Mail-Adresse bei Organisator*innen angegeben').optional(),
+	website: z.url('Ungültige URL bei Organisator*innen angegeben').optional(),
 })
 
 const submitterSchema = z.object({
 	name: z.string().min(1, 'Dein Name fehlt'),
-	email: z
-		.string()
-		.min(1, 'Deine E-Mail-Adresse fehlt')
-		.email('Ungültige E-Mail-Adresse angegeben'),
+	email: z.email('Ungültige E-Mail-Adresse angegeben'),
 })
 
 const decorationSchema = z.object({
@@ -98,11 +95,11 @@ const schema = z.object({
 	key: z.string().optional(),
 	title: z.string().min(1, 'Bitte Titel der Veranstaltung angeben'),
 	descHtml: z.string().min(1, 'Bitte Beschreibung der Veranstaltung angeben'),
-	website: z.string().url('Die angegebene Website ist keine gültige URL').optional(),
+	website: z.url('Die angegebene Website ist keine gültige URL').optional(),
 	time: z.array(timeSchema).or(timeSchema),
 	place: placeSchema,
 	organizer: organizerSchema.optional(),
-	pictureUrl: z.string().url('Ungültige URL beim Bild angegeben').optional(),
+	pictureUrl: z.url('Ungültige URL beim Bild angegeben').optional(),
 	tags: z.string().min(1, 'Tag darf nicht leer sein').array(),
 	submitter: submitterSchema,
 	orgaNotes: z.string().optional(),

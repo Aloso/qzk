@@ -22,7 +22,6 @@
 			class="Person-photo"
 			fallbackAlt="Bild von {person.name}"
 			width={400}
-			context="Person: {person.name}"
 		/>
 		<div class="content">
 			<h1 class="name">{person.name}</h1>

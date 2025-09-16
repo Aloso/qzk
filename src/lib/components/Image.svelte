@@ -4,23 +4,15 @@
 	import type { Image } from '$lib/data'
 
 	interface Props extends HTMLImgAttributes {
-		context: string
 		img: Image
 		alt?: string
 		fallbackAlt?: string
 		width?: number
 		height?: number
 	}
-	let { context, img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
+	let { img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
 
 	if (!img.url) {
-		import('node:fs').then(fs => {
-			fs.appendFileSync(
-				'.sveltekit-errors.txt',
-				`Fehler: Ein Bild wurde auf "${context}" verwendet, das noch nicht auf Contentful veröffentlicht wurde: \`${img.id}\`\n`,
-			)
-		})
-
 		throw new Error(`Tried to include an asset that isn't published: ${img.id}`)
 	}
 
