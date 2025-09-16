@@ -19,7 +19,7 @@
 	<div class="mainbar">
 		<div class="published"><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
-		<Image class="BlogPost-photo" img={data.photo} width={800} context="Startseite" />
+		<Image class="BlogPost-photo" img={data.photo} width={800} />
 		<FormattedContent parts={data.parts} />
 	</div>
 

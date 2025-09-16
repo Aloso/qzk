@@ -24,13 +24,7 @@
 
 <div class="blogPost" class:withImage>
 	{#if withImage}
-		<Image
-			class="BlogPostPreview-photo"
-			img={post.photo}
-			width={250}
-			height={250}
-			context="Blog Post: {post.title}"
-		/>
+		<Image class="BlogPostPreview-photo" img={post.photo} width={250} height={250} />
 	{/if}
 	<div class="right">
 		<h3 class="small-title">

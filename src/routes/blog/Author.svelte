@@ -16,7 +16,6 @@
 		alt="Bild des Autors {author.name}"
 		width={60}
 		height={60}
-		context="Autor: {author.name}"
 	/>
 	<div class="right">
 		<span class="name">
