@@ -147,6 +147,16 @@ body.show-paragraphs {
 	}
 }
 
+.accordeon summary {
+	font-weight: 600;
+	font-size: 1.67rem;
+	cursor: pointer;
+}
+.accordeon summary:hover,
+.accordeon summary:focus {
+	color: var(--color-theme);
+}
+
 @keyframes fade-in {
 	0% {
 		opacity: 0;

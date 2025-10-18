@@ -38,6 +38,12 @@ export interface Person {
 	description?: Document
 }
 
+export interface Accordeon {
+	title: string
+	content: Document
+	open: boolean
+}
+
 export interface DateRange {
 	from: string
 	to: string

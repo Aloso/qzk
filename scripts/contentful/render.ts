@@ -2,7 +2,7 @@ import { CommonNode, documentToHtmlString, Next } from '@contentful/rich-text-ht
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful'
-import { Asset, BlogPost, Image, Item, Person, StaticPage } from './types'
+import { Accordeon, Asset, BlogPost, Image, Item, Person, StaticPage } from './types'
 
 const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 'youtube'] as const
 
@@ -24,7 +24,7 @@ export interface RenderedHtml {
 	headings: Heading[]
 }
 
-export function render(data: Document): RenderedHtml {
+export function render(data: Document, ids: string[] = []): RenderedHtml {
 	const extraComponents: ExtraComponent[] = []
 	let blockLevel = 0
 
@@ -38,7 +38,6 @@ export function render(data: Document): RenderedHtml {
 	const separator = `{{separator-${Date.now()}}}`
 
 	const headings: Heading[] = []
-	const ids: string[] = []
 
 	const html = documentToHtmlString(data, {
 		preserveWhitespace: true,
@@ -68,6 +67,12 @@ export function render(data: Document): RenderedHtml {
 							<p class="embedDescription">${fields.role}</p>
 							${fields.pronouns ? `<p class="embedDescription">${fields.pronouns}</p>` : ''}
 						</a>`
+					}
+					case 'accordeon': {
+						const { fields } = target as Item<Accordeon>
+						const { content, headings: innerHeadings } = render(fields.content, ids)
+						headings.push(...innerHeadings)
+						return `<details class="accordeon" open="${fields.open}"><summary>${fields.title}</summary>${content}</details>`
 					}
 					default:
 						return ''
