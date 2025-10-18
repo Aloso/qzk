@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient, Entry, EntrySkeletonType } from 'contentful'
 import { config } from 'dotenv'
 import * as fs from 'node:fs'
 import { render } from './render'
-import { BlogPost, GeneralInfo, Image, Navigation, Person, StaticPage } from './types'
+import { Accordeon, BlogPost, GeneralInfo, Image, Navigation, Person, StaticPage } from './types'
 import { getAllNavigations } from './parseNav'
 import { getGeneralInfo } from './parseGeneralInfo'
 import { fetchContentfulEntries } from './fetchContentfulEntries'
@@ -14,6 +13,7 @@ config()
 const contentfulClient = createClient({
 	space: process.env.CONTENTFUL_SPACE_ID!,
 	accessToken: process.env.CONTENTFUL_TOKEN!,
+	// use 'cdn.contentful.com' for normal use and 'preview.contentful.com' for preview
 	host: 'cdn.contentful.com',
 })
 const items = await fetchContentfulEntries(contentfulClient)
@@ -24,6 +24,7 @@ const data: Record<string, ReturnType<typeof transform>[]> = {
 	staticPage: [],
 	navigation: [],
 	generalInfo: [],
+	accordeon: [],
 }
 
 for (const entry of items) {
@@ -101,6 +102,12 @@ function transform(entry: Entry<EntrySkeletonType>) {
 		}
 		case 'generalInfo': {
 			fields = entry.fields as unknown as GeneralInfo
+			break
+		}
+		case 'accordeon': {
+			const { title, content, open } = entry.fields as unknown as Accordeon
+			const rendered = render(content)
+			fields = { title, content: rendered, open }
 			break
 		}
 		default:

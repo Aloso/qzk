@@ -117,6 +117,7 @@
 		flex-direction: column;
 		align-items: stretch;
 		font-family: inherit;
+		font-weight: normal;
 		padding: 0.7rem 5px 0;
 		border: none;
 		background-color: transparent;
