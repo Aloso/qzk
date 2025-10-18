@@ -106,7 +106,7 @@
 {/if}
 
 <style lang="scss">
-	@use '../../../../routes/vars.scss' as vars;
+	@use '../../../../routes/vars';
 
 	.section-title {
 		font-weight: 600;
@@ -157,6 +157,7 @@
 
 	.add-slot-action {
 		font-family: inherit;
+		font-weight: normal;
 		font-size: 0.9rem;
 		border: none;
 		color: inherit;

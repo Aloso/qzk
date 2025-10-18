@@ -30,6 +30,7 @@ export default defineConfig(
 				{ varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
 			],
 			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-base-to-string': 'error',
 		},
 	},
 	{

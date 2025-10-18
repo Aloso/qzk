@@ -66,7 +66,7 @@
 </li>
 
 <style lang="scss">
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.calendar-day {
 		display: block;

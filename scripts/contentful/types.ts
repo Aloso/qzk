@@ -12,6 +12,8 @@ export interface Item<T> {
 	}
 }
 
+export type Localized<T> = { [key in keyof T]: Record<'de-DE' | 'en', T[key]> }
+
 export interface StaticPage {
 	slug: string
 	name: string
@@ -64,6 +66,7 @@ export interface GeneralInfo {
 	openingHoursSun?: string
 	specialOpeningHours: string[]
 	importantInfo?: string[]
+	importantInfoEn?: string[]
 }
 
 export interface Navigation {
@@ -93,7 +96,7 @@ export interface Asset<D extends Details = Details> {
 	}
 }
 
-export type Image = Item<Asset<ImageDetails>>
+export type Image = Item<Localized<Asset<ImageDetails>>>
 
 export interface Details {
 	size: number

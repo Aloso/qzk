@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
 	interface Props {
@@ -7,6 +8,7 @@
 	}
 
 	let { links }: Props = $props()
+	let locale = getLocale()
 
 	let loggedIn = $state(false)
 	onMount(() => {
@@ -19,31 +21,31 @@
 		{#each links as section}
 			<div class="link-section">
 				{#if section.href}
-					<a class="title" href={section.href}>{section.text}</a>
+					<a class="title" href={localizeHref(section.href)}>{section[locale]}</a>
 				{:else}
-					<div class="title">{section.text}</div>
+					<div class="title">{section[locale]}</div>
 				{/if}
 				{#each section.children ?? [] as link}
-					<a href={link.href}>{link.text}</a>
+					<a href={localizeHref(link.href ?? '/')}>{link[locale]}</a>
 				{/each}
 			</div>
 		{/each}
 		{#if loggedIn}
 			<div class="link-section">
 				<div class="title">Admin</div>
-				<a href="/admin/events/drafts/1">Event-Verwaltung</a>
-				<a href="/admin/logout">Logout</a>
+				<a href={localizeHref('/admin/events/drafts/1')}>Event-Verwaltung</a>
+				<a href={localizeHref('/admin/logout')}>Logout</a>
 			</div>
 		{/if}
 	</div>
 	<div class="hidden">
-		<a href="/wegbeschreibung">Wegbeschreibung</a>
+		<a href={localizeHref('/wegbeschreibung')}>Wegbeschreibung</a>
 	</div>
 </footer>
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	footer {
 		border-top: 3px solid vars.$COLOR_T2;

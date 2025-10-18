@@ -2,6 +2,7 @@
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	let subject = $state('')
 	let email = $state('')
@@ -29,31 +30,30 @@
 >
 	<ValidatedInput
 		type="text"
-		label="Betreff:"
+		label={m.email_subject()}
 		name="_subject"
 		bind:value={subject}
 		bind:error={subjectError}
-		required="Bitte Betreff eingeben"
+		required={m.email_subject_missing()}
 		{submitClicked}
 	/>
 	<ValidatedInput
 		type="email"
-		label="Deine E-Mail:"
+		label={m.email_sender()}
 		name="email"
 		bind:value={email}
 		bind:error={emailError}
-		required="Bitte Deine E-Mail-Adresse eingeben"
+		required={m.email_sender_missing()}
 		{submitClicked}
-		hasError={email =>
-			/^\S+@\S+\.\S+$/.test(email) ? false : 'Diese E-Mail-Adresse ist nicht gültig!'}
+		hasError={email => (/^\S+@\S+\.\S+$/.test(email) ? false : m.email_sender_invalid())}
 	/>
 	<ValidatedInput
 		type="textarea"
-		label="Nachricht:"
+		label={m.email_message()}
 		name="content"
 		bind:value={content}
 		bind:error={contentError}
-		required="Bitte Nachricht eingeben"
+		required={m.email_message_missing()}
 		{submitClicked}
 		style="--min-height: 200px"
 	/>
@@ -62,7 +62,7 @@
 	<input type="hidden" name="_captcha" value="false" />
 	<input type="hidden" name="_next" value={nextLink} />
 
-	<SubmitButton disabled={submitClicked && !!formError}>Absenden</SubmitButton>
+	<SubmitButton disabled={submitClicked && !!formError}>{m.actions_send()}</SubmitButton>
 </form>
 
 <style lang="scss">

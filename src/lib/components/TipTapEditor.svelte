@@ -412,6 +412,8 @@
 />
 
 <style lang="scss">
+	@use '../../routes/vars';
+
 	.control-group {
 		display: flex;
 		flex-wrap: wrap;
@@ -426,7 +428,7 @@
 			0 -10px 0 var(--background, #eee),
 			0 1px 4px 5px var(--background, #eee);
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			top: 81px;
 			margin-top: 10px;
 		}

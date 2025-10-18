@@ -4,6 +4,7 @@
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
 	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		event: Event
@@ -83,7 +84,7 @@
 		</div>
 		<a
 			class="open-button"
-			href="/veranstaltungen/{event.key}"
+			href={localizeHref(`/veranstaltungen/${event.key}`)}
 			target={openInNewTab ? '_blank' : undefined}
 			style={event.decoration
 				? `--bg: oklch(0.6 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.5 0.15 ${event.decoration.colors[1]})`
@@ -96,7 +97,7 @@
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.event {
 		display: flex;

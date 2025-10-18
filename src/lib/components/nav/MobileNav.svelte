@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import type { Navigations } from '$lib/data'
+	import { getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
 	import { isNavItem } from './navUtil'
 
 	interface Props {
@@ -8,6 +10,13 @@
 	}
 
 	let { url, links }: Props = $props()
+	let locale = getLocale()
+
+	function toggleLocale() {
+		const locale = getLocale() === 'en' ? 'de' : 'en'
+		localStorage.locale = locale
+		setLocale(locale)
+	}
 </script>
 
 <nav id="mobile-nav" class="hidden">
@@ -15,8 +24,12 @@
 		{#each links as link}
 			<div class="nav-group">
 				<div class="nav-row">
-					<a class="a nav-link" href={link.href} class:active={isNavItem(link, url)}>
-						{@html link.text}
+					<a
+						class="a nav-link"
+						href={localizeHref(link.href ?? '/')}
+						class:active={isNavItem(link, url)}
+					>
+						{link[locale]}
 					</a>
 
 					{#if link.children?.length}
@@ -24,18 +37,31 @@
 					{/if}
 				</div>
 				{#each link.children ?? [] as child}
-					<a class="a nav-child" href={child.href}>
-						{@html child.text}
+					<a class="a nav-child" href={localizeHref(child.href ?? '/')}>
+						{child[locale]}
 					</a>
 				{/each}
 			</div>
 		{/each}
+
+		<div class="nav-group">
+			<div class="nav-row">
+				<a
+					class="a nav-link"
+					href={localizeHref(page.url.href, { locale: locale === 'en' ? 'de' : 'en' })}
+					onclick={toggleLocale}
+				>
+					<img src="/globe.svg" alt=" " />
+					{locale === 'en' ? 'Deutsch' : 'English'}
+				</a>
+			</div>
+		</div>
 	</div>
 </nav>
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	#mobile-nav {
 		display: none;
@@ -170,6 +196,12 @@
 				&:hover,
 				&:focus {
 					background-color: vars.$COLOR_T1;
+				}
+
+				img {
+					width: 1.2rem;
+					margin: 0 0.5rem 0 0;
+					vertical-align: -0.1rem;
 				}
 			}
 		}

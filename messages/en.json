@@ -1,0 +1,47 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"header_search": "Search",
+	"header_search_placeholder": "Search website...",
+	"header_search_error": "An error occurred while searching!",
+	"header_search_results_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"match": {
+				"countPlural=zero": "No results",
+				"countPlural=one": "1 result",
+				"countPlural=other": "{count} results"
+			}
+		}
+	],
+	"header_search_authors": "Authors",
+
+	"error": "Error",
+	"required": "Required",
+	"actions_back": "Back",
+	"actions_send": "Send",
+
+	"email_subject": "Subject:",
+	"email_subject_missing": "Please enter a subject",
+	"email_sender": "Your email address:",
+	"email_sender_missing": "Please enter a return address",
+	"email_sender_invalid": "This email address is invalid!",
+	"email_message": "Message:",
+	"email_message_missing": "Please enter a message",
+	"email_sent": "Message sent",
+	"email_sent_body": "We have received your message.",
+	"email_sending_failed": "Error sending the message",
+	"email_sending_failed_contact": "We are sorry for the inconvenience. Please contact us per email:",
+	"email_sending_no_message": "No message exists!",
+
+	"newsletter_email": "Your email address:",
+	"newsletter_email_missing": "Please enter your email address",
+	"newsletter_accept_terms": "I agree to receive emails and accept the privacy policy.",
+	"newsletter_signup": "Subscribe to newsletter",
+
+	"table_of_contents": "On this page",
+	"table_of_contents_show": "Table of contents",
+	"table_of_contents_hide": "Close table of contents",
+
+	"blog_published": "Published {date}"
+}

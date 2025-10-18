@@ -14,6 +14,7 @@
 	import SubmittedList from '$lib/components/events/SubmittedList.svelte'
 	import { onMount } from 'svelte'
 	import { fetchAllEvents } from '$lib/events/eventApi'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
@@ -41,7 +42,7 @@
 				minute: '2-digit',
 			})
 			submittedDrafts.add(key, `${date} - ${event.title}`)
-			goto('/veranstaltungen/' + encodeURIComponent(key))
+			goto(localizeHref('/veranstaltungen/' + encodeURIComponent(key)))
 		} catch (e) {
 			status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
 		}

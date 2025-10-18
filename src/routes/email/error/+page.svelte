@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from '$lib/paraglide/messages'
 	import { onMount } from 'svelte'
 
 	let message = $state<string>()
@@ -16,18 +17,18 @@
 </script>
 
 <svelte:head>
-	<title>Fehler - Queeres Zentrum Kassel</title>
+	<title>{m.error()} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
-<h1>Fehler beim Senden der Nachricht</h1>
+<h1>{m.email_sending_failed()}</h1>
 {#if message}
 	<p class="message">{message}</p>
-	<p>Wir entschuldigen uns für die Störung. Bitte kontaktiere uns per E-Mail:</p>
+	<p>{m.email_sending_failed_contact()}</p>
 	<p>
 		<a href="mailto:orga-queereszentrumkassel@riseup.net">orga-queereszentrumkassel@riseup.net</a>
 	</p>
 {:else}
-	<p>Keine Nachricht vorhanden!</p>
+	<p>{m.email_sending_no_message()}</p>
 {/if}
 
 <style lang="scss">

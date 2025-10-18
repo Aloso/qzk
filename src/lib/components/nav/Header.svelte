@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import DesktopNav from './DesktopNav.svelte'
 	import MobileNav from './MobileNav.svelte'
 
@@ -18,7 +19,7 @@
 	<MobileNav {links} {url} />
 
 	<div class="header-i">
-		<a class="logo-link" href="/">
+		<a class="logo-link" href={localizeHref('/')}>
 			<img data-header-logo class="logo" src="/logo-colorful.png" alt="Queeres Zentrum Kassel" />
 		</a>
 
@@ -37,7 +38,7 @@
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	header {
 		font-size: 1.2rem;
@@ -48,7 +49,7 @@
 		top: -182px;
 		transition: margin-bottom 0.5s;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			top: 0;
 
 			&.smaller {
@@ -65,7 +66,7 @@
 		border-bottom: 2px solid vars.$COLOR_T2;
 		text-align: center;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			text-align: left;
 			display: flex;
 			padding: 0.6rem 0 0.6rem 1rem;
@@ -87,7 +88,7 @@
 		width: fit-content;
 		margin: 0 auto;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			margin: 0;
 		}
 	}
@@ -99,7 +100,7 @@
 		aspect-ratio: 868 / 440;
 		transition: width 0.5s;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			width: 200px;
 			max-width: calc(100vw - 10rem);
 
@@ -114,7 +115,7 @@
 		display: none;
 	}
 
-	@media (max-width: 60rem) {
+	@media (max-width: vars.$DESKTOP_BP) {
 		.header-i {
 			position: relative;
 		}

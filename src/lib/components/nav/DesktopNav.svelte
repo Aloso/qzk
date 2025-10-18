@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import type { Navigations } from '$lib/data'
+	import { m } from '$lib/paraglide/messages'
+	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
 	import { isNavItem } from './navUtil'
 
 	interface Props {
@@ -8,41 +11,68 @@
 	}
 
 	let { url, links }: Props = $props()
+	let locale = getLocale()
+
+	function toggleLocale() {
+		const locale = getLocale() === 'en' ? 'de' : 'en'
+		localStorage.locale = locale
+		setLocale(locale)
+	}
 </script>
 
 <nav>
 	{#each links as link}
 		{#if link.children?.length}
 			<div class="nav-group">
-				<a href={link.href} class="a" class:active={isNavItem(link, url)}>
-					<span class="nav-link-inner">{@html link.text}</span>
+				<a
+					href={localizeHref(link.href ?? '/')}
+					class="a"
+					class:active={isNavItem(link, deLocalizeHref(url))}
+				>
+					<span class="nav-link-inner">{link[locale]}</span>
 				</a>
 
 				<div class="nav-dropdown">
 					{#each link.children as child}
-						<a href={child.href}>
-							{@html child.text}
+						<a href={localizeHref(child.href ?? '/')}>
+							{child[locale]}
 						</a>
 					{/each}
 				</div>
 			</div>
 		{:else}
-			<a href={link.href} class="a" class:active={isNavItem(link, url)}>
-				<span class="nav-link-inner">{@html link.text}</span>
+			<a
+				href={localizeHref(link.href ?? '/')}
+				class="a"
+				class:active={isNavItem(link, deLocalizeHref(url))}
+			>
+				<span class="nav-link-inner">{link[locale]}</span>
 			</a>
 		{/if}
 	{/each}
 
+	<a
+		class="a"
+		href={localizeHref(page.url.href, { locale: locale === 'en' ? 'de' : 'en' })}
+		onclick={toggleLocale}
+	>
+		<span class="nav-link-inner">
+			<img src="/globe.svg" alt=" " />
+			{locale === 'en' ? 'DE' : 'EN'}
+		</span>
+	</a>
+
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt=" " /> Suche
+			<img src="/search.svg" alt=" " />
+			{m.header_search()}
 		</span>
 	</button>
 </nav>
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	nav {
 		display: flex;
@@ -145,7 +175,7 @@
 		}
 	}
 
-	@media (max-width: 60rem) {
+	@media (max-width: vars.$DESKTOP_BP) {
 		nav {
 			display: none;
 		}

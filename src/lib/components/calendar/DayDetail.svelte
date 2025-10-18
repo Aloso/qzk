@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getInBetween, isBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		day: Date
@@ -71,7 +72,8 @@
 	<ul class="event-list">
 		{#each dayEvents as event}
 			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
-				<a href="/veranstaltungen/{event.key}" class="title">{event.title}</a><br />
+				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">{event.title}</a>
+				<br />
 				{[formatPlace(event.place), formatTimes(event.time[0])]
 					.filter(s => s !== undefined)
 					.join(' · ')}
@@ -81,7 +83,10 @@
 		{/each}
 	</ul>
 	<div class="bottom">
-		<a class="plan-button" href="/planen?date={encodeURIComponent(day.toISOString())}">
+		<a
+			class="plan-button"
+			href={localizeHref(`/planen?date=${encodeURIComponent(day.toISOString())}`)}
+		>
 			Veranstaltung hinzufügen
 		</a>
 	</div>

@@ -166,6 +166,7 @@
 			padding: 0.4rem 0.7rem;
 			border-radius: 10px;
 			font-family: inherit;
+			font-weight: normal;
 			font-size: 1rem;
 			line-height: 1.2rem;
 			text-decoration: none;

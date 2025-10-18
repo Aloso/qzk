@@ -6,6 +6,7 @@
 	import { fetchEventOrDraft as fetchEventOrDraft } from '$lib/events/eventApi/fetchEventOrDraft'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import { error } from '@sveltejs/kit'
 	import { onMount } from 'svelte'
 
@@ -47,7 +48,7 @@
 						return
 					}
 				}
-				goto(`/veranstaltungen/${event.key}`)
+				goto(localizeHref(`/veranstaltungen/${event.key}`))
 			} catch (e) {
 				if (e instanceof Error) {
 					status = { type: 'error', message: e.message }

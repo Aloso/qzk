@@ -3,6 +3,7 @@
 		FormValuesOrganisator,
 		FormValuesPersonalInfo,
 	} from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
 	interface Props {
@@ -31,7 +32,7 @@
 {#if !professional}
 	<p class="important">
 		Durch das Absenden stimmst du der Veröffentlichung der angegebenen Daten zu. Mehr Infos findest
-		du in der <a href="/datenschutz" target="_blank">Datenschutzerklärung</a>.
+		du in der <a href={localizeHref('/datenschutz')} target="_blank">Datenschutzerklärung</a>.
 	</p>
 {/if}
 

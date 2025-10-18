@@ -1,0 +1,47 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"header_search": "Suche",
+	"header_search_placeholder": "Website durchsuchen...",
+	"header_search_error": "Bei der Suche ist ein Fehler aufgetreten!",
+	"header_search_results_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"match": {
+				"countPlural=zero": "Keine Ergebnisse",
+				"countPlural=one": "1 Ergebnis",
+				"countPlural=other": "{count} Ergebnisse"
+			}
+		}
+	],
+	"header_search_authors": "Autor*innen",
+
+	"error": "Fehler",
+	"required": "Verpflichtend",
+	"actions_back": "Zurück",
+	"actions_send": "Absenden",
+
+	"email_subject": "Betreff:",
+	"email_subject_missing": "Bitte Betreff eingeben",
+	"email_sender": "Deine E-Mail:",
+	"email_sender_missing": "Bitte Deine E-Mail-Adresse eingeben",
+	"email_sender_invalid": "Diese E-Mail-Adresse ist nicht gültig!",
+	"email_message": "Nachricht:",
+	"email_message_missing": "Bitte Nachricht eingeben",
+	"email_sent": "Nachricht gesendet",
+	"email_sent_body": "Wir haben Deine Nachricht erhalten.",
+	"email_sending_failed": "Fehler beim Senden der Nachricht",
+	"email_sending_failed_contact": "Wir entschuldigen uns für die Störung. Bitte kontaktiere uns per E-Mail:",
+	"email_sending_no_message": "Keine Nachricht vorhanden!",
+
+	"newsletter_email": "Deine E-Mail-Adresse:",
+	"newsletter_email_missing": "Bitte Deine E-Mail-Adresse eingeben",
+	"newsletter_accept_terms": "Ich stimme dem Versand von E-Mails zu und akzeptiere die Datenschutzvereinbarung.",
+	"newsletter_signup": "Newsletter abonnieren",
+
+	"table_of_contents": "Inhalt",
+	"table_of_contents_show": "Inhaltsverzeichnis",
+	"table_of_contents_hide": "Inhaltsverzeichnis schließen",
+
+	"blog_published": "Veröffentlicht: {date}"
+}

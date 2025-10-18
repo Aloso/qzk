@@ -20,6 +20,7 @@ export interface GeneralInfoTransformed {
 		hours: DateRange[]
 	}[]
 	importantInfo?: string[]
+	importantInfoEn?: string[]
 }
 
 export function getGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {
@@ -27,5 +28,6 @@ export function getGeneralInfo(info: GeneralInfo): GeneralInfoTransformed {
 		openingHours: info.openingHours.regular,
 		specialOpeningHours: info.openingHours.special,
 		importantInfo: info.importantInfo,
+		importantInfoEn: info.importantInfoEn,
 	}
 }

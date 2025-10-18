@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { SubmittedDraft } from '$lib/hooks/createSubmittedDrafts.svelte'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		items: SubmittedDraft[]
@@ -14,7 +15,7 @@
 	<ul class="drafts-list">
 		{#each items as { key, name }}
 			<li>
-				<a href="/veranstaltungen/{key}">{name}</a>
+				<a href={localizeHref(`/veranstaltungen/${key}`)}>{name}</a>
 			</li>
 		{/each}
 	</ul>

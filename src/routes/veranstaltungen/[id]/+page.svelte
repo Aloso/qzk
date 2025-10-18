@@ -7,6 +7,7 @@
 	import type { Data } from './+page.server'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { onMount } from 'svelte'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		data: Data
@@ -162,7 +163,7 @@
 			</p>
 			<p>
 				Wenn du Fragen oder Wünsche hast, schreibe uns bitte über das
-				<a href="/kontakt">Kontaktformular</a>.
+				<a href={localizeHref('/kontakt')}>Kontaktformular</a>.
 			</p>
 		{:else}
 			Entwurf
@@ -173,10 +174,12 @@
 				{#if loggedIn || !isPublished}
 					<a
 						class="admin-button edit"
-						href="/veranstaltungen/bearbeiten?{new URLSearchParams({
-							key: event.key!,
-							isPublished: String(isPublished),
-						})}"
+						href={localizeHref(
+							`/veranstaltungen/bearbeiten?${new URLSearchParams({
+								key: event.key!,
+								isPublished: String(isPublished),
+							})}`,
+						)}
 					>
 						Bearbeiten
 					</a>
@@ -265,7 +268,7 @@
 					{event.place.address}
 				</p>
 				<p>
-					<a class="button-link" href="/wegbeschreibung">Wegbeschreibung</a>
+					<a class="button-link" href={localizeHref('/wegbeschreibung')}>Wegbeschreibung</a>
 					<a
 						class="button-link"
 						href="https://maps.app.goo.gl/UcrvgAGBe8dn5b9F6"
@@ -321,7 +324,7 @@
 </div>
 
 <style lang="scss">
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.layout {
 		display: flex;
@@ -350,7 +353,7 @@
 	.quick-links {
 		display: none;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			display: flex;
 			margin: 1rem 0 1.5rem 0;
 			gap: 0.5rem;
@@ -386,7 +389,7 @@
 		max-width: 100%;
 		margin: 2rem 0 0 0;
 
-		@media (max-width: 60rem) {
+		@media (max-width: vars.$DESKTOP_BP) {
 			width: 44rem;
 			min-width: unset;
 			margin-top: 0;
@@ -447,6 +450,7 @@
 		padding: 0.4rem 0.7rem;
 		border-radius: 10px;
 		font-family: inherit;
+		font-weight: normal;
 		font-size: 1rem;
 		line-height: 1.2rem;
 		text-decoration: none;

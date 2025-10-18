@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount, tick } from 'svelte'
 
 	type State = 'idle' | 'ask-for-consent' | 'loading' | 'loaded' | 'error'
@@ -64,7 +65,7 @@
 			<button class="consent-button" onclick={giveConsent}>Profil laden</button>
 			<div class="consent">
 				Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter
-				<a href="/datenschutz">Datenschutz</a>.
+				<a href={localizeHref('/datenschutz')}>Datenschutz</a>.
 			</div>
 		{:else if st === 'loading' || st === 'loaded'}
 			Lädt...

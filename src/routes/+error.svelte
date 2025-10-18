@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { localizeHref } from '$lib/paraglide/runtime'
 </script>
 
 <svelte:head>
@@ -11,7 +12,7 @@
 		<h1>Seite nicht gefunden</h1>
 		<p>Entschuldigung, wir haben nicht gefunden, wonach Du suchst.</p>
 		<p>
-			<a href="/">Zur Startseite</a>
+			<a href={localizeHref('/')}>Zur Startseite</a>
 		</p>
 	{:else}
 		<h1>Fehler {page.status}</h1>

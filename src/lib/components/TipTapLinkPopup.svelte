@@ -254,7 +254,7 @@
 {/if}
 
 <style lang="scss">
-	@use '../../routes/vars.scss' as vars;
+	@use '../../routes/vars';
 
 	.overlay {
 		box-sizing: border-box;
