@@ -52,7 +52,7 @@
 		})
 	}
 
-	function formatDateSpan(start: Date, end: Date, concise = false) {
+	function formatDateSpan(start: Date, end: Date) {
 		return formatDate(start) + ' – ' + formatDate(end)
 	}
 </script>

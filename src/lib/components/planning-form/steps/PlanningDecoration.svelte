@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { FormValuesDecoration } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import type { ChangeEventHandler } from 'svelte/elements'
 
 	interface Props {
 		values: FormValuesDecoration

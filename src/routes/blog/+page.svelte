@@ -15,7 +15,7 @@
 	<p>Es wurden noch keine Blog Posts veröffentlicht. Schau später nochmal vorbei!</p>
 {:else}
 	<section>
-		{#each posts as post}
+		{#each posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</section>

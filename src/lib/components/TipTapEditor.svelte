@@ -68,7 +68,7 @@
 								return ctx.protocols.some(
 									p => p === protocol || (typeof p === 'object' && p.scheme === protocol),
 								)
-							} catch (error) {
+							} catch {
 								return false
 							}
 						},
@@ -81,7 +81,7 @@
 								const domain = parsedUrl.hostname
 
 								return !disallowedDomains.includes(domain)
-							} catch (error) {
+							} catch {
 								return false
 							}
 						},
@@ -310,7 +310,7 @@
 				value={s!.paragraph ? 'P' : s!.headingLevel !== undefined ? `H${s!.headingLevel}` : ''}
 			>
 				<option value="P" onclick={setParagraph}>Absatz</option>
-				{#each headingLevels as level}
+				{#each headingLevels as level (level)}
 					<option
 						value="H{level}"
 						onclick={() => editor!.chain().focus().setHeading({ level }).run()}

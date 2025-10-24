@@ -1,4 +1,4 @@
-import { Entry, EntrySkeletonType, type ContentfulClientApi } from 'contentful'
+import type { Entry, EntrySkeletonType, ContentfulClientApi } from 'contentful'
 
 export async function fetchContentfulEntries(
 	client: ContentfulClientApi<undefined>,

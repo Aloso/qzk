@@ -32,7 +32,7 @@
 			...
 		{/if}
 		<span>
-			{#each pages as _, i}
+			{#each pages as _, i (i)}
 				<a
 					href={createUrl(i + first)}
 					class:active={i + first === page}

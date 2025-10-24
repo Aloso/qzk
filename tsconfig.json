@@ -10,7 +10,8 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler"
-	}
+	},
+	"include": ["src", "scripts", "vite.config.ts"]
 	// "exclude": ["functions/**/*"],
 
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias

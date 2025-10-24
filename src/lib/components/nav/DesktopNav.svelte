@@ -13,15 +13,14 @@
 	let { url, links }: Props = $props()
 	let locale = getLocale()
 
-	function toggleLocale() {
-		const locale = getLocale() === 'en' ? 'de' : 'en'
-		localStorage.locale = locale
-		setLocale(locale)
-	}
+	const locales = [
+		{ locale: 'de', label: 'Deutsch' },
+		{ locale: 'en', label: 'English' },
+	] as const
 </script>
 
 <nav>
-	{#each links as link}
+	{#each links as link (link)}
 		{#if link.children?.length}
 			<div class="nav-group">
 				<a
@@ -33,7 +32,7 @@
 				</a>
 
 				<div class="nav-dropdown">
-					{#each link.children as child}
+					{#each link.children as child (child)}
 						<a href={localizeHref(child.href ?? '/')}>
 							{child[locale]}
 						</a>
@@ -51,16 +50,27 @@
 		{/if}
 	{/each}
 
-	<a
-		class="a"
-		href={localizeHref(page.url.href, { locale: locale === 'en' ? 'de' : 'en' })}
-		onclick={toggleLocale}
-	>
-		<span class="nav-link-inner">
+	<div class="nav-group">
+		<span class="nav-link-inner a">
 			<img src="/globe.svg" alt=" " />
-			{locale === 'en' ? 'DE' : 'EN'}
+			{locale === 'en' ? 'EN' : 'DE'}
 		</span>
-	</a>
+
+		<div class="nav-dropdown">
+			{#each locales as { label, locale } (locale)}
+				<a
+					href={localizeHref(page.url.href, { locale })}
+					onclick={() => {
+						localStorage.locale = locale
+						setLocale(locale)
+					}}
+					class:active={locale === getLocale()}
+				>
+					{label}
+				</a>
+			{/each}
+		</div>
+	</div>
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
@@ -127,6 +137,16 @@
 			text-decoration: none;
 			color: vars.$COLOR_T4;
 
+			&.active {
+				background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
+				cursor: default;
+
+				&:hover,
+				&:focus {
+					background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
+				}
+			}
+
 			&:hover,
 			&:focus {
 				background-color: vars.$COLOR_T1;
@@ -167,6 +187,10 @@
 
 	.nav-link-inner {
 		display: block;
+
+		&.a {
+			cursor: default;
+		}
 
 		img {
 			width: 1em;

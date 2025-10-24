@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
 	let username = $state('')
@@ -26,11 +27,11 @@
 			delete localStorage.loggedIn
 		} else if (url.searchParams.get('m') === 'loginSuccessful') {
 			localStorage.loggedIn = 'true'
-			goto('/admin/events/drafts/1', { replaceState: true })
+			goto(localizeHref('/admin/events/drafts/1'), { replaceState: true })
 		} else if (url.searchParams.get('m') === 'loggedOut') {
 			delete localStorage.loggedIn
 		} else if (localStorage.loggedIn) {
-			goto('/admin/events/drafts/1', { replaceState: true })
+			goto(localizeHref('/admin/events/drafts/1'), { replaceState: true })
 		}
 	})
 </script>

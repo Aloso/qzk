@@ -67,12 +67,12 @@
 	<MonthNav bind:year bind:month />
 
 	<div class="weekday-labels">
-		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay}
+		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay (weekDay)}
 			<div>{weekDay}</div>
 		{/each}
 	</div>
 	<ul class="days">
-		{#each days as day}
+		{#each days as day (day)}
 			<CalendarDay
 				{...day}
 				allEvents={events}

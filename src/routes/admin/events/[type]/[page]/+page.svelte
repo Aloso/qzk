@@ -6,6 +6,7 @@
 	import TabBar from '$lib/components/TabBar.svelte'
 	import { onMount } from 'svelte'
 	import type { Data } from './+page.server'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		data: Data
@@ -38,10 +39,10 @@
 <h1>Veranstaltungen</h1>
 <TabBar
 	urls={[
-		['/admin/events/drafts/1', 'drafts', 'Entwürfe'],
-		['/admin/events/published/1', 'published', 'Öffentlich'],
-		['/admin/events/past/1', 'past', 'Ehemalig'],
-		[`/admin/events/months/${monthDate}`, 'months', 'Nach Monat'],
+		[localizeHref('/admin/events/drafts/1'), 'drafts', 'Entwürfe'],
+		[localizeHref('/admin/events/published/1'), 'published', 'Öffentlich'],
+		[localizeHref('/admin/events/past/1'), 'past', 'Ehemalig'],
+		[localizeHref(`/admin/events/months/${monthDate}`), 'months', 'Nach Monat'],
 	]}
 	active={data.type}
 />
@@ -53,7 +54,7 @@
 			month={monthStart.getMonth()}
 			onChange={(year, month) => {
 				const monthNew = `${year}-${String(month + 1).padStart(2, '0')}-01`
-				goto(`/admin/events/months/${monthNew}`, { replaceState: true })
+				goto(localizeHref(`/admin/events/months/${monthNew}`), { replaceState: true })
 			}}
 		/>
 		<br />
@@ -67,8 +68,8 @@
 	/>
 
 	<div class="event-grid">
-		{#each data.events as event}
-			<EventViewSmall {event} editable openInNewTab />
+		{#each data.events as event (event.key)}
+			<EventViewSmall {event} openInNewTab />
 		{/each}
 		<div></div>
 		<div></div>

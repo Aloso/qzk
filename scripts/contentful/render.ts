@@ -1,8 +1,21 @@
-import { CommonNode, documentToHtmlString, Next } from '@contentful/rich-text-html-renderer'
+import {
+	type CommonNode,
+	documentToHtmlString,
+	type Next,
+} from '@contentful/rich-text-html-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful'
-import { Accordeon, Asset, BlogPost, Image, Item, Localized, Person, StaticPage } from './types'
+import type {
+	Accordeon,
+	Asset,
+	BlogPost,
+	Image,
+	Item,
+	Localized,
+	Person,
+	StaticPage,
+} from './types'
 
 const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 'youtube'] as const
 
@@ -50,7 +63,7 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 						const { fields } = target as unknown as Item<Localized<StaticPage>>
 						return `<a class="embed" href="${localUrl(locale, fields.slug)}">
 							<p class="embedTitle">${local(fields.name, locale)}</p>
-							<p class="embedDescription">${local(fields.description, locale)}</p>
+							${fields.description ? `<p class="embedDescription">${local(fields.description, locale)}</p>` : ''}
 						</a>`
 					}
 					case 'blogPost': {
@@ -81,7 +94,10 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 							locale,
 						)
 						headings.push(...innerHeadings)
-						return `<details class="accordeon" open="${local(fields.open, locale)}"><summary>${local(fields.title, locale)}</summary>${content}</details>`
+						return `<details class="accordeon" open="${local(fields.open, locale)}">
+							<summary>${local(fields.title, locale)}</summary>
+							${content.flatMap(c => (typeof c === 'string' ? [c] : [])).join('')}
+						</details>`
 					}
 					default:
 						return ''

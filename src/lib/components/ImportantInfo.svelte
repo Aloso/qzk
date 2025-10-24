@@ -4,7 +4,7 @@
 	let { importantInfo }: GeneralInfoTransformed = $props()
 </script>
 
-{#each importantInfo as info}
+{#each importantInfo as info (info)}
 	<div class="important-info">
 		{info}
 	</div>

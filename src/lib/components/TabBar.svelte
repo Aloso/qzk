@@ -7,22 +7,17 @@
 	let { urls, active }: Props = $props()
 
 	let elemWidth = $state(0)
-	let refWidth = $state(0)
 	let maxInnerWidth = $state(0)
-	let vertical = $state(false)
+	let vertical = $derived(elemWidth < maxInnerWidth)
 
-	$effect(() => {
-		maxInnerWidth = Math.max(maxInnerWidth, refWidth)
-	})
-
-	$effect(() => {
-		vertical = elemWidth < maxInnerWidth
-	})
+	function refWidthChanged(width: number) {
+		maxInnerWidth = Math.max(maxInnerWidth, width)
+	}
 </script>
 
 <div class="tabs" class:vertical bind:clientWidth={elemWidth}>
-	<div class="tabs-inner" bind:clientWidth={refWidth}>
-		{#each urls as [url, id, name]}
+	<div class="tabs-inner" bind:clientWidth={() => 0, refWidthChanged}>
+		{#each urls as [url, id, name] (url)}
 			<a class:active={active === id} href={url}>{name}</a>
 		{/each}
 	</div>

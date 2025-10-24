@@ -88,7 +88,7 @@
 		{/if}
 
 		<div class="results">
-			{#each searchResults?.hits ?? [] as hit}
+			{#each searchResults?.hits ?? [] as hit (hit.objectID)}
 				<a class="result" href={localizeHref(hit.objectID)} onclick={() => onselect()}>
 					<span class="title">
 						{#if hit.objectID.startsWith('/person/')}

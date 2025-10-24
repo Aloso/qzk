@@ -1,4 +1,4 @@
-import { GeneralInfo } from './types'
+import type { GeneralInfo } from './types'
 
 export interface DateRange {
 	from: string

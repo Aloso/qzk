@@ -1,8 +1,8 @@
-import { createClient, Entry, EntrySkeletonType } from 'contentful'
+import { createClient, type Entry, type EntrySkeletonType } from 'contentful'
 import { config } from 'dotenv'
 import * as fs from 'node:fs'
 import { render } from './render'
-import {
+import type {
 	Accordeon,
 	BlogPost,
 	GeneralInfo,

@@ -66,7 +66,7 @@
 	}
 
 	.published {
-		color: #777;
+		color: #666;
 	}
 
 	.title-link {

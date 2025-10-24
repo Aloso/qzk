@@ -23,12 +23,12 @@
 
 	const trailingZeroes = /:00$/
 	function formatTimeRange(range: DateRange): string {
-		return `${range.from.replace(trailingZeroes, '')} – ${range.to.replace(trailingZeroes, '')} Uhr`
+		return `${range.from.replace(trailingZeroes, '')}\u{2009}–\u{2009}${range.to.replace(trailingZeroes, '')} Uhr`
 	}
 </script>
 
 <div class="opening-hours">
-	{#each weekDayTranslations.filter(([key, _]) => openingHours[key]?.length > 0) as [key, label]}
+	{#each weekDayTranslations.filter(([key, _]) => openingHours[key]?.length > 0) as [key, label] (key)}
 		<div class="row">
 			<span class="label">{label}</span>
 			<span>{openingHours[key].map(formatTimeRange).join(', ')}</span>
@@ -37,7 +37,7 @@
 
 	{#if special.length > 0}
 		<hr />
-		{#each special as { date, hours }}
+		{#each special as { date, hours }, i (i)}
 			<div class="row special">
 				<span class="label">
 					{new Date(date).toLocaleDateString('de-DE', {

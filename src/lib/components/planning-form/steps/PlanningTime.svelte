@@ -46,7 +46,7 @@
 <div class="section-title">Zeit</div>
 <p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
 <div>
-	{#each values.time as _, i}
+	{#each values.time as _, i (i)}
 		<TimeSlot
 			bind:time={values.time[i]}
 			onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}

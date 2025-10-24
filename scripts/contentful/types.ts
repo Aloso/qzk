@@ -1,4 +1,4 @@
-import { Document } from '@contentful/rich-text-types'
+import type { Document } from '@contentful/rich-text-types'
 
 // These are the types received from contentful
 
@@ -17,7 +17,7 @@ export type Localized<T> = { [key in keyof T]: Record<'de-DE' | 'en', T[key]> }
 export interface StaticPage {
 	slug: string
 	name: string
-	description: string
+	description?: string
 	content: Document
 }
 

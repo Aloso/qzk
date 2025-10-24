@@ -9,8 +9,6 @@
 	interface Props {
 		event: Event
 		showMore?: boolean
-		editable?: boolean
-		published?: boolean
 		openInNewTab?: boolean
 	}
 
@@ -87,7 +85,7 @@
 			href={localizeHref(`/veranstaltungen/${event.key}`)}
 			target={openInNewTab ? '_blank' : undefined}
 			style={event.decoration
-				? `--bg: oklch(0.6 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.5 0.15 ${event.decoration.colors[1]})`
+				? `--bg: oklch(0.55 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.45 0.15 ${event.decoration.colors[1]})`
 				: undefined}
 		>
 			Mehr Infos

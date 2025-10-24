@@ -13,7 +13,7 @@
 	<h2>Eingereichte Veranstaltungen</h2>
 
 	<ul class="drafts-list">
-		{#each items as { key, name }}
+		{#each items as { key, name } (key + name)}
 			<li>
 				<a href={localizeHref(`/veranstaltungen/${key}`)}>{name}</a>
 			</li>

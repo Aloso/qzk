@@ -158,15 +158,16 @@
 		line-height: 40px;
 		border-radius: 8px;
 		color: white;
-		background-color: #0085dd;
+		background-color: #0077c7;
 		text-shadow: 0 1px 2px #0002;
 		border: none;
 		font-size: 1rem;
 		font-family: inherit;
+		font-weight: normal;
 
 		&:hover,
 		&:focus {
-			background-color: #0078c8;
+			background-color: #006db6;
 		}
 	}
 

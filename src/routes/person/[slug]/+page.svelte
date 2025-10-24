@@ -46,7 +46,7 @@
 		<p>Die neuesten Beiträge werden angezeigt</p>
 	{/if}
 	<div class="blog-posts">
-		{#each posts as post}
+		{#each posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</div>

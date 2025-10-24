@@ -48,7 +48,8 @@
 		<em class="required">Adresse</em>
 		<textarea
 			bind:value={values.placeAddress}
-			placeholder={'Adresszeile 1\nAdresszeile 2'}
+			placeholder="Adresszeile 1
+Adresszeile 2"
 			rows="2"
 			required={values.placeType === 'PHYSICAL'}
 		></textarea>

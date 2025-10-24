@@ -3,7 +3,7 @@
 	import PlanningFormProfesh from '$lib/components/planning-form/PlanningFormProfesh.svelte'
 	import { updateDraft } from '$lib/events/draftApi'
 	import { updateEvent } from '$lib/events/eventApi'
-	import { fetchEventOrDraft as fetchEventOrDraft } from '$lib/events/eventApi/fetchEventOrDraft'
+	import { fetchEventOrDraft } from '$lib/events/eventApi/fetchEventOrDraft'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { localizeHref } from '$lib/paraglide/runtime'

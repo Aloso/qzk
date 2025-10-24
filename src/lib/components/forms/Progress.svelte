@@ -12,7 +12,7 @@
 </script>
 
 <div class="progress" bind:this={elem}>
-	{#each items as _, index}
+	{#each items as _, index (index)}
 		<div class="progress-part">
 			<div class="progress-track" style="width: {value - min >= index ? 100 : 0}%"></div>
 		</div>

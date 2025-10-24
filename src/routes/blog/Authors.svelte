@@ -10,7 +10,7 @@
 </script>
 
 <div class="authors">
-	{#each authors as author}
+	{#each authors as author (author.slug)}
 		<AuthorComponent {author} />
 	{/each}
 </div>

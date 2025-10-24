@@ -65,7 +65,7 @@
 				/>
 			{/if}
 
-			{#each filteredEvents as event}
+			{#each filteredEvents as event (event.key)}
 				<EventViewSmall {event} />
 			{/each}
 			<div></div>
@@ -100,7 +100,7 @@
 		<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
 
 		<div class="blog-posts">
-			{#each posts as post}
+			{#each posts as post (post.slug)}
 				<BlogPostPreview {post} />
 			{/each}
 		</div>

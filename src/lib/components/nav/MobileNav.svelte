@@ -21,7 +21,7 @@
 
 <nav id="mobile-nav" class="hidden">
 	<div class="mobile-nav-inner">
-		{#each links as link}
+		{#each links as link (link)}
 			<div class="nav-group">
 				<div class="nav-row">
 					<a
@@ -36,7 +36,7 @@
 						<button data-nav-extender="" class="nav-extender" aria-label="Erweitern"></button>
 					{/if}
 				</div>
-				{#each link.children ?? [] as child}
+				{#each link.children ?? [] as child (child)}
 					<a class="a nav-child" href={localizeHref(child.href ?? '/')}>
 						{child[locale]}
 					</a>

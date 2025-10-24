@@ -1,4 +1,4 @@
-import { Item, Navigation, TopLevelNavItem } from './types'
+import type { Item, Navigation, TopLevelNavItem } from './types'
 
 export interface Navigations {
 	header: TypedNavigation[]

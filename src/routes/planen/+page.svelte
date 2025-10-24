@@ -102,7 +102,7 @@
 			</h3>
 			<p>Bitte überprüfe, dass kein Terminkonflikt entsteht.</p>
 			<div class="event-container">
-				{#each intersecting as event}
+				{#each intersecting as event (event.key)}
 					<EventViewSmall {event} showMore openInNewTab />
 				{/each}
 				<div></div>

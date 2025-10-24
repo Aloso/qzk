@@ -18,14 +18,14 @@
 
 <footer>
 	<div class="footer-inner">
-		{#each links as section}
+		{#each links as section (section)}
 			<div class="link-section">
 				{#if section.href}
 					<a class="title" href={localizeHref(section.href)}>{section[locale]}</a>
 				{:else}
 					<div class="title">{section[locale]}</div>
 				{/if}
-				{#each section.children ?? [] as link}
+				{#each section.children ?? [] as link (link)}
 					<a href={localizeHref(link.href ?? '/')}>{link[locale]}</a>
 				{/each}
 			</div>

@@ -29,12 +29,10 @@ export default defineConfig(
 				'warn',
 				{ varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
 			],
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/no-base-to-string': 'error',
 		},
 	},
 	{
-		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
+		files: ['**/*.ts', '**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
@@ -43,5 +41,33 @@ export default defineConfig(
 				svelteConfig,
 			},
 		},
+		rules: {
+			'@typescript-eslint/restrict-template-expressions': 'warn',
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-base-to-string': 'error',
+			'svelte/no-navigation-without-resolve': 'off',
+			'svelte/no-at-html-tags': 'off',
+			'svelte/prefer-svelte-reactivity': 'off',
+		},
+	},
+	{
+		files: ['**/*.svelte.ts', '**/*.svelte'],
+		rules: {
+			'@typescript-eslint/no-unused-expressions': 'off',
+		},
+	},
+	{
+		ignores: [
+			'node_modules',
+			'build',
+			'.svelte-kit',
+			'package',
+			'.env',
+			'.env.*',
+			'!.env.example',
+			'pnpm-lock.yaml',
+			'package-lock.json',
+			'yarn.lock',
+		],
 	},
 )

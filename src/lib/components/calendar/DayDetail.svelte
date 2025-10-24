@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getInBetween, isBetween } from '$lib/events/intersections'
+	import { getInBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
 	import { localizeHref } from '$lib/paraglide/runtime'
 
@@ -47,7 +47,7 @@
 			case 'time':
 				return formatDate(time.start)
 			case 'time-range':
-				return `${formatDate(time.start)} – ${formatDate(time.end)}`
+				return `${formatDate(time.start)}\u{2009}–\u{2009}${formatDate(time.end)}`
 		}
 	}
 
@@ -70,7 +70,7 @@
 		})}
 	</div>
 	<ul class="event-list">
-		{#each dayEvents as event}
+		{#each dayEvents as event (event.key)}
 			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
 				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">{event.title}</a>
 				<br />

@@ -49,7 +49,7 @@
 			case 'day-range':
 				return `<span>${formatDate(time.start)} – ${formatDate(time.end)}</span>`
 			case 'time-range':
-				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)} – ${formatTime(time.end)}</span>`
+				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end)}</span>`
 		}
 	}
 
@@ -226,13 +226,13 @@
 				: undefined}
 		>
 			{#if showAll || futureTimes.length === 0}
-				{#each showAll ? pastTimes : pastTimes.slice(-5) as time}
+				{#each showAll ? pastTimes : pastTimes.slice(-5) as time (time)}
 					<div class="row in-past">
 						{@html formatAppointment(time)}
 					</div>
 				{/each}
 			{/if}
-			{#each showAll ? futureTimes : futureTimes.slice(0, 5) as time}
+			{#each showAll ? futureTimes : futureTimes.slice(0, 5) as time (time)}
 				<div class="row">
 					{@html formatAppointment(time)}
 				</div>

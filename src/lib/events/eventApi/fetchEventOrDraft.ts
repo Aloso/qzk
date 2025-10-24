@@ -2,6 +2,7 @@ import { host } from '.'
 import { wire2event } from '../convert'
 import type { Event, WireEvent, WithSubmitter } from '../types'
 import { goto } from '$app/navigation'
+import { localizeHref } from '$lib/paraglide/runtime'
 
 export async function fetchEventOrDraft(key: string): Promise<Event & WithSubmitter> {
 	const url = new URL(host() + '/eventOrDraft')
@@ -10,7 +11,7 @@ export async function fetchEventOrDraft(key: string): Promise<Event & WithSubmit
 	const response = await fetch(url)
 	if (!response.ok) {
 		if (response.status === 401) {
-			goto('/admin?m=loginFailed')
+			void goto(localizeHref('/admin?m=loginFailed'))
 		} else {
 			throw new Error('request unsuccessful: ' + response.status, { cause: response })
 		}

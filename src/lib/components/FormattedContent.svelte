@@ -26,7 +26,7 @@
 </script>
 
 <section bind:this={htmlSection}>
-	{#each parts as part}
+	{#each parts as part, i (i)}
 		{#if typeof part === 'string'}
 			{@html part}
 		{:else if part.type === 'contact-form'}

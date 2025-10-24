@@ -27,7 +27,7 @@
 		<div class="sidebar">
 			<h2 class="sidebar-title">Mehr interessante Beiträge</h2>
 			<div class="blog-posts">
-				{#each data.related as post}
+				{#each data.related as post (post.slug)}
 					<BlogPostPreview {post} />
 				{/each}
 			</div>

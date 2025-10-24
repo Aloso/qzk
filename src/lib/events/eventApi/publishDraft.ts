@@ -1,4 +1,5 @@
 import { goto } from '$app/navigation'
+import { localizeHref } from '$lib/paraglide/runtime'
 import { host } from '.'
 
 export async function publishDraft(key: string): Promise<boolean> {
@@ -8,7 +9,7 @@ export async function publishDraft(key: string): Promise<boolean> {
 	const response = await fetch(url, { method: 'POST' })
 	if (!response.ok) {
 		if (response.status === 401) {
-			goto('/admin?m=loginFailed')
+			void goto(localizeHref('/admin?m=loginFailed'))
 		} else if (response.status === 404) {
 			return false
 		} else {

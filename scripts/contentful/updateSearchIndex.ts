@@ -1,7 +1,7 @@
 import { algoliasearch } from 'algoliasearch'
 
 import type dataObj from '../../src/lib/contentful/data'
-import { RichText } from '../../src/lib/contentful/data'
+import type { RichText } from '../../src/lib/contentful/data'
 import sanitize from 'sanitize-html'
 
 interface IndexObject {
@@ -13,7 +13,7 @@ interface IndexObject {
 }
 
 export async function updateSearchIndex(data: typeof dataObj) {
-	const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+	const client = algoliasearch(process.env.ALGOLIA_APP_ID!, process.env.ALGOLIA_API_KEY!)
 
 	const objects: IndexObject[] = []
 

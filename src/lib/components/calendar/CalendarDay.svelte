@@ -53,7 +53,7 @@
 	>
 		<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 		<div class="badges">
-			{#each dayEvents.slice(0, 3) as event}
+			{#each dayEvents.slice(0, 3) as event (event.key)}
 				<div
 					class="events-badge"
 					style={colorCoded && event.decoration
@@ -124,7 +124,7 @@
 	}
 
 	.day-label {
-		color: #0005;
+		color: #0000008c;
 		font-size: 1.14rem;
 		padding: 0.05rem 0;
 		border: 2px solid transparent;
