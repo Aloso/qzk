@@ -4,7 +4,8 @@
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
 	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		event: Event
@@ -13,6 +14,7 @@
 	}
 
 	let { event, showMore = false, openInNewTab }: Props = $props()
+	let locale = getLocale()
 
 	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.title))
 	let descHtml = $derived.by(() => {
@@ -30,12 +32,12 @@
 	function formatDateSoon({ start, end }: Time) {
 		const days = daysUntil(start)
 		if (days < 0 && end && daysUntil(end) >= 0) {
-			return 'Aktuell'
+			return m.event_current()
 		}
 		if (days >= 0 && days < 6) {
-			if (days === 0) return 'Heute'
-			else if (days === 1) return 'Morgen'
-			else return start.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })
+			if (days === 0) return m.event_today()
+			else if (days === 1) return m.event_tomorrow()
+			else return start.toLocaleDateString(locale, { timeZone: 'Europe/Berlin', weekday: 'long' })
 		}
 	}
 </script>
@@ -63,7 +65,7 @@
 	{#if showMore}
 		<div class="event-place" aria-label="Ort">
 			{#if event.place.type === 'ONLINE'}
-				Online-Veranstaltung
+				{m.event_online()}
 			{:else}
 				{event.place.room ?? event.place.name}
 			{/if}
@@ -88,7 +90,7 @@
 				? `--bg: oklch(0.55 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.45 0.15 ${event.decoration.colors[1]})`
 				: undefined}
 		>
-			Mehr Infos
+			{m.event_more_info()}
 		</a>
 	</div>
 </div>

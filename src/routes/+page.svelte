@@ -7,6 +7,7 @@
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import DayDetail from '$lib/components/calendar/DayDetail.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		data: Data
@@ -28,17 +29,17 @@
 
 <div class="layout">
 	<section class="important">
-		<h2 class="sidebar-title">Offenes Wohnzimmer</h2>
+		<h2 class="sidebar-title">{m.home_opening_hours()}</h2>
 		<OpeningHours {...generalInfo} />
 
 		{#if generalInfo.importantInfo?.length}
-			<h2 class="sidebar-title">Wichtig</h2>
+			<h2 class="sidebar-title">{m.home_important()}</h2>
 			<ImportantInfo {...generalInfo} />
 		{/if}
 	</section>
 
 	<section class="events">
-		<h2>Veranstaltungen</h2>
+		<h2>{m.home_events()}</h2>
 
 		<div class="event-container">
 			<div class="calendar-wrapper" class:is-expanded={openCalendarDay !== undefined}>
@@ -74,9 +75,9 @@
 		{#if filteredEvents}
 			<div class="label-bottom">
 				{#if filteredEvents.length > 0}
-					Es werden Veranstaltungen der nächsten 30 Tage angezeigt.
+					{m.home_event_limit_reached()}
 				{:else}
-					Keine Veranstaltungen in den nächsten 30 Tagen
+					{m.home_no_events()}
 				{/if}
 			</div>
 		{/if}
@@ -86,18 +87,16 @@
 		<h2 class="sidebar-title">Instagram</h2>
 		<IgFeed />
 
-		<h2 class="sidebar-title">Veranstaltung planen</h2>
-		<p>Wähle einen Tag im Kalender, um eine Veranstaltung zu erstellen.</p>
-		<noscript>
-			<p>Für diese Funktion wird JavaScript benötigt!</p>
-		</noscript>
+		<h2 class="sidebar-title">{m.home_plan_event()}</h2>
+		<p>{m.home_select_day_to_plan()}</p>
+		<noscript><p>{m.noscript()}</p></noscript>
 		<!--
 		<p>Du möchtest etwas im Queeren Zentrum veranstalten?</p>
 
 		<a href="/planen" class="add-event">Neue Veranstaltung</a>
 		-->
 
-		<h2 class="sidebar-title">Neue Blog-Beiträge</h2>
+		<h2 class="sidebar-title">{m.home_new_blog_posts()}</h2>
 
 		<div class="blog-posts">
 			{#each posts as post (post.slug)}

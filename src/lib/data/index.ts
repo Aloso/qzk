@@ -80,6 +80,7 @@ export interface BlogPostViewTransformed {
 	photo: Image
 	parts: RichText
 	related: BlogPostPreviewTransformed[]
+	lang: string
 }
 
 export interface BlogPostPreview {

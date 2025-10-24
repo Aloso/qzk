@@ -5,6 +5,7 @@
 	import type { BlogPostViewTransformed } from '$lib/data'
 	import BlogPostPreview from '../../BlogPostPreview.svelte'
 	import FormattedContent from '$lib/components/FormattedContent.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	let { data }: { data: BlogPostViewTransformed } = $props()
 </script>
@@ -20,12 +21,12 @@
 		<div class="published"><PublishDate date={data.published} withDescription /></div>
 		<Authors authors={data.authors} />
 		<Image class="BlogPost-photo" img={data.photo} width={800} />
-		<FormattedContent parts={data.parts} />
+		<FormattedContent parts={data.parts} lang={data.lang} />
 	</div>
 
 	{#if data.related.length > 0}
 		<div class="sidebar">
-			<h2 class="sidebar-title">Mehr interessante Beiträge</h2>
+			<h2 class="sidebar-title">{m.blog_sidebar_more_posts()}</h2>
 			<div class="blog-posts">
 				{#each data.related as post (post.slug)}
 					<BlogPostPreview {post} />

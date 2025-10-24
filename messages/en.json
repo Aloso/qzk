@@ -16,8 +16,13 @@
 	],
 	"header_search_authors": "Authors",
 
+	"footer_event_management": "Event Management",
+	"footer_logout": "Logout",
+
 	"error": "Error",
+	"loading": "Loading...",
 	"required": "Required",
+	"noscript": "This feature requires JavaScript enabled!",
 	"actions_back": "Back",
 	"actions_send": "Send",
 
@@ -43,5 +48,33 @@
 	"table_of_contents_show": "Table of contents",
 	"table_of_contents_hide": "Close table of contents",
 
-	"blog_published": "Published {date}"
+	"home_opening_hours": "Open Living Room",
+	"home_closed": "closed",
+	"home_important": "Important",
+	"home_events": "Upcoming Events",
+	"home_event_limit_reached": "Events for the next 30 days are displayed.",
+	"home_no_events": "No events in the next 30 days",
+	"home_plan_event": "Plan an Event",
+	"home_select_day_to_plan": "Select a day in the calendar to create a new event.",
+	"home_no_events_on_day": "No events on this day",
+	"home_add_event": "Add event",
+	"home_new_blog_posts": "New Blog Posts",
+
+	"instagram_open": "Open profile on Instagram",
+	"instagram_load_profile": "Load profile",
+	"instagram_privacy": "This may result in cookies being sent to Instagram. See <a>privacy policy</a> for more.",
+	"instagram_loading_error": "The profile could not be loaded. It may have been blocked by your browser or an ad blocker.",
+
+	"blog_published": "Published {date}",
+	"blog_by": "by {date}",
+	"blog_by_unknown": "unknown author",
+	"blog_open": "Read blog post",
+	"blog_sidebar_more_posts": "More interesting articles",
+
+	"event_current": "Currently",
+	"event_today": "Today",
+	"event_tomorrow": "Tomorrow",
+	"event_yesterday": "Yesterday",
+	"event_online": "Online event",
+	"event_more_info": "More info"
 }

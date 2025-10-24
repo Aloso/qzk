@@ -16,8 +16,13 @@
 	],
 	"header_search_authors": "Autor*innen",
 
+	"footer_event_management": "Event-Veranstaltung",
+	"footer_logout": "Logout",
+
 	"error": "Fehler",
+	"loading": "Lädt...",
 	"required": "Verpflichtend",
+	"noscript": "Für diese Funktion wird JavaScript benötigt!",
 	"actions_back": "Zurück",
 	"actions_send": "Absenden",
 
@@ -43,5 +48,33 @@
 	"table_of_contents_show": "Inhaltsverzeichnis",
 	"table_of_contents_hide": "Inhaltsverzeichnis schließen",
 
-	"blog_published": "Veröffentlicht: {date}"
+	"home_opening_hours": "Offenes Wohnzimmer",
+	"home_closed": "geschlossen",
+	"home_important": "Wichtig",
+	"home_events": "Veranstaltungen",
+	"home_event_limit_reached": "Es werden Veranstaltungen der nächsten 30 Tage angezeigt.",
+	"home_no_events": "Keine Veranstaltungen in den nächsten 30 Tagen",
+	"home_plan_event": "Veranstaltung planen",
+	"home_select_day_to_plan": "Wähle einen Tag im Kalender, um eine Veranstaltung zu erstellen.",
+	"home_no_events_on_day": "Keine Veranstaltungen an diesem Tag",
+	"home_add_event": "Veranstaltung hinzufügen",
+	"home_new_blog_posts": "Neue Blog-Beiträge",
+
+	"instagram_open": "Profil auf Instagram ansehen",
+	"instagram_load_profile": "Profil laden",
+	"instagram_privacy": "Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter <a>Datenschutz</a>.",
+	"instagram_loading_error": "Das Profil konnte nicht geladen werden. Möglicherweise wurde es durch den Browser oder einen Ad-Blocker blockiert.",
+
+	"blog_published": "Veröffentlicht: {date}",
+	"blog_by": "von {date}",
+	"blog_by_unknown": "unbekannt",
+	"blog_open": "Artikel aufrufen",
+	"blog_sidebar_more_posts": "Mehr interessante Beiträge",
+
+	"event_current": "Aktuell",
+	"event_today": "Heute",
+	"event_tomorrow": "Morgen",
+	"event_yesterday": "Gestern",
+	"event_online": "Online-Veranstaltung",
+	"event_more_info": "Mehr Infos"
 }

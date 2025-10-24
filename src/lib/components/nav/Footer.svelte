@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
+	import { m } from '$lib/paraglide/messages'
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
@@ -33,8 +34,8 @@
 		{#if loggedIn}
 			<div class="link-section">
 				<div class="title">Admin</div>
-				<a href={localizeHref('/admin/events/drafts/1')}>Event-Verwaltung</a>
-				<a href={localizeHref('/admin/logout')}>Logout</a>
+				<a href={localizeHref('/admin/events/drafts/1')}>{m.footer_event_management()}</a>
+				<a href={localizeHref('/admin/logout')}>{m.footer_logout()}</a>
 			</div>
 		{/if}
 	</div>

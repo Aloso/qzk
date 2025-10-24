@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Event, Time } from '$lib/events/types'
+	import { getLocale } from '$lib/paraglide/runtime'
+	import { getCalendarDays } from '../timeCalc'
 	import CalendarDay from './CalendarDay.svelte'
 	import MonthNav from './MonthNav.svelte'
 
@@ -13,6 +15,10 @@
 	}
 
 	let { events, showDate, draftTimes, colorCoded, highlightedDate, onClickDay }: Props = $props()
+
+	let locale = getLocale()
+	let intlLocale = new Intl.Locale(navigator.language) as { weekInfo?: { firstDay: 1 | 7 } }
+	let firstDayOfWeek = intlLocale.weekInfo?.firstDay ?? (locale === 'de' ? 1 : 7)
 
 	let highlightedYear = $derived(highlightedDate?.getFullYear())
 	let highlightedMonth = $derived(highlightedDate?.getMonth())
@@ -31,43 +37,22 @@
 		month = draftEventMonth
 	})
 
-	let firstDayOfMonth = $derived.by(() => {
-		const date = new Date(showDate)
-		date.setMonth(month)
-		date.setDate(1)
-		date.setHours(12, 0, 0, 0)
-		return date
-	})
+	let days = $derived(getCalendarDays(showDate, month, year, firstDayOfWeek))
 
-	let firstWeekDay = $derived((firstDayOfMonth.getDay() + 6) % 7)
-	let daysInMonth = $derived(new Date(year, month + 1, 0).getDate())
-	let daysInLastMonth = $derived(new Date(year, month, 0).getDate())
-
-	let days = $derived(
-		Array.from({ length: 42 }).map((_, i) => {
-			const absNumber = i - firstWeekDay + (firstWeekDay === 0 ? -6 : 1)
-			return absNumber < 1
-				? {
-						day: daysInLastMonth + absNumber,
-						month: (month + 11) % 12,
-						year: month === 0 ? year - 1 : year,
-					}
-				: absNumber > daysInMonth
-					? {
-							day: absNumber - daysInMonth,
-							month: (month + 1) % 12,
-							year: month === 11 ? year + 1 : year,
-						}
-					: { day: absNumber, month, year, isCurrentMonth: true }
-		}),
-	)
+	let weekdays =
+		locale === 'de'
+			? ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+			: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+	if (firstDayOfWeek === 7) {
+		weekdays.unshift(weekdays.pop()!)
+	}
 </script>
 
 <div class="calendar">
 	<MonthNav bind:year bind:month />
 
 	<div class="weekday-labels">
-		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay (weekDay)}
+		{#each weekdays as weekDay (weekDay)}
 			<div>{weekDay}</div>
 		{/each}
 	</div>

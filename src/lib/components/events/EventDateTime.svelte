@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Time } from '$lib/events/types'
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale } from '$lib/paraglide/runtime'
 	import { daysUntil } from '../timeCalc'
 
 	interface Props {
@@ -7,6 +9,7 @@
 	}
 
 	let { time }: Props = $props()
+	let locale = getLocale()
 
 	let formatted = $derived.by(() => {
 		if (time.start == null) return 'ERROR'
@@ -25,16 +28,16 @@
 	function formatDate(d: Date) {
 		const days = daysUntil(d)
 		if (days >= -1 && days < 6) {
-			if (days === -1) return 'Gestern'
-			else if (days === 0) return '<em>Heute</em>'
-			else if (days === 1) return '<em>Morgen</em>'
+			if (days === -1) return m.event_yesterday()
+			else if (days === 0) return `<em>${m.event_today()}</em>`
+			else if (days === 1) return `<em>${m.event_tomorrow()}</em>`
 			else {
-				return `<em>${d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })}</em>`
+				return `<em>${d.toLocaleDateString(locale, { timeZone: 'Europe/Berlin', weekday: 'long' })}</em>`
 			}
 		}
 
 		return d
-			.toLocaleDateString('de-DE', {
+			.toLocaleDateString(locale, {
 				timeZone: 'Europe/Berlin',
 				month: 'numeric',
 				day: 'numeric',
@@ -45,11 +48,12 @@
 	}
 
 	function formatTime(d: Date) {
-		return d.toLocaleTimeString('de-DE', {
+		const time = d.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
 			hour: '2-digit',
 			minute: '2-digit',
 		})
+		return locale === 'en' ? time.replace(/^0|:00/g, '') : time
 	}
 
 	function formatDateSpan(start: Date, end: Date) {

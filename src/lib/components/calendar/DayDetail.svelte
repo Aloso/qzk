@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { getInBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		day: Date
@@ -10,6 +11,7 @@
 	}
 
 	let { day, allEvents, onClose }: Props = $props()
+	let locale = getLocale()
 
 	let { dayStart, dayEnd } = $derived.by(() => {
 		const year = day.getFullYear()
@@ -52,7 +54,7 @@
 	}
 
 	function formatDate(d: Date) {
-		return d.toLocaleTimeString('de-DE', {
+		return d.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
 			hour: '2-digit',
 			minute: '2-digit',
@@ -62,8 +64,9 @@
 
 <div class="day-detail">
 	<div class="top">
-		<button type="button" class="back-button" onclick={onClose} aria-label="Zurück"></button>
-		{day.toLocaleDateString('de-DE', {
+		<button type="button" class="back-button" onclick={onClose} aria-label={m.actions_back()}
+		></button>
+		{day.toLocaleDateString(locale, {
 			day: 'numeric',
 			month: 'long',
 			weekday: 'long',
@@ -79,7 +82,7 @@
 					.join(' · ')}
 			</li>
 		{:else}
-			<div class="empty">Keine Veranstaltungen an diesem Tag</div>
+			<div class="empty">{m.home_no_events_on_day()}</div>
 		{/each}
 	</ul>
 	<div class="bottom">
@@ -87,7 +90,7 @@
 			class="plan-button"
 			href={localizeHref(`/planen?date=${encodeURIComponent(day.toISOString())}`)}
 		>
-			Veranstaltung hinzufügen
+			{m.home_add_event()}
 		</a>
 	</div>
 </div>

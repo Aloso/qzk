@@ -9,7 +9,12 @@
 	import type { ExtraComponent } from '$lib/data'
 	import { localizeHref } from '$lib/paraglide/runtime'
 
-	let { parts }: { parts: (string | ExtraComponent)[] } = $props()
+	interface Props {
+		parts: (string | ExtraComponent)[]
+		lang?: string
+	}
+
+	let { parts, lang }: Props = $props()
 
 	// TODO: remove this
 	let htmlSection = $state<HTMLElement>()
@@ -25,7 +30,7 @@
 	})
 </script>
 
-<section bind:this={htmlSection}>
+<section bind:this={htmlSection} {lang}>
 	{#each parts as part, i (i)}
 		{#if typeof part === 'string'}
 			{@html part}

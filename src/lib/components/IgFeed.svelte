@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { m } from '$lib/paraglide/messages'
 	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount, tick } from 'svelte'
+	import Insert from './Insert.svelte'
 
 	type State = 'idle' | 'ask-for-consent' | 'loading' | 'loaded' | 'error'
 
@@ -59,23 +61,23 @@
 
 		{#if st === 'idle' || (st === 'error' && errorShown)}
 			<a id="main_link" href={permaLink} target="_blank" rel="noreferrer noopener">
-				Profil auf Instagram ansehen
+				{m.instagram_open()}
 			</a>
 		{:else if st === 'ask-for-consent'}
-			<button class="consent-button" onclick={giveConsent}>Profil laden</button>
+			<button class="consent-button" onclick={giveConsent}>{m.instagram_load_profile()}</button>
 			<div class="consent">
-				Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter
-				<a href={localizeHref('/datenschutz')}>Datenschutz</a>.
+				<Insert template={m.instagram_privacy()}>
+					{#snippet placeholder(_, text)}
+						<a href={localizeHref('/datenschutz')}>{text}</a>
+					{/snippet}
+				</Insert>
 			</div>
 		{:else if st === 'loading' || st === 'loaded'}
-			Lädt...
+			{m.loading()}
 		{:else if st === 'error'}
-			<div class="error">
-				Das Profil konnte nicht geladen werden. Möglicherweise wurde es durch den Browser oder einen
-				Ad-Blocker blockiert.
-			</div>
+			<div class="error">{m.instagram_loading_error()}</div>
 			<a id="main_link" href={permaLink} target="_blank" rel="noreferrer noopener">
-				Profil auf Instagram ansehen
+				{m.instagram_open()}
 			</a>
 		{/if}
 	</blockquote>
