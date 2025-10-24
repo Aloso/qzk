@@ -17,7 +17,9 @@
 	let { events, showDate, draftTimes, colorCoded, highlightedDate, onClickDay }: Props = $props()
 
 	let locale = getLocale()
-	let intlLocale = new Intl.Locale(navigator.language) as { weekInfo?: { firstDay: 1 | 7 } }
+	let intlLocale = new Intl.Locale(navigator.language ?? locale) as {
+		weekInfo?: { firstDay: 1 | 7 }
+	}
 	let firstDayOfWeek = intlLocale.weekInfo?.firstDay ?? (locale === 'de' ? 1 : 7)
 
 	let highlightedYear = $derived(highlightedDate?.getFullYear())
