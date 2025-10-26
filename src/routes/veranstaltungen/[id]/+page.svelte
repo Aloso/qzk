@@ -1,13 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { browser } from '$app/environment'
+
 	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
+	import Insert from '$lib/components/Insert.svelte'
 	import { deleteDraft } from '$lib/events/draftApi'
 	import { deleteEvent, publishDraft } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Time } from '$lib/events/types'
-	import type { Data } from './+page.server'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
-	import { onMount } from 'svelte'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '$lib/paraglide/messages'
+	import type { Data } from './+page.server'
 
 	interface Props {
 		data: Data
@@ -21,14 +25,17 @@
 		| { type: 'error'; message: string }
 
 	let { data }: Props = $props()
+	let locale = getLocale()
+	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
 	const event = data.event
 	const now = Date.now()
 	const todayUtc = new Date()
 	todayUtc.setUTCHours(0, 0, 0, 0)
 
-	const pastTimes = $derived(event.time.filter(t => getEndOfTime(t) <= now))
-	const futureTimes = $derived(event.time.filter(t => getEndOfTime(t) > now))
+	let pastTimes = $derived(event.time.filter(t => getEndOfTime(t) <= now))
+	let futureTimes = $derived(event.time.filter(t => getEndOfTime(t) > now))
+	let nextTime = $derived(futureTimes[0])
 	let isPublished = $state(data.isPublished)
 	let showAll = $state(false)
 	let status = $state<Status>({ type: 'ready' })
@@ -40,24 +47,28 @@
 
 	const submittedDrafts = createSubmittedDrafts()
 
-	function formatAppointment(time: Time) {
+	function formatAppointment(time: Time): string[] {
 		switch (time.variant) {
 			case 'day':
-				return `<span>${formatDate(time.start)}</span>`
+				return [formatDate(time.start)]
 			case 'time':
-				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)}</span>`
+				return [formatDate(time.start), formatTime(time.start)]
 			case 'day-range':
-				return `<span>${formatDate(time.start)} – ${formatDate(time.end)}</span>`
+				return [`${formatDate(time.start)} – ${formatDate(time.end)}`]
 			case 'time-range':
-				return `<span>${formatDate(time.start)}</span><span>${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end)}</span>`
+				return [
+					formatDate(time.start),
+					`${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end)}`,
+				]
 		}
 	}
 
 	function formatTime(date: Date) {
-		return date.toLocaleTimeString('de-DE', {
+		return date.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
-			hour: '2-digit',
+			hour: locale === 'en' ? 'numeric' : '2-digit',
 			minute: '2-digit',
+			hourCycle,
 		})
 	}
 
@@ -65,24 +76,23 @@
 		const withYear = date.getFullYear() !== new Date().getFullYear()
 
 		return date
-			.toLocaleDateString('de-DE', {
+			.toLocaleDateString(locale, {
 				timeZone: 'Europe/Berlin',
 				weekday: withYear ? undefined : 'short',
 				day: 'numeric',
-				month: withYear ? 'short' : 'long',
+				month: withYear || locale === 'en' ? 'short' : 'long',
 				year: withYear ? 'numeric' : undefined,
 			})
 			.replace('.,', ',')
 	}
 
-	function formatRelativeDate(date: Date) {
+	function getRelativeDays(date: Date) {
 		const today = new Date()
 		today.setHours(0, 0, 0, 0)
 		const dateCopy = new Date(date)
 		dateCopy.setHours(0, 0, 0, 0)
 		// rounding should help with issues due to DST
-		const diff = Math.round((dateCopy.getTime() - today.getTime()) / (24 * 60 * 60 * 1000))
-		return diff === 0 ? '<b>Heute</b>' : diff === 1 ? '<b>Morgen</b>' : `in <b>${diff}</b> Tagen`
+		return Math.round((dateCopy.getTime() - today.getTime()) / (24 * 60 * 60 * 1000))
 	}
 
 	function scrollToAppointments(e: MouseEvent) {
@@ -103,13 +113,13 @@
 				isPublished = true
 				status = { type: 'ready' }
 			} catch (e) {
-				status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
+				status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
 			}
 		}
 	}
 
 	async function remove() {
-		if (!confirm(`${isPublished ? 'Veranstaltung' : 'Entwurf'} endgültig löschen?`)) {
+		if (!confirm(isPublished ? m.event_delete_final() : m.event_delete_draft_final())) {
 			return
 		}
 
@@ -125,18 +135,18 @@
 					if (success) {
 						status = { type: 'deleted' }
 					} else {
-						status = { type: 'error', message: 'Fehler beim Löschen!' }
+						status = { type: 'error', message: m.event_delete_failed() }
 					}
 				}
 			} catch (e) {
-				status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
+				status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
 			}
 		}
 	}
 </script>
 
 <svelte:head>
-	<title>{event.title} - Queeres Zentrum Kassel</title>
+	<title>{event.title} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if loggedIn || !isPublished}
@@ -149,24 +159,24 @@
 		{#if status.type === 'error'}
 			<p>{status.message}</p>
 		{:else if status.type === 'deleting'}
-			<p>Wird gelöscht...</p>
+			<p>{m.deleting()}</p>
 		{:else if status.type === 'deleted'}
-			<p>Gelöscht</p>
+			<p>{m.deleted()}</p>
 		{:else if status.type === 'submitting'}
-			<p>Wird veröffentlicht...</p>
+			<p>{m.publishing()}</p>
 		{:else if isPublished}
-			<p>Veröffentlichte Veranstaltung</p>
+			<p>{m.event_published_label()}</p>
 		{:else if loggedIn === false}
+			<p>{m.event_submitted_label()}</p>
 			<p>
-				Die Veranstaltung wurde eingereicht. Wir informieren dich, wenn wir die Veranstaltung
-				akzeptieren und auf der Website veröffentlichen. Bis dahin kannst du sie noch bearbeiten.
-			</p>
-			<p>
-				Wenn du Fragen oder Wünsche hast, schreibe uns bitte über das
-				<a href={localizeHref('/kontakt')}>Kontaktformular</a>.
+				<Insert template={m.event_submitted_contact()}>
+					{#snippet placeholder(_, text)}
+						<a href={localizeHref('/kontakt')}>{text}</a>
+					{/snippet}
+				</Insert>
 			</p>
 		{:else}
-			Entwurf
+			{m.event_draft_label()}
 		{/if}
 
 		{#if status.type === 'ready' && event}
@@ -181,14 +191,14 @@
 							})}`,
 						)}
 					>
-						Bearbeiten
+						{m.actions_edit()}
 					</a>
 				{/if}
 				{#if loggedIn || !isPublished}
-					<button class="admin-button delete" onclick={remove}>Löschen</button>
+					<button class="admin-button delete" onclick={remove}>{m.actions_delete()}</button>
 				{/if}
 				{#if loggedIn && !isPublished}
-					<button class="admin-button publish" onclick={publish}>Veröffentlichen</button>
+					<button class="admin-button publish" onclick={publish}>{m.actions_publish()}</button>
 				{/if}
 			</div>
 		{/if}
@@ -201,13 +211,13 @@
 
 		<div class="quick-links">
 			<a href="#termine" onclick={scrollToAppointments}>
-				Termine
+				{m.event_anchor_appointments({ count: event.time.length })}
 				<svg class="arrow-down" viewBox="0 0 24 24">
 					<path d="M4,14L12,22L20,14M12,22L12,2z" />
 				</svg>
 			</a>
 			<a href="#ort" onclick={scrollToPlace}>
-				Ort
+				{m.event_anchor_place()}
 				<svg class="arrow-down" viewBox="0 0 24 24">
 					<path d="M4,14L12,22L20,14M12,22L12,2z" />
 				</svg>
@@ -218,7 +228,9 @@
 	</div>
 
 	<div class="sidebar">
-		<div class="sidebar-title" id="termine">Termin{event.time.length > 1 ? 'e' : ''}</div>
+		<div class="sidebar-title" id="termine">
+			{m.event_anchor_appointments({ count: event.time.length })}
+		</div>
 		<div
 			class="appointments"
 			style={event.decoration
@@ -228,37 +240,50 @@
 			{#if showAll || futureTimes.length === 0}
 				{#each showAll ? pastTimes : pastTimes.slice(-5) as time (time)}
 					<div class="row in-past">
-						{@html formatAppointment(time)}
+						{#each formatAppointment(time) as span (span)}
+							<span>{span}</span>
+						{/each}
 					</div>
 				{/each}
 			{/if}
 			{#each showAll ? futureTimes : futureTimes.slice(0, 5) as time (time)}
 				<div class="row">
-					{@html formatAppointment(time)}
+					{#each formatAppointment(time) as span (span)}
+						<span>{span}</span>
+					{/each}
 				</div>
 			{/each}
 			{#if !showAll && (event.time.length > 5 || (futureTimes.length && pastTimes.length))}
-				<button class="show-all-times" onclick={() => (showAll = true)}>Alle anzeigen</button>
+				<button class="show-all-times" onclick={() => (showAll = true)}>
+					{m.actions_show_all()}
+				</button>
 			{/if}
 		</div>
-		{#if futureTimes.length > 0}
-			{#if futureTimes[0].variant === 'day-range'}
-				{#if futureTimes[0].start >= todayUtc}
-					<p>Beginnt {@html formatRelativeDate(futureTimes[0].start)}</p>
-				{:else}
-					<p>Endet {@html formatRelativeDate(futureTimes[0].end)}</p>
-				{/if}
-			{:else if futureTimes[0].variant === 'day'}
-				<p>Findet {@html formatRelativeDate(futureTimes[0].start)} statt</p>
-			{:else}
-				<EventCountDown
-					showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
-					time={futureTimes[0].start}
-				/>
-			{/if}
+		{#if nextTime && (nextTime.variant === 'day' || nextTime.variant === 'day-range')}
+			<p>
+				<Insert
+					template={m.event_relative_days({
+						days: getRelativeDays(
+							nextTime.variant === 'day' || nextTime.start >= todayUtc
+								? nextTime.start
+								: nextTime.end!,
+						),
+						ty: nextTime.variant === 'day' ? 'once' : nextTime.start >= todayUtc ? 'start' : 'end',
+					})}
+				>
+					{#snippet placeholder(_bold, text)}
+						<b>{text}</b>
+					{/snippet}
+				</Insert>
+			</p>
+		{:else if nextTime}
+			<EventCountDown
+				showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
+				time={nextTime.start}
+			/>
 		{/if}
 
-		<div class="sidebar-title" id="ort">Ort</div>
+		<div class="sidebar-title" id="ort">{m.event_anchor_place()}</div>
 
 		{#if event.place.type === 'PHYSICAL'}
 			{#if event.place.room}
@@ -268,7 +293,9 @@
 					{event.place.address}
 				</p>
 				<p>
-					<a class="button-link" href={localizeHref('/wegbeschreibung')}>Wegbeschreibung</a>
+					<a class="button-link" href={localizeHref('/wegbeschreibung')}>
+						{m.event_anchor_directions()}
+					</a>
 					<a
 						class="button-link"
 						href="https://maps.app.goo.gl/UcrvgAGBe8dn5b9F6"
@@ -528,6 +555,7 @@
 			margin-top: 0.5rem;
 			border-radius: 10px;
 			font-family: inherit;
+			font-weight: normal;
 			font-size: 0.9rem;
 			align-self: center;
 

@@ -45,9 +45,8 @@
 				element,
 				extensions: [
 					StarterKit.configure({
-						heading: {
-							levels: headingLevels,
-						},
+						heading: { levels: headingLevels },
+						link: false,
 					}),
 					Subscript,
 					Superscript,

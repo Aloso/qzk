@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>{person.name} - Queeres Zentrum Kassel</title>
+	<title>{person.name} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <div>

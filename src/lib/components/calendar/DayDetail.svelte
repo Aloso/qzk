@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
 	import { getInBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
 	import { m } from '$lib/paraglide/messages'
@@ -12,6 +13,7 @@
 
 	let { day, allEvents, onClose }: Props = $props()
 	let locale = getLocale()
+	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
 	let { dayStart, dayEnd } = $derived.by(() => {
 		const year = day.getFullYear()
@@ -47,18 +49,20 @@
 			case 'day-range':
 				return undefined
 			case 'time':
-				return formatDate(time.start)
+				return formatTime(time.start)
 			case 'time-range':
-				return `${formatDate(time.start)}\u{2009}–\u{2009}${formatDate(time.end)}`
+				return `${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end)}`
 		}
 	}
 
-	function formatDate(d: Date) {
-		return d.toLocaleTimeString(locale, {
+	function formatTime(d: Date) {
+		const time = d.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
-			hour: '2-digit',
+			hour: locale === 'en' ? 'numeric' : '2-digit',
 			minute: '2-digit',
+			hourCycle,
 		})
+		return locale === 'en' && hourCycle !== 'h23' ? time.replace(':00', '') : time
 	}
 </script>
 

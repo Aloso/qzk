@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.title} - Queeres Zentrum Kassel</title>
+	<title>{data.title} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>{data.title}</h1>

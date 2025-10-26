@@ -219,7 +219,7 @@
 									rel="noreferrer noopener"
 									onclick={() => (isTested = true)}
 								>
-									URL testen
+									Bereinigte URL testen
 								</a>
 							{/if}
 							<button type="button" onclick={() => (isEditingParams = false)}>Abbrechen</button>

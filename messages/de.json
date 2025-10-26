@@ -21,10 +21,17 @@
 
 	"error": "Fehler",
 	"loading": "Lädt...",
+	"publishing": "Wird veröffentlicht...",
+	"deleting": "Wird gelöscht...",
+	"deleted": "Gelöscht",
 	"required": "Verpflichtend",
 	"noscript": "Für diese Funktion wird JavaScript benötigt!",
+	"actions_edit": "Bearbeiten",
+	"actions_delete": "Löschen",
+	"actions_publish": "Veröffentlichen",
 	"actions_back": "Zurück",
 	"actions_send": "Absenden",
+	"actions_show_all": "Alle anzeigen",
 
 	"email_subject": "Betreff:",
 	"email_subject_missing": "Bitte Betreff eingeben",
@@ -76,5 +83,52 @@
 	"event_tomorrow": "Morgen",
 	"event_yesterday": "Gestern",
 	"event_online": "Online-Veranstaltung",
-	"event_more_info": "Mehr Infos"
+	"event_more_info": "Mehr Infos",
+	"event_anchor_appointments": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Termin",
+				"countPlural=other": "Termine"
+			}
+		}
+	],
+	"event_anchor_place": "Ort",
+	"event_anchor_directions": "Wegbeschreibung",
+	"event_relative_days": [
+		{
+			"declarations": ["input days", "input ty"],
+			"selectors": ["days", "ty"],
+			"match": {
+				"ty=start, days=0": "Beginnt <b>heute</b>",
+				"ty=start, days=1": "Beginnt <b>morgen</b>",
+				"ty=start, days=*": "Beginnt in <b>{days}</b> Tagen",
+				"ty=end, days=0": "Endet <b>heute</b>",
+				"ty=end, days=1": "Endet <b>morgen</b>",
+				"ty=end, days=*": "Endet in <b>{days}</b> Tagen",
+				"ty=once, days=0": "Findet <b>heute</b> statt",
+				"ty=once, days=1": "Findet <b>morgen</b> statt",
+				"ty=once, days=*": "Findet in <b>{days}</b> Tagen statt"
+			}
+		}
+	],
+	"event_next_appointment": "Nächster Termin:",
+	"event_countdown_day": "Tag",
+	"event_countdown_days": "Tage",
+	"event_countdown_hours": "Stunden",
+	"event_countdown_minutes": "Minuten",
+	"event_countdown_seconds": "Sekunden",
+
+	"event_draft_label": "Entwurf",
+	"event_published_label": "Veröffentlichte Veranstaltung",
+	"event_submitted_label": "Die Veranstaltung wurde eingereicht. Wir informieren dich, wenn wir die Veranstaltung akzeptieren und auf der Website veröffentlichen. Bis dahin kannst du sie noch bearbeiten.",
+	"event_submitted_contact": "Wenn du Fragen oder Wünsche hast, schreibe uns bitte über das <a>Kontaktformular</a>.",
+	"event_delete_final": "Veranstaltung endgültig löschen?",
+	"event_delete_draft_final": "Entwurf endgültig löschen?",
+	"event_delete_failed": "Fehler beim Löschen!",
+
+	"e404_title": "Seite nicht gefunden",
+	"e404_text": "Entschuldigung, wir haben nicht gefunden, wonach Du suchst.",
+	"e404_home": "Zur Startseite"
 }

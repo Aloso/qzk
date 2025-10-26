@@ -6,6 +6,7 @@
 	import { fetchEventOrDraft } from '$lib/events/eventApi/fetchEventOrDraft'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 	import { localizeHref } from '$lib/paraglide/runtime'
 	import { error } from '@sveltejs/kit'
 	import { onMount } from 'svelte'
@@ -59,11 +60,11 @@
 </script>
 
 <svelte:head>
-	<title>Bearbeiten - {event?.title ?? 'Lädt...'} - Queeres Zentrum Kassel</title>
+	<title>{m.actions_edit()}: {event?.title ?? m.loading()} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if event}
 	<PlanningFormProfesh {status} defaults={defaults.values} {onSubmit} />
 {:else}
-	<div style="text-align: center; margin: 4rem 0">Lädt...</div>
+	<div style="text-align: center; margin: 4rem 0">{m.loading()}</div>
 {/if}

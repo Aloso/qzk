@@ -4,6 +4,13 @@ import type { D1Database } from '@cloudflare/workers-types'
 
 // for information about these interfaces
 declare global {
+	namespace Intl {
+		interface Locale {
+			getHourCycles?: () => ('h11' | 'h12' | 'h23' | 'h24')[]
+			weekInfo?: { firstDay: 1 | 7 }
+		}
+	}
+
 	namespace App {
 		// interface Error {}
 		// interface Locals {}

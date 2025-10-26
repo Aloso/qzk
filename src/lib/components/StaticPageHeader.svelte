@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{locale === 'en' ? (nameEn ?? name) : name} - Queeres Zentrum Kassel</title>
+	<title>{locale === 'en' ? (nameEn ?? name) : name} | Queeres Zentrum Kassel</title>
 	{#if description}
 		<meta
 			name="description"

@@ -33,7 +33,7 @@
 </script>
 
 <svelte:head>
-	<title>Admin: Veranstaltungen - Queeres Zentrum Kassel</title>
+	<title>Admin: Veranstaltungen | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>Veranstaltungen</h1>

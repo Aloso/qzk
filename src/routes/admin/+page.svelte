@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-	<title>Administration - Queeres Zentrum Kassel</title>
+	<title>Administration | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <form onsubmit={submit} method="POST" action="/admin/login">

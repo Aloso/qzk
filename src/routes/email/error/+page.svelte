@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-	<title>{m.error()} - Queeres Zentrum Kassel</title>
+	<title>{m.error()} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>{m.email_sending_failed()}</h1>
@@ -25,7 +25,7 @@
 	<p class="message">{message}</p>
 	<p>{m.email_sending_failed_contact()}</p>
 	<p>
-		<a href="mailto:orga-queereszentrumkassel@riseup.net">orga-queereszentrumkassel@riseup.net</a>
+		<a href="mailto:kontakt@queereszentrumkassel.de">kontakt@queereszentrumkassel.de</a>
 	</p>
 {:else}
 	<p>{m.email_sending_no_message()}</p>

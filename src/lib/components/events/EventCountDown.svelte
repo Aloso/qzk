@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { m } from '$lib/paraglide/messages'
+
 	interface Props {
 		time: Date
 		showLabel?: boolean
@@ -29,7 +31,7 @@
 
 <div class="next">
 	{#if showLabel}
-		Nächster Termin:
+		{m.event_next_appointment()}
 	{/if}
 
 	{#if diff > 0}
@@ -37,20 +39,20 @@
 			{#if daysTotal !== 0}
 				<div class="item">
 					<em>{daysTotal}</em>
-					{daysTotal !== 1 ? 'Tage' : 'Tag'}
+					{daysTotal !== 1 ? m.event_countdown_days() : m.event_countdown_day()}
 				</div>
 			{/if}
 			<div class="item">
 				<em>{String(hours).padStart(2, '0')}</em>
-				Std.
+				{m.event_countdown_hours()}
 			</div>
 			<div class="item">
 				<em>{String(minutes).padStart(2, '0')}</em>
-				Min.
+				{m.event_countdown_minutes()}
 			</div>
 			<div class="item">
 				<em>{String(seconds).padStart(2, '0')}</em>
-				Sek.
+				{m.event_countdown_seconds()}
 			</div>
 		</div>
 	{:else}

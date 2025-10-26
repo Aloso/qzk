@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Blog - Queeres Zentrum Kassel</title>
+	<title>Blog | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>Blog</h1>

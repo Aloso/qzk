@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<title>{m.email_sent()} - Queeres Zentrum Kassel</title>
+	<title>{m.email_sent()} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>{m.email_sent()}</h1>

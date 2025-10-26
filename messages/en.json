@@ -21,10 +21,17 @@
 
 	"error": "Error",
 	"loading": "Loading...",
+	"publishing": "Publishing...",
+	"deleting": "Deleting...",
+	"deleted": "Deleted",
 	"required": "Required",
 	"noscript": "This feature requires JavaScript enabled!",
+	"actions_edit": "Edit",
+	"actions_delete": "Delete",
+	"actions_publish": "Publish",
 	"actions_back": "Back",
 	"actions_send": "Send",
+	"actions_show_all": "Show all",
 
 	"email_subject": "Subject:",
 	"email_subject_missing": "Please enter a subject",
@@ -76,5 +83,52 @@
 	"event_tomorrow": "Tomorrow",
 	"event_yesterday": "Yesterday",
 	"event_online": "Online event",
-	"event_more_info": "More info"
+	"event_more_info": "More info",
+	"event_anchor_appointments": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Appointment",
+				"countPlural=other": "Appointments"
+			}
+		}
+	],
+	"event_anchor_place": "Place",
+	"event_anchor_directions": "Directions",
+	"event_relative_days": [
+		{
+			"declarations": ["input days", "input ty"],
+			"selectors": ["days", "ty"],
+			"match": {
+				"ty=start, days=0": "Begins <b>today</b>",
+				"ty=start, days=1": "Begins <b>tomorrow</b>",
+				"ty=start, days=*": "Begins in <b>{days}</b> days",
+				"ty=end, days=0": "Ends <b>today</b>",
+				"ty=end, days=1": "Ends <b>tomorrow</b>",
+				"ty=end, days=*": "Ends in <b>{days}</b> days",
+				"ty=once, days=0": "Taking place <b>today</b>",
+				"ty=once, days=1": "Taking place <b>tomorrow</b>",
+				"ty=once, days=*": "Taking place in <b>{days}</b> days"
+			}
+		}
+	],
+	"event_next_appointment": "Next date:",
+	"event_countdown_day": "day",
+	"event_countdown_days": "days",
+	"event_countdown_hours": "hr",
+	"event_countdown_minutes": "min",
+	"event_countdown_seconds": "sec",
+
+	"event_draft_label": "Draft",
+	"event_published_label": "Published event",
+	"event_submitted_label": "The event has been submitted. We will let you know when we accept the event and publish it on the website. Until then, you can still edit it.",
+	"event_submitted_contact": "If you have any questions or requests, please write to us using the <a>contact form</a>.",
+	"event_delete_final": "Delete event permanently?",
+	"event_delete_draft_final": "Delete draft permanently?",
+	"event_delete_failed": "Deletion failed!",
+
+	"e404_title": "Page not found",
+	"e404_text": "We are sorry, we couldn't find what you are looking for.",
+	"e404_home": "Homepage"
 }
