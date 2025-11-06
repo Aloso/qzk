@@ -131,7 +131,7 @@
 		font-size: 0.9rem;
 		padding: 0.5rem 0.67rem;
 		background: #0001;
-		border: 2px solid #aaa;
+		border: 2px solid var(--color-inputborder);
 		border-radius: 0 0 20px 20px;
 
 		&:hover {
@@ -143,8 +143,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		background: #eee;
-		border: 2px solid #aaa;
+		background: var(--color-bg2);
+		border: 2px solid var(--color-inputborder);
 		border-radius: 0 0 20px 20px;
 		padding: 0.75rem 1rem 1rem 1rem;
 	}

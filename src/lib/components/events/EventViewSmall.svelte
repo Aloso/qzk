@@ -106,8 +106,8 @@
 		border: none;
 		margin: 0 0 2rem 0;
 		padding: 1.5rem;
-		background-color: #f4f4f4;
-		box-shadow: inset 0 0 0 2px #0000000a;
+		background-color: var(--color-bg1);
+		box-shadow: inset 0 0 0 2px var(--slight-accent);
 		border-radius: 25px;
 		text-align: left;
 		color: inherit;
@@ -142,7 +142,7 @@
 		.event-img-label {
 			display: inline-block;
 			text-transform: uppercase;
-			background-color: white;
+			background-color: var(--color-bg);
 			margin: 0;
 			padding: 0.4rem 0.7rem;
 			border-radius: 0 8px 8px 0;
@@ -184,7 +184,7 @@
 			width: 100%;
 			height: 50px;
 			bottom: 0;
-			background: linear-gradient(transparent, #f4f4f4);
+			background: linear-gradient(transparent, var(--color-bg1));
 		}
 
 		:global(p),
@@ -223,7 +223,7 @@
 		.open-button {
 			align-self: flex-end;
 			border: none;
-			background-color: var(--bg, color.adjust(vars.$COLOR_T4, $lightness: +8%));
+			background-color: var(--bg, var(--color-theme2));
 			color: white;
 			transition: background-color 0.2s;
 			border-radius: 8px;
@@ -236,26 +236,26 @@
 
 			&:hover,
 			&:focus {
-				background-color: var(--bg-focus, vars.$COLOR_T4);
+				background-color: var(--bg-focus, var(--color-theme1));
 			}
 		}
 	}
 
 	.event-place {
 		margin: 1rem 0 0 0;
-		background-color: white;
+		background-color: var(--color-bg);
 		padding: 0.4rem 0.6rem;
 		border-radius: 8px;
-		box-shadow: inset 0 0 0 2px #e5e5e5;
+		box-shadow: inset 0 0 0 2px var(--color-bg3);
 	}
 
 	.event-time {
 		display: flex;
-		background-color: white;
+		background-color: var(--color-bg);
 		padding: 0.4rem 0.6rem;
 		border-radius: 8px;
 		overflow: hidden;
-		box-shadow: inset 0 0 0 2px #e5e5e5;
+		box-shadow: inset 0 0 0 2px var(--color-bg3);
 
 		:global(i) {
 			font-style: normal;
@@ -264,7 +264,7 @@
 			white-space: nowrap;
 
 			&:not(.lone) {
-				border-right: 2px solid #e5e5e5;
+				border-right: 2px solid var(--color-bg3);
 				margin-right: 10px;
 			}
 		}

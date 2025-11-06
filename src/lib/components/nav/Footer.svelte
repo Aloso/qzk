@@ -46,8 +46,8 @@
 	@use '../../../routes/vars.scss' as vars;
 
 	footer {
-		border-top: 3px solid vars.$COLOR_T2;
-		background-color: vars.$COLOR_T0;
+		border-top: 3px solid var(--bg-theme3);
+		background-color: var(--bg-theme);
 		margin-top: 4rem;
 		padding-bottom: 2rem;
 	}
@@ -66,14 +66,14 @@
 		font-size: inherit;
 		font-weight: 500;
 		text-decoration: none;
-		color: color.adjust(vars.$COLOR_T4, $lightness: -10%);
+		color: var(--color-theme);
 		align-self: start;
 		font-family: inherit;
 		font-size: inherit;
 		padding: 0;
 
 		&:hover {
-			color: vars.$COLOR_T4;
+			color: var(--color-theme1);
 		}
 
 		@media (pointer: coarse) {

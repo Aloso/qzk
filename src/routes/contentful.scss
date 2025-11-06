@@ -2,7 +2,7 @@
 	display: block;
 	margin: 1rem 0;
 	padding: 1rem;
-	border: 2px solid #ddd;
+	border: 2px solid var(--color-border2);
 	border-radius: 1rem;
 	text-decoration: none;
 	color: inherit;
@@ -42,7 +42,7 @@
 	width: 100%;
 	color: #777;
 	line-height: 1.5rem;
-	background-color: #eee;
+	background-color: var(--color-bg2);
 	text-align: center;
 	aspect-ratio: var(--width, auto) / var(--height, auto);
 }

@@ -90,7 +90,7 @@
 <style lang="scss">
 	.calendar {
 		box-sizing: border-box;
-		border: 2px solid #d6d6d6;
+		border: 2px solid var(--color-border);
 		border-radius: 25px;
 		overflow: hidden;
 		height: 25rem;
@@ -110,7 +110,7 @@
 			width: 15%;
 			flex-shrink: 1;
 			font-weight: 600;
-			color: #444;
+			color: var(--color-text-dim);
 		}
 	}
 

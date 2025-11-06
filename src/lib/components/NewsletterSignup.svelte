@@ -53,8 +53,8 @@
 
 <style lang="scss">
 	form {
-		background-color: #eee;
-		border: 2px solid #ddd;
+		background-color: var(--color-bg2);
+		border: 2px solid var(--color-border2);
 		border-radius: 30px;
 		padding: 30px;
 		max-width: 44rem;

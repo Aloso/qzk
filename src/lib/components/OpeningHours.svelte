@@ -59,8 +59,8 @@
 
 <style lang="scss">
 	.opening-hours {
-		background-color: #eee;
-		border: 2px solid #0001;
+		background-color: var(--color-bg2);
+		border: 2px solid var(--slight-accent);
 		padding: 0.7rem 1rem;
 		border-radius: 15px;
 

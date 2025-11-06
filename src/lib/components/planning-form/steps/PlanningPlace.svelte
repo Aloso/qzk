@@ -90,8 +90,8 @@
 	select,
 	textarea,
 	input:not([type='checkbox']) {
-		background-color: white;
-		border: 2px solid #aaa;
+		background-color: var(--color-bg);
+		border: 2px solid var(--color-inputborder);
 		font: inherit;
 		font-size: 95%;
 		margin: 0;
@@ -113,7 +113,7 @@
 	input[type='text'] {
 		box-sizing: border-box;
 		width: calc(100% - 4.4rem);
-		color: black;
+		color: var(--color-text-contrast);
 	}
 
 	em {

@@ -117,10 +117,10 @@
 	.time-slot {
 		display: flex;
 		gap: 0.75rem;
-		border: 2px solid #aaa;
+		border: 2px solid var(--color-inputborder);
 		padding: 0.8rem;
 		margin: 0 0 -2px 0;
-		background-color: white;
+		background-color: var(--color-bg);
 
 		&:first-child {
 			border-top-left-radius: 20px;

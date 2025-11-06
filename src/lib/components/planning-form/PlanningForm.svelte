@@ -193,8 +193,8 @@
 <style lang="scss">
 	form {
 		box-sizing: border-box;
-		background-color: #eee;
-		border: 2px solid #ddd;
+		background-color: var(--color-bg2);
+		border: 2px solid var(--color-border2);
 		border-radius: 30px;
 		padding: 30px;
 		width: 100%;
@@ -206,7 +206,7 @@
 
 		&.popup {
 			border: none;
-			background-color: white;
+			background-color: var(--color-bg);
 			padding: 3rem;
 			margin: auto;
 		}

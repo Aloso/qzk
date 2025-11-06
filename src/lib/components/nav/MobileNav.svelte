@@ -49,7 +49,7 @@
 			flex-direction: column;
 			box-sizing: border-box;
 			height: calc(92vh - 12rem);
-			background-color: vars.$COLOR_T0;
+			background-color: var(--bg-theme);
 			overflow: hidden;
 			transition: 0.4s;
 			animation: ease-out 0.4s open-menu;
@@ -74,7 +74,7 @@
 			&::after {
 				content: '';
 				position: absolute;
-				box-shadow: inset 0 -80px 40px -40px vars.$COLOR_T0;
+				box-shadow: inset 0 -80px 40px -40px var(--bg-theme);
 				left: 0;
 				bottom: 0;
 				width: 100%;
@@ -97,7 +97,7 @@
 				padding-bottom: 0;
 
 				&:global(.extended) {
-					box-shadow: 0 0 0 3px color.adjust(vars.$COLOR_T2, $lightness: +5%);
+					box-shadow: 0 0 0 3px var(--bg-theme2);
 					padding-bottom: 0.7rem;
 
 					.nav-extender {
@@ -121,7 +121,7 @@
 				flex-grow: 0;
 				border: none;
 				border-radius: 100px;
-				box-shadow: inset 0 0 0 0.33rem vars.$COLOR_T0;
+				box-shadow: inset 0 0 0 0.33rem var(--bg-theme);
 				background-color: transparent;
 				width: calc(2rem + 19px);
 				margin: 3px;
@@ -135,7 +135,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: color.adjust(vars.$COLOR_T2, $lightness: +5%);
+					background-color: var(--bg-theme2);
 				}
 			}
 
@@ -144,7 +144,7 @@
 				background-color: transparent;
 				font: inherit;
 				text-align: left;
-				color: vars.$COLOR_T4;
+				color: var(--color-theme1);
 
 				display: block;
 				flex-grow: 1;
@@ -169,7 +169,7 @@
 
 				&:hover,
 				&:focus {
-					background-color: vars.$COLOR_T1;
+					background-color: var(--bg-theme1);
 				}
 			}
 		}

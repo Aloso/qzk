@@ -93,7 +93,7 @@
 		}
 
 		&:hover {
-			background-color: #e3e3e3;
+			background-color: var(--color-bg3);
 		}
 
 		&.isToday {
@@ -106,6 +106,20 @@
 
 		&.isHighlighted {
 			background-color: #f9c2d9;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			&.isToday {
+				background-color: #720030;
+
+				&:hover {
+					background-color: #8f003c;
+				}
+			}
+
+			&.isHighlighted {
+				background-color: #8f003c;
+			}
 		}
 	}
 
@@ -123,13 +137,13 @@
 	}
 
 	.day-label {
-		color: #0005;
+		color: var(--color-text-dimmer);
 		font-size: 1.14rem;
 		padding: 0.05rem 0;
 		border: 2px solid transparent;
 
 		.isCurrentMonth & {
-			color: black;
+			color: var(--color-text-contrast);
 		}
 
 		&.hasDraftEvent {
@@ -165,7 +179,7 @@
 
 	.events-badge {
 		display: inline-block;
-		background-color: var(--badge-bg, vars.$COLOR_T3);
+		background-color: var(--badge-bg, var(--color-accent1));
 		border-radius: 0.5rem;
 		height: 0.5rem;
 		width: 0.5rem;

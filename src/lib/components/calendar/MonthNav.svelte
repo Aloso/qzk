@@ -57,7 +57,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: #eee;
+				background-color: var(--color-bg2);
 			}
 
 			&:first-child::after {
@@ -65,7 +65,7 @@
 				width: 0.5rem;
 				height: 0.5rem;
 				display: inline-block;
-				border: 2px solid #0008;
+				border: 2px solid #777;
 				border-width: 0 0 0.11rem 0.11rem;
 				transform: rotate(45deg);
 				margin-right: -0.3rem;
@@ -76,7 +76,7 @@
 				width: 0.5rem;
 				height: 0.5rem;
 				display: inline-block;
-				border: 2px solid #0007;
+				border: 2px solid #777;
 				border-width: 0 0.11rem 0.11rem 0;
 				transform: rotate(-45deg);
 				margin-left: -0.3rem;

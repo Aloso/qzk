@@ -49,8 +49,8 @@
 <style lang="scss">
 	input,
 	:global(#desc-input) {
-		background-color: white;
-		border: 2px solid #aaa;
+		background-color: var(--color-bg);
+		border: 2px solid var(--color-inputborder);
 		font: inherit;
 		font-size: 95%;
 		margin: 0;
@@ -70,7 +70,7 @@
 	:global(#desc-input) {
 		box-sizing: border-box;
 		width: 100%;
-		color: black;
+		color: var(--color-text-contrast);
 	}
 
 	:global(#desc-input) {

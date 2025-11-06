@@ -86,9 +86,9 @@
 	input,
 	textarea {
 		box-sizing: border-box;
-		border: 2px solid #aaa;
+		border: 2px solid var(--color-inputborder);
 		border-radius: 15px;
-		background-color: white;
+		background-color: var(--color-bg);
 		font: inherit;
 		padding: 15px;
 		transition: border-color 0.2s;

@@ -40,7 +40,7 @@
 	img {
 		display: block;
 		object-fit: cover;
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		text-align: center;
 		line-height: 1.5rem;
 		color: #777;

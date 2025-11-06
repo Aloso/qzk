@@ -421,10 +421,10 @@
 		position: sticky;
 		top: 73px;
 		z-index: 1;
-		background: var(--background, #eee);
+		background: var(--background, var(--color-bg2));
 		box-shadow:
-			0 -10px 0 var(--background, #eee),
-			0 1px 4px 5px var(--background, #eee);
+			0 -10px 0 var(--background, var(--color-bg2)),
+			0 1px 4px 5px var(--background, var(--color-bg2));
 
 		@media (max-width: 60rem) {
 			top: 81px;
@@ -464,7 +464,7 @@
 	button {
 		opacity: 0.85;
 		background-color: transparent;
-		color: black;
+		color: var(--color-text-contrast);
 		border: none;
 		padding: 0 4px;
 		font: inherit;
@@ -480,7 +480,7 @@
 		}
 
 		&:hover:not(.is-active):not(:disabled) {
-			background-color: #0001;
+			background-color: var(--slight-accent);
 		}
 
 		&:disabled {
@@ -498,8 +498,9 @@
 
 	select {
 		opacity: 0.85;
-		border: 2px solid #0003;
+		border: 2px solid var(--some-accent);
 		background: transparent;
+		color: var(--color-text);
 		padding: 3px 10px;
 		font: inherit;
 		font-size: 0.95rem;

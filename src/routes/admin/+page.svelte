@@ -87,8 +87,8 @@
 		box-sizing: border-box;
 		width: 100%;
 		margin: 0.5rem 0 0 0;
-		background-color: white;
-		border: 2px solid #aaa;
+		background-color: var(--color-bg);
+		border: 2px solid var(--color-inputborder);
 		padding: 0.5rem 1rem;
 		border-radius: 10px;
 		font: inherit;

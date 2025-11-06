@@ -71,7 +71,7 @@
 		justify-content: center;
 
 		.item {
-			color: #0008;
+			color: var(--color-dim);
 			font-size: 0.9rem;
 		}
 
@@ -80,7 +80,7 @@
 			font-style: normal;
 			font-weight: 500;
 			font-size: 1.8rem;
-			color: #000b;
+			color: var(--color-dim);
 		}
 	}
 </style>

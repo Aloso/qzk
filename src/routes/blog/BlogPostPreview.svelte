@@ -107,12 +107,12 @@
 		text-decoration: none;
 		display: inline-block;
 		padding: 0.5rem 0.7rem;
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		border-radius: 10px;
 
 		&:hover,
 		&:focus {
-			background-color: vars.$COLOR_T0;
+			background-color: var(--bg-theme);
 		}
 	}
 </style>

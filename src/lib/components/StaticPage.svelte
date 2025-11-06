@@ -124,7 +124,7 @@
 		padding: 0.5rem 0.6rem;
 		margin: 0;
 		color: #333;
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		border-radius: 10px;
 		border: none;
 		align-self: start;
@@ -139,7 +139,7 @@
 
 		&:hover,
 		&:focus {
-			background-color: #ddd;
+			background-color: var(--color-bg4);
 		}
 
 		@media (max-width: 78rem) {
@@ -198,8 +198,8 @@
 
 		.toc {
 			position: static;
-			background-color: #eee;
-			border: 2px solid #ddd;
+			background-color: var(--color-bg2);
+			border: 2px solid var(--color-bg4);
 			border-radius: 20px;
 			padding: 1rem 1.2rem;
 			width: auto;

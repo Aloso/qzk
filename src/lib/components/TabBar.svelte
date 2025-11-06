@@ -63,11 +63,11 @@
 
 		a {
 			margin: 0 -2px 0 0;
-			background-color: #eee;
-			border: 2px solid #ccc;
+			background-color: var(--color-bg2);
+			border: 2px solid var(--color-border);
 			padding: 0.5rem 0.8rem;
 			white-space: nowrap;
-			color: black;
+			color: var(--color-text-contrast);
 			font: inherit;
 			font-size: 1.1rem;
 			text-decoration: none;
@@ -77,8 +77,8 @@
 
 			&:hover,
 			&:focus {
-				background-color: white;
-				border-color: #aaa;
+				background-color: var(--color-bg);
+				border-color: var(--color-inputborder);
 				z-index: 1;
 			}
 
@@ -92,8 +92,8 @@
 			}
 
 			&.active {
-				background-color: white;
-				border-color: #aaa;
+				background-color: var(--color-bg);
+				border-color: var(--color-inputborder);
 				font-weight: 600;
 				z-index: 1;
 			}

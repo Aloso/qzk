@@ -107,7 +107,7 @@
 		flex-direction: column;
 		box-sizing: border-box;
 		border-radius: 15px;
-		border: 1px solid #dbdbdb;
+		border: 1px solid var(--color-border2);
 		margin: 0;
 		padding: 1.75rem 2rem;
 		gap: 1rem;

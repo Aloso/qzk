@@ -25,11 +25,34 @@
 		<div class="header-ii">
 			<DesktopNav {links} {url} />
 
-			<button id="search-button" data-search-button>
-				<img src="/search.svg" alt="Suche" />
+			<button id="search-button" data-search-button aria-label="Suche">
+				<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-width="3.75"
+						d="M 2 22 L 8 16"
+					/>
+					<circle
+						r="8"
+						cx="14.5"
+						cy="9.5"
+						stroke="currentColor"
+						fill-opacity="0"
+						stroke-width="3"
+					/>
+				</svg>
 			</button>
-			<button id="burger-menu-button">
-				<img src="/burger.svg" alt="Menü" />
+			<button id="burger-menu-button" aria-label="Menü">
+				<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path
+						fill="currentColor"
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-width="4"
+						d="M3,3L21,3 M3,12L21,12 M3,21L21,21"
+					/>
+				</svg>
 			</button>
 		</div>
 	</div>
@@ -61,8 +84,8 @@
 		position: relative;
 		padding-top: 2rem;
 		z-index: 2; // higher than <main>
-		background-color: vars.$COLOR_T0;
-		border-bottom: 2px solid vars.$COLOR_T2;
+		background-color: var(--bg-theme);
+		border-bottom: 2px solid var(--bg-theme3);
 		text-align: center;
 
 		@media (max-width: 60rem) {
@@ -107,11 +130,16 @@
 				width: 100px;
 			}
 		}
+
+		@media (prefers-color-scheme: dark) {
+			filter: invert(70%) hue-rotate(180deg) saturate(200%);
+		}
 	}
 
 	#burger-menu-button,
 	#search-button {
 		display: none;
+		color: var(--color-theme2);
 	}
 
 	@media (max-width: 60rem) {
@@ -134,12 +162,11 @@
 			width: 3rem;
 			height: 3rem;
 			margin: 0;
-			color: black;
 			border: none;
 			border-radius: 15px;
 			transition: background-color 0.2s;
 
-			img {
+			svg {
 				width: 1.5rem;
 				height: 1.5rem;
 				vertical-align: middle;
@@ -147,7 +174,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: color.adjust(vars.$COLOR_T2, $lightness: +5%);
+				background-color: var(--bg-theme2);
 			}
 		}
 	}

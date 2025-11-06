@@ -40,7 +40,7 @@
 
 		&:hover,
 		&:focus {
-			background-color: #eee;
+			background-color: var(--color-bg2);
 		}
 	}
 

@@ -147,7 +147,7 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #0004;
+		background-color: var(--color-backdrop);
 		animation: 0.3s fade-in;
 		backdrop-filter: blur(6px);
 		z-index: 1000;
@@ -159,7 +159,7 @@
 		margin: 0 auto auto auto;
 		display: block;
 		box-sizing: border-box;
-		background-color: white;
+		background-color: var(--color-popup);
 		border-radius: 30px;
 		padding: min(3rem, 1.5rem + 1.3vw);
 		width: calc(700px + 2vw);
@@ -174,7 +174,9 @@
 		padding: 0.3rem 0;
 		margin: 0 0 1rem 0;
 		border: none;
-		border-bottom: 2px solid #0002;
+		border-bottom: 2px solid var(--some-accent);
+		background-color: transparent;
+		color: var(--color-text-contrast);
 		transition: border-bottom-color 0.2s;
 
 		&:hover,

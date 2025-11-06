@@ -7,16 +7,44 @@
 @use './contentful.scss';
 
 :root {
-	--color-theme: #{color.adjust(vars.$COLOR_T4, $lightness: 8%)};
+	--color-theme: #6f2989;
+	--color-theme1: #8832a8;
+	--color-theme2: #a13dc5;
+	--color-link: #8832a8;
 	--color-accent: #f000ec;
-	--color-link: #{vars.$COLOR_T4};
+	--color-accent1: #c853c2;
+	--bg-theme: #f7dfff;
+	--bg-theme1: #f3d1ff;
+	--bg-theme2: #efbcff;
+	--bg-theme3: #e9a2ff;
+
+	--color-bg: white;
+	--color-bg1: #f7f7f7;
+	--color-bg2: #eee;
+	--color-bg3: #e5e5e5;
+	--color-bg4: #ddd;
+	--color-border: #ccc;
+	--color-border2: #ddd;
+	--color-inputborder: #aaa;
+	--color-eventborder: #e5e5e5;
+	--color-important: #ffedb9;
 	--color-text: #000c;
+	--color-text-contrast: black;
+	--color-text-dim: #0008;
+	--color-text-dimmer: #0005;
+	--slight-accent: #0001;
+	--some-accent: #0003;
+	--color-popup: white;
+	--color-backdrop: #0004;
+
 	--link-decoration: 1.67px underline var(--color-link);
 	--link-decoration-hover: 1.67px underline var(--color-accent);
+
 	font-family: vars.$FONT_BODY;
 	color: var(--color-text);
 	font-size: min(118.75%, 98% + 0.3vw);
 	scroll-padding-top: 85px;
+	background-color: var(--color-bg);
 
 	@media (min-width: 1000px) {
 		scroll-padding-top: 75px;
@@ -24,6 +52,37 @@
 
 	@supports (font-variation-settings: normal) {
 		font-family: AsapVariable, sans-serif;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		--color-theme: #f895ff;
+		--color-theme1: #f56fff;
+		--color-theme2: #f34eff;
+		--color-link: #f34eff;
+		--color-accent: #f000ec;
+		--color-accent1: #c853c2;
+		--bg-theme: #390034;
+		--bg-theme1: #490043;
+		--bg-theme2: #63005b;
+		--bg-theme3: #75006b;
+
+		--color-bg: #222;
+		--color-bg1: #2c2c2c;
+		--color-bg2: #333;
+		--color-bg3: #444;
+		--color-border: #555;
+		--color-border2: #444;
+		--color-inputborder: #777;
+		--color-eventborder: #3c3c3c;
+		--color-important: #5c4500;
+		--color-text: #fffc;
+		--color-text-contrast: white;
+		--color-text-dim: #fff8;
+		--color-text-dimmer: #fff5;
+		--slight-accent: #fff1;
+		--some-accent: #fff3;
+		--color-popup: #2a2a2a;
+		--color-backdrop: #0006;
 	}
 }
 
@@ -133,7 +192,7 @@ blockquote {
 }
 
 hr {
-	border: 2px solid #ccc;
+	border: 2px solid var(--color-border);
 	border-width: 2px 0 0 0;
 	margin: 2rem 0;
 }

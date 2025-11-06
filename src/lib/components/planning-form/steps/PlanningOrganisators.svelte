@@ -45,8 +45,8 @@
 	}
 
 	input:not([type='checkbox']) {
-		background-color: white;
-		border: 2px solid #aaa;
+		background-color: var(--color-bg);
+		border: 2px solid var(--color-inputborder);
 		font: inherit;
 		font-size: 95%;
 		margin: 0;

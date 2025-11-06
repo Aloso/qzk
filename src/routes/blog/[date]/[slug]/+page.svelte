@@ -70,7 +70,7 @@
 			width: auto;
 			max-width: 44rem;
 			margin-top: 0;
-			border-top: 2px solid #ccc;
+			border-top: 2px solid var(--color-border);
 		}
 
 		:global(h3) {

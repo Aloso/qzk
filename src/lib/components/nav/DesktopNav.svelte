@@ -35,7 +35,10 @@
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt=" " /> Suche
+			<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path stroke="currentColor" stroke-linecap="round" stroke-width="3.75" d="M 2 22 L 8 16" />
+				<circle r="8" cx="14.5" cy="9.5" stroke="currentColor" fill-opacity="0" stroke-width="3" />
+			</svg> Suche
 		</span>
 	</button>
 </nav>
@@ -75,10 +78,10 @@
 		display: none;
 		position: absolute;
 		text-align: left;
-		background-color: vars.$COLOR_T0;
+		background-color: var(--bg-theme);
 		padding: 0 0 0.67rem 0;
 		border-radius: 0 0 15px 15px;
-		border: 2px solid vars.$COLOR_T2;
+		border: 2px solid var(--bg-theme3);
 		border-top: 0;
 		margin-top: 0.5rem;
 		margin-left: calc(-0.2rem - 2px);
@@ -95,11 +98,11 @@
 			text-overflow: ellipsis;
 			overflow: hidden;
 			text-decoration: none;
-			color: vars.$COLOR_T4;
+			color: var(--color-theme1);
 
 			&:hover,
 			&:focus {
-				background-color: vars.$COLOR_T1;
+				background-color: var(--bg-theme1);
 				border: none;
 			}
 		}
@@ -109,7 +112,7 @@
 		background-color: transparent;
 		border: none;
 		font: inherit;
-		color: vars.$COLOR_T4;
+		color: var(--color-theme1);
 
 		display: flex;
 		position: relative;
@@ -125,12 +128,12 @@
 
 		&:hover,
 		&:focus {
-			background-color: vars.$COLOR_T1;
+			background-color: var(--bg-theme1);
 		}
 
 		&.active {
-			background-color: white;
-			color: vars.$COLOR_T4;
+			background-color: var(--color-bg);
+			color: var(--color-theme1);
 			font-weight: 600;
 		}
 	}
@@ -138,7 +141,7 @@
 	.nav-link-inner {
 		display: block;
 
-		img {
+		svg {
 			width: 1em;
 			height: 1em;
 			margin: -2px 0.33rem -2px 0;

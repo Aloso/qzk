@@ -12,8 +12,8 @@
 
 <style lang="scss">
 	.important-info {
-		background-color: #ffedb9;
-		border: 2px solid #0001;
+		background-color: var(--color-important);
+		border: 2px solid var(--slight-accent);
 		padding: 0.9rem 1rem;
 		border-radius: 15px;
 		margin: 1rem 0 0 0;

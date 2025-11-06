@@ -64,11 +64,11 @@
 	}
 
 	a {
-		background-color: #eee;
-		border: 2px solid #aaa;
+		background-color: var(--color-bg2);
+		border: 2px solid var(--color-inputborder);
 		border-radius: 0;
 		padding: 0.2rem 0.7rem;
-		color: black;
+		color: var(--color-text-contrast);
 		font: inherit;
 		font-size: 94%;
 		text-decoration: none;
@@ -78,11 +78,11 @@
 
 		&:hover,
 		&:focus {
-			background-color: white;
+			background-color: var(--color-bg);
 		}
 
 		&.active {
-			background-color: white;
+			background-color: var(--color-bg);
 			font-weight: 600;
 			cursor: normal;
 		}

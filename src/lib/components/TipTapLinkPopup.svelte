@@ -269,14 +269,14 @@
 		z-index: 1001;
 		overflow: auto;
 		padding: 4rem 1.2rem;
-		color: black;
+		color: var(--color-text-contrast);
 	}
 
 	.popup {
 		margin: auto;
 		display: block;
 		box-sizing: border-box;
-		background-color: white;
+		background-color: var(--color-bg);
 		border-radius: 30px;
 		padding: min(2.5rem, 1.5rem + 1vw);
 		width: calc(33rem + 2vw);
@@ -293,11 +293,11 @@
 
 		input {
 			box-sizing: border-box;
-			border: 2px solid #aaa;
+			border: 2px solid var(--color-inputborder);
 			border-radius: 8px;
 			font: inherit;
-			background-color: white;
-			color: black;
+			background-color: var(--color-bg);
+			color: var(--color-text-contrast);
 			padding: 8px 12px;
 			margin: 5px 0 0 0;
 			width: 100%;
@@ -312,7 +312,7 @@
 	}
 
 	.params {
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		border-radius: 15px;
 		padding: 15px;
 
@@ -332,13 +332,13 @@
 
 		table {
 			border-collapse: collapse;
-			border: 2px solid #ccc;
+			border: 2px solid var(--color-border);
 			display: table;
 			width: calc(100% + 30px);
 			margin: 1rem -15px;
 
 			tr:nth-child(odd) {
-				background-color: white;
+				background-color: var(--color-bg);
 			}
 
 			th {
@@ -373,7 +373,7 @@
 						margin-top: 5px;
 
 						&:hover {
-							color: black;
+							color: var(--color-text-contrast);
 						}
 					}
 				}
@@ -384,8 +384,8 @@
 	.open-params button,
 	a.button {
 		border: none;
-		color: black;
-		background-color: #0001;
+		color: var(--color-text-contrast);
+		background-color: var(--slight-accent);
 		border-radius: 8px;
 		font: inherit;
 		padding: 7px 10px;

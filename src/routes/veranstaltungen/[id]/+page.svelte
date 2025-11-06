@@ -219,7 +219,7 @@
 		<div
 			class="appointments"
 			style={event.decoration
-				? `--gradient1: oklch(0.97 0.06 ${event.decoration.colors[0]}deg); --gradient2: oklch(0.97 0.06 ${event.decoration.colors[1]}deg);`
+				? `--hue1: ${event.decoration.colors[0]}deg; --hue2: ${event.decoration.colors[1]}deg`
 				: undefined}
 		>
 			{#if showAll || futureTimes.length === 0}
@@ -361,7 +361,7 @@
 			color: inherit;
 			display: inline-block;
 			padding: 0.5rem 0.6rem;
-			background: #eee;
+			background: var(--color-bg2);
 			border-radius: 10px;
 			font-size: 1.1rem;
 			font-weight: 500;
@@ -424,6 +424,27 @@
 			color: #6d0000;
 		}
 
+		@media (prefers-color-scheme: dark) {
+			background-color: #544b00;
+			border: 2px solid #6d6200;
+
+			&.published {
+				background-color: #123c06;
+				border-color: #114d00;
+			}
+
+			&.deleted {
+				background-color: #420000;
+				border-color: #560000;
+			}
+
+			&.error {
+				background-color: #420000;
+				border-color: #560000;
+				color: #ff9696;
+			}
+		}
+
 		p {
 			font-size: 1.1rem;
 			margin: 0;
@@ -443,7 +464,7 @@
 		display: inline-block;
 		border: none;
 		background-color: var(--bg);
-		color: white;
+		color: var(--color-text);
 		padding: 0.4rem 0.7rem;
 		border-radius: 10px;
 		font-family: inherit;
@@ -493,16 +514,24 @@
 		align-items: stretch;
 		box-sizing: border-box;
 		width: 100%;
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		background-image: linear-gradient(
 			to right in oklab,
-			var(--gradient1, transparent),
-			var(--gradient2, transparent)
+			oklch(0.97 0.06 var(--hue1)),
+			oklch(0.97 0.06 var(--hue2))
 		);
-		box-shadow: inset 0 0 0 2px #0001;
+		box-shadow: inset 0 0 0 2px var(--slight-accent);
 		padding: 0.7rem 1rem;
 		border-radius: 15px;
 		font-size: 1.05rem;
+
+		@media (prefers-color-scheme: dark) {
+			background-image: linear-gradient(
+				to right in oklab,
+				oklch(0.31 0.06 var(--hue1)),
+				oklch(0.31 0.06 var(--hue2))
+			);
+		}
 
 		.row {
 			display: flex;
@@ -517,8 +546,8 @@
 
 		.show-all-times {
 			border: none;
-			color: black;
-			background-color: #0000000c;
+			color: var(--color-text-contrast);
+			background-color: var(--slight-accent);
 			display: inline-block;
 			padding: 0.3rem 0.6rem;
 			margin-top: 0.5rem;
@@ -539,18 +568,18 @@
 	}
 
 	.button-link {
-		color: black;
+		color: var(--color-text-contrast);
 		text-decoration: none;
 		display: inline-block;
 		padding: 0.4rem 0.7rem;
 		margin-right: 0.5rem;
-		background-color: #eee;
+		background-color: var(--color-bg2);
 		border-radius: 10px;
 		font-size: 1rem;
 
 		&:hover,
 		&:focus {
-			background-color: vars.$COLOR_T0;
+			background-color: var(--bg-theme);
 		}
 	}
 

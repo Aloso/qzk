@@ -90,7 +90,7 @@
 <style lang="scss">
 	.day-detail {
 		box-sizing: border-box;
-		border: 2px solid #d6d6d6;
+		border: 2px solid var(--color-border2);
 		border-radius: 25px;
 		overflow: hidden;
 		height: 25rem;
@@ -120,7 +120,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: #eee;
+				background-color: var(--color-bg2);
 			}
 
 			&::after {
@@ -128,7 +128,7 @@
 				width: 0.5rem;
 				height: 0.5rem;
 				display: inline-block;
-				border: 2px solid #9700a8;
+				border: 2px solid var(--color-accent);
 				border-width: 0 0 0.15rem 0.15rem;
 				transform: rotate(45deg);
 				margin-right: -0.3rem;
@@ -166,7 +166,7 @@
 		.title {
 			font-size: 1.1rem;
 			font-weight: 600;
-			color: #333;
+			color: var(--color-dim);
 			text-decoration-color: transparent;
 
 			&:hover,
@@ -199,7 +199,7 @@
 
 			&:hover,
 			&:focus {
-				background-color: var(--color-link);
+				background-color: var(--color-theme2);
 			}
 		}
 	}
