@@ -14,12 +14,14 @@
 	import SubmittedList from '$lib/components/events/SubmittedList.svelte'
 	import { onMount } from 'svelte'
 	import { fetchAllEvents } from '$lib/events/eventApi'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { browser } from '$app/environment'
+	import { m } from '$lib/paraglide/messages'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
 	let preselectedDate =
-		'window' in globalThis && window.location.search
+		browser && window.location.search
 			? new URLSearchParams(window.location.search).get('date')
 			: null
 
@@ -34,9 +36,11 @@
 		status = { type: 'submitting' }
 		try {
 			const { key } = await submitDraft(event)
-			const date = new Date().toLocaleString('de-DE', {
+
+			const locale = getLocale()
+			const date = new Date().toLocaleString(locale, {
 				timeZone: 'Europe/Berlin',
-				month: 'numeric',
+				month: locale === 'de' ? 'numeric' : 'short',
 				day: 'numeric',
 				hour: '2-digit',
 				minute: '2-digit',
@@ -44,7 +48,7 @@
 			submittedDrafts.add(key, `${date} - ${event.title}`)
 			goto(localizeHref('/veranstaltungen/' + encodeURIComponent(key)))
 		} catch (e) {
-			status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
+			status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
 		}
 	}
 
@@ -81,7 +85,7 @@
 
 <SubmittedList items={submittedDrafts.items} />
 
-<h2>Veranstaltung einreichen</h2>
+<h2>{m.plan_event_title()}</h2>
 
 <div class="form-layout">
 	<div class="form-left">
@@ -98,9 +102,9 @@
 
 		{#if intersecting.length > 0}
 			<h3>
-				{intersecting.length} Veranstaltung{intersecting.length > 1 ? 'en' : ''} im gewählten Zeitraum
+				{m.plan_event_conflicts({ count: intersecting.length })}
 			</h3>
-			<p>Bitte überprüfe, dass kein Terminkonflikt entsteht.</p>
+			<p>{m.plan_event_check_conflicts()}</p>
 			<div class="event-container">
 				{#each intersecting as event (event.key)}
 					<EventViewSmall {event} showMore openInNewTab />
@@ -113,7 +117,7 @@
 
 	{#if events}
 		<div class="calendar">
-			<h2 class="sidebar-title">Kalender</h2>
+			<h2 class="sidebar-title">{m.plan_event_calendar()}</h2>
 
 			<CalendarView {events} {showDate} {draftTimes} onClickDay={clickCalendarDay} />
 		</div>

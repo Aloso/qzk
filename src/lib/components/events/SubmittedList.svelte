@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { SubmittedDraft } from '$lib/hooks/createSubmittedDrafts.svelte'
+	import { m } from '$lib/paraglide/messages'
 	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
@@ -10,7 +11,7 @@
 </script>
 
 {#if items.length}
-	<h2>Eingereichte Veranstaltungen</h2>
+	<h2>{m.plan_event_submitted_list()}</h2>
 
 	<ul class="drafts-list">
 		{#each items as { key, name } (key + name)}

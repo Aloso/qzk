@@ -10,6 +10,7 @@
 	import TipTapLinkPopup from './TipTapLinkPopup.svelte'
 	import { parseUrl } from './parseUrl'
 	import { browser } from '$app/environment'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		htmlValue: string
@@ -163,10 +164,10 @@
 				disabled={!s!.canBold}
 				class="text"
 				class:is-active={s!.bold}
-				title="Fett"
-				aria-label="Fett"
+				title={m.editor_bold()}
+				aria-label={m.editor_bold()}
 			>
-				<b>F</b>
+				<b>{m.editor_bold_icon()}</b>
 			</button>
 			<button
 				type="button"
@@ -174,10 +175,10 @@
 				disabled={!s!.canItalic}
 				class="text"
 				class:is-active={s!.italic}
-				title="Kursiv"
-				aria-label="Kursiv"
+				title={m.editor_italic()}
+				aria-label={m.editor_italic()}
 			>
-				<i>K</i>
+				<i>{m.editor_italic_icon()}</i>
 			</button>
 			<button
 				type="button"
@@ -185,15 +186,15 @@
 				disabled={!s!.canStrike}
 				class="text"
 				class:is-active={s!.strike}
-				title="Durchgestrichen"
-				aria-label="Durchgestrichen"
+				title={m.editor_strike()}
+				aria-label={m.editor_strike()}
 			>
-				<s>S</s>
+				<s>{m.editor_strike_icon()}</s>
 			</button>
 		</div>
 		<div class="help h1">
 			Mit diesen Buttons kannst du den ausgewählten Text <em>fett</em> (<b>F</b>), <em>kursiv</em>
-			(<i>K</i>) bzw. <em>durchgestrichen</em> (<s>S</s>) machen.
+			(<em>K</em>) bzw. <em>durchgestrichen</em> (<s>S</s>) machen.
 		</div>
 
 		<div class="button-group g2">
@@ -201,8 +202,8 @@
 				type="button"
 				class:is-active={s!.link}
 				onclick={clickLink}
-				aria-label="Link"
-				title="Link"
+				aria-label={m.editor_link()}
+				title={m.editor_link()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +216,12 @@
 					/></svg
 				>
 			</button>
-			<button type="button" onclick={setHorizontalRule} aria-label="Trennlinie" title="Trennlinie">
+			<button
+				type="button"
+				onclick={setHorizontalRule}
+				aria-label={m.editor_ruler()}
+				title={m.editor_ruler()}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					height="24px"
@@ -224,7 +230,12 @@
 					fill="currentColor"><path d="M160-440v-80h640v80H160Z" /></svg
 				>
 			</button>
-			<button type="button" onclick={setHardBreak} title="Zeilenumbruch" aria-label="Zeilenumbruch">
+			<button
+				type="button"
+				onclick={setHardBreak}
+				title={m.editor_line_break()}
+				aria-label={m.editor_line_break()}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					height="24px"
@@ -248,8 +259,8 @@
 				onclick={toggleBlockquote}
 				disabled={!s!.canBlockQuote}
 				class:is-active={s!.blockquote}
-				title="Zitat"
-				aria-label="Zitat"
+				title={m.editor_quote()}
+				aria-label={m.editor_quote()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -266,8 +277,8 @@
 				type="button"
 				onclick={toggleBulletList}
 				class:is-active={s!.bulletList}
-				title="Liste"
-				aria-label="Liste"
+				title={m.editor_ul()}
+				aria-label={m.editor_ul()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -284,8 +295,8 @@
 				type="button"
 				onclick={toggleOrderedList}
 				class:is-active={s!.orderedList}
-				title="Nummerierte Liste"
-				aria-label="Nummerierte Liste"
+				title={m.editor_ol()}
+				aria-label={m.editor_ol()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -308,13 +319,14 @@
 			<select
 				value={s!.paragraph ? 'P' : s!.headingLevel !== undefined ? `H${s!.headingLevel}` : ''}
 			>
-				<option value="P" onclick={setParagraph}>Absatz</option>
+				<option value="P" onclick={setParagraph}>{m.editor_paragraph()}</option>
 				{#each headingLevels as level (level)}
 					<option
 						value="H{level}"
 						onclick={() => editor!.chain().focus().setHeading({ level }).run()}
-						>Überschrift {level}</option
 					>
+						{m.editor_heading({ level })}
+					</option>
 				{/each}
 			</select>
 		</div>
@@ -329,8 +341,8 @@
 				type="button"
 				onclick={undo}
 				disabled={!s!.canUndo}
-				aria-label="Rückgängig"
-				title="Rückgängig"
+				aria-label={m.editor_undo()}
+				title={m.editor_undo()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -347,8 +359,8 @@
 				type="button"
 				onclick={redo}
 				disabled={!s!.canRedo}
-				aria-label="Wiederholen"
-				title="Wiederholen"
+				aria-label={m.editor_redo()}
+				title={m.editor_redo()}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -369,8 +381,8 @@
 				type="button"
 				onclick={() => (expanded = !expanded)}
 				class:is-active={expanded}
-				title="Mehr Aktionen"
-				aria-label="Mehr Aktionen"
+				title={m.editor_more_actions()}
+				aria-label={m.editor_more_actions()}
 				style="flex-grow: 0.2"
 			>
 				<svg
@@ -390,7 +402,7 @@
 		<div class="expander-div"></div>
 
 		<button type="button" class="close-help is-active" onclick={() => (showHelp = false)}>
-			Hilfe schließen
+			{m.editor_close_help()}
 		</button>
 	</div>
 {/if}

@@ -1,8 +1,10 @@
 <script lang="ts">
+	import Insert from '$lib/components/Insert.svelte'
 	import type {
 		FormValuesOrganisator,
 		FormValuesPersonalInfo,
 	} from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
@@ -31,24 +33,29 @@
 
 {#if !professional}
 	<p class="important">
-		Durch das Absenden stimmst du der Veröffentlichung der angegebenen Daten zu. Mehr Infos findest
-		du in der <a href={localizeHref('/datenschutz')} target="_blank">Datenschutzerklärung</a>.
+		<Insert template={m.pf_confirm_privacy()}>
+			{#snippet placeholder(type, content)}
+				{#if type === 'privacy'}
+					<a href={localizeHref('/datenschutz')} target="_blank">{content}</a>
+				{/if}
+			{/snippet}
+		</Insert>
 	</p>
 {/if}
 
-<div class="section-title">Persönliche Infos</div>
-<p>Diese Daten werden nicht veröffentlicht.</p>
+<div class="section-title">{m.pf_personal_data()}</div>
+<p>{m.pf_personal_data_help()}</p>
 <label>
-	<em class="required">Dein Name</em>
+	<em class="required">{m.pf_personal_data_name()}</em>
 	<input type="text" bind:value={values.yourName} required />
 </label>
 <label>
-	<em class="required">Deine E-Mail</em>
+	<em class="required">{m.pf_personal_data_email()}</em>
 	<input type="text" bind:value={values.yourEmail} required />
 </label>
 
 {#if professional}
-	<div class="section-title">Notizen (nicht öffentlich)</div>
+	<div class="section-title">{m.pf_personal_data_notes()}</div>
 	<textarea bind:value={values.orgaNotes} class="full-width"></textarea>
 {/if}
 

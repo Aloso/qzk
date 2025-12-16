@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FormValuesPlace } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		values: FormValuesPlace
@@ -19,20 +20,20 @@
 	})
 </script>
 
-<div class="section-title">Ort</div>
+<div class="section-title">{m.pf_place()}</div>
 <div class:professional>
 	<label>
-		<em class="required">Ort</em>
+		<em class="required">{m.pf_place()}</em>
 		<select bind:value={values.placeType}>
-			<option value="QZ">Queeres Zentrum</option>
-			<option value="PHYSICAL">Anderer Ort</option>
-			<option value="ONLINE">Online</option>
+			<option value="QZ">{m.pf_place_qz()}</option>
+			<option value="PHYSICAL">{m.pf_place_physical()}</option>
+			<option value="ONLINE">{m.event_online()}</option>
 		</select>
 	</label>
 	<label class:hidden={values.placeType !== 'QZ'}>
-		<em class="required">Raum</em>
+		<em class="required">{m.pf_room()}</em>
 		<select bind:value={values.placeRoom} required={values.placeType === 'QZ'}>
-			<option value={undefined}>Bitte wählen...</option>
+			<option value={undefined}>{m.pf_none_selected()}</option>
 			<option value="*innen-Raum">*innen-Raum</option>
 			<option value="Gelber Raum">Gelber Raum</option>
 			<option value="Blauer Raum">Blauer Raum</option>
@@ -41,25 +42,24 @@
 		</select>
 	</label>
 	<label class:hidden={values.placeType !== 'PHYSICAL'}>
-		<em class="required">Name</em>
+		<em class="required">{m.pf_place_name()}</em>
 		<input type="text" bind:value={values.placeName} required={values.placeType === 'PHYSICAL'} />
 	</label>
 	<label class:hidden={values.placeType !== 'PHYSICAL'}>
-		<em class="required">Adresse</em>
+		<em class="required">{m.pf_place_address()}</em>
 		<textarea
 			bind:value={values.placeAddress}
-			placeholder="Adresszeile 1
-Adresszeile 2"
+			placeholder={m.pf_place_address_placeholder()}
 			rows="2"
 			required={values.placeType === 'PHYSICAL'}
 		></textarea>
 	</label>
 	<label class:hidden={values.placeType !== 'ONLINE'}>
-		<em>
-			URL<br />
-			<span class="optional">Freiwillige Angabe</span>
-		</em>
-		<input type="text" bind:value={values.placeUrl} placeholder="Z.B. Link zu Online-Meeting" />
+		<em>{m.pf_place_url()}</em>
+		<div class="input-group">
+			<input type="text" bind:value={values.placeUrl} placeholder={m.pf_place_url_placeholder()} />
+			<span class="optional">{m.pf_optional()}</span>
+		</div>
 	</label>
 </div>
 
@@ -71,7 +71,7 @@ Adresszeile 2"
 	}
 
 	label {
-		display: block;
+		display: flex;
 		margin: 1rem 0;
 		transition: color 0.2s;
 
@@ -101,6 +101,7 @@ Adresszeile 2"
 		min-width: 50px;
 		transition: border-color 0.2s;
 		vertical-align: middle;
+		flex-grow: 1;
 
 		&:hover,
 		&:focus {
@@ -113,16 +114,22 @@ Adresszeile 2"
 	textarea,
 	input[type='text'] {
 		box-sizing: border-box;
-		width: calc(100% - 4.4rem);
 		color: black;
 	}
 
 	em {
 		font-style: normal;
 		display: inline-block;
-		width: 4rem;
+		width: 4.5rem;
 		padding: 10px 0;
 		vertical-align: middle;
+	}
+
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		flex-grow: 1;
 	}
 
 	.optional {

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import Insert from '$lib/components/Insert.svelte'
 	import type { FormValuesDescription } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 	import TipTapEditor from '../../TipTapEditor.svelte'
 
 	interface Props {
@@ -17,11 +19,11 @@
 </script>
 
 <label>
-	<em class="required">Name der Veranstaltung</em>
+	<em class="required">{m.pf_event_name()}</em>
 	<input class="full-width" type="text" bind:value={values.title} required />
 </label>
 <label for="desc-input">
-	<em class="required">Beschreibung</em>
+	<em class="required">{m.pf_description()}</em>
 	<TipTapEditor
 		id="desc-input"
 		bind:htmlValue={values.descHtml}
@@ -30,20 +32,23 @@
 	/>
 </label>
 <div class="hint">
-	<button type="button" class="a" onclick={() => (showHelp = !showHelp)}>Hilfe</button>
+	<button type="button" class="a" onclick={() => (showHelp = !showHelp)}>{m.help()}</button>
 </div>
 
 {#if !professional}
-	<p>
-		Bitte gib eine aussagekräftige Beschreibung an. Sie sollte alle wichtigen Fragen beantworten,
-		zum Beispiel:
-	</p>
-	<ul>
-		<li>Was erwartet mich bei der Veranstaltung?</li>
-		<li>Wer kann teilnehmen? Gibt es eine Altersgrenze?</li>
-		<li>Muss ich mich dafür vorbereiten oder etwas mitbringen?</li>
-	</ul>
-	<p>Ort und Zeit müssen <b>nicht</b> in der Beschreibung stehen.</p>
+	<Insert template={m.pf_description_help()}>
+		{#snippet placeholder(type, content)}
+			{#if type === 'p'}
+				<p>{content}</p>
+			{:else if type === 'ul'}
+				<ul>
+					{#each content!.split('|') as item, i (i)}
+						<li>{item}</li>
+					{/each}
+				</ul>
+			{/if}
+		{/snippet}
+	</Insert>
 {/if}
 
 <style lang="scss">

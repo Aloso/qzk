@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FormTime, FormValuesTime } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 	import TimeSlot from '../TimeSlot.svelte'
 
 	interface Props {
@@ -43,8 +44,8 @@
 	}
 </script>
 
-<div class="section-title">Zeit</div>
-<p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
+<div class="section-title">{m.pf_datetime()}</div>
+<p class="optional">{m.pf_datetime_optionals()}</p>
 <div>
 	{#each values.time as _, i (i)}
 		<TimeSlot
@@ -55,25 +56,25 @@
 	{#if (professional || values.time.length < 10) && values.time[0]?.variant !== 'day-range'}
 		{#if isAddingTimes}
 			<div class="add-slot-area">
-				Nächster Termin:
+				{m.pf_datetime_next()}
 				<div class="add-slot-options">
 					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(7)}>
-						nach 1 Woche
+						{m.pf_datetime_after_weeks({ count: 1 })}
 					</button>
 					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(14)}>
-						nach 2 Wochen
+						{m.pf_datetime_after_weeks({ count: 2 })}
 					</button>
 					<button type="button" class="add-slot-action" onclick={() => addSlotAfterDays(21)}>
-						nach 3 Wochen
+						{m.pf_datetime_after_weeks({ count: 3 })}
 					</button>
-					<button type="button" class="add-slot-action" onclick={addCustomSlot}
-						>Anderes Datum</button
-					>
+					<button type="button" class="add-slot-action" onclick={addCustomSlot}>
+						{m.pf_datetime_other_date()}
+					</button>
 				</div>
 			</div>
 		{:else}
 			<button type="button" class="add-slot" onclick={() => (isAddingTimes = true)}>
-				Weiteren Termin hinzufügen
+				{m.pf_datetime_add()}
 			</button>
 		{/if}
 	{/if}
@@ -99,10 +100,10 @@
 				}
 			}}
 		/>
-		Einzelne Veranstaltung über mehrere Tage
+		{m.pf_long_event()}
 	</label>
 {:else if !professional && values.time.length === 10}
-	<p>Maximal 10 Termine können hinzugefügt werden.</p>
+	<p>{m.pf_max_timeslots_reached({ n: 10 })}</p>
 {/if}
 
 <style lang="scss">
