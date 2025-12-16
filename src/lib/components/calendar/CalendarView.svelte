@@ -93,7 +93,7 @@
 		display: flex;
 
 		div {
-			padding: 0.3rem 0.5rem;
+			padding: 0.3rem;
 			width: 15%;
 			flex-shrink: 1;
 			font-weight: 600;
