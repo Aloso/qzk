@@ -6,6 +6,15 @@ import { formatErrors } from './errors'
 export async function submitDraft(
 	draft: Event & WithSubmitter,
 ): Promise<Event & WithSubmitter & WithKey> {
+	draft.title = draft.title.trim()
+	draft.submitter.name = draft.submitter.name.trim()
+	draft.submitter.email = draft.submitter.email.trim()
+	if (draft.organizer) {
+		draft.organizer.email = draft.organizer.email?.trim() || undefined
+		draft.organizer.phone = draft.organizer.phone?.trim() || undefined
+		draft.organizer.website = draft.organizer.website?.trim() || undefined
+	}
+
 	const response = await fetch(host() + '/draft', {
 		method: 'POST',
 		body: JSON.stringify(event2wire(draft)),
