@@ -2,6 +2,7 @@
 	import type { Event, Time } from '$lib/events/types'
 	import CalendarDay from './CalendarDay.svelte'
 	import MonthNav from './MonthNav.svelte'
+	import { getCalendarDays } from '../timeCalc'
 
 	interface Props {
 		events: Event[]
@@ -31,48 +32,19 @@
 		month = draftEventMonth
 	})
 
-	let firstDayOfMonth = $derived.by(() => {
-		const date = new Date(showDate)
-		date.setMonth(month)
-		date.setDate(1)
-		date.setHours(12, 0, 0, 0)
-		return date
-	})
-
-	let firstWeekDay = $derived((firstDayOfMonth.getDay() + 6) % 7)
-	let daysInMonth = $derived(new Date(year, month + 1, 0).getDate())
-	let daysInLastMonth = $derived(new Date(year, month, 0).getDate())
-
-	let days = $derived(
-		Array.from({ length: 42 }).map((_, i) => {
-			const absNumber = i - firstWeekDay + (firstWeekDay === 0 ? -6 : 1)
-			return absNumber < 1
-				? {
-						day: daysInLastMonth + absNumber,
-						month: (month + 11) % 12,
-						year: month === 0 ? year - 1 : year,
-					}
-				: absNumber > daysInMonth
-					? {
-							day: absNumber - daysInMonth,
-							month: (month + 1) % 12,
-							year: month === 11 ? year + 1 : year,
-						}
-					: { day: absNumber, month, year, isCurrentMonth: true }
-		}),
-	)
+	let days = $derived(getCalendarDays(showDate, month, year, 1))
 </script>
 
 <div class="calendar">
 	<MonthNav bind:year bind:month />
 
 	<div class="weekday-labels">
-		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay}
+		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay (weekDay)}
 			<div>{weekDay}</div>
 		{/each}
 	</div>
 	<ul class="days">
-		{#each days as day}
+		{#each days as day (day)}
 			<CalendarDay
 				{...day}
 				allEvents={events}
