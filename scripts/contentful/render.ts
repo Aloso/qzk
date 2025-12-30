@@ -62,7 +62,7 @@ export function render(data: Document, ids: string[] = []): RenderedHtml {
 					}
 					case 'person': {
 						const { fields } = target as Item<Person>
-						return `<a class="embed" href="/${fields.slug}">
+						return `<a class="embed" href="/person/${fields.slug}">
 							<p class="embedTitle">${fields.name}</p>
 							<p class="embedDescription">${fields.role}</p>
 							${fields.pronouns ? `<p class="embedDescription">${fields.pronouns}</p>` : ''}
