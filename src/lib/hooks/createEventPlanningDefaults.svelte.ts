@@ -1,8 +1,8 @@
 import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
 
 export interface FormValuesDescription {
-	title: string
-	descHtml: string
+	titleDe: string
+	descDe: string
 }
 
 export interface FormValuesPlace {
@@ -17,7 +17,7 @@ export interface FormValuesPlace {
 }
 
 export interface FormValuesTime {
-	time: FormTime[]
+	times: FormTime[]
 }
 
 export interface FormTime {
@@ -53,9 +53,9 @@ export type FormValues = FormValuesDescription &
 	FormValuesDecoration
 
 const emptyDefaults: FormValues = {
-	title: '',
-	descHtml: '',
-	time: [{ variant: 'day' }],
+	titleDe: '',
+	descDe: '',
+	times: [{ variant: 'day' }],
 	placeType: 'QZ',
 	placeRoom: undefined,
 	placeName: '',
@@ -84,7 +84,7 @@ export function createEventPlanningDefaults({ preselectedDate }: Options) {
 	if (preselectedDate) {
 		const start = new Date(preselectedDate)
 		start.setHours(12, 0, 0, 0)
-		defaults.time[0] = { variant: 'day', start }
+		defaults.times[0] = { variant: 'day', start }
 	}
 
 	return {
@@ -96,18 +96,18 @@ export function createEventPlanningDefaults({ preselectedDate }: Options) {
 		},
 		setToDraft(draft: Event & WithSubmitter) {
 			defaults = {
-				title: draft.title,
-				descHtml: draft.descHtml,
-				time: (draft.allTimes ?? draft.time).map(time => ({ ...time })),
+				titleDe: draft.titleDe,
+				descDe: draft.descDe,
+				times: (draft.allTimes ?? draft.times).map(time => ({ ...time })),
 				placeType: draft.place.room ? 'QZ' : draft.place.type,
 				placeRoom: draft.place.room,
 				placeName: draft.place.name,
 				placeAddress: draft.place.address ?? '',
 				placeUrl: draft.place.url ?? '',
-				organizerName: draft.organizer?.name ?? '',
-				organizerEmail: draft.organizer?.email ?? '',
-				organizerPhone: draft.organizer?.phone ?? '',
-				organizerWebsite: draft.organizer?.website ?? '',
+				organizerName: draft.organizer.name ?? '',
+				organizerEmail: draft.organizer.email ?? '',
+				organizerPhone: draft.organizer.phone ?? '',
+				organizerWebsite: draft.organizer.website ?? '',
 				website: draft.website ?? '',
 				pictureUrl: draft.pictureUrl ?? '',
 				yourName: draft.submitter.name,

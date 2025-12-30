@@ -1,13 +1,11 @@
 import { host } from '.'
 import { wire2event } from '../convert'
-import type { Event, WireEvent, WithSubmitter } from '../types'
+import type { Event, WithSubmitter } from '../types'
 import { goto } from '$app/navigation'
+import type { EventDto } from '$lib/server/events/event'
 
-export async function fetchEventOrDraft(key: string): Promise<Event & WithSubmitter> {
-	const url = new URL(host() + '/eventOrDraft')
-	url.searchParams.set('key', key)
-
-	const response = await fetch(url)
+export async function fetchEventForAdmin(key: string): Promise<Event & WithSubmitter> {
+	const response = await fetch(`${host()}/event?key=${key}`)
 	if (!response.ok) {
 		if (response.status === 401) {
 			goto('/admin?m=loginFailed')
@@ -15,7 +13,7 @@ export async function fetchEventOrDraft(key: string): Promise<Event & WithSubmit
 			throw new Error('request unsuccessful: ' + response.status, { cause: response })
 		}
 	}
-	const wireEvent: WireEvent = await response.json()
+	const wireEvent: EventDto = await response.json()
 	const event = wire2event(wireEvent)
 	return event as Event & WithSubmitter
 }

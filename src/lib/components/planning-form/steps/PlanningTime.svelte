@@ -13,15 +13,15 @@
 	let isAddingTimes = $state(false)
 
 	$effect(() => {
-		valid = values.time.every(time => !!time.start)
+		valid = values.times.every(time => !!time.start)
 	})
 
 	function addCustomSlot() {
-		values.time.push({ variant: 'day' })
+		values.times.push({ variant: 'day' })
 	}
 
 	function addSlotAfterDays(days: number) {
-		const times = values.time.filter((t): t is FormTime & { start: Date } => t.start !== undefined)
+		const times = values.times.filter((t): t is FormTime & { start: Date } => t.start !== undefined)
 		if (times.length === 0) return
 
 		const last = times[times.length - 1]
@@ -35,24 +35,24 @@
 		const endNew = end ? new Date(end) : undefined
 		endNew?.setDate(endNew.getDate() + days)
 
-		values.time.push({ variant, start: startNew, end: endNew })
+		values.times.push({ variant, start: startNew, end: endNew })
 	}
 
 	function removeSlot(index: number) {
-		values.time.splice(index, 1)
+		values.times.splice(index, 1)
 	}
 </script>
 
 <div class="section-title">Zeit</div>
 <p class="optional">Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.</p>
 <div>
-	{#each values.time as _, i}
+	{#each values.times as _, i}
 		<TimeSlot
-			bind:time={values.time[i]}
-			onRemove={values.time.length < 2 ? undefined : () => removeSlot(i)}
+			bind:time={values.times[i]}
+			onRemove={values.times.length < 2 ? undefined : () => removeSlot(i)}
 		/>
 	{/each}
-	{#if (professional || values.time.length < 10) && values.time[0]?.variant !== 'day-range'}
+	{#if (professional || values.times.length < 10) && values.times[0]?.variant !== 'day-range'}
 		{#if isAddingTimes}
 			<div class="add-slot-area">
 				Nächster Termin:
@@ -79,29 +79,29 @@
 	{/if}
 </div>
 
-{#if values.time.length === 1}
+{#if values.times.length === 1}
 	<label class="checkbox-label">
 		<input
 			type="checkbox"
-			checked={values.time[0].variant === 'day-range'}
+			checked={values.times[0].variant === 'day-range'}
 			onchange={e => {
 				if (e.currentTarget.checked) {
-					values.time[0] = {
+					values.times[0] = {
 						variant: 'day-range',
-						start: values.time[0].start,
-						end: values.time[0].start,
+						start: values.times[0].start,
+						end: values.times[0].start,
 					}
 				} else {
-					values.time[0] = {
+					values.times[0] = {
 						variant: 'day',
-						start: values.time[0].start,
+						start: values.times[0].start,
 					}
 				}
 			}}
 		/>
 		Einzelne Veranstaltung über mehrere Tage
 	</label>
-{:else if !professional && values.time.length === 10}
+{:else if !professional && values.times.length === 10}
 	<p>Maximal 10 Termine können hinzugefügt werden.</p>
 {/if}
 

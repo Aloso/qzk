@@ -15,18 +15,18 @@
 
 	let { event, showMore = false, openInNewTab }: Props = $props()
 
-	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.title))
-	let descHtml = $derived.by(() => {
+	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.titleDe))
+	let descDe = $derived.by(() => {
 		if (DOMPurify.isSupported) {
-			return DOMPurify.sanitize(event.descHtml)
+			return DOMPurify.sanitize(event.descDe)
 		} else {
 			// on the server, we trust that the HTML is okay
 			// this may cause hydration mismatches, because DOMPurify may
 			// insert HTML entities and remove `target="_blank" from links.
-			return event.descHtml
+			return event.descDe
 		}
 	})
-	let imgLabel = $derived(formatDateSoon(event.time[0]))
+	let imgLabel = $derived(formatDateSoon(event.times[0]))
 
 	function formatDateSoon({ start, end }: Time) {
 		const days = daysUntil(start)
@@ -57,9 +57,9 @@
 		{/if}
 	</div>
 
-	<h3 class="event-title" class:hyphenateTitle>{event.title}</h3>
+	<h3 class="event-title" class:hyphenateTitle>{event.titleDe}</h3>
 
-	<div class="event-description">{@html descHtml}</div>
+	<div class="event-description">{@html descDe}</div>
 
 	{#if showMore}
 		<div class="event-place" aria-label="Ort">
@@ -75,9 +75,9 @@
 		<div class="event-times" aria-label="Termin">
 			<span class="event-time">
 				{#if showMore}
-					<EventDateTimeDetailed time={event.time[0]} />
+					<EventDateTimeDetailed time={event.times[0]} />
 				{:else}
-					<EventDateTime time={event.time[0]} />
+					<EventDateTime time={event.times[0]} />
 				{/if}
 			</span>
 		</div>

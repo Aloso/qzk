@@ -11,16 +11,14 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 
-		type EnvVars = {
-			[key in `USER__${string}`]: string
+		type EnvVars = { [key in `USER__${string}`]: string } & {
+			DB: D1Database
+			ALGOLIA_APP_ID: string
+			ALGOLIA_API_KEY: string
 		}
 
 		interface Platform {
-			env: EnvVars & {
-				DB: D1Database
-				ALGOLIA_APP_ID: string
-				ALGOLIA_API_KEY: string
-			}
+			env: EnvVars
 			context: {
 				waitUntil(promise: Promise<unknown>): void
 			}

@@ -2,10 +2,7 @@ import { goto } from '$app/navigation'
 import { host } from '.'
 
 export async function publishDraft(key: string): Promise<boolean> {
-	const url = new URL(host() + '/event')
-	url.searchParams.set('key', key)
-
-	const response = await fetch(url, { method: 'POST' })
+	const response = await fetch(`${host()}/event/state?key=${key}&state=public`, { method: 'PUT' })
 	if (!response.ok) {
 		if (response.status === 401) {
 			goto('/admin?m=loginFailed')
