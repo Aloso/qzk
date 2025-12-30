@@ -14,7 +14,7 @@ const contentfulClient = createClient({
 	space: process.env.CONTENTFUL_SPACE_ID!,
 	accessToken: process.env.CONTENTFUL_TOKEN!,
 	// use 'cdn.contentful.com' for normal use and 'preview.contentful.com' for preview
-	host: 'cdn.contentful.com',
+	host: process.env.CONTENTFUL_HOST ?? 'cdn.contentful.com',
 })
 const items = await fetchContentfulEntries(contentfulClient)
 
