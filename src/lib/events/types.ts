@@ -1,3 +1,5 @@
+import type { EventDto, EventState, FullEventDto } from '$lib/server/events/event'
+
 export interface DraftData {
 	length: number
 	events: (Event & WithSubmitter)[]
@@ -5,16 +7,19 @@ export interface DraftData {
 
 export interface WireDraftData {
 	length: number
-	events: (WireEvent & WithSubmitter)[]
+	events: FullEventDto[]
 }
 
 export interface EventCommon {
 	key?: string
-	title: string
-	descHtml: string
+	state: EventState
+	titleDe: string
+	titleEn?: string
+	descDe: string
+	descEn?: string
 	website?: string
 	place: Place
-	organizer?: Organizer
+	organizer: Organizer
 	pictureUrl?: string
 	tags: string[]
 	decoration?: Decoration
@@ -24,23 +29,14 @@ export interface WithKey extends EventCommon {
 	key: string
 }
 
-export interface WithSubmitter extends EventCommon {
+export interface WithSubmitter {
 	submitter: Submitter
-	orgaNotes?: string
-}
-
-export interface WireEvent extends EventCommon {
-	time: WireTime | WireTime[]
 }
 
 export interface Event extends EventCommon {
-	time: Time[]
+	times: Time[]
 	allTimes?: Time[]
-}
-
-export interface WireTime {
-	start: string
-	end?: string
+	orgaNotes?: string
 }
 
 /**

@@ -2,6 +2,7 @@ import { wire2event } from '$lib/events/convert'
 import { getEndOfTime, getInBetween } from '$lib/events/intersections'
 import type { Event, Time, WithSubmitter } from '$lib/events/types'
 import { getAllEvents, getEventNumber } from '$lib/server/events/db'
+import type { EventDto, FullEventDto } from '$lib/server/events/event.js'
 import { tryAuthentication } from '$lib/server/events/http'
 import { error } from '@sveltejs/kit'
 
@@ -59,18 +60,18 @@ async function getEvents(
 	month: string,
 ): Promise<{ length: number; events: (Event & WithSubmitter)[] }> {
 	if (type === 'drafts') {
-		const length = await getEventNumber(env, false)
-		const events = await getAllEvents(env, { start, limit }, false)
+		const length = await getEventNumber(env, 'draft')
+		const events = (await getAllEvents(env, { start, limit }, 'draft')) as FullEventDto[]
 		return { length, events: events.map(wire2event) }
 	} else if (type === 'published') {
 		const now = Date.now()
-		const events = await getAllEvents(env, { start: 0 }, true)
+		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
 		const filteredEvents = events
 			.map(wire2event)
 			.map(event => ({
 				...event,
-				allTimes: event.time,
-				time: event.time.filter(time => getEndOfTime(time) > now),
+				allTimes: event.times,
+				time: event.times.filter(time => getEndOfTime(time) > now),
 			}))
 			.filter(event => event.time.length > 0)
 			.toSorted((a, b) => getSortTime(a) - getSortTime(b))
@@ -81,13 +82,13 @@ async function getEvents(
 		}
 	} else if (type === 'past') {
 		const now = Date.now()
-		const events = await getAllEvents(env, { start: 0 }, true)
+		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
 		const filteredEvents = events
 			.map(wire2event)
 			.map(event => ({
 				...event,
-				allTimes: event.time,
-				time: event.time.filter(time => getEndOfTime(time) <= now),
+				allTimes: event.times,
+				time: event.times.filter(time => getEndOfTime(time) <= now),
 			}))
 			.filter(event => event.time.length > 0)
 			.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
@@ -103,13 +104,13 @@ async function getEvents(
 		date.setMonth(date.getMonth() + 1)
 		const monthEnd = +date - 1
 
-		const events = await getAllEvents(env, { start: 0 }, true)
+		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
 		const filteredEvents = events
 			.map(wire2event)
 			.map(event => ({
 				...event,
-				allTimes: event.time,
-				time: getInBetween(event.time, monthStart, monthEnd),
+				allTimes: event.times,
+				time: getInBetween(event.times, monthStart, monthEnd),
 			}))
 			.filter(event => event.time.length > 0)
 			.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
@@ -119,10 +120,10 @@ async function getEvents(
 }
 
 function getSortTime(event: Event): number {
-	return event.time[0]?.start.getTime() ?? 0
+	return event.times[0]?.start.getTime() ?? 0
 }
 
 function getSortTimeEnd(event: Event): number {
-	const t: Time | undefined = event.time[event.time.length - 1]
+	const t: Time | undefined = event.times[event.times.length - 1]
 	return t?.end?.getTime() ?? t?.start.getTime() ?? 0
 }

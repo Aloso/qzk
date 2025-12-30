@@ -1,6 +1,5 @@
 <script lang="ts">
 	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
-	import { deleteDraft } from '$lib/events/draftApi'
 	import { deleteEvent, publishDraft } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Time } from '$lib/events/types'
@@ -26,8 +25,8 @@
 	const todayUtc = new Date()
 	todayUtc.setUTCHours(0, 0, 0, 0)
 
-	const pastTimes = $derived(event.time.filter(t => getEndOfTime(t) <= now))
-	const futureTimes = $derived(event.time.filter(t => getEndOfTime(t) > now))
+	const pastTimes = $derived(event.times.filter(t => getEndOfTime(t) <= now))
+	const futureTimes = $derived(event.times.filter(t => getEndOfTime(t) > now))
 	let isPublished = $state(data.isPublished)
 	let showAll = $state(false)
 	let status = $state<Status>({ type: 'ready' })
@@ -114,18 +113,12 @@
 
 		if (event?.key && (loggedIn || !isPublished)) {
 			try {
-				if (isPublished && loggedIn) {
-					await deleteEvent(event.key)
+				const success = await deleteEvent(event.key, isPublished ? 'public' : 'draft')
+				if (success) {
 					status = { type: 'deleted' }
-
 					submittedDrafts.remove(event.key)
 				} else {
-					const success = await deleteDraft(event.key)
-					if (success) {
-						status = { type: 'deleted' }
-					} else {
-						status = { type: 'error', message: 'Fehler beim Löschen!' }
-					}
+					status = { type: 'error', message: 'Fehler beim Löschen!' }
 				}
 			} catch (e) {
 				status = { type: 'error', message: e instanceof Error ? e.message : 'Fehler' }
@@ -135,7 +128,7 @@
 </script>
 
 <svelte:head>
-	<title>{event.title} - Queeres Zentrum Kassel</title>
+	<title>{event.titleDe} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if loggedIn || !isPublished}
@@ -194,7 +187,7 @@
 
 <div class="layout">
 	<div class="main">
-		<h1>{event.title}</h1>
+		<h1>{event.titleDe}</h1>
 
 		<div class="quick-links">
 			<a href="#termine" onclick={scrollToAppointments}>
@@ -211,11 +204,11 @@
 			</a>
 		</div>
 
-		<div class="event-description">{@html event.descHtml}</div>
+		<div class="event-description">{@html event.descDe}</div>
 	</div>
 
 	<div class="sidebar">
-		<div class="sidebar-title" id="termine">Termin{event.time.length > 1 ? 'e' : ''}</div>
+		<div class="sidebar-title" id="termine">Termin{event.times.length > 1 ? 'e' : ''}</div>
 		<div
 			class="appointments"
 			style={event.decoration
@@ -234,7 +227,7 @@
 					{@html formatAppointment(time)}
 				</div>
 			{/each}
-			{#if !showAll && (event.time.length > 5 || (futureTimes.length && pastTimes.length))}
+			{#if !showAll && (event.times.length > 5 || (futureTimes.length && pastTimes.length))}
 				<button class="show-all-times" onclick={() => (showAll = true)}>Alle anzeigen</button>
 			{/if}
 		</div>
@@ -249,7 +242,7 @@
 				<p>Findet {@html formatRelativeDate(futureTimes[0].start)} statt</p>
 			{:else}
 				<EventCountDown
-					showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
+					showLabel={futureTimes.length > 1 || (showAll && event.times.length > 1)}
 					time={futureTimes[0].start}
 				/>
 			{/if}
@@ -291,7 +284,7 @@
 			{/if}
 		{/if}
 
-		{#if event.organizer}
+		{#if event.organizer.name || event.organizer.email || event.organizer.phone || event.organizer.website}
 			<div class="sidebar-title">Kontakt</div>
 
 			{#if event.organizer.name}

@@ -18,10 +18,10 @@ export async function load({ platform }): Promise<Data> {
 		error(500, 'Platform not available')
 	}
 
-	const eventsRaw = await getAllEvents(platform.env, {}, true)
+	const eventsRaw = await getAllEvents(platform.env, {}, 'public')
 
 	const eventsParsed = eventsRaw
-		.map(({ submitter: _0, orgaNotes: _1, description: _3, ...rest }) => rest)
+		.map(({ submitter: _0, orgaNotes: _1, ...rest }) => rest)
 		.map<Event>(wire2event)
 
 	const now = Date.now()
@@ -34,16 +34,16 @@ export async function load({ platform }): Promise<Data> {
 	// 	return e.time.length > 0
 	// })
 	const events = eventsParsed.map(e => {
-		e.allTimes = Array.isArray(e.time) ? e.time : [e.time]
-		e.time = e.allTimes.filter(time => +time.start < inOneMonth && getEndOfTime(time) > now)
-		if (e.time.length === 0) {
-			e.descHtml = ''
+		e.allTimes = e.times
+		e.times = e.allTimes.filter(time => +time.start < inOneMonth && getEndOfTime(time) > now)
+		if (e.times.length === 0) {
+			e.descDe = ''
 		}
 		return e
 	})
 	events.sort((a, b) => {
-		const aTime = a.time[0] ?? a.allTimes![0]
-		const bTime = b.time[0] ?? b.allTimes![0]
+		const aTime = a.times[0] ?? a.allTimes![0]
+		const bTime = b.times[0] ?? b.allTimes![0]
 		return +aTime.start - +bTime.start
 	})
 

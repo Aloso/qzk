@@ -1,48 +1,59 @@
 import { json } from '@sveltejs/kit'
-import { deleteEvent, putEvent, setEventPublished } from '$lib/server/events/db'
+import { addDraft, deleteEvent, putEvent } from '$lib/server/events/db'
 import { parseEvent } from '$lib/server/events/event'
-import { queryKey, tryAuthentication } from '$lib/server/events/http'
+import { queryKey, queryState, tryAuthentication } from '$lib/server/events/http'
 import { sanitizeHtml } from '$lib/utils/sanitize'
 import { error } from '@sveltejs/kit'
+import { getEvent } from '$lib/server/events/db'
 
-/*
-	Everyone can fetch the list of published events. Only authorized users (admins) can
-	edit published events, and (un)publish events.
-*/
+// fetch
+export async function GET({ request, platform }): Promise<Response> {
+	if (!platform) error(500, 'Platform not available')
 
-// publish
+	const isAdmin = tryAuthentication(request, platform.env)
+
+	const params = new URL(request.url).searchParams
+	const key = queryKey(params)
+	const state = queryState(params)
+	if (!key) error(400, 'Missing key')
+	if (!state && !isAdmin) error(400, 'Missing state')
+
+	const event = await getEvent(platform.env, key, state)
+	if (!isAdmin && event.state !== 'draft') {
+		delete event.submitter
+		delete event.orgaNotes
+	}
+	return json(event)
+}
+
+// create draft
 export async function POST({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	if (!tryAuthentication(request, platform.env)) {
-		return error(401, 'Keine Berechtigung')
-	}
+	const event = parseEvent(await request.json())
+	event.descDe = sanitizeHtml(event.descDe)
+	if (!event.submitter) error(400, 'Missing submitter data')
 
-	const key = queryKey(request)
-	if (!key) {
-		throw new Response('Missing key', { status: 401 })
-	}
-	await setEventPublished(platform.env, key, true)
-	return new Response('OK')
+	await addDraft(platform.env, event)
+	return json(event)
 }
 
 // edit
 export async function PUT({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
-	if (!tryAuthentication(request, platform.env)) {
-		return error(401, 'Keine Berechtigung')
-	}
+	const isAdmin = tryAuthentication(request, platform.env)
 
 	const event = parseEvent(await request.json())
-	const key = queryKey(request) ?? event.key
-	if (!key) {
-		throw new Response('Missing key', { status: 401 })
+	if (!event.submitter) error(400, 'Missing submitter data')
+	if (!isAdmin && event.state !== 'draft') {
+		error(401, 'Keine Berechtigung')
 	}
-	event.key = key
-	event.descHtml = sanitizeHtml(event.descHtml)
 
-	await putEvent(platform.env, key, event, true)
+	event.key = queryKey(request) ?? event.key ?? error(400, 'Missing key')
+	event.descDe = sanitizeHtml(event.descDe)
+
+	await putEvent(platform.env, event, event.key)
 	return json(event)
 }
 
@@ -51,14 +62,14 @@ export async function DELETE({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
 
 	if (!tryAuthentication(request, platform.env)) {
-		return error(401, 'Keine Berechtigung')
+		error(401, 'Keine Berechtigung')
 	}
 
-	const key = queryKey(request)
-	if (!key) {
-		throw new Response('Missing key', { status: 401 })
-	}
-	await deleteEvent(platform.env, key, true)
-	// await setEventPublished(platform.env, key, false)
+	const params = new URL(request.url).searchParams
+	const key = queryKey(params) ?? error(400, 'Missing key')
+	const state = queryState(params) ?? error(400, 'Missing state')
+
+	await deleteEvent(platform.env, key, state)
+	// await setEventState(platform.env, key, 'archived')
 	return new Response('OK')
 }

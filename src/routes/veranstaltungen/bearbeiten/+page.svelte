@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import PlanningFormProfesh from '$lib/components/planning-form/PlanningFormProfesh.svelte'
-	import { updateDraft } from '$lib/events/draftApi'
-	import { updateEvent } from '$lib/events/eventApi'
-	import { fetchEventOrDraft as fetchEventOrDraft } from '$lib/events/eventApi/fetchEventOrDraft'
+	import { updateEvent, fetchEventForAdmin } from '$lib/events/eventApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { error } from '@sveltejs/kit'
@@ -29,23 +27,22 @@
 		isPublished = params.get('isPublished') === 'true'
 		const key = params.get('key') ?? error(404)
 
-		event = await fetchEventOrDraft(key)
+		event = await fetchEventForAdmin(key)
 		defaults.setToDraft(event)
 	})
 
-	async function onSubmit(newEvent: Event & WithSubmitter) {
+	async function onSubmit(newEvent: Omit<Event, 'state'> & WithSubmitter) {
 		if (event?.key && (loggedIn || !isPublished)) {
 			const key = event.key
 			try {
 				status = { type: 'submitting' }
-				if (isPublished && loggedIn) {
-					await updateEvent(newEvent, key)
-				} else {
-					const updated = await updateDraft(newEvent, key)
-					if (!updated) {
-						status = { type: 'error', message: 'Fehler beim Bearbeiten!' }
-						return
-					}
+				const updated = await updateEvent(
+					{ ...newEvent, state: isPublished && loggedIn ? 'public' : 'draft' },
+					key,
+				)
+				if (!updated) {
+					status = { type: 'error', message: 'Fehler beim Bearbeiten!' }
+					return
 				}
 				goto(`/veranstaltungen/${event.key}`)
 			} catch (e) {
@@ -58,7 +55,7 @@
 </script>
 
 <svelte:head>
-	<title>Bearbeiten - {event?.title ?? 'Lädt...'} - Queeres Zentrum Kassel</title>
+	<title>Bearbeiten - {event?.titleDe ?? 'Lädt...'} - Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if event}

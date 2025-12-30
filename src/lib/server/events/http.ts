@@ -1,3 +1,6 @@
+import { error } from '@sveltejs/kit'
+import { parseState } from './event'
+
 type Env = App.Platform['env']
 
 interface Credentials {
@@ -47,11 +50,20 @@ export function queryKey(receiver: Request | URLSearchParams) {
 	return receiver.get('key') ?? undefined
 }
 
+export function queryState(receiver: Request | URLSearchParams) {
+	if (receiver instanceof Request) {
+		receiver = new URL(receiver.url).searchParams
+	}
+	const state = receiver.get('state')
+	if (!state) return
+	return parseState(state)
+}
+
 export function queryNumber(params: URLSearchParams, name: string) {
 	const value = params.get(name)
 	if (value == null) return
 	if (Number.isNaN(value)) {
-		throw new Response(`Bad query parameter ${name}`, { status: 400 })
+		error(400, `Bad query parameter ${name}`)
 	}
 	return +value
 }

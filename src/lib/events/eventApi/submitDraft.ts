@@ -1,21 +1,21 @@
+import type { EventDto } from '$lib/server/events/event'
 import { host } from '.'
 import { event2wire, wire2event } from '../convert'
-import type { Event, WireEvent, WithKey, WithSubmitter } from '../types'
+import type { Event, WithKey, WithSubmitter } from '../types'
 import { formatErrors } from './errors'
 
 export async function submitDraft(
 	draft: Event & WithSubmitter,
 ): Promise<Event & WithSubmitter & WithKey> {
-	draft.title = draft.title.trim()
+	draft.titleDe = draft.titleDe.trim()
 	draft.submitter.name = draft.submitter.name.trim()
 	draft.submitter.email = draft.submitter.email.trim()
-	if (draft.organizer) {
-		draft.organizer.email = draft.organizer.email?.trim() || undefined
-		draft.organizer.phone = draft.organizer.phone?.trim() || undefined
-		draft.organizer.website = draft.organizer.website?.trim() || undefined
-	}
+	draft.organizer.name = draft.organizer.name?.trim() || undefined
+	draft.organizer.email = draft.organizer.email?.trim() || undefined
+	draft.organizer.phone = draft.organizer.phone?.trim() || undefined
+	draft.organizer.website = draft.organizer.website?.trim() || undefined
 
-	const response = await fetch(host() + '/draft', {
+	const response = await fetch(`${host()}/event`, {
 		method: 'POST',
 		body: JSON.stringify(event2wire(draft)),
 	})
@@ -30,6 +30,6 @@ export async function submitDraft(
 		}
 	}
 
-	const created: WireEvent & WithSubmitter & WithKey = await response.json()
+	const created: EventDto & WithSubmitter & WithKey = await response.json()
 	return wire2event(created)
 }
