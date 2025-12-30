@@ -4,7 +4,6 @@
 
 	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
 	import Insert from '$lib/components/Insert.svelte'
-	import { deleteDraft } from '$lib/events/draftApi'
 	import { deleteEvent, publishDraft } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Time } from '$lib/events/types'
@@ -33,8 +32,8 @@
 	const todayUtc = new Date()
 	todayUtc.setUTCHours(0, 0, 0, 0)
 
-	let pastTimes = $derived(event.time.filter(t => getEndOfTime(t) <= now))
-	let futureTimes = $derived(event.time.filter(t => getEndOfTime(t) > now))
+	let pastTimes = $derived(event.times.filter(t => getEndOfTime(t) <= now))
+	let futureTimes = $derived(event.times.filter(t => getEndOfTime(t) > now))
 	let nextTime = $derived(futureTimes[0])
 	let isPublished = $state(data.isPublished)
 	let showAll = $state(false)
@@ -125,18 +124,12 @@
 
 		if (event?.key && (loggedIn || !isPublished)) {
 			try {
-				if (isPublished && loggedIn) {
-					await deleteEvent(event.key)
+				const success = await deleteEvent(event.key, isPublished ? 'public' : 'draft')
+				if (success) {
 					status = { type: 'deleted' }
-
 					submittedDrafts.remove(event.key)
 				} else {
-					const success = await deleteDraft(event.key)
-					if (success) {
-						status = { type: 'deleted' }
-					} else {
-						status = { type: 'error', message: m.event_delete_failed() }
-					}
+					status = { type: 'error', message: m.event_delete_failed() }
 				}
 			} catch (e) {
 				status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
@@ -146,7 +139,7 @@
 </script>
 
 <svelte:head>
-	<title>{event.title} | Queeres Zentrum Kassel</title>
+	<title>{event.titleDe} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if loggedIn || !isPublished}
@@ -207,11 +200,11 @@
 
 <div class="layout">
 	<div class="main">
-		<h1>{event.title}</h1>
+		<h1>{event.titleDe}</h1>
 
 		<div class="quick-links">
 			<a href="#termine" onclick={scrollToAppointments}>
-				{m.event_anchor_appointments({ count: event.time.length })}
+				{m.event_anchor_appointments({ count: event.times.length })}
 				<svg class="arrow-down" viewBox="0 0 24 24">
 					<path d="M4,14L12,22L20,14M12,22L12,2z" />
 				</svg>
@@ -224,12 +217,12 @@
 			</a>
 		</div>
 
-		<div class="event-description">{@html event.descHtml}</div>
+		<div class="event-description">{@html event.descDe}</div>
 	</div>
 
 	<div class="sidebar">
 		<div class="sidebar-title" id="termine">
-			{m.event_anchor_appointments({ count: event.time.length })}
+			{m.event_anchor_appointments({ count: event.times.length })}
 		</div>
 		<div
 			class="appointments"
@@ -253,7 +246,7 @@
 					{/each}
 				</div>
 			{/each}
-			{#if !showAll && (event.time.length > 5 || (futureTimes.length && pastTimes.length))}
+			{#if !showAll && (event.times.length > 5 || (futureTimes.length && pastTimes.length))}
 				<button class="show-all-times" onclick={() => (showAll = true)}>
 					{m.actions_show_all()}
 				</button>
@@ -278,7 +271,7 @@
 			</p>
 		{:else if nextTime}
 			<EventCountDown
-				showLabel={futureTimes.length > 1 || (showAll && event.time.length > 1)}
+				showLabel={futureTimes.length > 1 || (showAll && event.times.length > 1)}
 				time={nextTime.start}
 			/>
 		{/if}
@@ -321,7 +314,7 @@
 			{/if}
 		{/if}
 
-		{#if event.organizer}
+		{#if event.organizer.name || event.organizer.email || event.organizer.phone || event.organizer.website}
 			<div class="sidebar-title">Kontakt</div>
 
 			{#if event.organizer.name}

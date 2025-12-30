@@ -35,7 +35,7 @@
 	let dayEnd = $derived(new Date(year, month, day + 1))
 
 	let dayEvents = $derived(
-		allEvents.filter(event => isBetween(event.allTimes ?? event.time, dayStart, dayEnd)),
+		allEvents.filter(event => isBetween(event.allTimes ?? event.times, dayStart, dayEnd)),
 	)
 
 	let [hasDraftEvent, notFirst, notLast] = $derived.by(() => {
@@ -49,7 +49,7 @@
 		type="button"
 		class="day-button"
 		onclick={() => onClick?.(dayStart)}
-		title={dayEvents.map(e => e.title).join('\n')}
+		title={dayEvents.map(e => e.titleDe).join('\n')}
 	>
 		<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 		<div class="badges">

@@ -13,7 +13,7 @@
 
 	interface Props {
 		defaults: FormValues
-		onSubmit: (event: Event & WithSubmitter) => void
+		onSubmit: (event: Omit<Event, 'state'> & WithSubmitter) => void
 		onTimeChange?: (times: Time[]) => void
 		status:
 			| { type: 'ready' | 'submitting' | 'submitted' }
@@ -49,7 +49,7 @@
 	})
 
 	$effect(() => {
-		const validTimes = values.time.filter(isTimeValid)
+		const validTimes = values.times.filter(isTimeValid)
 		if (validTimes.length) {
 			onTimeChange?.(validTimes)
 		}
@@ -57,15 +57,15 @@
 
 	$effect(() => {
 		clickCalendarDay = date => {
-			if (values.time.length === 1) {
-				const time = values.time[0]
+			if (values.times.length === 1) {
+				const time = values.times[0]
 				if (
 					time.start === undefined &&
 					(time.end === undefined || time.variant === 'day' || time.variant === 'time')
 				) {
 					const dateNew = new Date(date)
 					dateNew.setHours(12, 0, 0, 0)
-					values.time[0] = { variant: 'day', start: dateNew }
+					values.times[0] = { variant: 'day', start: dateNew }
 				}
 			}
 		}
@@ -90,10 +90,10 @@
 			JSON.stringify({ name: values.yourName, email: values.yourEmail }),
 		)
 
-		const event: Event & WithSubmitter = {
-			title: values.title,
-			descHtml: values.descHtml,
-			time: values.time as Time[],
+		const event: Omit<Event, 'state'> & WithSubmitter = {
+			titleDe: values.titleDe,
+			descDe: values.descDe,
+			times: values.times as Time[],
 			place: getPlace(),
 			organizer: getOrganizer(),
 			website: values.website === '' ? undefined : values.website,
@@ -127,14 +127,12 @@
 	}
 
 	function getOrganizer(): Event['organizer'] {
-		return values.organizerName === ''
-			? undefined
-			: {
-					name: values.organizerName,
-					email: values.organizerEmail === '' ? undefined : values.organizerEmail,
-					phone: values.organizerPhone === '' ? undefined : values.organizerPhone,
-					website: values.organizerWebsite === '' ? undefined : values.organizerWebsite,
-				}
+		return {
+			name: values.organizerName === '' ? undefined : values.organizerName,
+			email: values.organizerEmail === '' ? undefined : values.organizerEmail,
+			phone: values.organizerPhone === '' ? undefined : values.organizerPhone,
+			website: values.organizerWebsite === '' ? undefined : values.organizerWebsite,
+		}
 	}
 
 	function isTimeValid(time: FormTime): time is Time {

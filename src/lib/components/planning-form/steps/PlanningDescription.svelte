@@ -14,19 +14,19 @@
 	let showHelp = $state(false)
 
 	$effect(() => {
-		valid = !!values.title && !!values.descHtml && values.descHtml !== '<p></p>'
+		valid = !!values.titleDe && !!values.descDe && values.descDe !== '<p></p>'
 	})
 </script>
 
 <label>
 	<em class="required">{m.pf_event_name()}</em>
-	<input class="full-width" type="text" bind:value={values.title} required />
+	<input class="full-width" type="text" bind:value={values.titleDe} required />
 </label>
 <label for="desc-input">
 	<em class="required">{m.pf_description()}</em>
 	<TipTapEditor
 		id="desc-input"
-		bind:htmlValue={values.descHtml}
+		bind:htmlValue={values.descDe}
 		bind:showHelp
 		headingLevels={[2, 3, 4, 5]}
 	/>

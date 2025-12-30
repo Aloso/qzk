@@ -11,7 +11,7 @@
 
 	interface Props {
 		defaults: FormValues
-		onSubmit: (event: Event & WithSubmitter) => void
+		onSubmit: (event: Omit<Event, 'state'> & WithSubmitter) => void
 
 		status: { type: 'ready' | 'submitting' } | { type: 'error'; message: string; missing?: boolean }
 	}
@@ -33,10 +33,10 @@
 	function submitForm(ev: SubmitEvent) {
 		ev.preventDefault()
 
-		const event: Event & WithSubmitter = {
-			title: values.title,
-			descHtml: values.descHtml,
-			time: values.time.filter((time): time is Time => !!time.start),
+		const event: Omit<Event, 'state'> & WithSubmitter = {
+			titleDe: values.titleDe,
+			descDe: values.descDe,
+			times: values.times.filter((time): time is Time => !!time.start),
 			place: getPlace(),
 			organizer: getOrganizer(),
 			website: values.website === '' ? undefined : values.website,
@@ -72,14 +72,12 @@
 	}
 
 	function getOrganizer(): Event['organizer'] {
-		return values.organizerName === ''
-			? undefined
-			: {
-					name: values.organizerName,
-					email: values.organizerEmail === '' ? undefined : values.organizerEmail,
-					phone: values.organizerPhone === '' ? undefined : values.organizerPhone,
-					website: values.organizerWebsite === '' ? undefined : values.organizerWebsite,
-				}
+		return {
+			name: values.organizerName === '' ? undefined : values.organizerName,
+			email: values.organizerEmail === '' ? undefined : values.organizerEmail,
+			phone: values.organizerPhone === '' ? undefined : values.organizerPhone,
+			website: values.organizerWebsite === '' ? undefined : values.organizerWebsite,
+		}
 	}
 </script>
 

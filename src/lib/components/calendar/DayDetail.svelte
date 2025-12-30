@@ -27,7 +27,7 @@
 	let dayEvents = $derived(
 		allEvents
 			.map(event => {
-				const time = getInBetween(event.allTimes ?? event.time, dayStart, dayEnd)
+				const time = getInBetween(event.allTimes ?? event.times, dayStart, dayEnd)
 				return { ...event, time }
 			})
 			.filter(e => e.time.length > 0),
@@ -79,7 +79,7 @@
 	<ul class="event-list">
 		{#each dayEvents as event (event.key)}
 			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
-				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">{event.title}</a>
+				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">{event.titleDe}</a>
 				<br />
 				{[formatPlace(event.place), formatTimes(event.time[0])]
 					.filter(s => s !== undefined)

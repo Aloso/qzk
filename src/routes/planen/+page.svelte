@@ -3,7 +3,7 @@
 	import StaticPage from '$lib/components/StaticPage.svelte'
 	import type { StaticPageTransformed } from '$lib/data'
 	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
-	import { submitDraft } from '$lib/events/draftApi'
+	import { submitDraft } from '$lib/events/eventApi'
 	import type { Event, Time, WithSubmitter } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
@@ -45,7 +45,7 @@
 				hour: '2-digit',
 				minute: '2-digit',
 			})
-			submittedDrafts.add(key, `${date} - ${event.title}`)
+			submittedDrafts.add(key, `${date} - ${event.titleDe}`)
 			goto(localizeHref('/veranstaltungen/' + encodeURIComponent(key)))
 		} catch (e) {
 			status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
@@ -62,19 +62,19 @@
 
 		return events
 			.flatMap<Event>(event => {
-				const time = narrowTimesToDraft(event.time, draftTimes!)
+				const time = narrowTimesToDraft(event.times, draftTimes!)
 				if (time.length === 0) return []
-				return [{ ...event, time, allTimes: event.time }]
+				return [{ ...event, time, allTimes: event.times }]
 			})
-			.sort((a, b) => +a.time[0].start - +b.time[0].start)
+			.sort((a, b) => +a.times[0].start - +b.times[0].start)
 	})
 	onMount(() => {
 		loadEvents()
 	})
 
 	async function loadEvents() {
-		events = await fetchAllEvents()
-		events.sort((a, b) => (a.time[0]?.start.getTime() ?? 0) - (b.time[0]?.start.getTime() ?? 0))
+		events = await fetchAllEvents('public')
+		events.sort((a, b) => (a.times[0]?.start.getTime() ?? 0) - (b.times[0]?.start.getTime() ?? 0))
 	}
 </script>
 
@@ -91,7 +91,7 @@
 	<div class="form-left">
 		<PlanningForm
 			defaults={defaults.values}
-			onSubmit={event => onSubmit(event)}
+			onSubmit={event => onSubmit({ ...event, state: 'draft' })}
 			onTimeChange={time => {
 				draftTimes = time
 				showDate = new Date(time[0].start)

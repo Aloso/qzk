@@ -2,27 +2,34 @@
 import { json } from '@sveltejs/kit'
 import { z } from 'zod'
 
-export interface Event {
+export interface EventDto {
 	key?: string
-	title: string
-	descHtml: string
-	description?: string // deprecated
+	state: EventState
+	titleDe: string
+	titleEn?: string
+	descDe: string
+	descEn?: string
 	website?: string
-	time: Time | Time[]
+	times: TimeDto[]
 	place: Place
-	organizer?: Organizer // TODO: make non-optional
+	organizer: Organizer
 	pictureUrl?: string
 	tags: string[]
-	submitter: Submitter
+	submitter?: Submitter
 	orgaNotes?: string
-	colors?: string[]
 	decoration?: Decoration
 }
 
-interface Time {
+export interface FullEventDto extends EventDto {
+	submitter: Submitter
+}
+
+export type EventState = 'public' | 'draft' | 'archived'
+
+export interface TimeDto {
 	start: string
 	end?: string
-	repeats?: Repeats
+	// repeats?: Repeats
 }
 
 // every day = { cycle: DAY }
@@ -91,23 +98,27 @@ const decorationSchema = z.object({
 	blendImage: z.string(),
 })
 
+const stateSchema = z.enum(['public', 'draft', 'archived'])
+
 const schema = z.object({
 	key: z.string().optional(),
-	title: z.string().min(1, 'Bitte Titel der Veranstaltung angeben'),
-	descHtml: z.string().min(1, 'Bitte Beschreibung der Veranstaltung angeben'),
+	state: stateSchema,
+	titleDe: z.string().min(1, 'Bitte Titel der Veranstaltung angeben'),
+	titleEn: z.string().optional(),
+	descDe: z.string().min(1, 'Bitte Beschreibung der Veranstaltung angeben'),
+	descEn: z.string().optional(),
 	website: z.url('Die angegebene Website ist keine gültige URL').optional(),
-	time: z.array(timeSchema).or(timeSchema),
+	times: z.array(timeSchema),
 	place: placeSchema,
-	organizer: organizerSchema.optional(),
+	organizer: organizerSchema,
 	pictureUrl: z.url('Ungültige URL beim Bild angegeben').optional(),
 	tags: z.string().min(1, 'Tag darf nicht leer sein').array(),
 	submitter: submitterSchema,
 	orgaNotes: z.string().optional(),
-	colors: z.array(z.string()).length(2).optional(),
 	decoration: decorationSchema.optional(),
 })
 
-export function parseEvent(data: unknown): Event {
+export function parseEvent(data: unknown): EventDto {
 	if (typeof data === 'object' && data && 'description' in data) {
 		delete data.description
 	}
@@ -119,7 +130,16 @@ export function parseEvent(data: unknown): Event {
 	}
 }
 
+export function parseState(state: string): EventState {
+	try {
+		return stateSchema.parse(state)
+	} catch (error) {
+		const { issues } = error as z.ZodError
+		throw json({ errors: issues }, { status: 400 })
+	}
+}
+
 // Ensure the type definitions are equivalent
 type ZodEvent = z.infer<typeof schema>
-const {}: Event = {} as ZodEvent
-const {}: ZodEvent = {} as Event
+const {}: EventDto = {} as ZodEvent
+const {}: ZodEvent = {} as EventDto

@@ -1,21 +1,16 @@
-import type { Event, EventCommon, Time, TimeVariant, WireEvent, WireTime } from './types'
+import type { EventDto, TimeDto } from '$lib/server/events/event'
+import type { Event, EventCommon, Time, TimeVariant } from './types'
 
-export function wire2event<E extends EventCommon>(event: WireEvent & E): Event & E {
-	const times = Array.isArray(event.time) ? event.time : [event.time]
-	return {
-		...event,
-		time: times.map(wire2time),
-	}
+export function wire2event<E>(event: EventDto & E): Event & E
+export function wire2event(event: EventDto): Event {
+	return { ...event, times: event.times.map(wire2time) }
 }
 
-export function event2wire<E extends EventCommon>(event: Event & E): WireEvent & E {
-	return {
-		...event,
-		time: event.time.map(time2wire),
-	}
+export function event2wire<E extends EventCommon>(event: Event & E): EventDto {
+	return { ...event, times: event.times.map(time2wire) }
 }
 
-function wire2time(time: WireTime): Time {
+function wire2time(time: TimeDto): Time {
 	const hasStartTime = time.start.includes('T')
 	const hasEndTime = time.end?.includes('T') ?? false
 	const variant: TimeVariant = hasEndTime
@@ -32,7 +27,7 @@ function wire2time(time: WireTime): Time {
 	return { variant, start, end } as Time
 }
 
-function time2wire(time: Time): WireTime {
+function time2wire(time: Time): TimeDto {
 	return {
 		start: formatDate(time.start, time.variant === 'time' || time.variant === 'time-range'),
 		end: time.end ? formatDate(time.end, time.variant === 'time-range') : undefined,

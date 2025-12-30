@@ -17,7 +17,7 @@
 	const { generalInfo, posts, events } = data
 
 	const today = new Date()
-	const filteredEvents = events?.filter(e => e.time.length > 0)
+	const filteredEvents = events?.filter(e => e.times.length > 0)
 
 	let openCalendarDay = $state<Date>()
 </script>
