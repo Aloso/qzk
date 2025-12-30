@@ -3,12 +3,7 @@ import { getEvent } from '$lib/server/events/db.js'
 import { error } from '@sveltejs/kit'
 import { wire2event } from '$lib/events/convert.js'
 
-export interface Data {
-	event: Event
-	isPublished: boolean
-}
-
-export async function load({ params, platform }): Promise<Data> {
+export async function load({ params, platform }): Promise<Event> {
 	if (!platform) {
 		error(500, 'Platform not available')
 	}
@@ -19,5 +14,5 @@ export async function load({ params, platform }): Promise<Data> {
 	delete event.submitter
 	delete event.orgaNotes
 
-	return { event: wire2event(event), isPublished: event.state === 'public' }
+	return wire2event<{}>(event)
 }

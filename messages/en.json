@@ -29,6 +29,7 @@
 	"noscript": "This feature requires JavaScript enabled!",
 	"actions_edit": "Edit",
 	"actions_delete": "Delete",
+	"actions_archive": "Move to trash",
 	"actions_publish": "Publish",
 	"actions_next": "Next",
 	"actions_back": "Back",
@@ -125,11 +126,12 @@
 
 	"event_draft_label": "Draft",
 	"event_published_label": "Published event",
+	"event_archived_label": "Deleted event",
 	"event_submitted_label": "The event has been submitted. We will let you know when we accept the event and publish it on the website. Until then, you can still edit it.",
 	"event_submitted_contact": "If you have any questions or requests, please write to us using the <a>contact form</a>.",
-	"event_delete_final": "Delete event permanently?",
 	"event_delete_draft_final": "Delete draft permanently?",
 	"event_delete_failed": "Deletion failed!",
+	"event_edit_failed": "Editing failed!",
 
 	"plan_event_title": "Submit an event",
 	"plan_event_submitted_list": "Previously submitted events",

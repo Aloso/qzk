@@ -34,7 +34,7 @@
 		{#if loggedIn}
 			<div class="link-section">
 				<div class="title">Admin</div>
-				<a href={localizeHref('/admin/events/drafts/1')}>{m.footer_event_management()}</a>
+				<a href={localizeHref('/admin/events/draft/1')}>{m.footer_event_management()}</a>
 				<a href={localizeHref('/admin/logout')}>{m.footer_logout()}</a>
 			</div>
 		{/if}

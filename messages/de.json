@@ -29,6 +29,7 @@
 	"noscript": "Für diese Funktion wird JavaScript benötigt!",
 	"actions_edit": "Bearbeiten",
 	"actions_delete": "Löschen",
+	"actions_archive": "In den Papierkorb",
 	"actions_publish": "Veröffentlichen",
 	"actions_next": "Weiter",
 	"actions_back": "Zurück",
@@ -125,11 +126,12 @@
 
 	"event_draft_label": "Entwurf",
 	"event_published_label": "Veröffentlichte Veranstaltung",
+	"event_archived_label": "Gelöschte Veranstaltung",
 	"event_submitted_label": "Die Veranstaltung wurde eingereicht. Wir informieren dich, wenn wir die Veranstaltung akzeptieren und auf der Website veröffentlichen. Bis dahin kannst du sie noch bearbeiten.",
 	"event_submitted_contact": "Wenn du Fragen oder Wünsche hast, schreibe uns bitte über das <a>Kontaktformular</a>.",
-	"event_delete_final": "Veranstaltung endgültig löschen?",
 	"event_delete_draft_final": "Entwurf endgültig löschen?",
 	"event_delete_failed": "Fehler beim Löschen!",
+	"event_edit_failed": "Fehler beim Bearbeiten!",
 
 	"plan_event_title": "Veranstaltung einreichen",
 	"plan_event_submitted_list": "Eingereichte Veranstaltungen",

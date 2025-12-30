@@ -4,16 +4,15 @@
 
 	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
 	import Insert from '$lib/components/Insert.svelte'
-	import { deleteEvent, publishDraft } from '$lib/events/eventApi'
+	import { deleteEvent, setEventState } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
-	import type { Time } from '$lib/events/types'
+	import type { Event, Time } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 	import { m } from '$lib/paraglide/messages'
-	import type { Data } from './+page.server'
 
 	interface Props {
-		data: Data
+		data: Event
 	}
 
 	type Status =
@@ -24,10 +23,10 @@
 		| { type: 'error'; message: string }
 
 	let { data }: Props = $props()
+	let event = $state(data)
 	let locale = getLocale()
 	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
-	const event = data.event
 	const now = Date.now()
 	const todayUtc = new Date()
 	todayUtc.setUTCHours(0, 0, 0, 0)
@@ -35,7 +34,6 @@
 	let pastTimes = $derived(event.times.filter(t => getEndOfTime(t) <= now))
 	let futureTimes = $derived(event.times.filter(t => getEndOfTime(t) > now))
 	let nextTime = $derived(futureTimes[0])
-	let isPublished = $state(data.isPublished)
 	let showAll = $state(false)
 	let status = $state<Status>({ type: 'ready' })
 
@@ -108,8 +106,8 @@
 		if (loggedIn && event?.key) {
 			status = { type: 'submitting' }
 			try {
-				await publishDraft(event.key)
-				isPublished = true
+				await setEventState(event.key, 'public')
+				event.state = 'public'
 				status = { type: 'ready' }
 			} catch (e) {
 				status = { type: 'error', message: e instanceof Error ? e.message : m.error() }
@@ -117,18 +115,29 @@
 		}
 	}
 
-	async function remove() {
-		if (!confirm(isPublished ? m.event_delete_final() : m.event_delete_draft_final())) {
-			return
+	async function deleteOrArchive() {
+		if (event.state === 'draft') {
+			if (!confirm(m.event_delete_draft_final())) return
 		}
 
-		if (event?.key && (loggedIn || !isPublished)) {
+		if (event?.key && (loggedIn || event.state === 'draft')) {
 			try {
-				const success = await deleteEvent(event.key, isPublished ? 'public' : 'draft')
-				if (success) {
-					status = { type: 'deleted' }
-					submittedDrafts.remove(event.key)
+				let success: boolean
+				if (event.state === 'draft') {
+					success = await deleteEvent(event.key, 'draft')
+					if (success) {
+						status = { type: 'deleted' }
+						submittedDrafts.remove(event.key)
+					}
 				} else {
+					success = await setEventState(event.key, 'archived')
+					if (success) {
+						status = { type: 'ready' }
+						event.state = 'archived'
+					}
+					console.log(success, $state.snapshot(status), event.state)
+				}
+				if (!success) {
 					status = { type: 'error', message: m.event_delete_failed() }
 				}
 			} catch (e) {
@@ -142,10 +151,11 @@
 	<title>{event.titleDe} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
-{#if loggedIn || !isPublished}
+{#if loggedIn || event.state !== 'public'}
 	<div
 		class="admin-bar"
-		class:published={status.type === 'submitting' || (isPublished && status.type === 'ready')}
+		class:published={status.type === 'submitting' ||
+			(event.state === 'public' && status.type === 'ready')}
 		class:deleted={status.type === 'deleted' || status.type === 'deleting'}
 		class:error={status.type === 'error'}
 	>
@@ -157,8 +167,10 @@
 			<p>{m.deleted()}</p>
 		{:else if status.type === 'submitting'}
 			<p>{m.publishing()}</p>
-		{:else if isPublished}
+		{:else if event.state === 'public'}
 			<p>{m.event_published_label()}</p>
+		{:else if event.state === 'archived'}
+			<p>{m.event_archived_label()}</p>
 		{:else if loggedIn === false}
 			<p>{m.event_submitted_label()}</p>
 			<p>
@@ -174,23 +186,25 @@
 
 		{#if status.type === 'ready' && event}
 			<div class="admin-controls">
-				{#if loggedIn || !isPublished}
+				{#if loggedIn || event.state === 'draft'}
 					<a
 						class="admin-button edit"
 						href={localizeHref(
 							`/veranstaltungen/bearbeiten?${new URLSearchParams({
 								key: event.key!,
-								isPublished: String(isPublished),
+								state: event.state,
 							})}`,
 						)}
 					>
 						{m.actions_edit()}
 					</a>
 				{/if}
-				{#if loggedIn || !isPublished}
-					<button class="admin-button delete" onclick={remove}>{m.actions_delete()}</button>
+				{#if (loggedIn || event.state === 'draft') && event.state !== 'archived'}
+					<button class="admin-button delete" onclick={deleteOrArchive}>
+						{event.state === 'draft' ? m.actions_delete() : m.actions_archive()}
+					</button>
 				{/if}
-				{#if loggedIn && !isPublished}
+				{#if loggedIn && event.state !== 'public'}
 					<button class="admin-button publish" onclick={publish}>{m.actions_publish()}</button>
 				{/if}
 			</div>

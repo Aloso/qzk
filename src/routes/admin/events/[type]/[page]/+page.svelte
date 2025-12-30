@@ -39,10 +39,11 @@
 <h1>Veranstaltungen</h1>
 <TabBar
 	urls={[
-		[localizeHref('/admin/events/drafts/1'), 'drafts', 'Entwürfe'],
+		[localizeHref('/admin/events/draft/1'), 'draft', 'Entwürfe'],
 		[localizeHref('/admin/events/published/1'), 'published', 'Öffentlich'],
 		[localizeHref('/admin/events/past/1'), 'past', 'Ehemalig'],
 		[localizeHref(`/admin/events/months/${monthDate}`), 'months', 'Nach Monat'],
+		[localizeHref('/admin/events/archived/1'), 'archived', 'Papierkorb'],
 	]}
 	active={data.type}
 />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	interface Props {
-		urls: [string, string, string][]
+		urls: [url: string, id: string, name: string][]
 		active: string
 	}
 

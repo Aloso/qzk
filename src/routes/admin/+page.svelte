@@ -27,11 +27,11 @@
 			delete localStorage.loggedIn
 		} else if (url.searchParams.get('m') === 'loginSuccessful') {
 			localStorage.loggedIn = 'true'
-			goto(localizeHref('/admin/events/drafts/1'), { replaceState: true })
+			goto(localizeHref('/admin/events/draft/1'), { replaceState: true })
 		} else if (url.searchParams.get('m') === 'loggedOut') {
 			delete localStorage.loggedIn
 		} else if (localStorage.loggedIn) {
-			goto(localizeHref('/admin/events/drafts/1'), { replaceState: true })
+			goto(localizeHref('/admin/events/draft/1'), { replaceState: true })
 		}
 	})
 </script>
