@@ -148,7 +148,9 @@
 </script>
 
 <svelte:head>
-	<title>{event.titleDe} | Queeres Zentrum Kassel</title>
+	<title>
+		{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)} | Queeres Zentrum Kassel
+	</title>
 </svelte:head>
 
 {#if loggedIn || event.state !== 'public'}
@@ -214,7 +216,7 @@
 
 <div class="layout">
 	<div class="main">
-		<h1>{event.titleDe}</h1>
+		<h1>{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}</h1>
 
 		<div class="quick-links">
 			<a href="#termine" onclick={scrollToAppointments}>
@@ -231,7 +233,9 @@
 			</a>
 		</div>
 
-		<div class="event-description">{@html event.descDe}</div>
+		<div class="event-description">
+			{@html locale === 'de' ? event.descDe : (event.descEn ?? event.descDe)}
+		</div>
 	</div>
 
 	<div class="sidebar">

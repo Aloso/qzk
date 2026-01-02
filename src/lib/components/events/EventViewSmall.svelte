@@ -16,15 +16,16 @@
 	let { event, showMore = false, openInNewTab }: Props = $props()
 	let locale = getLocale()
 
-	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.titleDe))
-	let descDe = $derived.by(() => {
+	let hyphenateTitle = $derived(locale === 'de' && /\p{Alpha}{16,}/u.test(event.titleDe))
+	let desc = $derived.by(() => {
+		const desc = locale === 'en' ? (event.descEn ?? event.descDe) : event.descDe
 		if (DOMPurify.isSupported) {
-			return DOMPurify.sanitize(event.descDe)
+			return DOMPurify.sanitize(desc)
 		} else {
 			// on the server, we trust that the HTML is okay
 			// this may cause hydration mismatches, because DOMPurify may
 			// insert HTML entities and remove `target="_blank" from links.
-			return event.descDe
+			return desc
 		}
 	})
 	let imgLabel = $derived(formatDateSoon(event.times[0]))
@@ -58,9 +59,11 @@
 		{/if}
 	</div>
 
-	<h3 class="event-title" class:hyphenateTitle>{event.titleDe}</h3>
+	<h3 class="event-title" class:hyphenateTitle>
+		{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}
+	</h3>
 
-	<div class="event-description">{@html descDe}</div>
+	<div class="event-description">{@html desc}</div>
 
 	{#if showMore}
 		<div class="event-place" aria-label="Ort">

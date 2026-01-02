@@ -121,6 +121,10 @@
 		}
 	}
 
+	export function setHtmlValue(html: string) {
+		editor!.chain().focus().setContent(html).run()
+	}
+
 	const toggleBold = () => editor!.chain().focus().toggleBold().run()
 	const toggleItalic = () => editor!.chain().focus().toggleItalic().run()
 	const toggleStrike = () => editor!.chain().focus().toggleStrike().run()

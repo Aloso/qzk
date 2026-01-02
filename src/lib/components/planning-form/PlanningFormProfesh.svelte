@@ -36,6 +36,8 @@
 		const event: Omit<Event, 'state'> & WithSubmitter = {
 			titleDe: values.titleDe,
 			descDe: values.descDe,
+			titleEn: values.en ? values.titleEn : undefined,
+			descEn: values.en ? values.descEn : undefined,
 			times: values.times.filter((time): time is Time => !!time.start),
 			place: getPlace(),
 			organizer: getOrganizer(),

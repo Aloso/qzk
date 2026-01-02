@@ -36,6 +36,8 @@
 	"actions_send": "Absenden",
 	"actions_submit": "Absenden",
 	"actions_show_all": "Alle anzeigen",
+	"actions_translate": "Übersetzen",
+	"actions_translate_with": "mit DeepL",
 
 	"email_subject": "Betreff:",
 	"email_subject_missing": "Bitte Betreff eingeben",
@@ -154,8 +156,11 @@
 	"pf_optional": "Freiwillige Angabe",
 	"pf_optionals": "Freiwillige Angaben",
 	"pf_event_name": "Name der Veranstaltung",
+	"pf_event_name_en": "Name (Englisch)",
 	"pf_description": "Beschreibung",
+	"pf_description_en": "Beschreibung (Englisch)",
 	"pf_description_help": "<p>Bitte gib eine aussagekräftige Beschreibung an. Sie sollte alle wichtigen Fragen beantworten, zum Beispiel:</p> <ul>Was erwartet mich bei der Veranstaltung?|Wer kann teilnehmen? Gibt es eine Altersgrenze?|Muss ich mich dafür vorbereiten oder etwas mitbringen?</ul><p>Ort und Zeit müssen nicht in der Beschreibung stehen.</p>",
+	"pf_english_version": "Englische Version",
 	"pf_place": "Ort",
 	"pf_place_qz": "Queeres Zentrum Kassel",
 	"pf_place_physical": "Anderer Ort",
@@ -231,6 +236,11 @@
 	"editor_redo": "Wiederholen",
 	"editor_more_actions": "Mehr Aktionen",
 	"editor_close_help": "Hilfe schließen",
+
+	"translate_error_too_many_requests": "<b>Fehler</b>: Zu viele Anfragen",
+	"translate_error_quota_exceeded": "<b>Übersetzung vorübergehend nicht verfügbar<b>. Die monatliche Grenze für Übersetzungen durch unsere Community wurde erreicht.",
+	"translate_error_content_too_large": "<b>Fehler</b>: Der Text ist zu lang (mehr als 10.000 Zeichen).",
+	"translate_error_internal": "<b>Fehler</b>: Übersetzung fehlgeschlagen.",
 
 	"e404_title": "Seite nicht gefunden",
 	"e404_text": "Entschuldigung, wir haben nicht gefunden, wonach Du suchst.",

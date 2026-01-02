@@ -22,6 +22,7 @@ declare global {
 			DB: D1Database
 			ALGOLIA_APP_ID: string
 			ALGOLIA_API_KEY: string
+			DEEPL_API_KEY: string
 		}
 
 		interface Platform {
