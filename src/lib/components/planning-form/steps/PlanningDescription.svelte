@@ -19,7 +19,7 @@
 	let enEditor = $state<TipTapEditor>()
 
 	let deValid = $derived(!!values.titleDe && isDescriptionValid(values.descDe))
-	let enValid = !values.en || (!!values.titleEn && isDescriptionValid(values.descEn))
+	let enValid = $derived(!values.en || (!!values.titleEn && isDescriptionValid(values.descEn)))
 	let sourceLang = $derived(lastChangedLanguage === 'de' || !enValid ? 'de' : 'en')
 	let translationButtonActive = $derived.by(() => {
 		if (sourceLang === 'de') return deValid && values.descDe.length > 12
@@ -39,7 +39,6 @@
 		values.descEn
 		lastChangedLanguage = 'en'
 	})
-	$inspect(values.titleEn)
 
 	function isDescriptionValid(desc?: string) {
 		return !!desc && desc !== '<p></p>'

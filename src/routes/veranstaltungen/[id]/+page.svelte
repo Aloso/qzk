@@ -321,29 +321,31 @@
 				<p class="address">{event.place.address}</p>
 			{/if}
 		{:else}
-			<p>Online-Veranstaltung</p>
+			<p>{m.event_online()}</p>
 
 			{#if event.place.url}
 				<p>{new URL(event.place.url).host.replace(/^www\./, '')}</p>
 
 				<a href={event.place.url} target="_blank" rel="noopener noreferrer">
-					Veranstaltung beitreten
+					{m.event_join_meeting()}
 				</a>
 			{/if}
 		{/if}
 
 		{#if event.organizer.name || event.organizer.email || event.organizer.phone || event.organizer.website}
-			<div class="sidebar-title">Kontakt</div>
+			<div class="sidebar-title">{m.event_contact()}</div>
 
 			{#if event.organizer.name}
 				<p>{event.organizer.name}</p>
 			{/if}
 			{#if event.organizer.email}
-				<p>E-Mail: <a href="mailto:{event.organizer.email}">{event.organizer.email}</a></p>
+				<p>
+					{m.event_email()}: <a href="mailto:{event.organizer.email}">{event.organizer.email}</a>
+				</p>
 			{/if}
 			{#if event.organizer.phone}
 				<p>
-					Telefon:
+					{m.event_phone()}:
 					<a href="tel:{event.organizer.phone.replace(/^0(?!0)/, '+49')}">
 						{event.organizer.phone}
 					</a>
@@ -351,7 +353,7 @@
 			{/if}
 			{#if event.organizer.website}
 				<p class="break">
-					Website:
+					{m.event_website()}:
 					<a href={event.organizer.website} target="_blank" rel="noreferrer noopener">
 						{new URL(event.organizer.website).host}
 					</a>

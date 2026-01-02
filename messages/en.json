@@ -89,6 +89,7 @@
 	"event_tomorrow": "Tomorrow",
 	"event_yesterday": "Yesterday",
 	"event_online": "Online event",
+	"event_join_meeting": "Join event",
 	"event_more_info": "More info",
 	"event_anchor_appointments": [
 		{
@@ -125,6 +126,10 @@
 	"event_countdown_hours": "hr",
 	"event_countdown_minutes": "min",
 	"event_countdown_seconds": "sec",
+	"event_contact": "Contact",
+	"event_email": "Email",
+	"event_phone": "Phone",
+	"event_website": "Website",
 
 	"event_draft_label": "Draft",
 	"event_published_label": "Published event",
