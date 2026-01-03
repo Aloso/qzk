@@ -80,7 +80,7 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 					}
 					case 'person': {
 						const { fields } = target as Item<Localized<Person>>
-						return `<a class="embed" href="${localUrl(locale, `/person/${fields.slug['de-DE']}`)}">
+						return `<a class="embed" href="${localUrl(locale, 'person', fields.slug['de-DE'])}">
 							<p class="embedTitle">${local(fields.name, locale)}</p>
 							<p class="embedDescription">${local(fields.role, locale)}</p>
 							${fields.pronouns ? `<p class="embedDescription">${local(fields.pronouns, locale)}</p>` : ''}
