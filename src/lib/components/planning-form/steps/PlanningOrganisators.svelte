@@ -1,5 +1,7 @@
 <script lang="ts">
+	import Insert from '$lib/components/Insert.svelte'
 	import type { FormValuesOrganisator } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		values: FormValuesOrganisator
@@ -13,27 +15,35 @@
 	})
 </script>
 
-<div class="section-title">Organisator*innen</div>
-<p>Kontaktdaten der organisierenden Person/Gruppe</p>
-<p class="optional">Freiwillige Angaben</p>
+<div class="section-title">{m.pf_organisators()}</div>
+<p>{m.pf_organisators_description()}</p>
+<p class="optional">{m.pf_optionals()}</p>
 
 <label>
-	<em>Name(n)</em>
+	<em>{m.pf_organisators_name()}</em>
 	<input type="text" bind:value={values.organizerName} />
 </label>
 <label>
-	<em>E-Mail</em>
+	<em>{m.pf_organisators_email()}</em>
 	<input type="text" bind:value={values.organizerEmail} />
 </label>
 <label>
-	<em>Telefon</em>
+	<em>{m.pf_organisators_phone()}</em>
 	<input type="text" bind:value={values.organizerPhone} />
 </label>
 <label>
-	<em>Website</em>
+	<em>{m.pf_organisators_website()}</em>
 	<input type="text" bind:value={values.organizerWebsite} />
 	{#if !valid}
-		<div class="error">Muss mit <b>https://</b> oder <b>http://</b> beginnen</div>
+		<div class="error">
+			<Insert template={m.pf_organisators_website_invalid()}>
+				{#snippet placeholder(type, content)}
+					{#if type === 'b'}
+						<b>{content}</b>
+					{/if}
+				{/snippet}
+			</Insert>
+		</div>
 	{/if}
 </label>
 

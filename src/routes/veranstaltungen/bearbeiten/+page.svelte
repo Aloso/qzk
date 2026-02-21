@@ -4,6 +4,9 @@
 	import { updateEvent, fetchEventForAdmin } from '$lib/events/eventApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
+	import { localizeHref } from '$lib/paraglide/runtime'
+	import type { EventState } from '$lib/server/events/event'
 	import { error } from '@sveltejs/kit'
 	import { onMount } from 'svelte'
 
@@ -19,12 +22,12 @@
 	})
 
 	let event = $state<Event & WithSubmitter>()
-	let isPublished = $state(false)
+	let evState = $state<EventState>('draft')
 	let status = $state<Status>({ type: 'ready' })
 
 	onMount(async () => {
 		const params = new URLSearchParams(location.search)
-		isPublished = params.get('isPublished') === 'true'
+		evState = (params.get('state') as EventState) ?? 'draft'
 		const key = params.get('key') ?? error(404)
 
 		event = await fetchEventForAdmin(key)
@@ -32,19 +35,16 @@
 	})
 
 	async function onSubmit(newEvent: Omit<Event, 'state'> & WithSubmitter) {
-		if (event?.key && (loggedIn || !isPublished)) {
+		if (event?.key && (loggedIn || evState !== 'public')) {
 			const key = event.key
 			try {
 				status = { type: 'submitting' }
-				const updated = await updateEvent(
-					{ ...newEvent, state: isPublished && loggedIn ? 'public' : 'draft' },
-					key,
-				)
+				const updated = await updateEvent({ ...newEvent, state: evState }, key)
 				if (!updated) {
-					status = { type: 'error', message: 'Fehler beim Bearbeiten!' }
+					status = { type: 'error', message: m.event_edit_failed() }
 					return
 				}
-				goto(`/veranstaltungen/${event.key}`)
+				goto(localizeHref(`/veranstaltungen/${event.key}`))
 			} catch (e) {
 				if (e instanceof Error) {
 					status = { type: 'error', message: e.message }
@@ -55,11 +55,11 @@
 </script>
 
 <svelte:head>
-	<title>Bearbeiten - {event?.titleDe ?? 'Lädt...'} - Queeres Zentrum Kassel</title>
+	<title>{m.actions_edit()}: {event?.titleDe ?? m.loading()} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 {#if event}
 	<PlanningFormProfesh {status} defaults={defaults.values} {onSubmit} />
 {:else}
-	<div style="text-align: center; margin: 4rem 0">Lädt...</div>
+	<div style="text-align: center; margin: 4rem 0">{m.loading()}</div>
 {/if}

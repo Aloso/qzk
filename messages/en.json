@@ -1,0 +1,253 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"header_search": "Search",
+	"header_search_placeholder": "Search website...",
+	"header_search_error": "An error occurred while searching!",
+	"header_search_results_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"match": {
+				"countPlural=zero": "No results",
+				"countPlural=one": "1 result",
+				"countPlural=other": "{count} results"
+			}
+		}
+	],
+	"header_search_authors": "Authors",
+
+	"footer_event_management": "Event Management",
+	"footer_logout": "Logout",
+
+	"error": "Error",
+	"help": "Help",
+	"loading": "Loading...",
+	"publishing": "Publishing...",
+	"deleting": "Deleting...",
+	"deleted": "Deleted",
+	"required": "Required",
+	"noscript": "This feature requires JavaScript enabled!",
+	"actions_edit": "Edit",
+	"actions_delete": "Delete",
+	"actions_archive": "Move to trash",
+	"actions_publish": "Publish",
+	"actions_next": "Next",
+	"actions_back": "Back",
+	"actions_send": "Send",
+	"actions_submit": "Submit",
+	"actions_show_all": "Show all",
+	"actions_translate": "Translate",
+	"actions_translate_with": "with DeepL",
+
+	"email_subject": "Subject:",
+	"email_subject_missing": "Please enter a subject",
+	"email_sender": "Your email address:",
+	"email_sender_missing": "Please enter a return address",
+	"email_sender_invalid": "This email address is invalid!",
+	"email_message": "Message:",
+	"email_message_missing": "Please enter a message",
+	"email_sent": "Message sent",
+	"email_sent_body": "We have received your message.",
+	"email_sending_failed": "Error sending the message",
+	"email_sending_failed_contact": "We are sorry for the inconvenience. Please contact us per email:",
+	"email_sending_no_message": "No message exists!",
+
+	"newsletter_email": "Your email address:",
+	"newsletter_email_missing": "Please enter your email address",
+	"newsletter_accept_terms": "I agree to receive emails and accept the privacy policy.",
+	"newsletter_signup": "Subscribe to newsletter",
+
+	"table_of_contents": "On this page",
+	"table_of_contents_show": "Table of contents",
+	"table_of_contents_hide": "Close table of contents",
+
+	"home_opening_hours": "Open Living Room",
+	"home_closed": "closed",
+	"home_important": "Important",
+	"home_events": "Upcoming Events",
+	"home_event_limit_reached": "Events for the next 30 days are displayed.",
+	"home_no_events": "No events in the next 30 days",
+	"home_plan_event": "Plan an Event",
+	"home_select_day_to_plan": "Select a day in the calendar to create a new event.",
+	"home_no_events_on_day": "No events on this day",
+	"home_add_event": "Add event",
+	"home_new_blog_posts": "New Blog Posts",
+
+	"instagram_open": "Open profile on Instagram",
+	"instagram_load_profile": "Load profile",
+	"instagram_privacy": "This may result in cookies being sent to Instagram. See <a>privacy policy</a> for more.",
+	"instagram_loading_error": "The profile could not be loaded. It may have been blocked by your browser or an ad blocker.",
+
+	"blog_published": "Published {date}",
+	"blog_by": "by {date}",
+	"blog_by_unknown": "unknown author",
+	"blog_open": "Read blog post",
+	"blog_sidebar_more_posts": "More interesting articles",
+
+	"event_current": "Currently",
+	"event_today": "Today",
+	"event_tomorrow": "Tomorrow",
+	"event_yesterday": "Yesterday",
+	"event_online": "Online event",
+	"event_join_meeting": "Join event",
+	"event_more_info": "More info",
+	"event_anchor_appointments": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Appointment",
+				"countPlural=other": "Appointments"
+			}
+		}
+	],
+	"event_anchor_place": "Place",
+	"event_anchor_directions": "Directions",
+	"event_relative_days": [
+		{
+			"declarations": ["input days", "input ty"],
+			"selectors": ["days", "ty"],
+			"match": {
+				"ty=start, days=0": "Begins <b>today</b>",
+				"ty=start, days=1": "Begins <b>tomorrow</b>",
+				"ty=start, days=*": "Begins in <b>{days}</b> days",
+				"ty=end, days=0": "Ends <b>today</b>",
+				"ty=end, days=1": "Ends <b>tomorrow</b>",
+				"ty=end, days=*": "Ends in <b>{days}</b> days",
+				"ty=once, days=0": "Taking place <b>today</b>",
+				"ty=once, days=1": "Taking place <b>tomorrow</b>",
+				"ty=once, days=*": "Taking place in <b>{days}</b> days"
+			}
+		}
+	],
+	"event_next_appointment": "Next date:",
+	"event_countdown_day": "day",
+	"event_countdown_days": "days",
+	"event_countdown_hours": "hr",
+	"event_countdown_minutes": "min",
+	"event_countdown_seconds": "sec",
+	"event_contact": "Contact",
+	"event_email": "Email",
+	"event_phone": "Phone",
+	"event_website": "Website",
+
+	"event_draft_label": "Draft",
+	"event_published_label": "Published event",
+	"event_archived_label": "Deleted event",
+	"event_submitted_label": "The event has been submitted. We will let you know when we accept the event and publish it on the website. Until then, you can still edit it.",
+	"event_submitted_contact": "If you have any questions or requests, please write to us using the <a>contact form</a>.",
+	"event_delete_draft_final": "Delete draft permanently?",
+	"event_delete_failed": "Deletion failed!",
+	"event_edit_failed": "Editing failed!",
+
+	"plan_event_title": "Submit an event",
+	"plan_event_submitted_list": "Previously submitted events",
+	"plan_event_conflicts": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 event in the selected time frame",
+				"countPlural=other": "{count} events in the selected time frame"
+			}
+		}
+	],
+	"plan_event_check_conflicts": "Please check that there are no scheduling conflicts.",
+	"plan_event_calendar": "Calendar",
+
+	"pf_loading": "Loading...",
+	"pf_is_submitting": "Submitting...",
+	"pf_is_submitted": "Saved.",
+	"pf_optional": "Optional",
+	"pf_optionals": "Optional information",
+	"pf_event_name": "Name of the event (German)",
+	"pf_event_name_en": "Name (English)",
+	"pf_description": "Description (German)",
+	"pf_description_en": "Description (English)",
+	"pf_description_help": "<p>Please provide a meaningful description. It should answer all important questions, for example:</p> <ul>What can I expect at the event?|Who can participate? Is there an age limit?|Do I need to prepare for it or bring anything with me?</ul><p>The location and time do not need to be included in the description.</p>",
+	"pf_english_version": "English version",
+	"pf_place": "Place",
+	"pf_place_qz": "Queer Center Kassel",
+	"pf_place_physical": "Other place",
+	"pf_place_online": "Online",
+	"pf_room": "Room",
+	"pf_none_selected": "Please select...",
+	"pf_place_name": "Name",
+	"pf_place_address": "Address",
+	"pf_place_address_placeholder": "Address line 1\nAddress line 2",
+	"pf_place_url": "URL",
+	"pf_place_url_placeholder": "E.g. link to online meeting",
+	"pf_datetime": "Date and time",
+	"pf_datetime_date": "Date",
+	"pf_datetime_date_start": "Start date",
+	"pf_datetime_date_end": "End date",
+	"pf_datetime_time": "Time",
+	"pf_datetime_until": "to",
+	"pf_datetime_add": "Add another appointment",
+	"pf_datetime_next": "Next appointment:",
+	"pf_datetime_after_weeks": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "after 1 week",
+				"countPlural=other": "after {count} weeks"
+			}
+		}
+	],
+	"pf_datetime_other_date": "other date",
+	"pf_datetime_optionals": "Times are optional, if unknown.",
+	"pf_long_event": "Single event over multiple days",
+	"pf_max_timeslots_reached": "At most {n} dates can be added at once.",
+	"pf_organisators": "Organisators",
+	"pf_organisators_description": "Contact info of the organising person or group",
+	"pf_organisators_name": "Name(s)",
+	"pf_organisators_email": "Email",
+	"pf_organisators_phone": "Phone",
+	"pf_organisators_website": "Website",
+	"pf_organisators_website_invalid": "Must start with <b>https://</b> or <b>http://</b>",
+	"pf_decoration": "Colors",
+	"pf_decorations_help": "Two colors were randomly selected. You can still edit them:",
+	"pf_decorations_color1": "Color 1",
+	"pf_decorations_color2": "Color 2",
+	"pf_decorations_motif": "Design",
+	"pf_decorations_confetti": "Confetti",
+	"pf_decorations_artsy": "Sewing and crafting",
+	"pf_decorations_music": "Music",
+	"pf_decorations_community": "Community",
+	"pf_decorations_sports": "Sports",
+	"pf_personal_data": "Personal infos",
+	"pf_personal_data_help": "This information is not published.",
+	"pf_personal_data_name": "Your name",
+	"pf_personal_data_email": "Your email",
+	"pf_personal_data_notes": "Notes (not public)",
+	"pf_confirm_privacy": "By submitting this form, you consent to the publication of the data provided. For more information, please refer to the <privacy>privacy policy</privacy>.",
+
+	"editor_bold": "Bold",
+	"editor_italic": "Italic",
+	"editor_strike": "Strikethrough",
+	"editor_bold_icon": "B",
+	"editor_italic_icon": "𝐼",
+	"editor_strike_icon": "S",
+	"editor_link": "Link",
+	"editor_ruler": "Horizontal line",
+	"editor_line_break": "Line break",
+	"editor_quote": "Quote",
+	"editor_ul": "List",
+	"editor_ol": "Numbered list",
+	"editor_paragraph": "Paragraph",
+	"editor_heading": "Heading {level}",
+	"editor_undo": "Undo",
+	"editor_redo": "Redo",
+	"editor_more_actions": "More actions",
+	"editor_close_help": "Close help",
+
+	"translate_error_too_many_requests": "<b>Error</b>: Too many requests",
+	"translate_error_quota_exceeded": "<b>Translation temporarily unavailable</b>. The monthly limit for translations by our community has been reached.",
+	"translate_error_content_too_large": "<b>Error</b>: The text is too long (more than 10,000 characters).",
+	"translate_error_internal": "<b>Error</b>: Translation failed.",
+
+	"e404_title": "Page not found",
+	"e404_text": "We are sorry, we couldn't find what you are looking for.",
+	"e404_home": "Homepage"
+}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Time } from '$lib/events/types'
+	import { getLocale } from '$lib/paraglide/runtime'
 
 	interface Props {
 		time: Time
@@ -7,6 +8,7 @@
 	}
 
 	let { time, withWeekday = false }: Props = $props()
+	let locale = getLocale()
 
 	let formatted = $derived.by(() => {
 		if (time.start == null) return 'ERROR'
@@ -19,13 +21,13 @@
 			case 'day-range':
 				return `<i class="lone">${formatDateSpan(time.start, time.end!, withWeekday)}</i>`
 			case 'time-range':
-				return `<i>${formatDate(time.start, withWeekday)}</i>${formatTime(time.start)} – ${formatTime(time.end!)}`
+				return `<i>${formatDate(time.start, withWeekday)}</i>${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end!)}`
 		}
 	})
 
 	function formatDate(d: Date, withWeekday: boolean) {
 		return d
-			.toLocaleDateString('de-DE', {
+			.toLocaleDateString(locale, {
 				timeZone: 'Europe/Berlin',
 				year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
 				month: 'numeric',
@@ -37,7 +39,7 @@
 	}
 
 	function formatTime(d: Date) {
-		return d.toLocaleTimeString('de-DE', {
+		return d.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
 			hour: '2-digit',
 			minute: '2-digit',

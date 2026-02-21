@@ -15,7 +15,7 @@
 	let pages = $derived(Array.from({ length: last - first + 1 }).fill(0))
 </script>
 
-{#if maxPage === 1}
+{#if maxPage <= 1}
 	<p class="pagination">
 		{label ?? ''}
 	</p>
@@ -32,7 +32,7 @@
 			...
 		{/if}
 		<span>
-			{#each pages as _, i}
+			{#each pages as _, i (i)}
 				<a
 					href={createUrl(i + first)}
 					class:active={i + first === page}

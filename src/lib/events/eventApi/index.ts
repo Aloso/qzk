@@ -1,5 +1,5 @@
 export * from './submitDraft'
-export * from './publishDraft'
+export * from './setEventState'
 export * from './fetchAllEvents'
 export * from './fetchEventForAdmin'
 export * from './updateEvent'

@@ -1,4 +1,4 @@
-import { Entry, EntrySkeletonType, type ContentfulClientApi } from 'contentful'
+import type { Entry, EntrySkeletonType, ContentfulClientApi } from 'contentful'
 
 export async function fetchContentfulEntries(
 	client: ContentfulClientApi<undefined>,
@@ -7,7 +7,7 @@ export async function fetchContentfulEntries(
 	const items: Entry<EntrySkeletonType>[] = []
 
 	for (let page = 0; ; page += 1) {
-		const entries = await client.getEntries({
+		const entries = await client.withAllLocales.getEntries({
 			skip: page * pageSize,
 			limit: pageSize,
 		})

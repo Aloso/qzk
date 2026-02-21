@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import type { StaticPageTransformed } from '$lib/data'
 	import { error } from '@sveltejs/kit'
 
@@ -7,11 +7,15 @@
 	import IgFeed from './IgFeed.svelte'
 	import NewsletterSignup from './NewsletterSignup.svelte'
 	import YouTubeVideo from './YouTubeVideo.svelte'
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale } from '$lib/paraglide/runtime'
 
 	let { data }: { data: StaticPageTransformed } = $props()
+	let locale = getLocale()
 
-	let omitFirst = $derived(data.headings[0]?.level === 1 && data.headings[0].text === data.name)
-	let tocItems = $derived(omitFirst ? data.headings.slice(1) : data.headings)
+	let headings = $derived(locale === 'en' ? (data.headingsEn ?? data.headings) : data.headings)
+	let omitFirst = $derived(headings[0]?.level === 1 && headings[0].text === data.name)
+	let tocItems = $derived(omitFirst ? headings.slice(1) : headings)
 	let hasToc = $derived(tocItems.length > 3)
 	let tocHasH1 = $derived(tocItems.some(it => it.level === 1))
 
@@ -21,7 +25,7 @@
 </script>
 
 {#if omitFirst}
-	<h1 class="top-level-h1">{data.name}</h1>
+	<h1 class="top-level-h1">{locale === 'en' ? (data.nameEn ?? data.name) : data.name}</h1>
 {/if}
 
 {#if hasToc}
@@ -34,16 +38,16 @@
 				d="M3,3L11,3 M3,12L21,12 M3,21L18,21"
 			/>
 		</svg>
-		Inhaltsverzeichnis{expanded ? ' schließen' : ''}
+		{expanded ? m.table_of_contents_hide() : m.table_of_contents_show()}
 	</button>
 {/if}
 
 <div class="layout" class:hasToc>
 	{#if hasToc}
 		<div class="toc" class:mobile-hidden={!expanded}>
-			<h2>Inhalt</h2>
-			<ul>
-				{#each tocItems as { level, text, id }}
+			<h2>{m.table_of_contents()}</h2>
+			<ul lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
+				{#each tocItems as { level, text, id } (id)}
 					<li class="toc-item" style="--level: {tocHasH1 ? level - 1 : level - 2}">
 						<a href="#{id}">{text}</a>
 					</li>
@@ -52,18 +56,16 @@
 		</div>
 	{/if}
 
-	<section class="main-section">
-		{#each data.content as part, i}
+	<section class="main-section" lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
+		{#each locale === 'en' ? (data.contentEn ?? data.content) : data.content as part, i (i)}
 			{#if typeof part === 'string'}
 				<section class:omitFirst={omitFirst && i === 0}>
 					{@html part}
 				</section>
 			{:else if part.type === 'contact-form'}
 				<ContactForm
-					nextLink="https://{$page.url
-						.host}/email/gesendet?context=CONTACT_FORM&backLink={encodeURIComponent(
-						$page.url.href,
-					)}"
+					nextLink="https://{page.url
+						.host}/email/gesendet?context=CONTACT_FORM&backLink={encodeURIComponent(page.url.href)}"
 				/>
 			{:else if part.type === 'instagram-profile'}
 				<IgFeed />
@@ -81,7 +83,7 @@
 </div>
 
 <style lang="scss">
-	@use '../../routes/vars.scss' as vars;
+	@use '../../routes/vars';
 
 	@media (max-width: 78rem) {
 		.mobile-hidden {

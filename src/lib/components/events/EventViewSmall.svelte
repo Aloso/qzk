@@ -4,26 +4,28 @@
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
 	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		event: Event
 		showMore?: boolean
-		editable?: boolean
-		published?: boolean
 		openInNewTab?: boolean
 	}
 
 	let { event, showMore = false, openInNewTab }: Props = $props()
+	let locale = getLocale()
 
-	let hyphenateTitle = $derived(/\p{Alpha}{16,}/u.test(event.titleDe))
-	let descDe = $derived.by(() => {
+	let hyphenateTitle = $derived(locale === 'de' && /\p{Alpha}{16,}/u.test(event.titleDe))
+	let desc = $derived.by(() => {
+		const desc = locale === 'en' ? (event.descEn ?? event.descDe) : event.descDe
 		if (DOMPurify.isSupported) {
-			return DOMPurify.sanitize(event.descDe)
+			return DOMPurify.sanitize(desc)
 		} else {
 			// on the server, we trust that the HTML is okay
 			// this may cause hydration mismatches, because DOMPurify may
 			// insert HTML entities and remove `target="_blank" from links.
-			return event.descDe
+			return desc
 		}
 	})
 	let imgLabel = $derived(formatDateSoon(event.times[0]))
@@ -31,12 +33,12 @@
 	function formatDateSoon({ start, end }: Time) {
 		const days = daysUntil(start)
 		if (days < 0 && end && daysUntil(end) >= 0) {
-			return 'Aktuell'
+			return m.event_current()
 		}
 		if (days >= 0 && days < 6) {
-			if (days === 0) return 'Heute'
-			else if (days === 1) return 'Morgen'
-			else return start.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin', weekday: 'long' })
+			if (days === 0) return m.event_today()
+			else if (days === 1) return m.event_tomorrow()
+			else return start.toLocaleDateString(locale, { timeZone: 'Europe/Berlin', weekday: 'long' })
 		}
 	}
 </script>
@@ -57,14 +59,16 @@
 		{/if}
 	</div>
 
-	<h3 class="event-title" class:hyphenateTitle>{event.titleDe}</h3>
+	<h3 class="event-title" class:hyphenateTitle>
+		{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}
+	</h3>
 
-	<div class="event-description">{@html descDe}</div>
+	<div class="event-description">{@html desc}</div>
 
 	{#if showMore}
 		<div class="event-place" aria-label="Ort">
 			{#if event.place.type === 'ONLINE'}
-				Online-Veranstaltung
+				{m.event_online()}
 			{:else}
 				{event.place.room ?? event.place.name}
 			{/if}
@@ -83,20 +87,20 @@
 		</div>
 		<a
 			class="open-button"
-			href="/veranstaltungen/{event.key}"
+			href={localizeHref(`/veranstaltungen/${event.key}`)}
 			target={openInNewTab ? '_blank' : undefined}
 			style={event.decoration
-				? `--bg: oklch(0.6 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.5 0.15 ${event.decoration.colors[1]})`
+				? `--bg: oklch(0.55 0.15 ${event.decoration.colors[1]}); --bg-focus: oklch(0.45 0.15 ${event.decoration.colors[1]})`
 				: undefined}
 		>
-			Mehr Infos
+			{m.event_more_info()}
 		</a>
 	</div>
 </div>
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.event {
 		display: flex;

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { m } from '$lib/paraglide/messages'
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import type { HighlightResultOption, SearchResponse, SnippetResultOption } from 'algoliasearch'
 
 	interface Props {
@@ -74,24 +76,20 @@
 			type="search"
 			bind:this={searchBox}
 			bind:value={searchQuery}
-			placeholder="Website durchsuchen..."
+			placeholder={m.header_search_placeholder()}
 		/>
 
 		{#if error}
-			Bei der Suche ist ein Fehler aufgetreten!
+			{m.header_search_error()}
 		{/if}
 
 		{#if searchResults}
-			{searchResults.nbHits === 1
-				? '1 Ergebnis'
-				: searchResults.nbHits === 0
-					? 'Keine Ergebnisse'
-					: searchResults.nbHits + ' Ergebnisse'}
+			{m.header_search_results_count({ count: searchResults.nbHits ?? 0 })}
 		{/if}
 
 		<div class="results">
-			{#each searchResults?.hits ?? [] as hit}
-				<a class="result" href={hit.objectID} onclick={() => onselect()}>
+			{#each searchResults?.hits ?? [] as hit (hit.objectID)}
+				<a class="result" href={localizeHref(hit.objectID)} onclick={() => onselect()}>
 					<span class="title">
 						{#if hit.objectID.startsWith('/person/')}
 							Person:
@@ -102,7 +100,9 @@
 					</span>
 					{#if hit._highlightResult?.authors && (hit._highlightResult.authors as HighlightResultOption).matchLevel !== 'none'}
 						<span class="line">
-							Autor*innen: {@html (hit._highlightResult!.authors as HighlightResultOption).value}
+							{m.header_search_authors()}: {@html (
+								hit._highlightResult!.authors as HighlightResultOption
+							).value}
 						</span>
 					{/if}
 					{#if hit._snippetResult?.description && (hit._snippetResult.description as SnippetResultOption).matchLevel !== 'none'}
@@ -137,7 +137,7 @@
 </div>
 
 <style lang="scss">
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.search-overlay {
 		box-sizing: border-box;

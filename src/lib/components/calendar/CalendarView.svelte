@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
 	import type { Event, Time } from '$lib/events/types'
+	import { getLocale } from '$lib/paraglide/runtime'
+	import { getCalendarDays } from '../timeCalc'
 	import CalendarDay from './CalendarDay.svelte'
 	import MonthNav from './MonthNav.svelte'
-	import { getCalendarDays } from '../timeCalc'
 
 	interface Props {
 		events: Event[]
@@ -14,6 +16,11 @@
 	}
 
 	let { events, showDate, draftTimes, colorCoded, highlightedDate, onClickDay }: Props = $props()
+
+	let locale = getLocale()
+	let firstDayOfWeek =
+		(browser ? new Intl.Locale(navigator.language ?? locale).weekInfo?.firstDay : undefined) ??
+		(locale === 'de' ? 1 : 7)
 
 	let highlightedYear = $derived(highlightedDate?.getFullYear())
 	let highlightedMonth = $derived(highlightedDate?.getMonth())
@@ -32,14 +39,22 @@
 		month = draftEventMonth
 	})
 
-	let days = $derived(getCalendarDays(showDate, month, year, 1))
+	let days = $derived(getCalendarDays(showDate, month, year, firstDayOfWeek))
+
+	let weekdays =
+		locale === 'de'
+			? ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+			: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+	if (firstDayOfWeek === 7) {
+		weekdays.unshift(weekdays.pop()!)
+	}
 </script>
 
 <div class="calendar">
 	<MonthNav bind:year bind:month />
 
 	<div class="weekday-labels">
-		{#each ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as weekDay (weekDay)}
+		{#each weekdays as weekDay (weekDay)}
 			<div>{weekDay}</div>
 		{/each}
 	</div>
@@ -78,7 +93,7 @@
 		display: flex;
 
 		div {
-			padding: 0.3rem 0.5rem;
+			padding: 0.3rem;
 			width: 15%;
 			flex-shrink: 1;
 			font-weight: 600;

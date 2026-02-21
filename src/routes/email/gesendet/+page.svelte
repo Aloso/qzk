@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
+	import { m } from '$lib/paraglide/messages'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	let message = $state<string>()
 	// TODO
@@ -16,15 +18,15 @@
 </script>
 
 <svelte:head>
-	<title>Nachricht gesendet - Queeres Zentrum Kassel</title>
+	<title>{m.email_sent()} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
-<h1>Nachricht gesendet</h1>
-<p>Wir haben Deine Nachricht erhalten.</p>
+<h1>{m.email_sent()}</h1>
+<p>{m.email_sent_body()}</p>
 {#if message}
 	<p class="message">{message}</p>
 {/if}
-<p><a href={backLink}>Zurück</a></p>
+<p><a href={backLink ? localizeHref(backLink) : ''}>{m.actions_back()}</a></p>
 
 <style lang="scss">
 	.message {

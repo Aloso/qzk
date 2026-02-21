@@ -75,7 +75,7 @@ export interface StaticPage extends GenericEntry<'staticPage'> {
 	fields: {
 		name: string
 		slug: string
-		description: string
+		description?: string
 		content: RichText
 		headings: Heading[]
 	}

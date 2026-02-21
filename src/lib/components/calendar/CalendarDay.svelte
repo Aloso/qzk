@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { isBetween, isBetweenAndOverlaps } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
+	import { getLocale } from '$lib/paraglide/runtime'
 
 	interface Props {
 		day: number
@@ -25,6 +26,7 @@
 		colorCoded,
 		onClick,
 	}: Props = $props()
+	let locale = getLocale()
 
 	let now = new Date()
 	let isToday = $derived(
@@ -49,7 +51,7 @@
 		type="button"
 		class="day-button"
 		onclick={() => onClick?.(dayStart)}
-		title={dayEvents.map(e => e.titleDe).join('\n')}
+		title={dayEvents.map(e => (locale === 'de' ? e.titleDe : (e.titleEn ?? e.titleDe))).join('\n')}
 	>
 		<div class="day-label" class:hasDraftEvent class:notFirst class:notLast>{day}</div>
 		<div class="badges">
@@ -66,7 +68,7 @@
 </li>
 
 <style lang="scss">
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	.calendar-day {
 		display: block;
@@ -124,7 +126,7 @@
 	}
 
 	.day-label {
-		color: #0005;
+		color: #0000008c;
 		font-size: 1.14rem;
 		padding: 0.05rem 0;
 		border: 2px solid transparent;

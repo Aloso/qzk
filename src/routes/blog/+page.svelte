@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Blog - Queeres Zentrum Kassel</title>
+	<title>Blog | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <h1>Blog</h1>
@@ -15,7 +15,7 @@
 	<p>Es wurden noch keine Blog Posts veröffentlicht. Schau später nochmal vorbei!</p>
 {:else}
 	<section>
-		{#each posts as post}
+		{#each posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</section>

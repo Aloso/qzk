@@ -47,23 +47,20 @@
 		}
 	})
 	let params = $state<Param[]>()
-	let [cleanedUrl, cleanedCount] = $derived.by(() => {
+	let cleanedUrl = $derived.by(() => {
 		if (editingLink && params) {
 			try {
 				const url = new URL(editingLink.url)
-				let count = 0
 				for (const param of params) {
 					if (!param.enabled) {
 						url.searchParams.delete(param.key, param.value)
-						count += 1
 					}
 				}
-				return [url, count]
+				return url
 			} catch {
 				// do nothing
 			}
 		}
-		return [undefined, 0]
 	})
 	let isEditingParams = $state(false)
 	let isTested = $state(false)
@@ -83,12 +80,9 @@
 	$effect(() => {
 		if (editingLink) {
 			try {
-				params = [
-					...new URL(editingLink.url).searchParams
-						.entries()
-						.filter(([key]) => !commonQueryParams.has(key))
-						.map(([key, value]): Param => ({ key, value, enabled: false })),
-				]
+				params = [...new URL(editingLink.url).searchParams.entries()]
+					.filter(([key]) => !commonQueryParams.has(key))
+					.map(([key, value]): Param => ({ key, value, enabled: false }))
 				isTested = false
 			} catch {
 				params = undefined
@@ -163,7 +157,7 @@
 
 							<table>
 								<tbody>
-									{#each params as { key, value, enabled }, i}
+									{#each params as { key, value, enabled }, i (i)}
 										<tr>
 											<th>
 												<label>
@@ -225,7 +219,7 @@
 									rel="noreferrer noopener"
 									onclick={() => (isTested = true)}
 								>
-									URL testen
+									Bereinigte URL testen
 								</a>
 							{/if}
 							<button type="button" onclick={() => (isEditingParams = false)}>Abbrechen</button>
@@ -254,7 +248,7 @@
 {/if}
 
 <style lang="scss">
-	@use '../../routes/vars.scss' as vars;
+	@use '../../routes/vars';
 
 	.overlay {
 		box-sizing: border-box;

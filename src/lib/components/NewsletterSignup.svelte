@@ -2,6 +2,7 @@
 	import Checkbox from '$lib/components/forms/Checkbox.svelte'
 	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
 	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	let email = $state('')
 	let checkbox = $state(false)
@@ -24,27 +25,20 @@
 >
 	<ValidatedInput
 		type="email"
-		label="Deine E-Mail-Adresse:"
+		label={m.newsletter_email()}
 		name="EMAIL"
 		bind:value={email}
 		bind:error={emailError}
-		required="Bitte Deine E-Mail-Adresse eingeben"
+		required={m.newsletter_email_missing()}
 		{submitClicked}
-		hasError={email =>
-			/^\S+@\S+\.\S+$/.test(email) ? false : 'Die E-Mail-Adresse ist nicht gültig!'}
+		hasError={email => (/^\S+@\S+\.\S+$/.test(email) ? false : m.email_sender_invalid())}
 	/>
 
-	<Checkbox
-		name="OPT_IN"
-		value="1"
-		bind:checked={checkbox}
-		required="Verpflichtend"
-		{submitClicked}
-	>
-		Ich stimme dem Versand von E-Mails zu und akzeptiere die Datenschutzvereinbarung.
+	<Checkbox name="OPT_IN" value="1" bind:checked={checkbox} required={m.required()} {submitClicked}>
+		{m.newsletter_accept_terms()}
 	</Checkbox>
 
-	<SubmitButton disabled={submitClicked && !!formError}>Newsletter abonnieren</SubmitButton>
+	<SubmitButton disabled={submitClicked && !!formError}>{m.newsletter_signup()}</SubmitButton>
 
 	<input type="text" name="email_address_check" value="" aria-hidden="true" class="input--hidden" />
 	<input type="hidden" name="locale" value="en" />

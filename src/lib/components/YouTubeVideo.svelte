@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { localizeHref } from '$lib/paraglide/runtime'
 	import { onMount } from 'svelte'
 
 	type State = 'idle' | 'ask-for-consent' | 'loaded'
@@ -39,7 +40,7 @@
 		<button class="consent-button" onclick={giveConsent}>YouTube-Video laden</button>
 		<div class="consent">
 			Dadurch werden möglicherweise Cookies an YouTube gesendet. Mehr unter
-			<a href="/datenschutz">Datenschutz</a>.
+			<a href={localizeHref('/datenschutz')}>Datenschutz</a>.
 		</div>
 	{:else}
 		<iframe

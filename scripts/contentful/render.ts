@@ -1,8 +1,21 @@
-import { CommonNode, documentToHtmlString, Next } from '@contentful/rich-text-html-renderer'
+import {
+	type CommonNode,
+	documentToHtmlString,
+	type Next,
+} from '@contentful/rich-text-html-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful'
-import { Accordeon, Asset, BlogPost, Image, Item, Person, StaticPage } from './types'
+import type {
+	Accordeon,
+	Asset,
+	BlogPost,
+	Image,
+	Item,
+	Localized,
+	Person,
+	StaticPage,
+} from './types'
 
 const allowedTypes = ['contact-form', 'instagram-profile', 'newsletter-signup', 'youtube'] as const
 
@@ -24,7 +37,8 @@ export interface RenderedHtml {
 	headings: Heading[]
 }
 
-export function render(data: Document, ids: string[] = []): RenderedHtml {
+export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en'): RenderedHtml {
+	const isEn = locale === 'en'
 	const extraComponents: ExtraComponent[] = []
 	let blockLevel = 0
 
@@ -46,33 +60,44 @@ export function render(data: Document, ids: string[] = []): RenderedHtml {
 				const target = node.data.target as Item<unknown>
 				switch (target.sys.contentType?.sys.id) {
 					case 'staticPage': {
-						const { fields } = target as unknown as Item<StaticPage>
-						return `<a class="embed" href="/${fields.slug}">
-							<p class="embedTitle">${fields.name}</p>
-							<p class="embedDescription">${fields.description}</p>
+						const { fields } = target as unknown as Item<Localized<StaticPage>>
+						return `<a class="embed" href="${localUrl(locale, fields.slug)}">
+							<p class="embedTitle">${local(fields.name, locale)}</p>
+							${fields.description ? `<p class="embedDescription">${local(fields.description, locale)}</p>` : ''}
 						</a>`
 					}
 					case 'blogPost': {
-						const { fields } = target as Item<BlogPost>
-						return `<a class="embed" href="/${fields.slug}">
-							<p class="embedTitle">${fields.title}</p>
-							<p class="embedDescription">Veröffentlicht: ${new Date(fields.published).toLocaleDateString('de', { timeZone: 'Europe/Berlin', dateStyle: 'long' })}</p>
-							<p class="embedDescription">Von ${fields.authors.map(author => author.fields.name).join(', ')}</p>
+						const { fields } = target as Item<Localized<BlogPost>>
+						const publishLabel = isEn ? 'Published' : 'Veröffentlicht'
+						const authorsLabel = isEn ? 'By' : 'Von'
+						return `<a class="embed" href="${localUrl(locale, fields.slug['de-DE'])}">
+							<p class="embedTitle">${local(fields.title, locale)}</p>
+							<p class="embedDescription">${publishLabel}: ${new Date(local(fields.published, locale)).toLocaleDateString(locale, { timeZone: 'Europe/Berlin', dateStyle: 'long' })}</p>
+							<p class="embedDescription">${authorsLabel} ${local(fields.authors, locale)
+								.map(author => author.fields.name)
+								.join(', ')}</p>
 						</a>`
 					}
 					case 'person': {
-						const { fields } = target as Item<Person>
-						return `<a class="embed" href="/person/${fields.slug}">
-							<p class="embedTitle">${fields.name}</p>
-							<p class="embedDescription">${fields.role}</p>
-							${fields.pronouns ? `<p class="embedDescription">${fields.pronouns}</p>` : ''}
+						const { fields } = target as Item<Localized<Person>>
+						return `<a class="embed" href="${localUrl(locale, 'person', fields.slug['de-DE'])}">
+							<p class="embedTitle">${local(fields.name, locale)}</p>
+							<p class="embedDescription">${local(fields.role, locale)}</p>
+							${fields.pronouns ? `<p class="embedDescription">${local(fields.pronouns, locale)}</p>` : ''}
 						</a>`
 					}
 					case 'accordeon': {
-						const { fields } = target as Item<Accordeon>
-						const { content, headings: innerHeadings } = render(fields.content, ids)
+						const { fields } = target as Item<Localized<Accordeon>>
+						const { content, headings: innerHeadings } = render(
+							local(fields.content, locale),
+							ids,
+							locale,
+						)
 						headings.push(...innerHeadings)
-						return `<details class="accordeon" open="${fields.open}"><summary>${fields.title}</summary>${content}</details>`
+						return `<details class="accordeon" open="${local(fields.open, locale)}">
+							<summary>${local(fields.title, locale)}</summary>
+							${content.flatMap(c => (typeof c === 'string' ? [c] : [])).join('')}
+						</details>`
 					}
 					default:
 						return ''
@@ -80,9 +105,10 @@ export function render(data: Document, ids: string[] = []): RenderedHtml {
 			},
 			[BLOCKS.EMBEDDED_ASSET]: node => {
 				const image = node.data.target as Image
-				const { contentType, url } = image.fields.file
+				const file = local(image.fields.file, locale)
+				const { contentType, url } = file
 				if (contentType.startsWith('image/')) {
-					const { width, height } = image.fields.file.details.image
+					const { width, height } = file.details.image
 					return `<img src="${encodeURI(url)}?fl=progressive&fm=jpg"
           class="EmbeddedAsset-Image"
           style="--width: ${width}; --height: ${height}" />`
@@ -137,22 +163,25 @@ export function render(data: Document, ids: string[] = []): RenderedHtml {
 
 			[INLINES.ASSET_HYPERLINK]: (node, children) => {
 				const { content, data } = node as AssetHyperlink
-				const { target } = data as unknown as { target: Item<Asset> }
-				return `<a href="${encodeURI(target.fields.file.url)}" target="_blank" rel="noopener"
-				title="${target.fields.description ?? ''}">${children(content)}</a>`
+				const { target } = data as unknown as { target: Item<Localized<Asset>> }
+				const file = local(target.fields.file, locale)
+				const description = target.fields.description
+					? local(target.fields.description, locale)
+					: undefined
+				return `<a href="${encodeURI(file.url)}" target="_blank" rel="noopener" title="${description}">${children(content)}</a>`
 			},
 			[INLINES.ENTRY_HYPERLINK]: (node, children) => {
 				const { content, data } = node as EntryHyperlink
 				const { sys, fields } = data.target as unknown as Entry
 				if (sys.contentType.sys.id === 'staticPage') {
-					const { slug } = fields as unknown as StaticPage
-					return `<a href="/${slug === 'index' ? '' : slug}">${children(content)}</a>`
+					const { slug } = fields as unknown as Localized<StaticPage>
+					return `<a href="${localUrl(locale, slug)}">${children(content)}</a>`
 				} else if (sys.contentType.sys.id === 'blogPost') {
-					const { slug, published } = fields as unknown as BlogPost
-					return `<a href="/blog/${published}/${slug}">${children(content)}</a>`
+					const { slug, published } = fields as unknown as Localized<BlogPost>
+					return `<a href="${localUrl(locale, 'blog', published, slug)}">${children(content)}</a>`
 				} else if (sys.contentType.sys.id === 'person') {
-					const { slug } = fields as unknown as Person
-					return `<a href="/person/${slug}">${children(content)}</a>`
+					const { slug } = fields as unknown as Localized<Person>
+					return `<a href="${localUrl(locale, 'person', slug)}">${children(content)}</a>`
 				} else {
 					return '<span style="color: red">FEHLER: Nicht unterstützer Entry Type</span>'
 				}
@@ -217,4 +246,23 @@ function createId(string: string, previousIds: string[]): string {
 	} else {
 		return id
 	}
+}
+
+function local<T>(object: Record<'de-DE' | 'en', T>, locale: 'de-DE' | 'en'): T {
+	return object[locale] ?? object['de-DE']
+}
+
+function localUrl(
+	locale: 'de-DE' | 'en',
+	...slugs: (string | Record<'de-DE' | 'en', string>)[]
+): string {
+	const segments = slugs.map(s => (typeof s === 'object' ? (s[locale] ?? s['de-DE']) : s))
+	if (segments.length === 1 && segments[0] === 'index') {
+		slugs.pop()
+	}
+
+	if (locale === 'en') {
+		return segments.length === 0 ? '/en' : '/en/' + segments.join('/')
+	}
+	return '/' + segments.join('/')
 }

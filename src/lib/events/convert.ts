@@ -10,7 +10,7 @@ export function event2wire<E extends EventCommon>(event: Event & E): EventDto {
 	return { ...event, times: event.times.map(time2wire) }
 }
 
-function wire2time(time: TimeDto): Time {
+export function wire2time(time: TimeDto): Time {
 	const hasStartTime = time.start.includes('T')
 	const hasEndTime = time.end?.includes('T') ?? false
 	const variant: TimeVariant = hasEndTime

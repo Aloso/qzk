@@ -4,6 +4,10 @@ export function getInBetween(eventTimes: Time[], start: number, end: number): Ti
 	return eventTimes.filter(time => !(+time.start > end || +(time.end ?? time.start) < start))
 }
 
+export function isSingleTimeBetween(time: Time, start: number, end: number): boolean {
+	return !(+time.start > end || +(time.end ?? time.start) < start)
+}
+
 export function isBetween(eventTimes: Time[], start: Date, end: Date): boolean {
 	return eventTimes.some(time => !(time.start > end || (time.end ?? time.start) < start))
 }

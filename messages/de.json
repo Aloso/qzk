@@ -1,0 +1,253 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"header_search": "Suche",
+	"header_search_placeholder": "Website durchsuchen...",
+	"header_search_error": "Bei der Suche ist ein Fehler aufgetreten!",
+	"header_search_results_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"match": {
+				"countPlural=zero": "Keine Ergebnisse",
+				"countPlural=one": "1 Ergebnis",
+				"countPlural=other": "{count} Ergebnisse"
+			}
+		}
+	],
+	"header_search_authors": "Autor*innen",
+
+	"footer_event_management": "Event-Veranstaltung",
+	"footer_logout": "Logout",
+
+	"error": "Fehler",
+	"help": "Hilfe",
+	"loading": "Lädt...",
+	"publishing": "Wird veröffentlicht...",
+	"deleting": "Wird gelöscht...",
+	"deleted": "Gelöscht",
+	"required": "Verpflichtend",
+	"noscript": "Für diese Funktion wird JavaScript benötigt!",
+	"actions_edit": "Bearbeiten",
+	"actions_delete": "Löschen",
+	"actions_archive": "In den Papierkorb",
+	"actions_publish": "Veröffentlichen",
+	"actions_next": "Weiter",
+	"actions_back": "Zurück",
+	"actions_send": "Absenden",
+	"actions_submit": "Absenden",
+	"actions_show_all": "Alle anzeigen",
+	"actions_translate": "Übersetzen",
+	"actions_translate_with": "mit DeepL",
+
+	"email_subject": "Betreff:",
+	"email_subject_missing": "Bitte Betreff eingeben",
+	"email_sender": "Deine E-Mail:",
+	"email_sender_missing": "Bitte Deine E-Mail-Adresse eingeben",
+	"email_sender_invalid": "Diese E-Mail-Adresse ist nicht gültig!",
+	"email_message": "Nachricht:",
+	"email_message_missing": "Bitte Nachricht eingeben",
+	"email_sent": "Nachricht gesendet",
+	"email_sent_body": "Wir haben Deine Nachricht erhalten.",
+	"email_sending_failed": "Fehler beim Senden der Nachricht",
+	"email_sending_failed_contact": "Wir entschuldigen uns für die Störung. Bitte kontaktiere uns per E-Mail:",
+	"email_sending_no_message": "Keine Nachricht vorhanden!",
+
+	"newsletter_email": "Deine E-Mail-Adresse:",
+	"newsletter_email_missing": "Bitte Deine E-Mail-Adresse eingeben",
+	"newsletter_accept_terms": "Ich stimme dem Versand von E-Mails zu und akzeptiere die Datenschutzvereinbarung.",
+	"newsletter_signup": "Newsletter abonnieren",
+
+	"table_of_contents": "Inhalt",
+	"table_of_contents_show": "Inhaltsverzeichnis",
+	"table_of_contents_hide": "Inhaltsverzeichnis schließen",
+
+	"home_opening_hours": "Offenes Wohnzimmer",
+	"home_closed": "geschlossen",
+	"home_important": "Wichtig",
+	"home_events": "Veranstaltungen",
+	"home_event_limit_reached": "Es werden Veranstaltungen der nächsten 30 Tage angezeigt.",
+	"home_no_events": "Keine Veranstaltungen in den nächsten 30 Tagen",
+	"home_plan_event": "Veranstaltung planen",
+	"home_select_day_to_plan": "Wähle einen Tag im Kalender, um eine Veranstaltung zu erstellen.",
+	"home_no_events_on_day": "Keine Veranstaltungen an diesem Tag",
+	"home_add_event": "Veranstaltung hinzufügen",
+	"home_new_blog_posts": "Neue Blog-Beiträge",
+
+	"instagram_open": "Profil auf Instagram ansehen",
+	"instagram_load_profile": "Profil laden",
+	"instagram_privacy": "Dadurch werden möglicherweise Cookies an Instagram gesendet. Mehr unter <a>Datenschutz</a>.",
+	"instagram_loading_error": "Das Profil konnte nicht geladen werden. Möglicherweise wurde es durch den Browser oder einen Ad-Blocker blockiert.",
+
+	"blog_published": "Veröffentlicht: {date}",
+	"blog_by": "von {date}",
+	"blog_by_unknown": "unbekannt",
+	"blog_open": "Artikel aufrufen",
+	"blog_sidebar_more_posts": "Mehr interessante Beiträge",
+
+	"event_current": "Aktuell",
+	"event_today": "Heute",
+	"event_tomorrow": "Morgen",
+	"event_yesterday": "Gestern",
+	"event_online": "Online-Veranstaltung",
+	"event_join_meeting": "Veranstaltung beitreten",
+	"event_more_info": "Mehr Infos",
+	"event_anchor_appointments": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Termin",
+				"countPlural=other": "Termine"
+			}
+		}
+	],
+	"event_anchor_place": "Ort",
+	"event_anchor_directions": "Wegbeschreibung",
+	"event_relative_days": [
+		{
+			"declarations": ["input days", "input ty"],
+			"selectors": ["days", "ty"],
+			"match": {
+				"ty=start, days=0": "Beginnt <b>heute</b>",
+				"ty=start, days=1": "Beginnt <b>morgen</b>",
+				"ty=start, days=*": "Beginnt in <b>{days}</b> Tagen",
+				"ty=end, days=0": "Endet <b>heute</b>",
+				"ty=end, days=1": "Endet <b>morgen</b>",
+				"ty=end, days=*": "Endet in <b>{days}</b> Tagen",
+				"ty=once, days=0": "Findet <b>heute</b> statt",
+				"ty=once, days=1": "Findet <b>morgen</b> statt",
+				"ty=once, days=*": "Findet in <b>{days}</b> Tagen statt"
+			}
+		}
+	],
+	"event_next_appointment": "Nächster Termin:",
+	"event_countdown_day": "Tag",
+	"event_countdown_days": "Tage",
+	"event_countdown_hours": "Stunden",
+	"event_countdown_minutes": "Minuten",
+	"event_countdown_seconds": "Sekunden",
+	"event_contact": "Kontakt",
+	"event_email": "E-Mail",
+	"event_phone": "Telefon",
+	"event_website": "Website",
+
+	"event_draft_label": "Entwurf",
+	"event_published_label": "Veröffentlichte Veranstaltung",
+	"event_archived_label": "Gelöschte Veranstaltung",
+	"event_submitted_label": "Die Veranstaltung wurde eingereicht. Wir informieren dich, wenn wir die Veranstaltung akzeptieren und auf der Website veröffentlichen. Bis dahin kannst du sie noch bearbeiten.",
+	"event_submitted_contact": "Wenn du Fragen oder Wünsche hast, schreibe uns bitte über das <a>Kontaktformular</a>.",
+	"event_delete_draft_final": "Entwurf endgültig löschen?",
+	"event_delete_failed": "Fehler beim Löschen!",
+	"event_edit_failed": "Fehler beim Bearbeiten!",
+
+	"plan_event_title": "Veranstaltung einreichen",
+	"plan_event_submitted_list": "Eingereichte Veranstaltungen",
+	"plan_event_conflicts": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 Veranstaltung im gewählten Zeitraum",
+				"countPlural=other": "{count} Veranstaltungen im gewählten Zeitraum"
+			}
+		}
+	],
+	"plan_event_check_conflicts": "Bitte überprüfe, dass kein Terminkonflikt entsteht.",
+	"plan_event_calendar": "Kalender",
+
+	"pf_loading": "Wird geladen...",
+	"pf_is_submitting": "Wird abgesendet...",
+	"pf_is_submitted": "Gespeichert.",
+	"pf_optional": "Freiwillige Angabe",
+	"pf_optionals": "Freiwillige Angaben",
+	"pf_event_name": "Name der Veranstaltung",
+	"pf_event_name_en": "Name (Englisch)",
+	"pf_description": "Beschreibung",
+	"pf_description_en": "Beschreibung (Englisch)",
+	"pf_description_help": "<p>Bitte gib eine aussagekräftige Beschreibung an. Sie sollte alle wichtigen Fragen beantworten, zum Beispiel:</p> <ul>Was erwartet mich bei der Veranstaltung?|Wer kann teilnehmen? Gibt es eine Altersgrenze?|Muss ich mich dafür vorbereiten oder etwas mitbringen?</ul><p>Ort und Zeit müssen nicht in der Beschreibung stehen.</p>",
+	"pf_english_version": "Englische Version",
+	"pf_place": "Ort",
+	"pf_place_qz": "Queeres Zentrum Kassel",
+	"pf_place_physical": "Anderer Ort",
+	"pf_place_online": "Online",
+	"pf_room": "Raum",
+	"pf_none_selected": "Bitte wählen...",
+	"pf_place_name": "Name",
+	"pf_place_address": "Adresse",
+	"pf_place_address_placeholder": "Adresszeile 1\nAdresszeile 2",
+	"pf_place_url": "URL",
+	"pf_place_url_placeholder": "Z.B. Link zu Online-Meeting",
+	"pf_datetime": "Zeit",
+	"pf_datetime_date": "Datum",
+	"pf_datetime_date_start": "Startdatum",
+	"pf_datetime_date_end": "Enddatum",
+	"pf_datetime_time": "Zeit",
+	"pf_datetime_until": "bis",
+	"pf_datetime_add": "Weiteren Termin hinzufügen",
+	"pf_datetime_next": "Nächster Termin:",
+	"pf_datetime_after_weeks": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "nach 1 Woche",
+				"countPlural=other": "nach {count} Wochen"
+			}
+		}
+	],
+	"pf_datetime_other_date": "anderes Datum",
+	"pf_datetime_optionals": "Angabe der Uhrzeiten ist freiwillig, falls noch nicht bekannt.",
+	"pf_long_event": "Einzelne Veranstaltung über mehrere Tage",
+	"pf_max_timeslots_reached": "Maximal {n} Termine können hinzugefügt werden.",
+	"pf_organisators": "Organisator*innen",
+	"pf_organisators_description": "Kontaktdaten der organisierenden Person/Gruppe",
+	"pf_organisators_name": "Name(n)",
+	"pf_organisators_email": "E-Mail",
+	"pf_organisators_phone": "Telefon",
+	"pf_organisators_website": "Telefon",
+	"pf_organisators_website_invalid": "Muss mit <b>https://</b> oder <b>http://</b> beginnen",
+	"pf_decoration": "Farben",
+	"pf_decorations_help": "Es wurden zwei Farben zufällig ausgewählt. Du kannst sie noch bearbeiten:",
+	"pf_decorations_color1": "Farbe 1",
+	"pf_decorations_color2": "Farbe 2",
+	"pf_decorations_motif": "Motiv",
+	"pf_decorations_confetti": "Konfetti",
+	"pf_decorations_artsy": "Nähen und Basteln",
+	"pf_decorations_music": "Musik",
+	"pf_decorations_community": "Community",
+	"pf_decorations_sports": "Sport",
+	"pf_personal_data": "Persönliche Infos",
+	"pf_personal_data_help": "Diese Daten werden nicht veröffentlicht.",
+	"pf_personal_data_name": "Dein Name",
+	"pf_personal_data_email": "Deine E-Mail",
+	"pf_personal_data_notes": "Notizen (nicht öffentlich)",
+	"pf_confirm_privacy": "Durch das Absenden stimmst du der Veröffentlichung der angegebenen Daten zu. Mehr Infos findest du in der <privacy>Datenschutzerklärung</privacy>.",
+
+	"editor_bold": "Fett",
+	"editor_italic": "Kursiv",
+	"editor_strike": "Durchgestrichen",
+	"editor_bold_icon": "F",
+	"editor_italic_icon": "K",
+	"editor_strike_icon": "D",
+	"editor_link": "Link",
+	"editor_ruler": "Trennlinie",
+	"editor_line_break": "Zeilenumbruch",
+	"editor_quote": "Zitat",
+	"editor_ul": "Liste",
+	"editor_ol": "Nummerierte Liste",
+	"editor_paragraph": "Absatz",
+	"editor_heading": "Überschrift {level}",
+	"editor_undo": "Rückgängig",
+	"editor_redo": "Wiederholen",
+	"editor_more_actions": "Mehr Aktionen",
+	"editor_close_help": "Hilfe schließen",
+
+	"translate_error_too_many_requests": "<b>Fehler</b>: Zu viele Anfragen",
+	"translate_error_quota_exceeded": "<b>Übersetzung vorübergehend nicht verfügbar<b>. Die monatliche Grenze für Übersetzungen durch unsere Community wurde erreicht.",
+	"translate_error_content_too_large": "<b>Fehler</b>: Der Text ist zu lang (mehr als 10.000 Zeichen).",
+	"translate_error_internal": "<b>Fehler</b>: Übersetzung fehlgeschlagen.",
+
+	"e404_title": "Seite nicht gefunden",
+	"e404_text": "Entschuldigung, wir haben nicht gefunden, wonach Du suchst.",
+	"e404_home": "Zur Startseite"
+}

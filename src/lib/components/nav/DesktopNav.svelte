@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Navigations } from '$lib/data'
+	import { m } from '$lib/paraglide/messages'
+	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
 	import { isNavItem } from './navUtil'
 
 	interface Props {
@@ -8,41 +10,80 @@
 	}
 
 	let { url, links }: Props = $props()
+	let locale = getLocale()
+
+	const locales = [
+		{ locale: 'de', label: 'Deutsch' },
+		{ locale: 'en', label: 'English' },
+	] as const
 </script>
 
 <nav>
-	{#each links as link}
+	{#each links as link (link)}
 		{#if link.children?.length}
 			<div class="nav-group">
-				<a href={link.href} class="a" class:active={isNavItem(link, url)}>
-					<span class="nav-link-inner">{@html link.text}</span>
+				<a
+					href={localizeHref(link.href ?? '/')}
+					class="a"
+					class:active={isNavItem(link, deLocalizeHref(url))}
+				>
+					<span class="nav-link-inner">{link[locale]}</span>
 				</a>
 
 				<div class="nav-dropdown">
-					{#each link.children as child}
-						<a href={child.href}>
-							{@html child.text}
+					{#each link.children as child (child)}
+						<a href={localizeHref(child.href ?? '/')}>
+							{child[locale]}
 						</a>
 					{/each}
 				</div>
 			</div>
 		{:else}
-			<a href={link.href} class="a" class:active={isNavItem(link, url)}>
-				<span class="nav-link-inner">{@html link.text}</span>
+			<a
+				href={localizeHref(link.href ?? '/')}
+				class="a"
+				class:active={isNavItem(link, deLocalizeHref(url))}
+			>
+				<span class="nav-link-inner">{link[locale]}</span>
 			</a>
 		{/if}
 	{/each}
 
+	<!--
+	<div class="nav-group">
+		<span class="nav-link-inner a">
+			<img src="/globe.svg" alt=" " />
+			{locale === 'en' ? 'EN' : 'DE'}
+		</span>
+
+		<div class="nav-dropdown">
+			{#each locales as { label, locale } (locale)}
+				<a
+					href={localizeHref(page.url.href, { locale })}
+					onclick={() => {
+						localStorage.locale = locale
+						setLocale(locale)
+					}}
+					class:active={locale === getLocale()}
+				>
+					{label}
+				</a>
+			{/each}
+		</div>
+	</div>
+	-->
+
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt=" " /> Suche
+			<img src="/search.svg" alt=" " />
+			{m.header_search()}
 		</span>
 	</button>
 </nav>
 
 <style lang="scss">
 	@use 'sass:color';
-	@use '../../../routes/vars.scss' as vars;
+	@use '../../../routes/vars';
 
 	nav {
 		display: flex;
@@ -97,6 +138,18 @@
 			text-decoration: none;
 			color: vars.$COLOR_T4;
 
+			/*
+			&.active {
+				background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
+				cursor: default;
+
+				&:hover,
+				&:focus {
+					background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
+				}
+			}
+			*/
+
 			&:hover,
 			&:focus {
 				background-color: vars.$COLOR_T1;
@@ -138,6 +191,12 @@
 	.nav-link-inner {
 		display: block;
 
+		/*
+		&.a {
+			cursor: default;
+		}
+		*/
+
 		img {
 			width: 1em;
 			height: 1em;
@@ -145,7 +204,7 @@
 		}
 	}
 
-	@media (max-width: 60rem) {
+	@media (max-width: vars.$DESKTOP_BP) {
 		nav {
 			display: none;
 		}

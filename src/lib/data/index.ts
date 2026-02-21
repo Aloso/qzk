@@ -44,6 +44,7 @@ export interface GeneralInfoTransformed {
 		hours: DateRange[]
 	}[]
 	importantInfo?: string[]
+	importantInfoEn?: string[]
 }
 
 export interface DateRange {
@@ -79,6 +80,7 @@ export interface BlogPostViewTransformed {
 	photo: Image
 	parts: RichText
 	related: BlogPostPreviewTransformed[]
+	lang: string
 }
 
 export interface BlogPostPreview {
@@ -133,10 +135,14 @@ export interface StaticPage {
 
 export interface StaticPageTransformed {
 	name: string
+	nameEn?: string
 	slug: string
 	description?: string
+	descriptionEn?: string
 	content: RichText
+	contentEn?: RichText
 	headings: Heading[]
+	headingsEn?: Heading[]
 }
 
 export interface Navigation {
@@ -151,6 +157,7 @@ export interface Navigations {
 
 export interface TypedNavigation {
 	href?: string
-	text: string
+	de: string
+	en: string
 	children?: TypedNavigation[]
 }

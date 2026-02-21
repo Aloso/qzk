@@ -4,6 +4,13 @@ import type { D1Database } from '@cloudflare/workers-types'
 
 // for information about these interfaces
 declare global {
+	namespace Intl {
+		interface Locale {
+			getHourCycles?: () => ('h11' | 'h12' | 'h23' | 'h24')[]
+			weekInfo?: { firstDay: 1 | 7 }
+		}
+	}
+
 	namespace App {
 		// interface Error {}
 		// interface Locals {}
@@ -15,6 +22,12 @@ declare global {
 			DB: D1Database
 			ALGOLIA_APP_ID: string
 			ALGOLIA_API_KEY: string
+			DEEPL_API_KEY: string
+
+			CONTACT_FORM_RECIPIENT: string
+			SMTP_USERNAME: string
+			SMTP_PASSWORD: string
+			SMTP_HOST: string
 		}
 
 		interface Platform {

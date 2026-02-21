@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
 	import type { PersonPreview } from '$lib/data'
+	import { localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		author: PersonPreview
@@ -9,7 +10,7 @@
 	let { author }: Props = $props()
 </script>
 
-<a class="author" href="/person/{author.slug}">
+<a class="author" href={localizeHref(`/person/${author.slug}`)}>
 	<Image
 		class="BlogPost-Author-photo"
 		img={author.photo}

@@ -40,3 +40,28 @@ export function sanitizeHtml(html: string): string {
 		allowedSchemes: ['http', 'https', 'mailto', 'tel'],
 	})
 }
+
+export function sanitizeHtmlPlain(html: string): string {
+	return sanitizeHtmlLib(html, {
+		allowedTags: [],
+		allowedAttributes: {},
+	})
+}
+
+export function escapeHtml(text: string): string {
+	return text.replace(/[&<>"']/g, c => {
+		switch (c) {
+			case '&':
+				return '&amp;'
+			case '<':
+				return '&lt;'
+			case '>':
+				return '&gt;'
+			case '"':
+				return '&quot;'
+			case "'":
+			default:
+				return '&#039;'
+		}
+	})
+}

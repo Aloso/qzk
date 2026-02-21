@@ -9,6 +9,7 @@
 	import Progress from '../forms/Progress.svelte'
 	import PlanningPlace from './steps/PlanningPlace.svelte'
 	import PlanningDecoration from './steps/PlanningDecoration.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		defaults: FormValues
@@ -92,6 +93,8 @@
 		const event: Omit<Event, 'state'> & WithSubmitter = {
 			titleDe: values.titleDe,
 			descDe: values.descDe,
+			titleEn: values.en ? values.titleEn : undefined,
+			descEn: values.en ? values.descEn : undefined,
 			times: values.times as Time[],
 			place: getPlace(),
 			organizer: getOrganizer(),
@@ -140,7 +143,7 @@
 </script>
 
 {#if !formLoaded}
-	<form class:popup>Wird geladen...</form>
+	<form class:popup>{m.pf_loading()}</form>
 {/if}
 
 <form onsubmit={submitForm} class:popup class:hidden={!formLoaded}>
@@ -162,7 +165,7 @@
 
 	<div class="nav-buttons">
 		{#if step > 1}
-			<button type="button" onclick={() => step--}>Zurück</button>
+			<button type="button" onclick={() => step--}>{m.actions_back()}</button>
 		{:else}
 			<div></div>
 		{/if}
@@ -172,19 +175,21 @@
 				type="submit"
 				disabled={!valid[step - 1] || (status.type === 'error' && status.missing)}
 			>
-				Absenden
+				{m.actions_submit()}
 			</button>
 		{:else}
-			<button type="button" disabled={!valid[step - 1]} onclick={() => step++}>Weiter</button>
+			<button type="button" disabled={!valid[step - 1]} onclick={() => step++}>
+				{m.actions_next()}
+			</button>
 		{/if}
 	</div>
 
 	{#if status.type === 'submitting'}
-		<p>Wird abgesendet...</p>
+		<p>{m.pf_is_submitting()}</p>
 	{:else if status.type === 'error'}
 		<p class="error">{status.message}</p>
 	{:else if status.type === 'submitted'}
-		<p>Gespeichert.</p>
+		<p>{m.pf_is_submitted()}</p>
 	{/if}
 </form>
 

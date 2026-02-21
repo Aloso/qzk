@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { FormValuesDecoration } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import type { ChangeEventHandler } from 'svelte/elements'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		values: FormValuesDecoration
@@ -30,10 +30,10 @@
 	}
 </script>
 
-<div class="section-title">Farben</div>
+<div class="section-title">{m.pf_decoration()}</div>
 
 {#if automated}
-	<p>Es wurden zwei Farben zufällig ausgewählt. Du kannst sie noch bearbeiten:</p>
+	<p>{m.pf_decorations_help()}</p>
 {/if}
 
 <div
@@ -42,7 +42,7 @@
 ></div>
 
 <div class="slider-section">
-	<label class="color-label" for="color1">Farbe 1</label>
+	<label class="color-label" for="color1">{m.pf_decorations_color1()}</label>
 	<div class="slider">
 		<input
 			type="range"
@@ -57,7 +57,7 @@
 </div>
 
 <div class="slider-section">
-	<label class="color-label" for="color2">Farbe 2</label>
+	<label class="color-label" for="color2">{m.pf_decorations_color2()}</label>
 	<div class="slider">
 		<input
 			type="range"
@@ -72,13 +72,13 @@
 </div>
 
 <label class="select-label">
-	<em class="motif-label">Motiv</em>
+	<em class="motif-label">{m.pf_decorations_motif()}</em>
 	<select bind:value={values.blendImage}>
-		<option value="confetti">Konfetti</option>
-		<option value="sew">Nähen und Basteln</option>
-		<option value="music">Musik</option>
-		<option value="community">Community</option>
-		<option value="sport">Sport</option>
+		<option value="confetti">{m.pf_decorations_confetti()}</option>
+		<option value="sew">{m.pf_decorations_artsy()}</option>
+		<option value="music">{m.pf_decorations_music()}</option>
+		<option value="community">{m.pf_decorations_community()}</option>
+		<option value="sport">{m.pf_decorations_sports()}</option>
 	</select>
 </label>
 

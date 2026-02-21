@@ -52,6 +52,7 @@ export async function load({ params }: LoadEvent<UrlParams>): Promise<BlogPostVi
 			...related,
 			teaser: related.teaser,
 		})),
+		lang: 'de',
 	}
 }
 

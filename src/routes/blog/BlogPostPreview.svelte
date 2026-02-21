@@ -2,6 +2,8 @@
 	import Image from '$lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
 	import type { BlogPostPreviewTransformed, PersonPreview } from '$lib/data'
+	import { localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		post: BlogPostPreviewTransformed
@@ -18,7 +20,7 @@
 		if (authors.length > 2) {
 			authorsConcat += ', …'
 		}
-		return authorsConcat || 'unbekannt'
+		return authorsConcat || m.blog_by_unknown()
 	}
 </script>
 
@@ -28,20 +30,24 @@
 	{/if}
 	<div class="right">
 		<h3 class="small-title">
-			<a class="title-link" href="/blog/{post.published}/{post.slug}">{post.title}</a>
+			<a class="title-link" href={localizeHref(`/blog/${post.published}/${post.slug}`)}>
+				{post.title}
+			</a>
 		</h3>
 		<div class="published">
-			<PublishDate date={post.published} /> · von {createAuthors(post.authors)}
+			<PublishDate date={post.published} /> · {m.blog_by({ date: createAuthors(post.authors) })}
 		</div>
 		<div class="teaser smaller-paragraphs">
 			{@html post.teaser}
 		</div>
-		<a class="open-link" href="/blog/{post.published}/{post.slug}">Artikel aufrufen</a>
+		<a class="open-link" href={localizeHref(`/blog/${post.published}/${post.slug}`)}>
+			{m.blog_open()}
+		</a>
 	</div>
 </div>
 
 <style lang="scss">
-	@use '../vars.scss' as vars;
+	@use '../vars';
 
 	.blogPost {
 		display: flex;
@@ -61,7 +67,7 @@
 	}
 
 	.published {
-		color: #777;
+		color: #666;
 	}
 
 	.title-link {

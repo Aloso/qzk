@@ -1,13 +1,13 @@
-import { wire2event } from '$lib/events/convert'
-import { getEndOfTime, getInBetween } from '$lib/events/intersections'
+import { wire2event, wire2time } from '$lib/events/convert'
+import { getEndOfTime, getInBetween, isSingleTimeBetween } from '$lib/events/intersections'
 import type { Event, Time, WithSubmitter } from '$lib/events/types'
 import { getAllEvents, getEventNumber } from '$lib/server/events/db'
-import type { EventDto, FullEventDto } from '$lib/server/events/event.js'
+import type { EventDto, EventState, FullEventDto } from '$lib/server/events/event.js'
 import { tryAuthentication } from '$lib/server/events/http'
 import { error } from '@sveltejs/kit'
 
 export interface Data {
-	type: 'drafts' | 'published' | 'past' | 'months'
+	type: 'draft' | 'archived' | 'published' | 'past' | 'months'
 	page: number
 	maxPage: number
 	count: number
@@ -27,7 +27,8 @@ export async function load({ params, platform, request }): Promise<Data> {
 	const type = params.type as string
 
 	switch (type) {
-		case 'drafts':
+		case 'draft':
+		case 'archived':
 		case 'published':
 		case 'past':
 		case 'months': {
@@ -55,48 +56,32 @@ export async function load({ params, platform, request }): Promise<Data> {
 
 async function getEvents(
 	env: App.Platform['env'],
-	type: 'drafts' | 'published' | 'past' | 'months',
+	type: 'draft' | 'archived' | 'published' | 'past' | 'months',
 	start: number,
 	month: string,
 ): Promise<{ length: number; events: (Event & WithSubmitter)[] }> {
-	if (type === 'drafts') {
-		const length = await getEventNumber(env, 'draft')
-		const events = (await getAllEvents(env, { start, limit }, 'draft')) as FullEventDto[]
+	if (type === 'draft' || type === 'archived') {
+		const length = await getEventNumber(env, type)
+		const events = (await getAllEvents(env, { start, limit }, type)) as FullEventDto[]
 		return { length, events: events.map(wire2event) }
 	} else if (type === 'published') {
 		const now = Date.now()
-		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
-		const filteredEvents = events
-			.map(wire2event)
-			.map(event => ({
-				...event,
-				allTimes: event.times,
-				time: event.times.filter(time => getEndOfTime(time) > now),
-			}))
-			.filter(event => event.time.length > 0)
-			.toSorted((a, b) => getSortTime(a) - getSortTime(b))
-
-		return {
-			length: filteredEvents.length,
-			events: filteredEvents.slice(start, start + limit),
-		}
+		return filterAndTransformEvents(
+			env,
+			'public',
+			time => getEndOfTime(time) > now,
+			(a, b) => getSortTime(a) - getSortTime(b),
+			start,
+		)
 	} else if (type === 'past') {
 		const now = Date.now()
-		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
-		const filteredEvents = events
-			.map(wire2event)
-			.map(event => ({
-				...event,
-				allTimes: event.times,
-				time: event.times.filter(time => getEndOfTime(time) <= now),
-			}))
-			.filter(event => event.time.length > 0)
-			.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
-
-		return {
-			length: filteredEvents.length,
-			events: filteredEvents.slice(start, start + limit),
-		}
+		return filterAndTransformEvents(
+			env,
+			'public',
+			time => getEndOfTime(time) <= now,
+			(a, b) => getSortTimeEnd(b) - getSortTimeEnd(a),
+			start,
+		)
 	} else {
 		// months
 		const date = new Date(month)
@@ -104,19 +89,39 @@ async function getEvents(
 		date.setMonth(date.getMonth() + 1)
 		const monthEnd = +date - 1
 
-		const events = (await getAllEvents(env, { start: 0 }, 'public')) as FullEventDto[]
-		const filteredEvents = events
-			.map(wire2event)
-			.map(event => ({
-				...event,
-				allTimes: event.times,
-				time: getInBetween(event.times, monthStart, monthEnd),
-			}))
-			.filter(event => event.time.length > 0)
-			.toSorted((a, b) => getSortTimeEnd(b) - getSortTimeEnd(a))
-
-		return { length: filteredEvents.length, events: filteredEvents }
+		return filterAndTransformEvents(
+			env,
+			'public',
+			time => isSingleTimeBetween(time, monthStart, monthEnd),
+			(a, b) => getSortTimeEnd(b) - getSortTimeEnd(a),
+		)
 	}
+}
+
+async function filterAndTransformEvents(
+	env: App.Platform['env'],
+	state: EventState,
+	filterTimes: (time: Time) => boolean,
+	sortTimes: (a: Event, b: Event) => number,
+	start?: number,
+): Promise<{ length: number; events: (Event & WithSubmitter)[] }> {
+	const events = (await getAllEvents(env, { start: 0 }, state)) as (EventDto & WithSubmitter)[]
+	const filteredEvents = events
+		.map((event): Event & WithSubmitter => {
+			const allTimes = event.times.map(wire2time)
+			return { ...event, allTimes, times: allTimes.filter(filterTimes) }
+		})
+		.filter(event => event.times.length > 0)
+		.sort(sortTimes)
+
+	if (start !== undefined) {
+		return {
+			length: filteredEvents.length,
+			events: filteredEvents.slice(start, start + limit),
+		}
+	}
+
+	return { length: filteredEvents.length, events: filteredEvents }
 }
 
 function getSortTime(event: Event): number {

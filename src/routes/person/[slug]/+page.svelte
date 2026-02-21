@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>{person.name} - Queeres Zentrum Kassel</title>
+	<title>{person.name} | Queeres Zentrum Kassel</title>
 </svelte:head>
 
 <div>
@@ -46,7 +46,7 @@
 		<p>Die neuesten Beiträge werden angezeigt</p>
 	{/if}
 	<div class="blog-posts">
-		{#each posts as post}
+		{#each posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</div>

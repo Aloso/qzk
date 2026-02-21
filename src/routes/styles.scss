@@ -1,10 +1,10 @@
 @use 'sass:color';
-@use './vars.scss' as vars;
+@use './vars';
 
-@use '../../static/asap/asap.scss';
-@use '../../static/laila/laila.scss';
+@use '../../static/asap/asap';
+@use '../../static/laila/laila';
 
-@use './contentful.scss';
+@use './contentful';
 
 :root {
 	--color-theme: #{color.adjust(vars.$COLOR_T4, $lightness: 8%)};

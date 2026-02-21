@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FormTime } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import { m } from '$lib/paraglide/messages'
 
 	interface Props {
 		time: FormTime
@@ -83,21 +84,23 @@
 
 <div class="time-slot">
 	<label>
-		<em class="required">{values.longerPeriod ? 'Startdatum' : 'Datum'}</em>
+		<em class="required">
+			{values.longerPeriod ? m.pf_datetime_date_start() : m.pf_datetime_date()}
+		</em>
 		<input type="date" bind:value={values.startDate} required />
 	</label>
 
 	{#if values.longerPeriod}
 		<label>
-			<em class="required">Enddatum</em>
+			<em class="required">{m.pf_datetime_date_end()}</em>
 			<input type="date" bind:value={values.endDate} required={values.longerPeriod} />
 		</label>
 	{:else}
 		<label>
-			<em class="required">Uhrzeit</em>
+			<em class="required">{m.pf_datetime_time()}</em>
 			<div class="times">
 				<input type="time" bind:value={values.startTime} />
-				bis <input type="time" bind:value={values.endTime} />
+				{m.pf_datetime_until()} <input type="time" bind:value={values.endTime} />
 			</div>
 		</label>
 	{/if}
@@ -105,7 +108,7 @@
 	<div class="filler"></div>
 
 	{#if onRemove}
-		<button type="button" class="remove" onclick={onRemove} aria-label="Löschen">
+		<button type="button" class="remove" onclick={onRemove} aria-label={m.actions_delete()}>
 			<svg width="16" height="16" viewBox="0 0 16 16" stroke="currentColor">
 				<path d="M2,2 L14,14 M 2,14 L 14,2" stroke-width="2" />
 			</svg>
@@ -168,7 +171,7 @@
 	}
 
 	input[type='time'] {
-		max-width: 3.5rem;
+		max-width: 4.3rem;
 		min-width: 0;
 	}
 

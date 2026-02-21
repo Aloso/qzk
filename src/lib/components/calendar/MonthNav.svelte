@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getLocale } from '$lib/paraglide/runtime'
+
 	interface Props {
 		month: number
 		year: number
@@ -6,9 +8,10 @@
 	}
 
 	let { month = $bindable(), year = $bindable(), onChange }: Props = $props()
+	let locale = getLocale()
 
 	let monthName = $derived(
-		new Intl.DateTimeFormat('de-DE', { month: 'long' }).format(new Date(year, month, 2)),
+		new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(year, month, 2)),
 	)
 
 	function toPreviousMonth() {

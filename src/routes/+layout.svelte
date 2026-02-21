@@ -1,10 +1,17 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import Footer from '$lib/components/nav/Footer.svelte'
 	import Header from '$lib/components/nav/Header.svelte'
 	import SearchWrapper from '$lib/components/search/SearchWrapper.svelte'
 	import type { Navigations } from '$lib/data'
 	import type { Snippet } from 'svelte'
+	import {
+		extractLocaleFromNavigator,
+		getLocale,
+		locales,
+		localizeHref,
+		setLocale,
+	} from '$lib/paraglide/runtime'
 	import './styles.scss'
 
 	interface Props {
@@ -17,10 +24,33 @@
 	if (globalThis.location && globalThis.location.host === 'www.queereszentrumkassel.de') {
 		globalThis.location.replace(globalThis.location.href.replace(/www\./, ''))
 	}
+
+	$effect(() => {
+		page.url
+		const locale = getLocale()
+		const storedLocale = localStorage.locale
+		if (storedLocale) {
+			if (locale !== storedLocale) {
+				setLocale(storedLocale)
+			}
+		} else {
+			const preferredLocale = extractLocaleFromNavigator()
+			if (preferredLocale && preferredLocale !== locale) {
+				localStorage.locale = preferredLocale
+				setLocale(preferredLocale)
+			}
+		}
+	})
 </script>
 
+<div style="display:none">
+	{#each locales as locale (locale)}
+		<a href={localizeHref(page.url.pathname, { locale })}>{locale}</a>
+	{/each}
+</div>
+
 <div class="app">
-	<Header url={$page.url.pathname} links={data.header} />
+	<Header url={page.url.pathname} links={data.header} />
 
 	<main>
 		{@render children()}

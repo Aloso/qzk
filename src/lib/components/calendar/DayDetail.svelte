@@ -1,6 +1,9 @@
 <script lang="ts">
-	import { getInBetween, isBetween } from '$lib/events/intersections'
+	import { browser } from '$app/environment'
+	import { getInBetween } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		day: Date
@@ -9,6 +12,8 @@
 	}
 
 	let { day, allEvents, onClose }: Props = $props()
+	let locale = getLocale()
+	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
 	let { dayStart, dayEnd } = $derived.by(() => {
 		const year = day.getFullYear()
@@ -44,45 +49,54 @@
 			case 'day-range':
 				return undefined
 			case 'time':
-				return formatDate(time.start)
+				return formatTime(time.start)
 			case 'time-range':
-				return `${formatDate(time.start)} – ${formatDate(time.end)}`
+				return `${formatTime(time.start)}\u{2009}–\u{2009}${formatTime(time.end)}`
 		}
 	}
 
-	function formatDate(d: Date) {
-		return d.toLocaleTimeString('de-DE', {
+	function formatTime(d: Date) {
+		const time = d.toLocaleTimeString(locale, {
 			timeZone: 'Europe/Berlin',
-			hour: '2-digit',
+			hour: locale === 'en' ? 'numeric' : '2-digit',
 			minute: '2-digit',
+			hourCycle,
 		})
+		return locale === 'en' && hourCycle !== 'h23' ? time.replace(':00', '') : time
 	}
 </script>
 
 <div class="day-detail">
 	<div class="top">
-		<button type="button" class="back-button" onclick={onClose} aria-label="Zurück"></button>
-		{day.toLocaleDateString('de-DE', {
+		<button type="button" class="back-button" onclick={onClose} aria-label={m.actions_back()}
+		></button>
+		{day.toLocaleDateString(locale, {
 			day: 'numeric',
 			month: 'long',
 			weekday: 'long',
 		})}
 	</div>
 	<ul class="event-list">
-		{#each dayEvents as event}
+		{#each dayEvents as event (event.key)}
 			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
-				<a href="/veranstaltungen/{event.key}" class="title">{event.titleDe}</a><br />
+				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">
+					{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}
+				</a>
+				<br />
 				{[formatPlace(event.place), formatTimes(event.time[0])]
 					.filter(s => s !== undefined)
 					.join(' · ')}
 			</li>
 		{:else}
-			<div class="empty">Keine Veranstaltungen an diesem Tag</div>
+			<div class="empty">{m.home_no_events_on_day()}</div>
 		{/each}
 	</ul>
 	<div class="bottom">
-		<a class="plan-button" href="/planen?date={encodeURIComponent(day.toISOString())}">
-			Veranstaltung hinzufügen
+		<a
+			class="plan-button"
+			href={localizeHref(`/planen?date=${encodeURIComponent(day.toISOString())}`)}
+		>
+			{m.home_add_event()}
 		</a>
 	</div>
 </div>

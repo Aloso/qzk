@@ -36,6 +36,8 @@
 		const event: Omit<Event, 'state'> & WithSubmitter = {
 			titleDe: values.titleDe,
 			descDe: values.descDe,
+			titleEn: values.en ? values.titleEn : undefined,
+			descEn: values.en ? values.descEn : undefined,
 			times: values.times.filter((time): time is Time => !!time.start),
 			place: getPlace(),
 			organizer: getOrganizer(),
@@ -164,6 +166,7 @@
 			padding: 0.4rem 0.7rem;
 			border-radius: 10px;
 			font-family: inherit;
+			font-weight: normal;
 			font-size: 1rem;
 			line-height: 1.2rem;
 			text-decoration: none;

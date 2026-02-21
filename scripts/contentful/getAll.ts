@@ -1,8 +1,17 @@
-import { createClient, Entry, EntrySkeletonType } from 'contentful'
+import { createClient, type Entry, type EntrySkeletonType } from 'contentful'
 import { config } from 'dotenv'
 import * as fs from 'node:fs'
 import { render } from './render'
-import { Accordeon, BlogPost, GeneralInfo, Image, Navigation, Person, StaticPage } from './types'
+import type {
+	Accordeon,
+	BlogPost,
+	GeneralInfo,
+	Image,
+	Localized,
+	Navigation,
+	Person,
+	StaticPage,
+} from './types'
 import { getAllNavigations } from './parseNav'
 import { getGeneralInfo } from './parseGeneralInfo'
 import { fetchContentfulEntries } from './fetchContentfulEntries'
@@ -55,28 +64,31 @@ function transform(entry: Entry<EntrySkeletonType>) {
 	let fields: any
 	switch (entry.sys.contentType.sys.id) {
 		case 'person': {
-			const { name, slug, role, pronouns, photo, description } = entry.fields as unknown as Person
+			const { name, slug, role, pronouns, photo, description } =
+				entry.fields as unknown as Localized<Person>
 			fields = {
-				name,
-				slug,
-				role,
-				pronouns,
-				photo: transformImage(photo),
-				description: description ? render(description).content : undefined,
+				name: name['de-DE'],
+				slug: slug['de-DE'],
+				role: role['de-DE'],
+				pronouns: pronouns?.['de-DE'],
+				photo: transformImage(photo?.['de-DE']),
+				description: description?.['de-DE']
+					? render(description['de-DE'], [], 'de-DE').content
+					: undefined,
 			}
 			break
 		}
 		case 'blogPost': {
 			const { title, slug, published, authors, photo, teaser, content } =
-				entry.fields as unknown as BlogPost
-			const rendered = render(content)
+				entry.fields as unknown as Localized<BlogPost>
+			const rendered = content ? render(content['de-DE'], [], 'de-DE') : { content: '' }
 			fields = {
-				title,
-				slug,
-				published,
-				authorIds: authors.map(a => a.sys.id),
-				photo: transformImage(photo),
-				teaser: render(teaser)
+				title: title['de-DE'],
+				slug: slug['de-DE'],
+				published: published['de-DE'],
+				authorIds: authors['de-DE'].map(a => a.sys.id),
+				photo: transformImage(photo?.['de-DE']),
+				teaser: render(teaser['de-DE'], [], 'de-DE')
 					.content.filter(e => typeof e === 'string')
 					.join('\n'),
 				content: rendered.content,
@@ -84,30 +96,43 @@ function transform(entry: Entry<EntrySkeletonType>) {
 			break
 		}
 		case 'staticPage': {
-			const { name, slug, description, content } = entry.fields as unknown as StaticPage
-			const rendered = render(content)
+			const { name, slug, description, content } = entry.fields as unknown as Localized<StaticPage>
+			const rendered = render(content['de-DE'], [], 'de-DE')
+			const renderedEn = render(content['en'] ?? content['de-DE'], [], 'en')
 			fields = {
-				name,
-				slug,
-				description,
+				name: name['de-DE'],
+				nameEn: name['en'],
+				slug: slug['de-DE'],
+				description: description?.['de-DE'],
+				descriptionEn: description?.['en'],
 				content: rendered.content,
+				contentEn: renderedEn?.content,
 				headings: rendered.headings,
+				headingsEn: renderedEn?.headings,
 			}
 			break
 		}
 		case 'navigation': {
-			const { name, linksObject } = entry.fields as unknown as Navigation
-			fields = { name, linksObject }
+			const { name, linksObject } = entry.fields as unknown as Localized<Navigation>
+			fields = { name: name['de-DE'], linksObject: linksObject?.['de-DE'] }
 			break
 		}
 		case 'generalInfo': {
-			fields = entry.fields as unknown as GeneralInfo
+			const { name, importantInfo, openingHours, specialOpeningHours } =
+				entry.fields as unknown as Localized<GeneralInfo>
+			fields = {
+				name: name['de-DE'],
+				importantInfo: importantInfo?.['de-DE'],
+				importantInfoEn: importantInfo?.['en'],
+				openingHours: openingHours?.['de-DE'],
+				specialOpeningHours: specialOpeningHours?.['de-DE'],
+			}
 			break
 		}
 		case 'accordeon': {
-			const { title, content, open } = entry.fields as unknown as Accordeon
-			const rendered = render(content)
-			fields = { title, content: rendered, open }
+			const { title, content, open } = entry.fields as unknown as Localized<Accordeon>
+			const rendered = render(content['de-DE'], [], 'de-DE')
+			fields = { title: title['de-DE'], content: rendered, open: open['de-DE'] }
 			break
 		}
 		default:
@@ -129,11 +154,11 @@ function transform(entry: Entry<EntrySkeletonType>) {
 function transformImage(img?: Image) {
 	if (!img) return
 
-	const imgSize = img.fields.file.details.image
+	const imgSize = img.fields.file['de-DE'].details.image
 	return {
 		id: img.sys.id,
-		url: img.fields.file.url,
-		description: img.fields.description,
+		url: img.fields.file['de-DE'].url,
+		description: img.fields.description?.['de-DE'],
 		width: imgSize.width,
 		height: imgSize.height,
 	}
