@@ -40,7 +40,7 @@ export async function POST({ request, platform }): Promise<Response> {
 	// Send email
 	await mailer.send({
 		from: { name: displayName, email: 'contact@queereszentrumkassel.de' },
-		to: { name: 'Queeres Zentrum Kassel', email: 'info@queereszentrumkassel.de' },
+		to: { name: 'Queeres Zentrum Kassel', email: platform.env.CONTACT_FORM_RECIPIENT },
 		reply: { email },
 		subject: subject,
 		text: `${body}\n\nDiese E-Mail wurde von ${email} mit dem Kontaktformular auf queereszentrumkassel.de versendet.`,
@@ -54,7 +54,7 @@ export async function POST({ request, platform }): Promise<Response> {
 	})
 
 	if (redirect) {
-		return Response.redirect(redirect, 307) // Temporary Redirect
+		return Response.redirect(redirect, 303)
 	} else {
 		return new Response(null, { status: 201 }) // Created
 	}
