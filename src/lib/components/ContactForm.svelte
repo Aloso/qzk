@@ -20,7 +20,7 @@
 
 <form
 	method="POST"
-	action="https://formsubmit.co/info@queereszentrumkassel.de"
+	action="/api/forms/contact-form"
 	onsubmit={event => {
 		if (formError) {
 			event.preventDefault()
@@ -31,7 +31,7 @@
 	<ValidatedInput
 		type="text"
 		label={m.email_subject()}
-		name="_subject"
+		name="subject"
 		bind:value={subject}
 		bind:error={subjectError}
 		required={m.email_subject_missing()}
@@ -50,7 +50,7 @@
 	<ValidatedInput
 		type="textarea"
 		label={m.email_message()}
-		name="content"
+		name="body"
 		bind:value={content}
 		bind:error={contentError}
 		required={m.email_message_missing()}
@@ -58,9 +58,7 @@
 		style="--min-height: 200px"
 	/>
 
-	<input type="hidden" name="_template" value="box" />
-	<input type="hidden" name="_captcha" value="false" />
-	<input type="hidden" name="_next" value={nextLink} />
+	<input type="hidden" name="redirect" value={nextLink} />
 
 	<SubmitButton disabled={submitClicked && !!formError}>{m.actions_send()}</SubmitButton>
 </form>

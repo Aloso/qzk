@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit'
-import { escapeHtml, sanitizeHtml, sanitizeHtmlPlain } from '$lib/utils/sanitize'
+import { escapeHtml, sanitizeHtmlPlain } from '$lib/utils/sanitize'
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 

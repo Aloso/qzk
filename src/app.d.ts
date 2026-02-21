@@ -23,6 +23,11 @@ declare global {
 			ALGOLIA_APP_ID: string
 			ALGOLIA_API_KEY: string
 			DEEPL_API_KEY: string
+
+			CONTACT_FORM_RECIPIENT: string
+			SMTP_USERNAME: string
+			SMTP_PASSWORD: string
+			SMTP_HOST: string
 		}
 
 		interface Platform {

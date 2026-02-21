@@ -46,7 +46,7 @@
 	{#if hasToc}
 		<div class="toc" class:mobile-hidden={!expanded}>
 			<h2>{m.table_of_contents()}</h2>
-			<ul>
+			<ul lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
 				{#each tocItems as { level, text, id } (id)}
 					<li class="toc-item" style="--level: {tocHasH1 ? level - 1 : level - 2}">
 						<a href="#{id}">{text}</a>
@@ -56,7 +56,7 @@
 		</div>
 	{/if}
 
-	<section class="main-section">
+	<section class="main-section" lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
 		{#each locale === 'en' ? (data.contentEn ?? data.content) : data.content as part, i (i)}
 			{#if typeof part === 'string'}
 				<section class:omitFirst={omitFirst && i === 0}>

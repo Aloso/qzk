@@ -54,9 +54,9 @@ export function escapeHtml(text: string): string {
 			case '&':
 				return '&amp;'
 			case '<':
-				return '&gt;'
-			case '>':
 				return '&lt;'
+			case '>':
+				return '&gt;'
 			case '"':
 				return '&quot;'
 			case "'":

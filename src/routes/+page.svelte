@@ -14,10 +14,9 @@
 	}
 
 	const { data }: Props = $props()
-	const { generalInfo, posts, events } = data
 
 	const today = new Date()
-	const filteredEvents = events?.filter(e => e.times.length > 0)
+	const filteredEvents = $derived(data.events?.filter(e => e.times.length > 0))
 
 	let openCalendarDay = $state<Date>()
 </script>
@@ -30,11 +29,11 @@
 <div class="layout">
 	<section class="important">
 		<h2 class="sidebar-title">{m.home_opening_hours()}</h2>
-		<OpeningHours {...generalInfo} />
+		<OpeningHours {...data.generalInfo} />
 
-		{#if generalInfo.importantInfo?.length}
+		{#if data.generalInfo.importantInfo?.length}
 			<h2 class="sidebar-title">{m.home_important()}</h2>
-			<ImportantInfo {...generalInfo} />
+			<ImportantInfo {...data.generalInfo} />
 		{/if}
 	</section>
 
@@ -44,7 +43,7 @@
 		<div class="event-container">
 			<div class="calendar-wrapper" class:is-expanded={openCalendarDay !== undefined}>
 				<CalendarView
-					{events}
+					events={data.events}
 					showDate={today}
 					colorCoded
 					highlightedDate={openCalendarDay}
@@ -61,7 +60,7 @@
 			{#if openCalendarDay}
 				<DayDetail
 					day={openCalendarDay}
-					allEvents={events}
+					allEvents={data.events}
 					onClose={() => (openCalendarDay = undefined)}
 				/>
 			{/if}
@@ -99,7 +98,7 @@
 		<h2 class="sidebar-title">{m.home_new_blog_posts()}</h2>
 
 		<div class="blog-posts">
-			{#each posts as post (post.slug)}
+			{#each data.posts as post (post.slug)}
 				<BlogPostPreview {post} />
 			{/each}
 		</div>

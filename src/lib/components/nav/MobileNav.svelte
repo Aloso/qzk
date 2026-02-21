@@ -44,6 +44,7 @@
 			</div>
 		{/each}
 
+		<!--
 		<div class="nav-group">
 			<div class="nav-row">
 				<a
@@ -56,6 +57,7 @@
 				</a>
 			</div>
 		</div>
+		-->
 	</div>
 </nav>
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state'
 	import type { Navigations } from '$lib/data'
 	import { m } from '$lib/paraglide/messages'
 	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
@@ -50,6 +49,7 @@
 		{/if}
 	{/each}
 
+	<!--
 	<div class="nav-group">
 		<span class="nav-link-inner a">
 			<img src="/globe.svg" alt=" " />
@@ -71,6 +71,7 @@
 			{/each}
 		</div>
 	</div>
+	-->
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
@@ -137,6 +138,7 @@
 			text-decoration: none;
 			color: vars.$COLOR_T4;
 
+			/*
 			&.active {
 				background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
 				cursor: default;
@@ -146,6 +148,7 @@
 					background-color: color.adjust(vars.$COLOR_T1, $lightness: -3%);
 				}
 			}
+			*/
 
 			&:hover,
 			&:focus {
@@ -188,9 +191,11 @@
 	.nav-link-inner {
 		display: block;
 
+		/*
 		&.a {
 			cursor: default;
 		}
+		*/
 
 		img {
 			width: 1em;

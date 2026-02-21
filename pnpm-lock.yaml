@@ -38,6 +38,9 @@ importers:
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
+      worker-mailer:
+        specifier: ^1.2.1
+        version: 1.2.1
       zod:
         specifier: ^4.3.4
         version: 4.3.4
@@ -2468,6 +2471,9 @@ packages:
     resolution: {integrity: sha512-kKlNACbvHrkpIw6oPeYDSmdCTu2hdMHoyXLTcUKala++lx5Y+wjJ/e474Jqv5abnVmwxw08DiTuHmw69lJGksA==}
     engines: {node: '>=8.0.0'}
 
+  worker-mailer@1.2.1:
+    resolution: {integrity: sha512-gS2ei/mrpRqNs+AHmqxhT6vFPwCLw2qnz5ShmyGD0ULaU0Q9hxnFAcx9jhAip/MnD6+MjgnQu6hQQgA8mlOkVA==}
+
   workerd@1.20251011.0:
     resolution: {integrity: sha512-Dq35TLPEJAw7BuYQMkN3p9rge34zWMU2Gnd4DSJFeVqld4+DAO2aPG7+We2dNIAyM97S8Y9BmHulbQ00E0HC7Q==}
     engines: {node: '>=16'}
@@ -4762,6 +4768,8 @@ snapshots:
     dependencies:
       reduce-flatten: 2.0.0
       typical: 5.2.0
+
+  worker-mailer@1.2.1: {}
 
   workerd@1.20251011.0:
     optionalDependencies:
