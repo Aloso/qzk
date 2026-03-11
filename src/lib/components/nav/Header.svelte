@@ -41,7 +41,7 @@
 	@use '../../../routes/vars';
 
 	header {
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		line-height: 2rem;
 		letter-spacing: 0.03rem;
 		z-index: 2;

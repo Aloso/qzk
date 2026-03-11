@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import type { Navigations } from '$lib/data'
 	import { m } from '$lib/paraglide/messages'
 	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
@@ -49,7 +50,6 @@
 		{/if}
 	{/each}
 
-	<!--
 	<div class="nav-group">
 		<span class="nav-link-inner a">
 			<img src="/globe.svg" alt=" " />
@@ -71,12 +71,10 @@
 			{/each}
 		</div>
 	</div>
-	-->
 
 	<button class="a" data-search-button>
 		<span class="nav-link-inner">
-			<img src="/search.svg" alt=" " />
-			{m.header_search()}
+			<img src="/search.svg" alt="Suche" title="Suche" />
 		</span>
 	</button>
 </nav>
@@ -122,11 +120,11 @@
 		border: 2px solid vars.$COLOR_T2;
 		border-top: 0;
 		margin-top: 0.5rem;
-		margin-left: calc(-0.2rem - 2px);
+		margin-left: calc(-0.3rem - 2px);
 		max-width: 450px;
 		max-height: calc(100vh - 300px);
 		overflow: auto;
-		font-size: 1.05rem;
+		font-size: 1rem;
 		font-weight: 500;
 
 		a {
@@ -167,7 +165,7 @@
 		display: flex;
 		position: relative;
 		flex-direction: column;
-		padding: 8px 0.8rem;
+		padding: 8px 0.7rem;
 		margin: 0 2px;
 		text-decoration: none;
 		transition: 0.2s;

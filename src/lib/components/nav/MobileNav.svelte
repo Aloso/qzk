@@ -44,7 +44,6 @@
 			</div>
 		{/each}
 
-		<!--
 		<div class="nav-group">
 			<div class="nav-row">
 				<a
@@ -57,7 +56,6 @@
 				</a>
 			</div>
 		</div>
-		-->
 	</div>
 </nav>
 
@@ -135,7 +133,7 @@
 					.nav-child {
 						display: block;
 						line-height: 1;
-						padding: 0.83rem 1.4rem;
+						padding: 0.75rem 1.2rem;
 						overflow: hidden;
 					}
 				}
@@ -176,20 +174,20 @@
 
 				display: block;
 				flex-grow: 1;
-				padding: 1rem 1.4rem;
+				padding: 1rem 1.2rem;
 				text-decoration: none;
 				font-weight: 500;
-				font-size: 1.25rem;
+				font-size: 1.15rem;
 				line-height: 25px;
 				border-radius: 25px;
 
 				&.nav-child {
 					line-height: 0;
-					padding: 0 1.4rem;
+					padding: 0 1.2rem;
 					margin: 0 0.7rem;
 					overflow: hidden;
 					border-radius: 20px;
-					font-size: 1.1rem;
+					font-size: 1.05rem;
 					transition:
 						line-height 0.2s,
 						padding 0.2s;
