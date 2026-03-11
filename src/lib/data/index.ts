@@ -114,15 +114,19 @@ export interface PersonTransformed {
 	slug: string
 	name: string
 	role: string
+	roleEn?: string
 	pronouns?: string
+	pronounsEn?: string
 	photo: Image
 	description?: RichText
+	descriptionEn?: RichText
 }
 
 export interface PersonPreview {
 	slug: string
 	name: string
 	role: string
+	roleEn?: string
 	photo: Image
 }
 

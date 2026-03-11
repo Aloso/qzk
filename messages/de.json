@@ -140,6 +140,20 @@
 	"event_delete_failed": "Fehler beim Löschen!",
 	"event_edit_failed": "Fehler beim Bearbeiten!",
 
+	"person_picture_of": "Bild von {name}",
+	"person_pronouns": "Pronomen: {pronouns}",
+	"person_blog_post_title": [
+		{
+			"declarations": ["input name", "input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 Beitrag von {name}",
+				"countPlural=other": "{count} Beiträge von {name}"
+			}
+		}
+	],
+	"person_blog_posts_limit": "Die neuesten Beiträge werden angezeigt",
+
 	"plan_event_title": "Veranstaltung einreichen",
 	"plan_event_submitted_list": "Eingereichte Veranstaltungen",
 	"plan_event_conflicts": [

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Image from '$lib/components/Image.svelte'
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale } from '$lib/paraglide/runtime'
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 
@@ -8,7 +10,12 @@
 	}
 
 	let { data }: Props = $props()
-	const { person, posts, totalPosts } = data
+	let person = $derived(data.person)
+	let locale = getLocale()
+
+	function translation<T>(de: T, en: T | undefined): T {
+		return locale === 'en' ? (en ?? de) : de
+	}
 </script>
 
 <svelte:head>
@@ -20,18 +27,20 @@
 		<Image
 			img={person.photo}
 			class="Person-photo"
-			fallbackAlt="Bild von {person.name}"
+			fallbackAlt={m.person_picture_of({ name: person.name })}
 			width={400}
 		/>
 		<div class="content">
 			<h1 class="name">{person.name}</h1>
-			<div class="role">{person.role}</div>
+			<div class="role">{translation(person.role, person.roleEn)}</div>
 			{#if person.pronouns}
-				<div class="pronouns">Pronomen: {person.pronouns}</div>
+				<div class="pronouns">
+					{m.person_pronouns({ pronouns: translation(person.pronouns, person.pronounsEn) })}
+				</div>
 			{/if}
 			{#if person.description}
 				<div class="description">
-					{@html person.description}
+					{@html translation(person.description, person.descriptionEn)}
 				</div>
 			{/if}
 		</div>
@@ -39,14 +48,13 @@
 
 	<hr />
 	<h2>
-		{totalPosts}
-		{totalPosts === 1 ? 'Beitrag' : 'Beiträge'} von {person.name}
+		{m.person_blog_post_title({ count: data.totalPosts, name: person.name })}
 	</h2>
-	{#if totalPosts > 20}
-		<p>Die neuesten Beiträge werden angezeigt</p>
+	{#if data.totalPosts > 20}
+		<p>{m.person_blog_posts_limit()}</p>
 	{/if}
 	<div class="blog-posts">
-		{#each posts as post (post.slug)}
+		{#each data.posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</div>

@@ -83,7 +83,7 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 						return `<a class="embed" href="${localUrl(locale, 'person', fields.slug['de-DE'])}">
 							<p class="embedTitle">${local(fields.name, locale)}</p>
 							<p class="embedDescription">${local(fields.role, locale)}</p>
-							${fields.pronouns ? `<p class="embedDescription">${local(fields.pronouns, locale)}</p>` : ''}
+							${fields.pronouns ? `<p class="embedDescription">${locale === 'en' ? 'Pronouns' : 'Pronomen'}: ${local(fields.pronouns, locale)}</p>` : ''}
 						</a>`
 					}
 					case 'accordeon': {

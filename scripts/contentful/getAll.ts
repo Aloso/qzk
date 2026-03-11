@@ -70,10 +70,15 @@ function transform(entry: Entry<EntrySkeletonType>) {
 				name: name['de-DE'],
 				slug: slug['de-DE'],
 				role: role['de-DE'],
+				roleEn: role['en'],
 				pronouns: pronouns?.['de-DE'],
+				pronounsEn: pronouns?.['en'],
 				photo: transformImage(photo?.['de-DE']),
 				description: description?.['de-DE']
 					? render(description['de-DE'], [], 'de-DE').content
+					: undefined,
+				descriptionEn: description?.['en']
+					? render(description['en'], [], 'en').content
 					: undefined,
 			}
 			break
@@ -83,12 +88,12 @@ function transform(entry: Entry<EntrySkeletonType>) {
 				entry.fields as unknown as Localized<BlogPost>
 			const rendered = content ? render(content['de-DE'], [], 'de-DE') : { content: '' }
 			fields = {
-				title: title['de-DE'],
-				slug: slug['de-DE'],
-				published: published['de-DE'],
-				authorIds: authors['de-DE'].map(a => a.sys.id),
+				title: title?.['de-DE'],
+				slug: slug?.['de-DE'],
+				published: published?.['de-DE'],
+				authorIds: authors?.['de-DE'].map(a => a.sys.id),
 				photo: transformImage(photo?.['de-DE']),
-				teaser: render(teaser['de-DE'], [], 'de-DE')
+				teaser: render(teaser?.['de-DE'], [], 'de-DE')
 					.content.filter(e => typeof e === 'string')
 					.join('\n'),
 				content: rendered.content,

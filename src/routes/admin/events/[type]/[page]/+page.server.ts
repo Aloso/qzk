@@ -1,5 +1,5 @@
 import { wire2event, wire2time } from '$lib/events/convert'
-import { getEndOfTime, getInBetween, isSingleTimeBetween } from '$lib/events/intersections'
+import { getEndOfTime, isSingleTimeBetween } from '$lib/events/intersections'
 import type { Event, Time, WithSubmitter } from '$lib/events/types'
 import { getAllEvents, getEventNumber } from '$lib/server/events/db'
 import type { EventDto, EventState, FullEventDto } from '$lib/server/events/event.js'
