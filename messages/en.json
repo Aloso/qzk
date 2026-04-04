@@ -17,6 +17,7 @@
 	"header_search_authors": "Authors",
 
 	"footer_event_management": "Event Management",
+	"footer_feedback": "Feedback",
 	"footer_logout": "Logout",
 
 	"error": "Error",
@@ -168,6 +169,13 @@
 	],
 	"plan_event_check_conflicts": "Please check that there are no scheduling conflicts.",
 	"plan_event_calendar": "Calendar",
+
+	"feedback_happiness": "How happy are you with this website?",
+	"feedback_improve": "What can we improve?",
+	"feedback_wishes": "Do you have any wishes or suggestions?",
+	"feedback_optional": "optional",
+	"feedback_submit": "Submit feedback",
+	"feedback_thanks": "Thank You!",
 
 	"pf_loading": "Loading...",
 	"pf_is_submitting": "Submitting...",

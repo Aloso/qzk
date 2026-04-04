@@ -1,7 +1,7 @@
+import { getEvent } from '$backend/events/db'
+import { wire2event } from '$lib/events/convert'
 import type { Event } from '$lib/events/types'
-import { getEvent } from '$lib/server/events/db.js'
 import { error } from '@sveltejs/kit'
-import { wire2event } from '$lib/events/convert.js'
 
 export async function load({ params, platform }): Promise<Event> {
 	if (!platform) {
@@ -14,5 +14,5 @@ export async function load({ params, platform }): Promise<Event> {
 	delete event.submitter
 	delete event.orgaNotes
 
-	return wire2event<{}>(event)
+	return wire2event<object>(event)
 }

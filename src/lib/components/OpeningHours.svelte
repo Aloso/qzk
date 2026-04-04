@@ -31,8 +31,8 @@
 
 	const todayMidnight = new Date()
 	todayMidnight.setHours(0, 0, 0, 0)
-	const special = specialOpeningHours.filter(
-		({ date }) => new Date(date).getTime() >= todayMidnight.getTime(),
+	const special = $derived(
+		specialOpeningHours.filter(({ date }) => new Date(date).getTime() >= todayMidnight.getTime()),
 	)
 
 	const trailingZeroes = /:00($|(?= ))/

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
-	import BlogPostPreview from './blog/BlogPostPreview.svelte'
-	import type { Data } from './+page.server'
 	import IgFeed from '$lib/components/IgFeed.svelte'
-	import OpeningHours from '$lib/components/OpeningHours.svelte'
 	import ImportantInfo from '$lib/components/ImportantInfo.svelte'
+	import OpeningHours from '$lib/components/OpeningHours.svelte'
 	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
 	import DayDetail from '$lib/components/calendar/DayDetail.svelte'
+	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
+	import FeedbackForm from '$lib/components/feedback/FeedbackForm.svelte'
 	import { m } from '$lib/paraglide/messages'
+	import type { Data } from './+page.server'
+	import BlogPostPreview from './blog/BlogPostPreview.svelte'
 
 	interface Props {
 		data: Data
@@ -80,6 +81,10 @@
 				{/if}
 			</div>
 		{/if}
+
+		{#if data.showFeedback}
+			<FeedbackForm />
+		{/if}
 	</section>
 
 	<section class="social-and-blog">
@@ -108,7 +113,10 @@
 <style lang="scss">
 	.layout {
 		display: grid;
-		grid-template: 'events important' 0fr 'events social-and-blog' 1fr / 2fr 1fr;
+		grid-template:
+			'events important' 0fr
+			'events social-and-blog' 1fr
+			/ 2fr 1fr;
 		gap: 0 3rem;
 
 		@media (max-width: 78rem) {

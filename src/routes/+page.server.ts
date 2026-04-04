@@ -1,19 +1,21 @@
-import data from '$lib/contentful/data.js'
+import { getCookies } from '$backend/cookie'
+import { getAllEvents } from '$backend/events/db'
+import data from '$lib/contentful/data'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
 import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '$lib/data'
-import type { Event } from '$lib/events/types.js'
+import { wire2event } from '$lib/events/convert'
+import { getEndOfTime } from '$lib/events/intersections'
+import type { Event } from '$lib/events/types'
 import { error } from '@sveltejs/kit'
-import { getAllEvents } from '$lib/server/events/db.js'
-import { wire2event } from '$lib/events/convert.js'
-import { getEndOfTime } from '$lib/events/intersections.js'
 
 export interface Data {
 	generalInfo: GeneralInfoTransformed
 	posts: BlogPostPreviewTransformed[]
 	events: Event[]
+	showFeedback: boolean
 }
 
-export async function load({ platform }): Promise<Data> {
+export async function load({ platform, request }): Promise<Data> {
 	if (!platform) {
 		error(500, 'Platform not available')
 	}
@@ -47,9 +49,12 @@ export async function load({ platform }): Promise<Data> {
 		return +aTime.start - +bTime.start
 	})
 
+	const { feedback_v1 } = getCookies(request.headers)
+
 	return {
 		generalInfo: data.generalInfo,
 		posts: data.blogPost.slice(0, 2).map(blogPost => selectBlogPostPreview(blogPost.fields)),
 		events,
+		showFeedback: feedback_v1 == null,
 	}
 }

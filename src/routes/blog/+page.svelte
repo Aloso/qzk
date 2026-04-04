@@ -3,7 +3,6 @@
 	import type { Data } from './+page.server'
 
 	let { data }: { data: Data } = $props()
-	let { posts } = data
 </script>
 
 <svelte:head>
@@ -11,11 +10,11 @@
 </svelte:head>
 
 <h1>Blog</h1>
-{#if posts.length === 0}
+{#if data.posts.length === 0}
 	<p>Es wurden noch keine Blog Posts veröffentlicht. Schau später nochmal vorbei!</p>
 {:else}
 	<section>
-		{#each posts as post (post.slug)}
+		{#each data.posts as post (post.slug)}
 			<BlogPostPreview {post} withImage />
 		{/each}
 	</section>

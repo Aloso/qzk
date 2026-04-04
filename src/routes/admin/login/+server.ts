@@ -1,4 +1,4 @@
-import { verifyCredentials } from '$lib/server/events/http'
+import { verifyCredentials } from '$backend/events/http'
 import { error } from '@sveltejs/kit'
 
 export async function POST({ request, platform }): Promise<Response> {

@@ -27,7 +27,7 @@
 	}
 
 	const { videoId }: Props = $props()
-	const href = `https://www.youtube.com/embed/${videoId}`
+	const href = $derived(`https://www.youtube.com/embed/${videoId}`)
 </script>
 
 <div class="iframe-wrapper" class:loaded={st === 'loaded'}>

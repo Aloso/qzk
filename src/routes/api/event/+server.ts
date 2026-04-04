@@ -1,10 +1,8 @@
-import { json } from '@sveltejs/kit'
-import { addDraft, deleteEvent, putEvent } from '$lib/server/events/db'
-import { parseEvent } from '$lib/server/events/event'
-import { queryKey, queryState, tryAuthentication } from '$lib/server/events/http'
+import { addDraft, deleteEvent, getEvent, putEvent } from '$backend/events/db'
+import { parseEvent } from '$backend/events/event'
+import { queryKey, queryState, tryAuthentication } from '$backend/events/http'
 import { sanitizeHtml } from '$lib/utils/sanitize'
-import { error } from '@sveltejs/kit'
-import { getEvent } from '$lib/server/events/db'
+import { error, json } from '@sveltejs/kit'
 
 // fetch
 export async function GET({ request, platform }): Promise<Response> {

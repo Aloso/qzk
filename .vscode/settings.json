@@ -1,0 +1,14 @@
+{
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "always",
+			"source.removeUnusedImports": "always"
+		}
+	},
+	"[svelte]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "always",
+			"source.removeUnusedImports": "always"
+		}
+	}
+}

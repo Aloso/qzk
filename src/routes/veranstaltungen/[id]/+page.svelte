@@ -23,7 +23,7 @@
 		| { type: 'error'; message: string }
 
 	let { data }: Props = $props()
-	let event = $state(data)
+	let event = $derived(data)
 	let locale = getLocale()
 	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 

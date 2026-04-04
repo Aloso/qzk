@@ -1,4 +1,4 @@
-import type { EventDto, TimeDto } from '$lib/server/events/event'
+import type { EventDto, TimeDto } from '$backend/events/event'
 import type { Event, EventCommon, Time, TimeVariant } from './types'
 
 export function wire2event<E>(event: EventDto & E): Event & E

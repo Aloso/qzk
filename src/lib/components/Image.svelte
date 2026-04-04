@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { getHtmlSize, getSize } from './imageCalc'
-	import type { HTMLImgAttributes } from 'svelte/elements'
 	import type { Image } from '$lib/data'
+	import { error } from '@sveltejs/kit'
+	import type { HTMLImgAttributes } from 'svelte/elements'
+	import { getHtmlSize, getSize } from './imageCalc'
 
 	interface Props extends HTMLImgAttributes {
 		img: Image
@@ -12,16 +13,15 @@
 	}
 	let { img, alt, fallbackAlt, width, height, ...rest }: Props = $props()
 
-	if (!img.url) {
-		throw new Error(`Tried to include an asset that isn't published: ${img.id}`)
-	}
-
-	const size = getSize(img, width, height)
-	const cssSize = getHtmlSize(size, width, height)
+	let url = $derived(
+		img.url || error(500, `Tried to include an asset that isn't published: ${img.id}`),
+	)
+	let size = $derived(getSize(img, width, height))
+	let cssSize = $derived(getHtmlSize(size, width, height))
 </script>
 
 <img
-	src="{img.url}?w={size.width}&fl=progressive&fm=jpg"
+	src="{url}?w={size.width}&fl=progressive&fm=jpg"
 	width={cssSize.width}
 	height={cssSize.height}
 	alt={alt ?? img.description ?? fallbackAlt}

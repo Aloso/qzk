@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation'
-import type { EventState } from '$lib/server/events/event'
+import type { EventState } from '$backend/events/event'
 import { localizeHref } from '$lib/paraglide/runtime'
 import { host } from '.'
 

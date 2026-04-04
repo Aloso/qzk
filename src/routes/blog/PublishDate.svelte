@@ -9,12 +9,14 @@
 
 	let { date, withDescription }: Props = $props()
 	const locale = getLocale()
-	const dateFmt = new Date(date).toLocaleDateString(locale, {
-		timeZone: 'Europe/Berlin',
-		day: '2-digit',
-		month: locale === 'en' ? 'short' : '2-digit',
-		year: 'numeric',
-	})
+	const dateFmt = $derived(
+		new Date(date).toLocaleDateString(locale, {
+			timeZone: 'Europe/Berlin',
+			day: '2-digit',
+			month: locale === 'en' ? 'short' : '2-digit',
+			year: 'numeric',
+		}),
+	)
 </script>
 
 {withDescription ? m.blog_published({ date: dateFmt }) : dateFmt}

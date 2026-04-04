@@ -1,23 +1,10 @@
-import { formDataText } from '$lib/server/events/http'
-import { escapeHtml } from '$lib/utils/sanitize.js'
+import { createMailer } from '$backend/email'
+import { formDataText } from '$backend/events/http'
+import { escapeHtml } from '$lib/utils/sanitize'
 import { error } from '@sveltejs/kit'
 
 export async function POST({ request, platform }): Promise<Response> {
 	if (!platform) error(500, 'Platform not available')
-
-	const { WorkerMailer } = await import('worker-mailer')
-
-	// Connect to SMTP server
-	const mailer = await WorkerMailer.connect({
-		credentials: {
-			username: platform.env.SMTP_USERNAME,
-			password: platform.env.SMTP_PASSWORD,
-		},
-		authType: 'plain',
-		host: platform.env.SMTP_HOST,
-		port: 465, // try 587 if this fails
-		secure: true,
-	})
 
 	const formData = await request.formData()
 	const subject = formDataText(formData, 'subject') ?? error(400, 'Missing subject')
@@ -37,7 +24,7 @@ export async function POST({ request, platform }): Promise<Response> {
 		)
 		.join('\n')
 
-	// Send email
+	const mailer = await createMailer(platform.env)
 	await mailer.send({
 		from: { name: displayName, email: 'contact@queereszentrumkassel.de' },
 		to: { name: 'Queeres Zentrum Kassel', email: platform.env.CONTACT_FORM_RECIPIENT },

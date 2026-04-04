@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit'
-import { getAllEvents } from '$lib/server/events/db'
-import { queryState, tryAuthentication } from '$lib/server/events/http'
-import type { EventDto } from '$lib/server/events/event'
+import { getAllEvents } from '$backend/events/db'
+import { queryState, tryAuthentication } from '$backend/events/http'
+import type { EventDto } from '$backend/events/event'
 import { error } from '@sveltejs/kit'
 
 // fetch all events

@@ -16,7 +16,8 @@
 	],
 	"header_search_authors": "Autor*innen",
 
-	"footer_event_management": "Event-Veranstaltung",
+	"footer_event_management": "Event-Verwaltung",
+	"footer_feedback": "Feedback",
 	"footer_logout": "Logout",
 
 	"error": "Fehler",
@@ -168,6 +169,13 @@
 	],
 	"plan_event_check_conflicts": "Bitte überprüfe, dass kein Terminkonflikt entsteht.",
 	"plan_event_calendar": "Kalender",
+
+	"feedback_happiness": "Wie zufrieden bist du mit der Website?",
+	"feedback_improve": "Was können wir verbessern?",
+	"feedback_wishes": "Hast du Wünsche / Anregungen?",
+	"feedback_optional": "freiwillig",
+	"feedback_submit": "Feedback absenden",
+	"feedback_thanks": "Vielen Dank!",
 
 	"pf_loading": "Wird geladen...",
 	"pf_is_submitting": "Wird abgesendet...",

@@ -35,6 +35,7 @@
 			<div class="link-section">
 				<div class="title">Admin</div>
 				<a href={localizeHref('/admin/events/draft/1')}>{m.footer_event_management()}</a>
+				<a href={localizeHref('/admin/feedback')}>{m.footer_feedback()}</a>
 				<a href={localizeHref('/admin/logout')}>{m.footer_logout()}</a>
 			</div>
 		{/if}
@@ -57,7 +58,7 @@
 
 	.footer-inner {
 		display: flex;
-		gap: 2.5rem 4rem;
+		gap: 2.5rem;
 		padding: 1rem;
 		margin: 0 auto;
 		max-width: 70rem;

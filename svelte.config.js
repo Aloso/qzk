@@ -32,6 +32,10 @@ const config = {
 				exclude: [],
 			},
 		}),
+
+		alias: {
+			$backend: 'src/backend',
+		},
 	},
 }
 

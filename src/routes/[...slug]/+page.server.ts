@@ -1,5 +1,5 @@
-import data from '$lib/contentful/data.js'
-import type { StaticPageTransformed } from '$lib/data/index.js'
+import data from '$lib/contentful/data'
+import type { StaticPageTransformed } from '$lib/data/index'
 import { error, type LoadEvent } from '@sveltejs/kit'
 
 export const prerender = true

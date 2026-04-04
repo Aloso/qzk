@@ -1,8 +1,8 @@
-import type { EventDto } from '$lib/server/events/event'
+import type { EventDto } from '$backend/events/event'
 import { host } from '.'
 import { event2wire, wire2event } from '../convert'
-import { formatErrors } from './errors'
 import type { Event, WithSubmitter } from '../types'
+import { formatErrors } from './errors'
 
 export async function updateEvent(
 	event: Event & WithSubmitter,
