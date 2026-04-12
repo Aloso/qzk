@@ -7,6 +7,9 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		experimental: {
+			remoteFunctions: true,
+		},
 		env: {
 			publicPrefix: 'VITE_PUBLIC_',
 		},
@@ -35,6 +38,11 @@ const config = {
 
 		alias: {
 			$backend: 'src/backend',
+		},
+	},
+	compilerOptions: {
+		experimental: {
+			async: true,
 		},
 	},
 }

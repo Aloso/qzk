@@ -1,31 +1,19 @@
 <script lang="ts">
-	import { resolve } from '$app/paths'
 	import { m } from '$lib/paraglide/messages'
-	import type { FeedbackV1 } from '../../../routes/api/feedback/v1/+server'
 	import EmojiButton from './EmojiButton.svelte'
+	import { postFeedback } from './feedback.remote'
 
-	let emotion = $state<number>()
-	let textResponse = $state('')
-	let submitted = $state(false)
-
-	async function submit(event: SubmitEvent) {
-		event.preventDefault()
-		if (emotion === undefined) return
-		submitted = true
-
-		await fetch(resolve('/api/feedback/v1', {}), {
-			method: 'POST',
-			body: JSON.stringify({ emotion, textResponse } as FeedbackV1),
-			headers: {
-				'Content-Type': 'application/json; charset=utf-8',
-			},
-		})
+	interface Props {
+		submitted: boolean
 	}
+
+	let { submitted }: Props = $props()
+	let emotion = $state<number>()
 </script>
 
 <section class="feedback">
 	<div class="section-inner">
-		{#if submitted}
+		{#if submitted || postFeedback.result?.success}
 			<h2 class="thanks">{m.feedback_thanks()}</h2>
 		{:else}
 			<h2>{m.feedback_happiness()}</h2>
@@ -39,12 +27,13 @@
 			</div>
 
 			{#if emotion !== undefined}
-				<form action="" onsubmit={submit}>
+				<form {...postFeedback}>
 					<p class="question">
 						{emotion >= 1 ? m.feedback_wishes() : m.feedback_improve()}
 					</p>
 					<p class="optional">{m.feedback_optional()}</p>
-					<textarea bind:value={textResponse}></textarea>
+					<textarea {...postFeedback.fields.textResponse.as('text')}></textarea>
+					<input {...postFeedback.fields.emotion.as('number', emotion)} type="hidden" />
 
 					<button type="submit" class="submit-button">{m.feedback_submit()}</button>
 				</form>

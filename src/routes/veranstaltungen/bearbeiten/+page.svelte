@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import type { EventState } from '$backend/events/event'
 	import PlanningFormProfesh from '$lib/components/planning-form/PlanningFormProfesh.svelte'
-	import { updateEvent, fetchEventForAdmin } from '$lib/events/eventApi'
+	import { fetchEventForAdmin, updateEvent } from '$lib/events/eventApi'
 	import type { Event, WithSubmitter } from '$lib/events/types'
 	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
 	import { m } from '$lib/paraglide/messages'
 	import { localizeHref } from '$lib/paraglide/runtime'
-	import type { EventState } from '$lib/server/events/event'
 	import { error } from '@sveltejs/kit'
 	import { onMount } from 'svelte'
 

@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte'
+
 	import { page } from '$app/state'
 	import Footer from '$lib/components/nav/Footer.svelte'
 	import Header from '$lib/components/nav/Header.svelte'
 	import SearchWrapper from '$lib/components/search/SearchWrapper.svelte'
 	import type { Navigations } from '$lib/data'
-	import type { Snippet } from 'svelte'
 	import {
 		extractLocaleFromNavigator,
 		getLocale,
@@ -20,6 +21,8 @@
 	}
 
 	let { data, children }: Props = $props()
+	const locale = getLocale()
+	const otherLocale = locale === 'de' ? 'en' : 'de'
 
 	if (globalThis.location && globalThis.location.host === 'www.queereszentrumkassel.de') {
 		globalThis.location.replace(globalThis.location.href.replace(/www\./, ''))
@@ -27,7 +30,6 @@
 
 	$effect(() => {
 		page.url
-		const locale = getLocale()
 		const storedLocale = localStorage.locale
 		if (storedLocale) {
 			if (locale !== storedLocale) {
@@ -42,6 +44,15 @@
 		}
 	})
 </script>
+
+<svelte:head>
+	<link
+		rel="alternate"
+		hrefLang={otherLocale}
+		href={localizeHref(page.url.pathname, { locale: otherLocale })}
+	/>
+	<link rel="alternate" hrefLang="x-default" href={localizeHref(page.url.pathname, { locale })} />
+</svelte:head>
 
 <div style="display:none">
 	{#each locales as locale (locale)}

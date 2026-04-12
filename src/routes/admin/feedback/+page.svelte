@@ -17,24 +17,24 @@
 		})),
 	)
 
-	let happinessAvg = $derived(
-		items.map(it => it.data.emotion).reduce((a, b) => a + b) / items.length,
-	)
+	let happinessAvg = $derived(avg(items))
 	const oneMonthAgo = new Date()
 	oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
-	let happinessAvg30 = $derived(
-		items
-			.filter(it => it.time > oneMonthAgo)
-			.map(it => it.data.emotion)
-			.reduce((a, b) => a + b) / items.length,
-	)
+	let happinessAvg30 = $derived(avg(items.filter(it => it.time > oneMonthAgo)))
+
+	function avg(values: { data: { emotion: number } }[]) {
+		if (values.length === 0) {
+			return '–'
+		}
+		return (values.map(it => it.data.emotion).reduce((a, b) => a + b) / items.length + 3).toFixed(2)
+	}
 </script>
 
 <div>
 	<h1>Feedback</h1>
 
-	<p>Durchschnittliche Zufriedenheit: <b>{(happinessAvg + 3).toFixed(2)}</b> / 5</p>
-	<p>Durchschnittliche Zufriedenheit (30 Tage): <b>{(happinessAvg30 + 3).toFixed(2)}</b> / 5</p>
+	<p>Durchschnittliche Zufriedenheit: <b>{happinessAvg}</b> / 5</p>
+	<p>Durchschnittliche Zufriedenheit (30 Tage): <b>{happinessAvg30}</b> / 5</p>
 
 	<div class="table-wrapper">
 		<table>

@@ -1,4 +1,3 @@
-import { getCookies } from '$backend/cookie'
 import { getAllEvents } from '$backend/events/db'
 import data from '$lib/contentful/data'
 import { selectBlogPostPreview } from '$lib/contentful/selector'
@@ -8,17 +7,20 @@ import { getEndOfTime } from '$lib/events/intersections'
 import type { Event } from '$lib/events/types'
 import { error } from '@sveltejs/kit'
 
+interface Feedback {
+	id: string
+	date: number
+}
+
 export interface Data {
 	generalInfo: GeneralInfoTransformed
 	posts: BlogPostPreviewTransformed[]
 	events: Event[]
-	showFeedback: boolean
+	feedback?: Feedback
 }
 
-export async function load({ platform, request }): Promise<Data> {
-	if (!platform) {
-		error(500, 'Platform not available')
-	}
+export async function load({ platform, cookies }): Promise<Data> {
+	if (!platform) error(500, 'Platform not available')
 
 	const eventsRaw = await getAllEvents(platform.env, {}, 'public')
 
@@ -49,12 +51,13 @@ export async function load({ platform, request }): Promise<Data> {
 		return +aTime.start - +bTime.start
 	})
 
-	const { feedback_v1 } = getCookies(request.headers)
+	const feedbackCookie = cookies.get('feedback_v1')
+	const feedback = feedbackCookie ? (JSON.parse(feedbackCookie) as Feedback) : undefined
 
 	return {
 		generalInfo: data.generalInfo,
 		posts: data.blogPost.slice(0, 2).map(blogPost => selectBlogPostPreview(blogPost.fields)),
 		events,
-		showFeedback: feedback_v1 == null,
+		feedback,
 	}
 }

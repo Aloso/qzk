@@ -82,8 +82,8 @@
 			</div>
 		{/if}
 
-		{#if data.showFeedback}
-			<FeedbackForm />
+		{#if !data.feedback || data.feedback.date > Date.now() - 60_000}
+			<FeedbackForm submitted={data.feedback !== undefined} />
 		{/if}
 	</section>
 

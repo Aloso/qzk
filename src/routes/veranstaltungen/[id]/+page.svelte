@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { browser } from '$app/environment'
 
+	import { browser } from '$app/environment'
 	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
 	import Insert from '$lib/components/Insert.svelte'
 	import { deleteEvent, setEventState } from '$lib/events/eventApi'
 	import { getEndOfTime } from '$lib/events/intersections'
 	import type { Event, Time } from '$lib/events/types'
 	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 	import { m } from '$lib/paraglide/messages'
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
 
 	interface Props {
 		data: Event
