@@ -70,7 +70,7 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 						const { fields } = target as Item<Localized<BlogPost>>
 						const publishLabel = isEn ? 'Published' : 'Veröffentlicht'
 						const authorsLabel = isEn ? 'By' : 'Von'
-						return `<a class="embed" href="${localUrl(locale, fields.slug['de-DE'])}">
+						return `<a class="embed" href="${localUrl(locale, 'blog', fields.published, fields.slug['de-DE'])}">
 							<p class="embedTitle">${local(fields.title, locale)}</p>
 							<p class="embedDescription">${publishLabel}: ${new Date(local(fields.published, locale)).toLocaleDateString(locale, { timeZone: 'Europe/Berlin', dateStyle: 'long' })}</p>
 							<p class="embedDescription">${authorsLabel} ${local(fields.authors, locale)
