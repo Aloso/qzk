@@ -22,7 +22,7 @@
 	// TODO: This is duplicated in FormattedContent.svelte
 </script>
 
-{#if omitFirst}
+{#if omitFirst || headings[0]?.level !== 1}
 	<h1 class="top-level-h1">{locale === 'en' ? (data.nameEn ?? data.name) : data.name}</h1>
 {/if}
 
