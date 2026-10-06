@@ -3,8 +3,8 @@ import {
 	documentToHtmlString,
 	type Next,
 } from '@contentful/rich-text-html-renderer'
+import type { AssetHyperlink, Document, EntryHyperlink } from '@contentful/rich-text-types'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
-import type { Document, AssetHyperlink, EntryHyperlink } from '@contentful/rich-text-types'
 import type { Entry } from 'contentful'
 import type {
 	Accordeon,
@@ -70,12 +70,13 @@ export function render(data: Document, ids: string[] = [], locale: 'de-DE' | 'en
 						const { fields } = target as Item<Localized<BlogPost>>
 						const publishLabel = isEn ? 'Published' : 'Veröffentlicht'
 						const authorsLabel = isEn ? 'By' : 'Von'
+						const authors = local(fields.authors, locale).map(author =>
+							local(author.fields.name as any, locale),
+						)
 						return `<a class="embed" href="${localUrl(locale, 'blog', fields.published, fields.slug['de-DE'])}">
 							<p class="embedTitle">${local(fields.title, locale)}</p>
 							<p class="embedDescription">${publishLabel}: ${new Date(local(fields.published, locale)).toLocaleDateString(locale, { timeZone: 'Europe/Berlin', dateStyle: 'long' })}</p>
-							<p class="embedDescription">${authorsLabel} ${local(fields.authors, locale)
-								.map(author => author.fields.name)
-								.join(', ')}</p>
+							<p class="embedDescription">${authorsLabel} ${authors.join(', ')}</p>
 						</a>`
 					}
 					case 'person': {
