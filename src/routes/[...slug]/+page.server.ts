@@ -3,6 +3,7 @@ import type { StaticPageTransformed } from '$lib/data/index'
 import { error, type LoadEvent } from '@sveltejs/kit'
 
 export const prerender = true
+export const csr = false
 
 // This tells SvelteKit to pre-render the following pages, which aren't linked to from anywhere
 export function entries() {

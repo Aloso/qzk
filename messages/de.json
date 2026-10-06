@@ -226,7 +226,7 @@
 	"pf_organisators_name": "Name(n)",
 	"pf_organisators_email": "E-Mail",
 	"pf_organisators_phone": "Telefon",
-	"pf_organisators_website": "Telefon",
+	"pf_organisators_website": "Website",
 	"pf_organisators_website_invalid": "Muss mit <b>https://</b> oder <b>http://</b> beginnen",
 	"pf_decoration": "Farben",
 	"pf_decorations_help": "Es wurden zwei Farben zufällig ausgewählt. Du kannst sie noch bearbeiten:",

@@ -32,11 +32,10 @@
 		gap: 1rem;
 		align-items: center;
 		min-height: 60px;
-		border-radius: 30px;
+		border-radius: 60px;
 		text-decoration: none;
 		transition: 0.2s;
 		color: inherit;
-		max-width: 90%;
 
 		&:hover,
 		&:focus {
@@ -48,6 +47,7 @@
 		width: 60px;
 		height: 60px;
 		border-radius: 50%;
+		flex-shrink: 0;
 	}
 
 	.right {

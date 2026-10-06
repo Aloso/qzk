@@ -3,12 +3,12 @@
 	import type { StaticPageTransformed } from '$lib/data'
 	import { error } from '@sveltejs/kit'
 
+	import { m } from '$lib/paraglide/messages'
+	import { getLocale } from '$lib/paraglide/runtime'
 	import ContactForm from './ContactForm.svelte'
 	import IgFeed from './IgFeed.svelte'
 	import NewsletterSignup from './NewsletterSignup.svelte'
 	import YouTubeVideo from './YouTubeVideo.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale } from '$lib/paraglide/runtime'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 	let locale = getLocale()
@@ -19,8 +19,6 @@
 	let hasToc = $derived(tocItems.length > 3)
 	let tocHasH1 = $derived(tocItems.some(it => it.level === 1))
 
-	let expanded = $state(false)
-
 	// TODO: This is duplicated in FormattedContent.svelte
 </script>
 
@@ -28,23 +26,24 @@
 	<h1 class="top-level-h1">{locale === 'en' ? (data.nameEn ?? data.name) : data.name}</h1>
 {/if}
 
-{#if hasToc}
-	<button class="toc-button" onclick={() => (expanded = !expanded)}>
-		<svg class="toc-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-			<path
-				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-width="4"
-				d="M3,3L11,3 M3,12L21,12 M3,21L18,21"
-			/>
-		</svg>
-		{expanded ? m.table_of_contents_hide() : m.table_of_contents_show()}
-	</button>
-{/if}
-
 <div class="layout" class:hasToc>
 	{#if hasToc}
-		<div class="toc" class:mobile-hidden={!expanded}>
+		<button
+			class="toc-button"
+			data-label-open={m.table_of_contents_hide()}
+			data-label-closed={m.table_of_contents_show()}
+		>
+			<svg class="toc-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-width="4"
+					d="M3,3L11,3 M3,12L21,12 M3,21L18,21"
+				/>
+			</svg>
+			{m.table_of_contents_show()}
+		</button>
+		<div class="toc mobile-hidden">
 			<h2>{m.table_of_contents()}</h2>
 			<ul lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
 				{#each tocItems as { level, text, id } (id)}
@@ -54,6 +53,31 @@
 				{/each}
 			</ul>
 		</div>
+		<script>
+			;(() => {
+				const btn = document.querySelector('.toc-button')
+				const toc = document.querySelector('.toc')
+
+				if (btn && toc) {
+					if (window.matchMedia('(max-width: 78rem)').matches) {
+						btn.setAttribute('aria-expanded', 'false')
+					}
+
+					btn.addEventListener('click', () => {
+						const isHidden = toc.classList.contains('mobile-hidden')
+						if (isHidden) {
+							toc.classList.remove('mobile-hidden')
+							btn.setAttribute('aria-expanded', 'true')
+							btn.lastChild.textContent = btn.dataset.labelOpen
+						} else {
+							toc.classList.add('mobile-hidden')
+							btn.setAttribute('aria-expanded', 'false')
+							btn.lastChild.textContent = btn.dataset.labelClosed
+						}
+					})
+				}
+			})()
+		</script>
 	{/if}
 
 	<section class="main-section" lang={locale === 'en' && data.contentEn ? 'en' : 'de-DE'}>
