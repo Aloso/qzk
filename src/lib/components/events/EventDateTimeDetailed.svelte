@@ -30,7 +30,7 @@
 			.toLocaleDateString(locale, {
 				timeZone: 'Europe/Berlin',
 				year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
-				month: 'numeric',
+				month: locale === 'de' ? 'numeric' : 'short',
 				day: 'numeric',
 				weekday: withWeekday ? 'long' : undefined,
 			})

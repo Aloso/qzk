@@ -39,7 +39,7 @@
 		return d
 			.toLocaleDateString(locale, {
 				timeZone: 'Europe/Berlin',
-				month: 'numeric',
+				month: locale === 'de' ? 'numeric' : 'short',
 				day: 'numeric',
 				weekday: 'short',
 			})
