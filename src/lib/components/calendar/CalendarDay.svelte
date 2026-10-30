@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { isBetween, isBetweenAndOverlaps } from '$lib/events/intersections'
-	import type { Event, Time } from '$lib/events/types'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import { isBetween, isBetweenAndOverlaps } from '#lib/events/intersections.js'
+	import type { Event, Time } from '#lib/events/types.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		day: number

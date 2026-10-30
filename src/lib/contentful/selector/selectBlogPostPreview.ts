@@ -1,4 +1,4 @@
-import type { BlogPost, BlogPostPreview } from '$lib/data'
+import type { BlogPost, BlogPostPreview } from '#lib/data/index.js'
 import { selectPersonPreview } from '.'
 import data from '../data'
 

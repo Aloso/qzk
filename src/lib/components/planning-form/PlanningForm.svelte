@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Event, Time, WithSubmitter } from '$lib/events/types'
-	import type { FormTime, FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import type { Event, Time, WithSubmitter } from '#lib/events/types.js'
+	import type { FormTime, FormValues } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
 	import { onMount } from 'svelte'
 	import PlanningDescription from './steps/PlanningDescription.svelte'
 	import PlanningTime from './steps/PlanningTime.svelte'
@@ -9,7 +9,7 @@
 	import Progress from '../forms/Progress.svelte'
 	import PlanningPlace from './steps/PlanningPlace.svelte'
 	import PlanningDecoration from './steps/PlanningDecoration.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		defaults: FormValues

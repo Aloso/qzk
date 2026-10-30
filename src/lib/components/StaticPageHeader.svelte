@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { StaticPageTransformed } from '$lib/data'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import type { StaticPageTransformed } from '#lib/data/index.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 
 	let { name, nameEn, description, descriptionEn }: StaticPageTransformed = $props()
 	let locale = getLocale()

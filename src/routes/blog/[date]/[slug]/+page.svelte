@@ -1,11 +1,11 @@
 <script lang="ts">
 	import PublishDate from '../../PublishDate.svelte'
 	import Authors from '../../Authors.svelte'
-	import Image from '$lib/components/Image.svelte'
-	import type { BlogPostViewTransformed } from '$lib/data'
+	import Image from '#lib/components/Image.svelte'
+	import type { BlogPostViewTransformed } from '#lib/data/index.js'
 	import BlogPostPreview from '../../BlogPostPreview.svelte'
-	import FormattedContent from '$lib/components/FormattedContent.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import FormattedContent from '#lib/components/FormattedContent.svelte'
+	import { m } from '#lib/paraglide/messages.js'
 
 	let { data }: { data: BlogPostViewTransformed } = $props()
 </script>

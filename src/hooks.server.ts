@@ -1,13 +1,14 @@
-import type { Handle } from '@sveltejs/kit'
-import { paraglideMiddleware } from '$lib/paraglide/server'
+import { paraglideMiddleware } from '#lib/paraglide/server.js'
+import type { Handle } from '@sveltejs/kit/hooks'
 
 const handleParaglide: Handle = ({ event, resolve }) =>
-	paraglideMiddleware(event.request, ({ request, locale }) => {
-		event.request = request
-
-		return resolve(event, {
-			transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale),
-		})
+	paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
+		return resolve(
+			{ ...event, request: localizedRequest },
+			{
+				transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale),
+			},
+		)
 	})
 
 export const handle: Handle = handleParaglide

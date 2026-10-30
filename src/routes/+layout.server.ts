@@ -1,4 +1,4 @@
-import data from '$lib/contentful/data'
+import data from '#lib/contentful/data.js'
 
 export async function load() {
 	return data.navigations

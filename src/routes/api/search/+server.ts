@@ -1,4 +1,4 @@
-import { error, json } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import { algoliasearch, type Algoliasearch } from 'algoliasearch'
 
 let client: Algoliasearch
@@ -28,5 +28,5 @@ export async function GET({ request, platform }): Promise<Response> {
 		],
 	})
 
-	return json(results)
+	return Response.json(results)
 }

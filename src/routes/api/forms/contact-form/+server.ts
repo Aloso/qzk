@@ -1,6 +1,6 @@
-import { createMailer } from '$backend/email'
-import { formDataText } from '$backend/events/http'
-import { escapeHtml } from '$lib/utils/sanitize'
+import { createMailer } from '#backend/email.js'
+import { formDataText } from '#backend/events/http.js'
+import { escapeHtml } from '#lib/utils/sanitize.js'
 import { error } from '@sveltejs/kit'
 
 export async function POST({ request, platform }): Promise<Response> {

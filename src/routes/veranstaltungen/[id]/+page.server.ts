@@ -1,6 +1,6 @@
-import { getEvent } from '$backend/events/db'
-import { wire2event } from '$lib/events/convert'
-import type { Event } from '$lib/events/types'
+import { getEvent } from '#backend/events/db.js'
+import { wire2event } from '#lib/events/convert.js'
+import type { Event } from '#lib/events/types.js'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, platform }): Promise<Event> {

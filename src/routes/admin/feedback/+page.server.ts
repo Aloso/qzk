@@ -1,5 +1,5 @@
-import { tryAuthentication } from '$backend/events/http'
-import { getAllFeedback, type DbFeedback } from '$backend/feedback.js'
+import { tryAuthentication } from '#backend/events/http.js'
+import { getAllFeedback, type DbFeedback } from '#backend/feedback.js'
 import { error } from '@sveltejs/kit'
 
 export interface Data {

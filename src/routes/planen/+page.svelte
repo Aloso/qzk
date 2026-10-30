@@ -1,22 +1,22 @@
 <script lang="ts">
-	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import StaticPage from '$lib/components/StaticPage.svelte'
-	import type { StaticPageTransformed } from '$lib/data'
-	import PlanningForm from '$lib/components/planning-form/PlanningForm.svelte'
-	import { submitDraft } from '$lib/events/eventApi'
-	import type { Event, Time, WithSubmitter } from '$lib/events/types'
-	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
-	import { createEventPlanningDefaults } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import StaticPageHeader from '#lib/components/StaticPageHeader.svelte'
+	import StaticPage from '#lib/components/StaticPage.svelte'
+	import type { StaticPageTransformed } from '#lib/data/index.js'
+	import PlanningForm from '#lib/components/planning-form/PlanningForm.svelte'
+	import { submitDraft } from '#lib/events/eventApi/index.js'
+	import type { Event, Time, WithSubmitter } from '#lib/events/types.js'
+	import { createSubmittedDrafts } from '#lib/hooks/createSubmittedDrafts.svelte.js'
+	import { createEventPlanningDefaults } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
 	import { goto } from '$app/navigation'
-	import CalendarView from '$lib/components/calendar/CalendarView.svelte'
-	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
-	import { narrowTimesToDraft } from '$lib/events/intersections'
-	import SubmittedList from '$lib/components/events/SubmittedList.svelte'
+	import CalendarView from '#lib/components/calendar/CalendarView.svelte'
+	import EventViewSmall from '#lib/components/events/EventViewSmall.svelte'
+	import { narrowTimesToDraft } from '#lib/events/intersections.js'
+	import SubmittedList from '#lib/components/events/SubmittedList.svelte'
 	import { onMount } from 'svelte'
-	import { fetchAllEvents } from '$lib/events/eventApi'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
-	import { browser } from '$app/environment'
-	import { m } from '$lib/paraglide/messages'
+	import { fetchAllEvents } from '#lib/events/eventApi/index.js'
+	import { getLocale, localizeHref } from '#lib/paraglide/runtime.js'
+	import { browser } from '$app/env'
+	import { m } from '#lib/paraglide/messages.js'
 
 	let { data }: { data: StaticPageTransformed } = $props()
 
@@ -28,7 +28,6 @@
 	type Status = { type: 'ready' } | { type: 'submitting' } | { type: 'error'; message: string }
 
 	let status = $state<Status>({ type: 'ready' })
-
 	const defaults = createEventPlanningDefaults({ preselectedDate })
 	const submittedDrafts = createSubmittedDrafts()
 
@@ -36,8 +35,8 @@
 		status = { type: 'submitting' }
 		try {
 			const { key } = await submitDraft(event)
-
 			const locale = getLocale()
+
 			const date = new Date().toLocaleString(locale, {
 				timeZone: 'Europe/Berlin',
 				month: locale === 'de' ? 'numeric' : 'short',
@@ -53,21 +52,24 @@
 	}
 
 	let clickCalendarDay = $state<(date: Date) => void>()
-
 	let events = $state<Event[]>()
 	let draftTimes = $state<Time[]>()
 	let showDate = $state(new Date())
+
 	let intersecting = $derived.by(() => {
 		if (!events || !draftTimes) return []
 
 		return events
 			.flatMap<Event>(event => {
 				const time = narrowTimesToDraft(event.times, draftTimes!)
+
 				if (time.length === 0) return []
+
 				return [{ ...event, time, allTimes: event.times }]
 			})
 			.sort((a, b) => +a.times[0].start - +b.times[0].start)
 	})
+
 	onMount(() => {
 		loadEvents()
 	})

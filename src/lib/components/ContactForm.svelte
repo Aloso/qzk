@@ -1,8 +1,8 @@
 <script lang="ts">
-	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
+	import SubmitButton from '#lib/components/forms/SubmitButton.svelte'
 
-	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import ValidatedInput from '#lib/components/forms/ValidatedInput.svelte'
+	import { m } from '#lib/paraglide/messages.js'
 
 	let subject = $state('')
 	let email = $state('')

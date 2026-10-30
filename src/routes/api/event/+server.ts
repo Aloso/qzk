@@ -1,8 +1,8 @@
-import { addDraft, deleteEvent, getEvent, putEvent } from '$backend/events/db'
-import { parseEvent } from '$backend/events/event'
-import { queryKey, queryState, tryAuthentication } from '$backend/events/http'
-import { sanitizeHtml } from '$lib/utils/sanitize'
-import { error, json } from '@sveltejs/kit'
+import { addDraft, deleteEvent, getEvent, putEvent } from '#backend/events/db.js'
+import { parseEvent } from '#backend/events/event.js'
+import { queryKey, queryState, tryAuthentication } from '#backend/events/http.js'
+import { sanitizeHtml } from '#lib/utils/sanitize.js'
+import { error } from '@sveltejs/kit'
 
 // fetch
 export async function GET({ request, platform }): Promise<Response> {
@@ -21,7 +21,7 @@ export async function GET({ request, platform }): Promise<Response> {
 		delete event.submitter
 		delete event.orgaNotes
 	}
-	return json(event)
+	return Response.json(event)
 }
 
 // create draft
@@ -33,7 +33,7 @@ export async function POST({ request, platform }): Promise<Response> {
 	if (!event.submitter) error(400, 'Missing submitter data')
 
 	await addDraft(platform.env, event)
-	return json(event)
+	return Response.json(event)
 }
 
 // edit
@@ -52,7 +52,7 @@ export async function PUT({ request, platform }): Promise<Response> {
 	event.descDe = sanitizeHtml(event.descDe)
 
 	await putEvent(platform.env, event, event.key)
-	return json(event)
+	return Response.json(event)
 }
 
 // delete

@@ -1,4 +1,4 @@
-import type { Image } from '$lib/data'
+import type { Image } from '#lib/data/index.js'
 
 function getIdealWidth(img: Image, width?: number, height?: number): number {
 	const aspectRatio = img.width / img.height

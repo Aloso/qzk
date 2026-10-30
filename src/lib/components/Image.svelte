@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Image } from '$lib/data'
+	import type { Image } from '#lib/data/index.js'
 	import { error } from '@sveltejs/kit'
 	import type { HTMLImgAttributes } from 'svelte/elements'
 	import { getHtmlSize, getSize } from './imageCalc'

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Insert from '$lib/components/Insert.svelte'
+	import Insert from '#lib/components/Insert.svelte'
 	import type {
 		FormValuesOrganisator,
 		FormValuesPersonalInfo,
-	} from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	} from '#lib/hooks/createEventPlanningDefaults.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 	import { onMount } from 'svelte'
 
 	interface Props {

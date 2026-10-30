@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { DateRange, GeneralInfoTransformed } from '$lib/data'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import type { DateRange, GeneralInfoTransformed } from '#lib/data/index.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 
 	let { openingHours, specialOpeningHours }: GeneralInfoTransformed = $props()
 	let locale = getLocale()

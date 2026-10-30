@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Time } from '$lib/events/types'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import type { Time } from '#lib/events/types.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		time: Time

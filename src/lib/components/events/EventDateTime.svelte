@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Time } from '$lib/events/types'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import type { Time } from '#lib/events/types.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 	import { daysUntil } from '../timeCalc'
 
 	interface Props {

@@ -6,8 +6,8 @@
 	import IgFeed from './IgFeed.svelte'
 	import NewsletterSignup from './NewsletterSignup.svelte'
 	import YouTubeVideo from './YouTubeVideo.svelte'
-	import type { ExtraComponent } from '$lib/data'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import type { ExtraComponent } from '#lib/data/index.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		parts: (string | ExtraComponent)[]
@@ -47,7 +47,7 @@
 			{#if typeof part.param === 'string'}
 				<YouTubeVideo videoId={part.param} />
 			{:else}
-				{error(500, { message: 'YouTube video has no video ID' })}
+				{error(500, 'YouTube video has no video ID')}
 			{/if}
 		{/if}
 	{/each}

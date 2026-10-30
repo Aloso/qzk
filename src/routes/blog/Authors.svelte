@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AuthorComponent from './Author.svelte'
-	import type { PersonPreview } from '$lib/data'
+	import type { PersonPreview } from '#lib/data/index.js'
 
 	interface Props {
 		authors: PersonPreview[]

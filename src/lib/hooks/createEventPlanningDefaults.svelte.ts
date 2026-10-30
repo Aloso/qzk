@@ -1,4 +1,4 @@
-import type { Event, TimeVariant, WithSubmitter } from '$lib/events/types'
+import type { Event, TimeVariant, WithSubmitter } from '#lib/events/types.js'
 
 export interface FormValuesDescription {
 	titleDe: string

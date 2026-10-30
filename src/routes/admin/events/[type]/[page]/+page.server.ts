@@ -1,9 +1,9 @@
-import { getAllEvents, getEventNumber } from '$backend/events/db'
-import type { EventDto, EventState, FullEventDto } from '$backend/events/event'
-import { tryAuthentication } from '$backend/events/http'
-import { wire2event, wire2time } from '$lib/events/convert'
-import { getEndOfTime, isSingleTimeBetween } from '$lib/events/intersections'
-import type { Event, Time, WithSubmitter } from '$lib/events/types'
+import { getAllEvents, getEventNumber } from '#backend/events/db.js'
+import type { EventDto, EventState, FullEventDto } from '#backend/events/event.js'
+import { tryAuthentication } from '#backend/events/http.js'
+import { wire2event, wire2time } from '#lib/events/convert.js'
+import { getEndOfTime, isSingleTimeBetween } from '#lib/events/intersections.js'
+import type { Event, Time, WithSubmitter } from '#lib/events/types.js'
 import { error } from '@sveltejs/kit'
 
 export interface Data {

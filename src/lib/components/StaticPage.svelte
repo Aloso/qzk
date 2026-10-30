@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import type { StaticPageTransformed } from '$lib/data'
+	import type { StaticPageTransformed } from '#lib/data/index.js'
 	import { error } from '@sveltejs/kit'
 
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 	import ContactForm from './ContactForm.svelte'
 	import IgFeed from './IgFeed.svelte'
 	import NewsletterSignup from './NewsletterSignup.svelte'
@@ -99,7 +99,7 @@
 				{#if typeof part.param === 'string'}
 					<YouTubeVideo videoId={part.param} />
 				{:else}
-					{error(500, { message: 'YouTube video has no video ID' })}
+					{error(500, 'YouTube video has no video ID')}
 				{/if}
 			{/if}
 		{/each}

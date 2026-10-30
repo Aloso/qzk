@@ -1,4 +1,4 @@
-import type { TypedNavigation } from '$lib/data'
+import type { TypedNavigation } from '#lib/data/index.js'
 
 const startMatches = new Set<string | undefined>(['/blog', '/person', '/newsletter'])
 

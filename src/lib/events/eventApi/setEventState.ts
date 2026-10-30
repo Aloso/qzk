@@ -1,6 +1,6 @@
 import { goto } from '$app/navigation'
-import type { EventState } from '$backend/events/event'
-import { localizeHref } from '$lib/paraglide/runtime'
+import type { EventState } from '#backend/events/event.ts'
+import { localizeHref } from '#lib/paraglide/runtime.js'
 import { host } from '.'
 
 export async function setEventState(key: string, state: EventState): Promise<boolean> {

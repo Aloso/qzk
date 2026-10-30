@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Event, Time, WithSubmitter } from '$lib/events/types'
-	import type { FormValues } from '$lib/hooks/createEventPlanningDefaults.svelte'
+	import type { Event, Time, WithSubmitter } from '#lib/events/types.js'
+	import type { FormValues } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
 	import { onMount } from 'svelte'
 	import PlanningDescription from './steps/PlanningDescription.svelte'
 	import PlanningTime from './steps/PlanningTime.svelte'

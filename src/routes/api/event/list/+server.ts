@@ -1,7 +1,6 @@
-import { json } from '@sveltejs/kit'
-import { getAllEvents } from '$backend/events/db'
-import { queryState, tryAuthentication } from '$backend/events/http'
-import type { EventDto } from '$backend/events/event'
+import { getAllEvents } from '#backend/events/db.js'
+import { queryState, tryAuthentication } from '#backend/events/http.js'
+import type { EventDto } from '#backend/events/event.js'
 import { error } from '@sveltejs/kit'
 
 // fetch all events
@@ -19,5 +18,5 @@ export async function GET({ request, platform }): Promise<Response> {
 			delete event.orgaNotes
 		})
 	}
-	return json(events)
+	return Response.json(events)
 }

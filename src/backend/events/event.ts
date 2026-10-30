@@ -1,5 +1,4 @@
 /* eslint-disable no-empty-pattern */
-import { json } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export interface EventDto {
@@ -29,16 +28,6 @@ export type EventState = 'public' | 'draft' | 'archived'
 export interface TimeDto {
 	start: string
 	end?: string
-	// repeats?: Repeats
-}
-
-// every day = { cycle: DAY }
-// every other week = { cycle: WEEK, times: 2 }
-// every 3 months = { cycle: MONTH, times: 3 }
-// every Monday and Thursday = not possible
-interface Repeats {
-	cycle: 'DAY' | 'WEEK' | 'MONTH'
-	times?: number
 }
 
 interface Place {
@@ -126,7 +115,7 @@ export function parseEvent(data: unknown): EventDto {
 		return schema.parse(data)
 	} catch (error) {
 		const { issues } = error as z.ZodError
-		throw json({ errors: issues }, { status: 400 })
+		throw Response.json({ errors: issues }, { status: 400 })
 	}
 }
 
@@ -135,7 +124,7 @@ export function parseState(state: string): EventState {
 		return stateSchema.parse(state)
 	} catch (error) {
 		const { issues } = error as z.ZodError
-		throw json({ errors: issues }, { status: 400 })
+		throw Response.json({ errors: issues }, { status: 400 })
 	}
 }
 

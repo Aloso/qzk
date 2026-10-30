@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { SubmittedDraft } from '$lib/hooks/createSubmittedDrafts.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import type { SubmittedDraft } from '#lib/hooks/createSubmittedDrafts.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		items: SubmittedDraft[]

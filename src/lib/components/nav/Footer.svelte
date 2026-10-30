@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Navigations } from '$lib/data'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import type { Navigations } from '#lib/data/index.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale, localizeHref } from '#lib/paraglide/runtime.js'
 	import { onMount } from 'svelte'
 
 	interface Props {

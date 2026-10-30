@@ -1,6 +1,6 @@
-import data from '$lib/contentful/data'
-import { selectBlogPostPreview } from '$lib/contentful/selector'
-import type { PersonTransformed, BlogPostPreviewTransformed } from '$lib/data'
+import data from '#lib/contentful/data.js'
+import { selectBlogPostPreview } from '#lib/contentful/selector/index.js'
+import type { PersonTransformed, BlogPostPreviewTransformed } from '#lib/data/index.js'
 import { error, type LoadEvent } from '@sveltejs/kit'
 
 export const prerender = true

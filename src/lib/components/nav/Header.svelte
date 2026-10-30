@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Navigations } from '$lib/data'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import type { Navigations } from '#lib/data/index.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 	import DesktopNav from './DesktopNav.svelte'
 	import MobileNav from './MobileNav.svelte'
 

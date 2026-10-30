@@ -1,4 +1,4 @@
-import type { GeneralInfoTransformed, Navigations } from '$lib/data'
+import type { GeneralInfoTransformed, Navigations } from '#lib/data/index.js'
 import data from './data.json' with { type: 'json' }
 
 interface ExtraComponent {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { FeedbackV1 } from '../../api/feedback/v1/+server'
+	import type { FeedbackV1 } from '#lib/components/feedback/feedback.remote.ts'
 	import type { Data } from './+page.server'
 
 	interface Props {

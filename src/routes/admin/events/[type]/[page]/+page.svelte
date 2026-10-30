@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation'
-	import MonthNav from '$lib/components/calendar/MonthNav.svelte'
-	import EventViewSmall from '$lib/components/events/EventViewSmall.svelte'
-	import Pagination from '$lib/components/Pagination.svelte'
-	import TabBar from '$lib/components/TabBar.svelte'
+	import { goto, refreshAll } from '$app/navigation'
+	import MonthNav from '#lib/components/calendar/MonthNav.svelte'
+	import EventViewSmall from '#lib/components/events/EventViewSmall.svelte'
+	import Pagination from '#lib/components/Pagination.svelte'
+	import TabBar from '#lib/components/TabBar.svelte'
 	import { onMount } from 'svelte'
 	import type { Data } from './+page.server'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		data: Data
@@ -22,7 +22,7 @@
 
 	onMount(() => {
 		const listener = () => {
-			invalidateAll()
+			refreshAll()
 		}
 
 		window.addEventListener('focus', listener)

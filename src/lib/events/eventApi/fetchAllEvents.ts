@@ -1,4 +1,4 @@
-import type { EventDto, EventState } from '$backend/events/event'
+import type { EventDto, EventState } from '#backend/events/event.ts'
 import { host } from '.'
 import { wire2event } from '../convert'
 import type { Event } from '../types'

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Image from '$lib/components/Image.svelte'
-	import type { PersonPreview } from '$lib/data'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import Image from '#lib/components/Image.svelte'
+	import type { PersonPreview } from '#lib/data/index.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		author: PersonPreview

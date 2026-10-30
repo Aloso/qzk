@@ -1,6 +1,6 @@
 import { goto } from '$app/navigation'
-import type { EventDto } from '$backend/events/event'
-import { localizeHref } from '$lib/paraglide/runtime'
+import type { EventDto } from '#backend/events/event.ts'
+import { localizeHref } from '#lib/paraglide/runtime.js'
 import { host } from '.'
 import { wire2event } from '../convert'
 import type { Event, WithSubmitter } from '../types'

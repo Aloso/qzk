@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { FormValuesPlace } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import type { FormValuesPlace } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		values: FormValuesPlace

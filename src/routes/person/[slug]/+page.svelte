@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Image from '$lib/components/Image.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import Image from '#lib/components/Image.svelte'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 	import BlogPostPreview from '../../blog/BlogPostPreview.svelte'
 	import type { Data } from './+page.server'
 

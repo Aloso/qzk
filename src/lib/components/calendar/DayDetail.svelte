@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
-	import { getInBetween } from '$lib/events/intersections'
-	import type { Event, Time } from '$lib/events/types'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { browser } from '$app/env'
+	import { getInBetween } from '#lib/events/intersections.js'
+	import type { Event, Time } from '#lib/events/types.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale, localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		day: Date
@@ -13,6 +13,7 @@
 
 	let { day, allEvents, onClose }: Props = $props()
 	let locale = getLocale()
+
 	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
 	let { dayStart, dayEnd } = $derived.by(() => {
@@ -21,6 +22,7 @@
 		const date = day.getDate()
 		const dayStart = +new Date(year, month, date)
 		const dayEnd = +new Date(year, month, date + 1)
+
 		return { dayStart, dayEnd }
 	})
 
@@ -28,6 +30,7 @@
 		allEvents
 			.map(event => {
 				const time = getInBetween(event.allTimes ?? event.times, dayStart, dayEnd)
+
 				return { ...event, time }
 			})
 			.filter(e => e.time.length > 0),
@@ -60,7 +63,7 @@
 			timeZone: 'Europe/Berlin',
 			hour: locale === 'en' ? 'numeric' : '2-digit',
 			minute: '2-digit',
-			hourCycle,
+			hourCycle: hourCycle as 'h11' | 'h12' | 'h23' | 'h24' | undefined,
 		})
 		return locale === 'en' && hourCycle !== 'h23' ? time.replace(':00', '') : time
 	}
@@ -79,9 +82,10 @@
 	<ul class="event-list">
 		{#each dayEvents as event (event.key)}
 			<li style="--badge-bg: oklch(0.65 0.15 {event.decoration?.colors[1] ?? '#db71dd'})">
-				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title">
-					{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}
-				</a>
+				<a href={localizeHref(`/veranstaltungen/${event.key}`)} class="title"
+					>{locale === 'de' ? event.titleDe : (event.titleEn ?? event.titleDe)}</a
+				>
+
 				<br />
 				{[formatPlace(event.place), formatTimes(event.time[0])]
 					.filter(s => s !== undefined)

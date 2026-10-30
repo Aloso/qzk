@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { m } from '$lib/paraglide/messages'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '#lib/paraglide/messages.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 	import type { HighlightResultOption, SearchResponse, SnippetResultOption } from 'algoliasearch'
 
 	interface Props {

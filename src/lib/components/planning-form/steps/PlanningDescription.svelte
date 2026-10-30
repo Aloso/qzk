@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Insert from '$lib/components/Insert.svelte'
-	import type { FormValuesDescription } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { translate } from '$lib/translation'
+	import Insert from '#lib/components/Insert.svelte'
+	import type { FormValuesDescription } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { translate } from '#lib/translation/index.js'
 	import TipTapEditor from '../../TipTapEditor.svelte'
 
 	interface Props {

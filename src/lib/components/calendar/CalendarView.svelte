@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
-	import type { Event, Time } from '$lib/events/types'
-	import { getLocale } from '$lib/paraglide/runtime'
+	import { browser } from '$app/env'
+	import type { Event, Time } from '#lib/events/types.js'
+	import { getLocale } from '#lib/paraglide/runtime.js'
 	import { getCalendarDays } from '../timeCalc'
 	import CalendarDay from './CalendarDay.svelte'
 	import MonthNav from './MonthNav.svelte'
@@ -18,14 +18,15 @@
 	let { events, showDate, draftTimes, colorCoded, highlightedDate, onClickDay }: Props = $props()
 
 	let locale = getLocale()
+
 	let firstDayOfWeek =
-		(browser ? new Intl.Locale(navigator.language ?? locale).weekInfo?.firstDay : undefined) ??
-		(locale === 'de' ? 1 : 7)
+		(browser
+			? (new Intl.Locale(navigator.language ?? locale).getWeekInfo?.()?.firstDay as 1 | 7)
+			: undefined) ?? (locale === 'de' ? 1 : 7)
 
 	let highlightedYear = $derived(highlightedDate?.getFullYear())
 	let highlightedMonth = $derived(highlightedDate?.getMonth())
 	let highlightedDay = $derived(highlightedDate?.getDate())
-
 	let draftEventYear = $derived(showDate.getFullYear())
 	let draftEventMonth = $derived(showDate.getMonth())
 

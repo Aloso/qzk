@@ -1,7 +1,7 @@
 <script lang="ts">
-	import StaticPage from '$lib/components/StaticPage.svelte'
-	import StaticPageHeader from '$lib/components/StaticPageHeader.svelte'
-	import type { StaticPageTransformed } from '$lib/data'
+	import StaticPage from '#lib/components/StaticPage.svelte'
+	import StaticPageHeader from '#lib/components/StaticPageHeader.svelte'
+	import type { StaticPageTransformed } from '#lib/data/index.js'
 
 	interface Props {
 		data: StaticPageTransformed

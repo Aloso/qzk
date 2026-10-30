@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Image from '$lib/components/Image.svelte'
+	import Image from '#lib/components/Image.svelte'
 	import PublishDate from './PublishDate.svelte'
-	import type { BlogPostPreviewTransformed, PersonPreview } from '$lib/data'
-	import { localizeHref } from '$lib/paraglide/runtime'
-	import { m } from '$lib/paraglide/messages'
+	import type { BlogPostPreviewTransformed, PersonPreview } from '#lib/data/index.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		post: BlogPostPreviewTransformed

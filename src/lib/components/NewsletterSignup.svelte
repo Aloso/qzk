@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Checkbox from '$lib/components/forms/Checkbox.svelte'
-	import SubmitButton from '$lib/components/forms/SubmitButton.svelte'
-	import ValidatedInput from '$lib/components/forms/ValidatedInput.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import Checkbox from '#lib/components/forms/Checkbox.svelte'
+	import SubmitButton from '#lib/components/forms/SubmitButton.svelte'
+	import ValidatedInput from '#lib/components/forms/ValidatedInput.svelte'
+	import { m } from '#lib/paraglide/messages.js'
 
 	let email = $state('')
 	let checkbox = $state(false)

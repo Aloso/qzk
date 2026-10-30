@@ -2,17 +2,17 @@
 	import type { Snippet } from 'svelte'
 
 	import { page } from '$app/state'
-	import Footer from '$lib/components/nav/Footer.svelte'
-	import Header from '$lib/components/nav/Header.svelte'
-	import SearchWrapper from '$lib/components/search/SearchWrapper.svelte'
-	import type { Navigations } from '$lib/data'
+	import Footer from '#lib/components/nav/Footer.svelte'
+	import Header from '#lib/components/nav/Header.svelte'
+	import SearchWrapper from '#lib/components/search/SearchWrapper.svelte'
+	import type { Navigations } from '#lib/data/index.js'
 	import {
 		extractLocaleFromNavigator,
 		getLocale,
 		locales,
 		localizeHref,
 		setLocale,
-	} from '$lib/paraglide/runtime'
+	} from '#lib/paraglide/runtime.js'
 	import './styles.scss'
 
 	interface Props {

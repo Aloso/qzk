@@ -1,5 +1,5 @@
-import { setEventState } from '$backend/events/db'
-import { queryKey, queryState, tryAuthentication } from '$backend/events/http'
+import { setEventState } from '#backend/events/db.js'
+import { queryKey, queryState, tryAuthentication } from '#backend/events/http.js'
 import { error } from '@sveltejs/kit'
 
 // publish/unpublish/archive/unarchive

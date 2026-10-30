@@ -1,6 +1,6 @@
-import data from '$lib/contentful/data'
-import { selectBlogPostPreview } from '$lib/contentful/selector'
-import type { BlogPostPreviewTransformed } from '$lib/data'
+import data from '#lib/contentful/data.js'
+import { selectBlogPostPreview } from '#lib/contentful/selector/index.js'
+import type { BlogPostPreviewTransformed } from '#lib/data/index.js'
 
 export const prerender = true
 

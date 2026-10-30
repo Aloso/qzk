@@ -1,10 +1,10 @@
-import { getAllEvents } from '$backend/events/db'
-import data from '$lib/contentful/data'
-import { selectBlogPostPreview } from '$lib/contentful/selector'
-import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '$lib/data'
-import { wire2event } from '$lib/events/convert'
-import { getEndOfTime } from '$lib/events/intersections'
-import type { Event } from '$lib/events/types'
+import { getAllEvents } from '#backend/events/db.js'
+import data from '#lib/contentful/data.js'
+import { selectBlogPostPreview } from '#lib/contentful/selector/index.js'
+import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '#lib/data/index.js'
+import { wire2event } from '#lib/events/convert.js'
+import { getEndOfTime } from '#lib/events/intersections.js'
+import type { Event } from '#lib/events/types.js'
 import { error } from '@sveltejs/kit'
 
 interface Feedback {

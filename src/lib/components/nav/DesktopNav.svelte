@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import type { Navigations } from '$lib/data'
-	import { m } from '$lib/paraglide/messages'
-	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime'
+	import type { Navigations } from '#lib/data/index.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '#lib/paraglide/runtime.js'
 	import { isNavItem } from './navUtil'
 
 	interface Props {

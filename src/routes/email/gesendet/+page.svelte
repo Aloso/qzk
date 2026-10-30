@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { m } from '#lib/paraglide/messages.js'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 
 	let message = $state<string>()
 	// TODO

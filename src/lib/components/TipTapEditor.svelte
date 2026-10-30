@@ -9,8 +9,8 @@
 	import type { EditingLink } from './TipTapLinkPopup.svelte'
 	import TipTapLinkPopup from './TipTapLinkPopup.svelte'
 	import { parseUrl } from './parseUrl'
-	import { browser } from '$app/environment'
-	import { m } from '$lib/paraglide/messages'
+	import { browser } from '$app/env'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		htmlValue: string
@@ -65,6 +65,7 @@
 								}
 
 								const protocol = parsedUrl.protocol.replace(':', '')
+
 								return ctx.protocols.some(
 									p => p === protocol || (typeof p === 'object' && p.scheme === protocol),
 								)
@@ -78,6 +79,7 @@
 
 								// only auto-link if the domain is not in the disallowed list
 								const disallowedDomains = ['example-no-autolink.com', 'another-no-autolink.com']
+
 								const domain = parsedUrl.hostname
 
 								return !disallowedDomains.includes(domain)
@@ -93,6 +95,7 @@
 					htmlValue = editor!.getHTML()
 				},
 			})
+
 			s = getState(editor)
 			element.children[0].id = id
 		}
@@ -128,26 +131,30 @@
 	const toggleBold = () => editor!.chain().focus().toggleBold().run()
 	const toggleItalic = () => editor!.chain().focus().toggleItalic().run()
 	const toggleStrike = () => editor!.chain().focus().toggleStrike().run()
-
 	const toggleBlockquote = () => editor!.chain().focus().toggleBlockquote().run()
 	const toggleBulletList = () => editor!.chain().focus().toggleBulletList().run()
 	const toggleOrderedList = () => editor!.chain().focus().toggleOrderedList().run()
-
 	const setParagraph = () => editor!.chain().focus().setParagraph().run()
 	const setHorizontalRule = () => editor!.chain().focus().setHorizontalRule().run()
 	const setHardBreak = () => editor!.chain().focus().setHardBreak().run()
-
 	const undo = () => editor!.chain().focus().undo().run()
 	const redo = () => editor!.chain().focus().redo().run()
 
 	function clickLink() {
 		const previousUrl = editor!.getAttributes('link')?.href
+
 		if (previousUrl) {
 			editor!.chain().focus().extendMarkRange('link').run()
 		}
+
 		const { from, to } = editor!.state.selection
 		const text = editor!.state.doc.textBetween(from, to)
-		editingLink = { text, url: previousUrl ?? '', isCreating: previousUrl === undefined }
+
+		editingLink = {
+			text,
+			url: previousUrl ?? '',
+			isCreating: previousUrl === undefined,
+		}
 	}
 </script>
 
@@ -215,10 +222,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"
-					/></svg
 				>
+					<path
+						d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"
+					></path>
+				</svg>
 			</button>
 			<button
 				type="button"
@@ -231,7 +239,7 @@
 					height="24px"
 					viewBox="0 -960 960 960"
 					width="24px"
-					fill="currentColor"><path d="M160-440v-80h640v80H160Z" /></svg
+					fill="currentColor"><path d="M160-440v-80h640v80H160Z"></path></svg
 				>
 			</button>
 			<button
@@ -246,10 +254,10 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M360-240 120-480l240-240 56 56-144 144h488v-160h80v240H272l144 144-56 56Z"
-					/></svg
 				>
+					<path d="M360-240 120-480l240-240 56 56-144 144h488v-160h80v240H272l144 144-56 56Z"
+					></path>
+				</svg>
 			</button>
 		</div>
 		<div class="help h2">
@@ -272,10 +280,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="m228-240 92-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 42.5T458-480L320-240h-92Zm360 0 92-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 42.5T818-480L680-240h-92ZM320-500q25 0 42.5-17.5T380-560q0-25-17.5-42.5T320-620q-25 0-42.5 17.5T260-560q0 25 17.5 42.5T320-500Zm360 0q25 0 42.5-17.5T740-560q0-25-17.5-42.5T680-620q-25 0-42.5 17.5T620-560q0 25 17.5 42.5T680-500Zm0-60Zm-360 0Z"
-					/></svg
 				>
+					<path
+						d="m228-240 92-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 42.5T458-480L320-240h-92Zm360 0 92-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 42.5T818-480L680-240h-92ZM320-500q25 0 42.5-17.5T380-560q0-25-17.5-42.5T320-620q-25 0-42.5 17.5T260-560q0 25 17.5 42.5T320-500Zm360 0q25 0 42.5-17.5T740-560q0-25-17.5-42.5T680-620q-25 0-42.5 17.5T620-560q0 25 17.5 42.5T680-500Zm0-60Zm-360 0Z"
+					></path>
+				</svg>
 			</button>
 			<button
 				type="button"
@@ -290,10 +299,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M360-200v-80h480v80H360Zm0-240v-80h480v80H360Zm0-240v-80h480v80H360ZM200-160q-33 0-56.5-23.5T120-240q0-33 23.5-56.5T200-320q33 0 56.5 23.5T280-240q0 33-23.5 56.5T200-160Zm0-240q-33 0-56.5-23.5T120-480q0-33 23.5-56.5T200-560q33 0 56.5 23.5T280-480q0 33-23.5 56.5T200-400Zm0-240q-33 0-56.5-23.5T120-720q0-33 23.5-56.5T200-800q33 0 56.5 23.5T280-720q0 33-23.5 56.5T200-640Z"
-					/></svg
 				>
+					<path
+						d="M360-200v-80h480v80H360Zm0-240v-80h480v80H360Zm0-240v-80h480v80H360ZM200-160q-33 0-56.5-23.5T120-240q0-33 23.5-56.5T200-320q33 0 56.5 23.5T280-240q0 33-23.5 56.5T200-160Zm0-240q-33 0-56.5-23.5T120-480q0-33 23.5-56.5T200-560q33 0 56.5 23.5T280-480q0 33-23.5 56.5T200-400Zm0-240q-33 0-56.5-23.5T120-720q0-33 23.5-56.5T200-800q33 0 56.5 23.5T280-720q0 33-23.5 56.5T200-640Z"
+					></path>
+				</svg>
 			</button>
 			<button
 				type="button"
@@ -308,10 +318,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M120-80v-60h100v-30h-60v-60h60v-30H120v-60h120q17 0 28.5 11.5T280-280v40q0 17-11.5 28.5T240-200q17 0 28.5 11.5T280-160v40q0 17-11.5 28.5T240-80H120Zm0-280v-110q0-17 11.5-28.5T160-510h60v-30H120v-60h120q17 0 28.5 11.5T280-560v70q0 17-11.5 28.5T240-450h-60v30h100v60H120Zm60-280v-180h-60v-60h120v240h-60Zm180 440v-80h480v80H360Zm0-240v-80h480v80H360Zm0-240v-80h480v80H360Z"
-					/></svg
 				>
+					<path
+						d="M120-80v-60h100v-30h-60v-60h60v-30H120v-60h120q17 0 28.5 11.5T280-280v40q0 17-11.5 28.5T240-200q17 0 28.5 11.5T280-160v40q0 17-11.5 28.5T240-80H120Zm0-280v-110q0-17 11.5-28.5T160-510h60v-30H120v-60h120q17 0 28.5 11.5T280-560v70q0 17-11.5 28.5T240-450h-60v30h100v60H120Zm60-280v-180h-60v-60h120v240h-60Zm180 440v-80h480v80H360Zm0-240v-80h480v80H360Zm0-240v-80h480v80H360Z"
+					></path>
+				</svg>
 			</button>
 		</div>
 		<div class="help h3">
@@ -328,9 +339,8 @@
 					<option
 						value="H{level}"
 						onclick={() => editor!.chain().focus().setHeading({ level }).run()}
+						>{m.editor_heading({ level })}</option
 					>
-						{m.editor_heading({ level })}
-					</option>
 				{/each}
 			</select>
 		</div>
@@ -354,10 +364,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"
-					/></svg
 				>
+					<path
+						d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"
+					></path>
+				</svg>
 			</button>
 			<button
 				type="button"
@@ -372,10 +383,11 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z"
-					/></svg
 				>
+					<path
+						d="M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z"
+					></path>
+				</svg>
 			</button>
 		</div>
 		<div class="help h5">Rückgängig und wiederholen</div>
@@ -395,19 +407,20 @@
 					viewBox="0 -960 960 960"
 					width="24px"
 					fill="currentColor"
-					><path
-						d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"
-					/></svg
 				>
+					<path
+						d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"
+					></path>
+				</svg>
 			</button>
 		</div>
 		<div class="help expander-help">Tippe hier, um weitere Aktionen auszuklappen</div>
 
 		<div class="expander-div"></div>
 
-		<button type="button" class="close-help is-active" onclick={() => (showHelp = false)}>
-			{m.editor_close_help()}
-		</button>
+		<button type="button" class="close-help is-active" onclick={() => (showHelp = false)}
+			>{m.editor_close_help()}</button
+		>
 	</div>
 {/if}
 

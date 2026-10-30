@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Event, Time } from '$lib/events/types'
+	import type { Event, Time } from '#lib/events/types.js'
 	import EventDateTime from './EventDateTime.svelte'
 	import DOMPurify from 'dompurify'
 	import { daysUntil } from '../timeCalc'
 	import EventDateTimeDetailed from './EventDateTimeDetailed.svelte'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
-	import { m } from '$lib/paraglide/messages'
+	import { getLocale, localizeHref } from '#lib/paraglide/runtime.js'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		event: Event

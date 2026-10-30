@@ -1,4 +1,4 @@
-import type { EventState, FullEventDto } from '$backend/events/event'
+import type { EventState, FullEventDto } from '#backend/events/event.ts'
 
 export interface DraftData {
 	length: number

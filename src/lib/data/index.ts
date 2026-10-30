@@ -1,4 +1,4 @@
-import type { Heading, RichText } from '$lib/contentful/data'
+import type { Heading, RichText } from '#lib/contentful/data.js'
 
 export interface Image {
 	id: string

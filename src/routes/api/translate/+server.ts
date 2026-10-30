@@ -1,5 +1,4 @@
-import { json } from '@sveltejs/kit'
-import { escapeHtml, sanitizeHtmlPlain } from '$lib/utils/sanitize'
+import { escapeHtml, sanitizeHtmlPlain } from '#lib/utils/sanitize.js'
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 
@@ -39,7 +38,7 @@ function parseTranslate(data: unknown): TranslateRequest {
 		return translationSchema.parse(data)
 	} catch (error) {
 		const { issues } = error as z.ZodError
-		throw json({ errors: issues }, { status: 400 })
+		throw Response.json({ errors: issues }, { status: 400 })
 	}
 }
 
@@ -76,7 +75,7 @@ export async function POST({ request, platform }): Promise<Response> {
 
 	if (response.ok) {
 		const { translations } = (await response.json()) as { translations: { text: string }[] }
-		return json({
+		return Response.json({
 			parts: translations.map((t, i) => ({
 				text: parts[i].html ? t.text : sanitizeHtmlPlain(t.text),
 			})),

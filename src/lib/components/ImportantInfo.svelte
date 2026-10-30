@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GeneralInfoTransformed } from '$lib/data'
+	import type { GeneralInfoTransformed } from '#lib/data/index.js'
 
 	let { importantInfo }: GeneralInfoTransformed = $props()
 </script>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Insert from '$lib/components/Insert.svelte'
-	import type { FormValuesOrganisator } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import Insert from '#lib/components/Insert.svelte'
+	import type { FormValuesOrganisator } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		values: FormValuesOrganisator

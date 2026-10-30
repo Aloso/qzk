@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-
-	import { browser } from '$app/environment'
-	import EventCountDown from '$lib/components/events/EventCountDown.svelte'
-	import Insert from '$lib/components/Insert.svelte'
-	import { deleteEvent, setEventState } from '$lib/events/eventApi'
-	import { getEndOfTime } from '$lib/events/intersections'
-	import type { Event, Time } from '$lib/events/types'
-	import { createSubmittedDrafts } from '$lib/hooks/createSubmittedDrafts.svelte'
-	import { m } from '$lib/paraglide/messages'
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime'
+	import { browser } from '$app/env'
+	import EventCountDown from '#lib/components/events/EventCountDown.svelte'
+	import Insert from '#lib/components/Insert.svelte'
+	import { deleteEvent, setEventState } from '#lib/events/eventApi/index.js'
+	import { getEndOfTime } from '#lib/events/intersections.js'
+	import type { Event, Time } from '#lib/events/types.js'
+	import { createSubmittedDrafts } from '#lib/hooks/createSubmittedDrafts.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
+	import { getLocale, localizeHref } from '#lib/paraglide/runtime.js'
 
 	interface Props {
 		data: Event
@@ -25,10 +24,12 @@
 	let { data }: Props = $props()
 	let event = $derived(data)
 	let locale = getLocale()
+
 	let hourCycle = browser ? new Intl.Locale(navigator.language).getHourCycles?.()[0] : undefined
 
 	const now = Date.now()
 	const todayUtc = new Date()
+
 	todayUtc.setUTCHours(0, 0, 0, 0)
 
 	let pastTimes = $derived(event.times.filter(t => getEndOfTime(t) <= now))
@@ -36,8 +37,8 @@
 	let nextTime = $derived(futureTimes[0])
 	let showAll = $state(false)
 	let status = $state<Status>({ type: 'ready' })
-
 	let loggedIn = $state<boolean>()
+
 	onMount(() => {
 		loggedIn = !!localStorage.loggedIn
 	})
@@ -65,7 +66,7 @@
 			timeZone: 'Europe/Berlin',
 			hour: locale === 'en' ? 'numeric' : '2-digit',
 			minute: '2-digit',
-			hourCycle,
+			hourCycle: hourCycle as 'h11' | 'h12' | 'h23' | 'h24' | undefined,
 		})
 	}
 
@@ -221,15 +222,15 @@
 		<div class="quick-links">
 			<a href="#termine" onclick={scrollToAppointments}>
 				{m.event_anchor_appointments({ count: event.times.length })}
-				<svg class="arrow-down" viewBox="0 0 24 24">
-					<path d="M4,14L12,22L20,14M12,22L12,2z" />
-				</svg>
+				<svg class="arrow-down" viewBox="0 0 24 24"
+					><path d="M4,14L12,22L20,14M12,22L12,2z"></path></svg
+				>
 			</a>
 			<a href="#ort" onclick={scrollToPlace}>
 				{m.event_anchor_place()}
-				<svg class="arrow-down" viewBox="0 0 24 24">
-					<path d="M4,14L12,22L20,14M12,22L12,2z" />
-				</svg>
+				<svg class="arrow-down" viewBox="0 0 24 24"
+					><path d="M4,14L12,22L20,14M12,22L12,2z"></path></svg
+				>
 			</a>
 		</div>
 
@@ -264,10 +265,11 @@
 					{/each}
 				</div>
 			{/each}
+
 			{#if !showAll && (event.times.length > 5 || (futureTimes.length && pastTimes.length))}
-				<button class="show-all-times" onclick={() => (showAll = true)}>
-					{m.actions_show_all()}
-				</button>
+				<button class="show-all-times" onclick={() => (showAll = true)}
+					>{m.actions_show_all()}</button
+				>
 			{/if}
 		</div>
 		{#if nextTime && (nextTime.variant === 'day' || nextTime.variant === 'day-range')}
@@ -304,9 +306,10 @@
 					{event.place.address}
 				</p>
 				<p>
-					<a class="button-link" href={localizeHref('/wegbeschreibung')}>
-						{m.event_anchor_directions()}
-					</a>
+					<a class="button-link" href={localizeHref('/wegbeschreibung')}
+						>{m.event_anchor_directions()}</a
+					>
+
 					<a
 						class="button-link"
 						href="https://maps.app.goo.gl/UcrvgAGBe8dn5b9F6"

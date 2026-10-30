@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { FormTime } from '$lib/hooks/createEventPlanningDefaults.svelte'
-	import { m } from '$lib/paraglide/messages'
+	import type { FormTime } from '#lib/hooks/createEventPlanningDefaults.svelte.js'
+	import { m } from '#lib/paraglide/messages.js'
 
 	interface Props {
 		time: FormTime

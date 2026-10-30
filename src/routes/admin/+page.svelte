@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { localizeHref } from '$lib/paraglide/runtime'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 	import { onMount } from 'svelte'
 
 	let username = $state('')

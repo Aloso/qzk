@@ -6,8 +6,7 @@
 export type Cookie = Record<string, string>
 
 type PartitionedCookieConstraint =
-	| { partitioned: true; secure: true }
-	| { partitioned?: boolean; secure?: boolean } // reset to default
+	{ partitioned: true; secure: true } | { partitioned?: boolean; secure?: boolean } // reset to default
 
 export type CookieOptions = {
 	domain?: string
