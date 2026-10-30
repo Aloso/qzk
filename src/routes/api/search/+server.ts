@@ -1,13 +1,11 @@
-import { error } from '@sveltejs/kit'
+import { ALGOLIA_API_KEY, ALGOLIA_APP_ID } from '$app/env/private'
 import { algoliasearch, type Algoliasearch } from 'algoliasearch'
 
 let client: Algoliasearch
 
-export async function GET({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
+export async function GET({ request }): Promise<Response> {
 	if (!client) {
-		client = algoliasearch(platform.env.ALGOLIA_APP_ID, platform.env.ALGOLIA_API_KEY)
+		client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 	}
 
 	const url = new URL(request.url)

@@ -6,14 +6,12 @@ export interface Data {
 	feedback: DbFeedback[]
 }
 
-export async function load({ platform, request }): Promise<Data> {
-	if (!platform) error(500, 'Platform not available')
-
-	if (!tryAuthentication(request, platform.env)) {
+export async function load({ request }): Promise<Data> {
+	if (!tryAuthentication(request)) {
 		error(401, 'Keine Berechtigung')
 	}
 
-	const feedback = await getAllFeedback(platform.env, 'v1')
+	const feedback = await getAllFeedback('v1')
 
 	return { feedback }
 }

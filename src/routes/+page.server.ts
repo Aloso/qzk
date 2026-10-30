@@ -5,7 +5,6 @@ import type { BlogPostPreviewTransformed, GeneralInfoTransformed } from '#lib/da
 import { wire2event } from '#lib/events/convert.js'
 import { getEndOfTime } from '#lib/events/intersections.js'
 import type { Event } from '#lib/events/types.js'
-import { error } from '@sveltejs/kit'
 
 interface Feedback {
 	id: string
@@ -19,10 +18,8 @@ export interface Data {
 	feedback?: Feedback
 }
 
-export async function load({ platform, cookies }): Promise<Data> {
-	if (!platform) error(500, 'Platform not available')
-
-	const eventsRaw = await getAllEvents(platform.env, {}, 'public')
+export async function load({ cookies }): Promise<Data> {
+	const eventsRaw = await getAllEvents({}, 'public')
 
 	const eventsParsed = eventsRaw
 		.map(({ submitter: _0, orgaNotes: _1, ...rest }) => rest)

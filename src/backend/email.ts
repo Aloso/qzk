@@ -1,15 +1,15 @@
-type Env = App.Platform['env']
+import { SMTP_HOST, SMTP_PASSWORD, SMTP_USERNAME } from '$app/env/private'
 
-export async function createMailer(env: Env) {
+export async function createMailer() {
 	const { WorkerMailer } = await import('worker-mailer')
 
 	const mailer = await WorkerMailer.connect({
 		credentials: {
-			username: env.SMTP_USERNAME,
-			password: env.SMTP_PASSWORD,
+			username: SMTP_USERNAME,
+			password: SMTP_PASSWORD,
 		},
 		authType: 'plain',
-		host: env.SMTP_HOST,
+		host: SMTP_HOST,
 		port: 465,
 		secure: true,
 	})

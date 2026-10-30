@@ -1,18 +1,17 @@
-import { error } from '@sveltejs/kit'
-import type { EventDto, EventState } from './event'
-import { eventColumns, serializeDbEvent, parseState, type DbEvent } from './dbEvent'
 import type { D1Result } from '@cloudflare/workers-types'
+import { error } from '@sveltejs/kit'
+import { env } from 'cloudflare:workers'
 import { v4 as uuidv4 } from 'uuid'
+import { eventColumns, parseState, serializeDbEvent, type DbEvent } from './dbEvent'
+import type { EventDto, EventState } from './event'
 
 interface GetAllEventsOptions {
 	start?: number
 	limit?: number
 }
 
-type Env = App.Platform['env']
-
 /** Returns number of events in the given state */
-export async function getEventNumber(env: Env, state: EventState): Promise<number> {
+export async function getEventNumber(state: EventState): Promise<number> {
 	const lengthQuery = 'SELECT count(*) length FROM events_migration WHERE state = ?'
 	const lengthResult = await env.DB.prepare(lengthQuery)
 		.bind(parseState(state))
@@ -23,7 +22,6 @@ export async function getEventNumber(env: Env, state: EventState): Promise<numbe
 
 /** Returns all events in the given state (paginated). */
 export async function getAllEvents(
-	env: Env,
 	options: GetAllEventsOptions,
 	state: EventState,
 ): Promise<EventDto[]> {
@@ -41,7 +39,7 @@ export async function getAllEvents(
 }
 
 /** Returns the event identified by the given key, if it has the given state */
-export async function getEvent(env: Env, key: string, state?: EventState): Promise<EventDto> {
+export async function getEvent(key: string, state?: EventState): Promise<EventDto> {
 	let result: DbEvent | null
 	if (state) {
 		const query = 'SELECT * FROM events_migration WHERE id = ? AND state = ?'
@@ -54,7 +52,7 @@ export async function getEvent(env: Env, key: string, state?: EventState): Promi
 }
 
 /** Adds the event with a newly generated UUID as key and returns the key */
-export async function addDraft(env: Env, event: EventDto): Promise<string> {
+export async function addDraft(event: EventDto): Promise<string> {
 	if (event.state !== 'draft') error(400, 'state must be `draft`')
 	const key = uuidv4()
 	event.key = key
@@ -71,7 +69,7 @@ export async function addDraft(env: Env, event: EventDto): Promise<string> {
 	return key
 }
 
-export async function putEvent(env: Env, event: EventDto, key: string): Promise<void> {
+export async function putEvent(event: EventDto, key: string): Promise<void> {
 	sortEventTimes(event)
 
 	const { cols, placeholders, values } = eventColumns(['id', 'state'], event)
@@ -80,23 +78,22 @@ export async function putEvent(env: Env, event: EventDto, key: string): Promise<
 		.bind(...values, key, parseState(event.state))
 		.run()
 	if (!result.success) {
-		await getEvent(env, key, event.state) // throws 404 if the event doesn't exist
+		await getEvent(key, event.state) // throws 404 if the event doesn't exist
 		error(500, 'Failed to update event')
 	}
 }
 
-export async function deleteEvent(env: Env, key: string, state: EventState): Promise<void> {
+export async function deleteEvent(key: string, state: EventState): Promise<void> {
 	const query = 'DELETE FROM events_migration WHERE id = ? AND state = ?'
 
 	const result = await env.DB.prepare(query).bind(key, parseState(state)).run()
 	if (!result.success) {
-		await getEvent(env, key, state) // throws 404 if the event doesn't exist
+		await getEvent(key, state) // throws 404 if the event doesn't exist
 		error(500, 'Failed to delete event')
 	}
 }
 
 export async function setEventState(
-	env: Env,
 	key: string,
 	newState: EventState,
 	oldState?: EventState,
@@ -111,7 +108,7 @@ export async function setEventState(
 	}
 
 	if (!result.success) {
-		await getEvent(env, key, oldState) // throws 404 if the event doesn't exist
+		await getEvent(key, oldState) // throws 404 if the event doesn't exist
 		error(500, 'Failed to update event state')
 	}
 }

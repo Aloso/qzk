@@ -1,8 +1,9 @@
+import env from '$app/env/private'
 import { error } from '@sveltejs/kit'
 
-export async function verifyCaptcha(token: string, ip: string, platform: App.Platform) {
+export async function verifyCaptcha(token: string, ip: string) {
 	const formData = new FormData()
-	formData.append('secret', platform.env.TURNSTILE_SECRET_KEY)
+	formData.append('secret', env.TURNSTILE_SECRET_KEY)
 	formData.append('response', token)
 	formData.append('remoteip', ip)
 

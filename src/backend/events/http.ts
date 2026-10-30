@@ -1,17 +1,16 @@
 import { error } from '@sveltejs/kit'
+import { env } from 'cloudflare:workers'
 import { parseState } from './event'
-
-type Env = App.Platform['env']
 
 interface Credentials {
 	user: string
 	password: string
 }
 
-export function tryAuthentication(request: Request, env: Env): boolean {
+export function tryAuthentication(request: Request): boolean {
 	const credentials = getCredentials(request)
 	if (!credentials) return false
-	return verifyCredentials(env, credentials)
+	return verifyCredentials(credentials)
 }
 
 export function getCredentials(request: Request): Credentials | undefined {
@@ -25,7 +24,7 @@ export function getCredentials(request: Request): Credentials | undefined {
 	return { user, password }
 }
 
-export function verifyCredentials(env: Env, { user, password }: Credentials): boolean {
+export function verifyCredentials({ user, password }: Credentials): boolean {
 	const variable = `USER__${user}` as const
 	return variable in env && env[variable] === password
 }

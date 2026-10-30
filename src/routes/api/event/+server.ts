@@ -5,10 +5,8 @@ import { sanitizeHtml } from '#lib/utils/sanitize.js'
 import { error } from '@sveltejs/kit'
 
 // fetch
-export async function GET({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
-	const isAdmin = tryAuthentication(request, platform.env)
+export async function GET({ request }): Promise<Response> {
+	const isAdmin = tryAuthentication(request)
 
 	const params = new URL(request.url).searchParams
 	const key = queryKey(params)
@@ -16,7 +14,7 @@ export async function GET({ request, platform }): Promise<Response> {
 	if (!key) error(400, 'Missing key')
 	if (!state && !isAdmin) error(400, 'Missing state')
 
-	const event = await getEvent(platform.env, key, state)
+	const event = await getEvent(key, state)
 	if (!isAdmin && event.state !== 'draft') {
 		delete event.submitter
 		delete event.orgaNotes
@@ -25,22 +23,18 @@ export async function GET({ request, platform }): Promise<Response> {
 }
 
 // create draft
-export async function POST({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
+export async function POST({ request }): Promise<Response> {
 	const event = parseEvent(await request.json())
 	event.descDe = sanitizeHtml(event.descDe)
 	if (!event.submitter) error(400, 'Missing submitter data')
 
-	await addDraft(platform.env, event)
+	await addDraft(event)
 	return Response.json(event)
 }
 
 // edit
-export async function PUT({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
-	const isAdmin = tryAuthentication(request, platform.env)
+export async function PUT({ request }): Promise<Response> {
+	const isAdmin = tryAuthentication(request)
 
 	const event = parseEvent(await request.json())
 	if (!event.submitter) error(400, 'Missing submitter data')
@@ -51,15 +45,13 @@ export async function PUT({ request, platform }): Promise<Response> {
 	event.key = queryKey(request) ?? event.key ?? error(400, 'Missing key')
 	event.descDe = sanitizeHtml(event.descDe)
 
-	await putEvent(platform.env, event, event.key)
+	await putEvent(event, event.key)
 	return Response.json(event)
 }
 
 // delete
-export async function DELETE({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
-	if (!tryAuthentication(request, platform.env)) {
+export async function DELETE({ request }): Promise<Response> {
+	if (!tryAuthentication(request)) {
 		error(401, 'Keine Berechtigung')
 	}
 
@@ -67,7 +59,7 @@ export async function DELETE({ request, platform }): Promise<Response> {
 	const key = queryKey(params) ?? error(400, 'Missing key')
 	const state = queryState(params) ?? error(400, 'Missing state')
 
-	await deleteEvent(platform.env, key, state)
-	// await setEventState(platform.env, key, 'archived')
+	await deleteEvent(key, state)
+	// await setEventState(key, 'archived')
 	return new Response('OK')
 }

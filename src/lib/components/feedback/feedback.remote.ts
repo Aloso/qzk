@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import z from 'zod'
 
 import { addFeedback } from '#backend/feedback.js'
@@ -12,10 +11,9 @@ const feedbackSchema = z.object({
 export type FeedbackV1 = z.infer<typeof feedbackSchema>
 
 export const postFeedback = form(feedbackSchema, async feedback => {
-	const { platform, cookies } = getRequestEvent()
-	if (!platform) error(500, 'Platform not available')
+	const { cookies } = getRequestEvent()
 
-	const feedbackId = await addFeedback(platform.env, 'v1', feedback)
+	const feedbackId = await addFeedback('v1', feedback)
 
 	cookies.set('feedback_v1', JSON.stringify({ id: feedbackId, date: Date.now() }), {
 		maxAge: 365 * 24 * 60 * 60, // 1 year

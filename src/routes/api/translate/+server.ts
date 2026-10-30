@@ -2,6 +2,8 @@ import { escapeHtml, sanitizeHtmlPlain } from '#lib/utils/sanitize.js'
 import { error } from '@sveltejs/kit'
 import z from 'zod'
 
+import { DEEPL_API_KEY } from '$app/env/private'
+
 export interface TranslateRequest {
 	parts: TranslatePart[]
 	source_lang?: string
@@ -47,9 +49,7 @@ function toHtmlText(part: TranslatePart) {
 }
 
 // translate
-export async function POST({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
+export async function POST({ request }): Promise<Response> {
 	const { parts, source_lang, target_lang } = parseTranslate(await request.json())
 
 	const totalLength = parts.reduce((acc, part) => acc + part.text.length, 0)
@@ -60,7 +60,7 @@ export async function POST({ request, platform }): Promise<Response> {
 	const response = await fetch('https://api-free.deepl.com/v2/translate', {
 		method: 'POST',
 		headers: {
-			Authorization: `DeepL-Auth-Key ${platform.env.DEEPL_API_KEY}`,
+			Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
 			'User-Agent': 'QueeresZentrumKassel/1.0.0',
 			'Content-Type': 'application/json',
 		},

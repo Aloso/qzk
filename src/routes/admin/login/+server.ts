@@ -1,16 +1,13 @@
 import { verifyCredentials } from '#backend/events/http.js'
-import { error } from '@sveltejs/kit'
 
-export async function POST({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
+export async function POST({ request }): Promise<Response> {
 	const formData = await request.formData()
 	const credentials = {
 		user: formData.get('user') as string,
 		password: formData.get('password') as string,
 	}
 
-	if (!credentials.user || !credentials.password || !verifyCredentials(platform.env, credentials)) {
+	if (!credentials.user || !credentials.password || !verifyCredentials(credentials)) {
 		return new Response(null, {
 			status: 303,
 			headers: {

@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit'
+import { env } from 'cloudflare:workers'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface DbFeedback {
@@ -9,9 +10,7 @@ export interface DbFeedback {
 	notes?: string
 }
 
-type Env = App.Platform['env']
-
-export async function addFeedback(env: Env, formId: string, feedback: object): Promise<string> {
+export async function addFeedback(formId: string, feedback: object): Promise<string> {
 	const id = uuidv4()
 
 	const result = await env.DB.prepare(
@@ -26,7 +25,7 @@ export async function addFeedback(env: Env, formId: string, feedback: object): P
 	return id
 }
 
-export async function getAllFeedback(env: Env, formId: string): Promise<DbFeedback[]> {
+export async function getAllFeedback(formId: string): Promise<DbFeedback[]> {
 	const query = 'SELECT * FROM feedback WHERE formId = ?'
 	const { results } = await env.DB.prepare(query).bind(formId).all<DbFeedback>()
 	return results

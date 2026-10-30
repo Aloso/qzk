@@ -3,10 +3,8 @@ import { queryKey, queryState, tryAuthentication } from '#backend/events/http.js
 import { error } from '@sveltejs/kit'
 
 // publish/unpublish/archive/unarchive
-export async function PUT({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
-	if (!tryAuthentication(request, platform.env)) {
+export async function PUT({ request }): Promise<Response> {
+	if (!tryAuthentication(request)) {
 		return error(401, 'Keine Berechtigung')
 	}
 
@@ -16,6 +14,6 @@ export async function PUT({ request, platform }): Promise<Response> {
 	if (!key) error(401, 'Missing key')
 	if (!state) error(401, 'Missing state')
 
-	await setEventState(platform.env, key, state)
+	await setEventState(key, state)
 	return new Response('OK')
 }

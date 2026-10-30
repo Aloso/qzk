@@ -1,7 +1,5 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { D1Database } from '@cloudflare/workers-types'
-
 // for information about these interfaces
 declare global {
 	namespace App {
@@ -9,38 +7,13 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface PageState {}
-		// interface Platform {}
-
-		type EnvVars = { [key in `USER__${string}`]: string } & {
-			DB: D1Database
-			ALGOLIA_APP_ID: string
-			ALGOLIA_API_KEY: string
-			DEEPL_API_KEY: string
-
-			CONTACT_FORM_RECIPIENT: string
-			SMTP_USERNAME: string
-			SMTP_PASSWORD: string
-			SMTP_HOST: string
-
-			TURNSTILE_SECRET_KEY: string
-		}
-
-		interface Platform {
-			env: EnvVars
-			context: {
-				waitUntil(promise: Promise<unknown>): void
-			}
-			caches: CacheStorage & { default: Cache }
-		}
-	}
-
-	interface Window {
-		instgrm?: {
-			Embeds: {
-				process: () => void
-			}
-		}
 	}
 }
 
-export {}
+declare module 'cloudflare:workers' {
+	import type { D1Database } from '@cloudflare/workers-types'
+
+	export const env: { [key: `USER_${string}`]: string } & {
+		DB: D1Database
+	}
+}

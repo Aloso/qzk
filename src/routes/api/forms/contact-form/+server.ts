@@ -1,11 +1,10 @@
 import { createMailer } from '#backend/email.js'
 import { formDataText } from '#backend/events/http.js'
 import { escapeHtml } from '#lib/utils/sanitize.js'
+import { CONTACT_FORM_RECIPIENT } from '$app/env/private'
 import { error } from '@sveltejs/kit'
 
-export async function POST({ request, platform }): Promise<Response> {
-	if (!platform) error(500, 'Platform not available')
-
+export async function POST({ request }): Promise<Response> {
 	const formData = await request.formData()
 	const subject = formDataText(formData, 'subject') ?? error(400, 'Missing subject')
 	const email = formDataText(formData, 'email') ?? error(400, 'Missing email')
@@ -24,10 +23,10 @@ export async function POST({ request, platform }): Promise<Response> {
 		)
 		.join('\n')
 
-	const mailer = await createMailer(platform.env)
+	const mailer = await createMailer()
 	await mailer.send({
 		from: { name: displayName, email: 'contact@queereszentrumkassel.de' },
-		to: { name: 'Queeres Zentrum Kassel', email: platform.env.CONTACT_FORM_RECIPIENT },
+		to: { name: 'Queeres Zentrum Kassel', email: CONTACT_FORM_RECIPIENT },
 		reply: { email },
 		subject: subject,
 		text: `${body}\n\nDiese E-Mail wurde von ${email} mit dem Kontaktformular auf queereszentrumkassel.de versendet.`,
