@@ -85,11 +85,7 @@
 						Du kannst die Spende auch direkt überweisen, auch als Dauerauftrag. Das ist gebührenfrei und
 						du kannst einen beliebigen Betrag wählen.<br />
 						<span class="divider"></span>
-						<a
-							class="button checkout-button primary"
-							class:active={amount > 0}
-							href="/spende/checkout"
-						>
+						<a class="button checkout-button primary" class:active={amount > 0} href="/spende">
 							Jährlich <b>{formatEuro(Math.max(5, amount * 12))}</b> spenden
 						</a>
 					{:else}
@@ -114,11 +110,7 @@
 						Direkt überweisen
 					</a>
 				{:else}
-					<a
-						class="button checkout-button primary"
-						class:active={amount > 0}
-						href="/spende/checkout"
-					>
+					<a class="button checkout-button primary" class:active={amount > 0} href="/spende">
 						Weiter
 					</a>
 				{/if}
