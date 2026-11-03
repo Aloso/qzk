@@ -66,6 +66,7 @@
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*",
 		"#backend": "./src/backend",
-		"#backend/*": "./src/backend/*"
+		"#backend/*": "./src/backend/*",
+		"#assets/*": "./src/assets/*"
 	}
 }

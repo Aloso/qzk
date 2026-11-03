@@ -1,0 +1,55 @@
+@use 'sass:color';
+
+@mixin glitter($maximum-brightness: 1, $base-brightness: 0.2) {
+	// Density: The second value in the alpha channel of the Dense texture (-2.9) determines how many flakes are visible. -2.6 results in more, -3.2 in fewer.
+	// Brightness Range: The first value (5) controls the contrast. A lower value (3.5) makes the image softer and more uniform, while a higher value (7) increases the contrast, resulting in more flakes that are either fully lit or not lit at all.
+	--flake-dense: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 5 0 0 0 -2.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	--flake-spark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 9 0 0 0 -6.0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background-image: var(--flake-spark), var(--flake-dense);
+		mask-repeat: no-repeat;
+		mask-size: 300% 100%;
+	}
+
+	&::before {
+		background-size: 150px, 90px;
+		mask-image: linear-gradient(
+			110deg,
+			rgb(0 0 0 / #{$base-brightness}) 35%,
+			rgb(0 0 0 / #{$maximum-brightness}) 50%,
+			rgb(0 0 0 / #{$base-brightness}) 65%
+		);
+		animation: sweep 4.1s ease-in-out infinite;
+	}
+
+	&::after {
+		background-size: 110px, 67px;
+		background-position:
+			40px 20px,
+			13px 31px;
+		mask-image: linear-gradient(
+			70deg,
+			rgb(0 0 0 / #{$base-brightness}) 35%,
+			rgb(0 0 0 / #{$maximum-brightness}) 50%,
+			rgb(0 0 0 / #{$base-brightness}) 65%
+		);
+		animation: sweep 6s ease-in-out infinite reverse;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&::before,
+		&::after {
+			animation: none;
+		}
+	}
+}

@@ -71,6 +71,19 @@ export interface GeneralInfo extends GenericEntry<'generalInfo'> {
 	}
 }
 
+export interface DonationsInfo extends GenericEntry<'donations'> {
+	fields: {
+		description: RichText
+		descriptionEn: RichText
+		paypalUrl?: string
+		accountOwner: string
+		iban?: string
+		bic?: string
+		finalDescription: RichText
+		finalDescriptionEn: RichText
+	}
+}
+
 export interface StaticPage extends GenericEntry<'staticPage'> {
 	fields: {
 		name: string
@@ -93,5 +106,6 @@ export default data as {
 	blogPost: BlogPost[]
 	staticPage: StaticPage[]
 	generalInfo: GeneralInfoTransformed
+	donations: DonationsInfo
 	navigations: Navigations
 }

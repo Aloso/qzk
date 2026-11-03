@@ -166,6 +166,15 @@ body.show-paragraphs {
 	}
 }
 
+@keyframes sweep {
+	from {
+		mask-position: 100% 0;
+	}
+	to {
+		mask-position: 0% 0;
+	}
+}
+
 @media (max-width: 28rem) {
 	// avoid vertical scrolling due to very long words
 	h1,

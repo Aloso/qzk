@@ -69,6 +69,16 @@ export interface GeneralInfo {
 	importantInfoEn?: string[]
 }
 
+export interface DonationInfo {
+	name: string
+	description: Document
+	paypalUrl?: string
+	accountOwner: string
+	iban?: string
+	bic?: string
+	finalDescription: Document
+}
+
 export interface Navigation {
 	name: string
 	links?: string

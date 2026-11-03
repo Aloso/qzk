@@ -1,10 +1,14 @@
 import { createClient, type Entry, type EntrySkeletonType } from 'contentful'
 import { config } from 'dotenv'
 import * as fs from 'node:fs'
+import { fetchContentfulEntries } from './fetchContentfulEntries'
+import { getGeneralInfo } from './parseGeneralInfo'
+import { getAllNavigations } from './parseNav'
 import { render } from './render'
 import type {
 	Accordeon,
 	BlogPost,
+	DonationInfo,
 	GeneralInfo,
 	Image,
 	Localized,
@@ -12,9 +16,6 @@ import type {
 	Person,
 	StaticPage,
 } from './types'
-import { getAllNavigations } from './parseNav'
-import { getGeneralInfo } from './parseGeneralInfo'
-import { fetchContentfulEntries } from './fetchContentfulEntries'
 import { updateSearchIndex } from './updateSearchIndex'
 
 config()
@@ -34,6 +35,7 @@ const data: Record<string, ReturnType<typeof transform>[]> = {
 	navigation: [],
 	generalInfo: [],
 	accordeon: [],
+	donations: [],
 }
 
 for (const entry of items) {
@@ -43,13 +45,14 @@ for (const entry of items) {
 
 ;(data as any).navigations = getAllNavigations(data.navigation as any[])
 ;(data as any).generalInfo = getGeneralInfo(data.generalInfo[0].fields as any)
+;(data as any).donations = data.donations[0]
 
 delete data.navigation
 
 data.blogPost.sort((a, b) => {
 	return a.fields.published === b.fields.published
 		? a.fields.title.localeCompare(b.fields.title)
-		: -a.fields.published.localeCompare(b.fields.published)
+		: -(a.fields.published?.localeCompare(b.fields.published) ?? 0)
 })
 
 console.log('writing data.json...')
@@ -131,6 +134,36 @@ function transform(entry: Entry<EntrySkeletonType>) {
 				importantInfoEn: importantInfo?.['en'],
 				openingHours: openingHours?.['de-DE'],
 				specialOpeningHours: specialOpeningHours?.['de-DE'],
+			}
+			break
+		}
+		case 'donations': {
+			const { description, paypalUrl, accountOwner, iban, bic, finalDescription } =
+				entry.fields as unknown as Localized<DonationInfo>
+
+			const renderedDescDe = render(description['de-DE'], [], 'de-DE')
+			const renderedDescEn = render(description['en'] ?? description['de-DE'], [], 'en')
+
+			const renderedFinalDescDe = render(
+				finalDescription['de-DE'],
+				renderedDescDe.headings.map(h => h.id),
+				'de-DE',
+			)
+			const renderedFinalDescEn = render(
+				finalDescription['en'] ?? finalDescription['de-DE'],
+				renderedDescEn.headings.map(h => h.id),
+				'en',
+			)
+
+			fields = {
+				description: renderedDescDe.content,
+				descriptionEn: renderedDescEn.content,
+				paypalUrl: paypalUrl?.['de-DE'],
+				accountOwner: accountOwner['de-DE'],
+				iban: iban?.['de-DE'],
+				bic: bic?.['de-DE'],
+				finalDescription: renderedFinalDescDe.content,
+				finalDescriptionEn: renderedFinalDescEn.content,
 			}
 			break
 		}

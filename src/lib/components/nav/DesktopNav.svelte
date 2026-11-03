@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/state'
 	import type { Navigations } from '#lib/data/index.js'
 	import { m } from '#lib/paraglide/messages.js'
 	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '#lib/paraglide/runtime.js'
+	import { resolve } from '$app/paths'
+	import { page } from '$app/state'
 	import { isNavItem } from './navUtil'
 
 	interface Props {
@@ -50,6 +51,11 @@
 		{/if}
 	{/each}
 
+	<a href={resolve('/spende/[[tab=donationTab]]', { tab: undefined })} class="a fancy-glitter">
+		<i class="heart"></i>
+		<span class="nav-link-inner">{m.donations_button()}</span>
+	</a>
+
 	<div class="nav-group">
 		<span class="nav-link-inner a">
 			<img src="/globe.svg" alt=" " />
@@ -82,6 +88,7 @@
 <style lang="scss">
 	@use 'sass:color';
 	@use '../../../routes/vars';
+	@use '../../utils/glitter.scss' as *;
 
 	nav {
 		display: flex;
@@ -183,6 +190,34 @@
 			background-color: white;
 			color: vars.$COLOR_T4;
 			font-weight: 600;
+		}
+
+		&.fancy-glitter {
+			background-color: vars.$COLOR_T2;
+			flex-direction: row;
+			align-items: center;
+			gap: 0.5rem;
+
+			.heart {
+				display: block;
+				width: 20px;
+				height: 20px;
+				background-image: url('../../../assets/heart.svg');
+				background-size: contain;
+				transition: filter 0.2s;
+			}
+
+			&:hover,
+			&:focus {
+				color: #51006c;
+				background-color: color.adjust(vars.$COLOR_T2, $lightness: -7%);
+
+				.heart {
+					filter: brightness(0.8);
+				}
+			}
+
+			@include glitter($base-brightness: 0.2, $maximum-brightness: 1);
 		}
 	}
 

@@ -1,10 +1,12 @@
 <script lang="ts">
 	interface Props {
-		urls: [url: string, id: string, name: string][]
+		urls: [url: string, id: string, name: string, options?: { newTab?: boolean }][]
 		active: string
+		pink?: boolean
+		reset?: boolean
 	}
 
-	let { urls, active }: Props = $props()
+	let { urls, active, reset, pink }: Props = $props()
 
 	let elemWidth = $state(0)
 	let maxInnerWidth = $state(0)
@@ -15,15 +17,25 @@
 	}
 </script>
 
-<div class="tabs" class:vertical bind:clientWidth={elemWidth}>
+<div class="tabs" class:vertical class:pink bind:clientWidth={elemWidth}>
 	<div class="tabs-inner" bind:clientWidth={() => 0, refWidthChanged}>
-		{#each urls as [url, id, name] (url)}
-			<a class:active={active === id} href={url}>{name}</a>
+		{#each urls as [url, id, name, options] (url)}
+			<a
+				class:active={active === id}
+				href={url}
+				target={options?.newTab ? '_blank' : undefined}
+				data-sveltekit-reset={reset}
+			>
+				{name}
+			</a>
 		{/each}
 	</div>
 </div>
 
 <style lang="scss">
+	@use '../../routes/vars.scss' as vars;
+	@use 'sass:color';
+
 	.tabs {
 		display: flex;
 		align-content: flex-start;
@@ -62,7 +74,7 @@
 			border: 2px solid #ccc;
 			padding: 0.5rem 0.8rem;
 			white-space: nowrap;
-			color: black;
+			color: #333;
 			font: inherit;
 			font-size: 1.1rem;
 			text-decoration: none;
@@ -87,10 +99,30 @@
 			}
 
 			&.active {
+				color: black;
 				background-color: white;
 				border-color: #aaa;
 				font-weight: 600;
 				z-index: 1;
+			}
+		}
+
+		&.pink {
+			a {
+				background-color: white;
+				border: 2px solid vars.$COLOR_T2;
+
+				&:hover,
+				&:focus {
+					background-color: vars.$COLOR_T1;
+					z-index: initial;
+				}
+
+				&.active {
+					background-color: vars.$COLOR_T2;
+					border-color: color.adjust(vars.$COLOR_T2, $lightness: -10%);
+					z-index: 2;
+				}
 			}
 		}
 	}
