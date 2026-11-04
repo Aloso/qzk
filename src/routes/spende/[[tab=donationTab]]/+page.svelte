@@ -17,21 +17,11 @@
 	let { data }: Props = $props()
 	let locale = getLocale()
 
-	let amount = $state(10)
+	let amount = $state(0)
 
-	let [tab, monthly] = $derived.by(() => {
-		if (page.params.tab === 'monatlich') {
-			return ['lastschrift', true] as const
-		} else if (page.params.tab === undefined) {
-			return ['lastschrift', false] as const
-		} else if (page.params.tab === 'paypal') {
-			return ['paypal', false] as const
-		} else if (page.params.tab === 'ueberweisung') {
-			return ['ueberweisung', false] as const
-		} else {
-			return [undefined, false] as const
-		}
-	})
+	let tab = $derived(
+		page.params.tab === 'auswahl' ? undefined : (page.params.tab ?? ('lastschrift' as const)),
+	)
 </script>
 
 <svelte:head>
@@ -40,7 +30,7 @@
 </svelte:head>
 
 <section>
-	<h1>{m.donations_title()}</h1>
+	<h1>{m.donations_heading()}</h1>
 
 	{#each locale === 'en' ? data.descriptionEn : data.description as part, i (i)}
 		{#if typeof part === 'string'}
@@ -64,7 +54,7 @@
 	{/each}
 </section>
 
-<Donations bind:amount {tab} {monthly} donationsInfo={data} />
+<Donations bind:amount {tab} donationsInfo={data} />
 
 <section>
 	{#each locale === 'en' ? data.finalDescriptionEn : data.finalDescription as part, i (i)}

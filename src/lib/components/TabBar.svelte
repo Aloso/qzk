@@ -2,11 +2,10 @@
 	interface Props {
 		urls: [url: string, id: string, name: string, options?: { newTab?: boolean }][]
 		active: string
-		pink?: boolean
 		reset?: boolean
 	}
 
-	let { urls, active, reset, pink }: Props = $props()
+	let { urls, active, reset }: Props = $props()
 
 	let elemWidth = $state(0)
 	let maxInnerWidth = $state(0)
@@ -17,7 +16,7 @@
 	}
 </script>
 
-<div class="tabs" class:vertical class:pink bind:clientWidth={elemWidth}>
+<div class="tabs" class:vertical bind:clientWidth={elemWidth}>
 	<div class="tabs-inner" bind:clientWidth={() => 0, refWidthChanged}>
 		{#each urls as [url, id, name, options] (url)}
 			<a
@@ -104,25 +103,6 @@
 				border-color: #aaa;
 				font-weight: 600;
 				z-index: 1;
-			}
-		}
-
-		&.pink {
-			a {
-				background-color: white;
-				border: 2px solid vars.$COLOR_T2;
-
-				&:hover,
-				&:focus {
-					background-color: vars.$COLOR_T1;
-					z-index: initial;
-				}
-
-				&.active {
-					background-color: vars.$COLOR_T2;
-					border-color: color.adjust(vars.$COLOR_T2, $lightness: -10%);
-					z-index: 2;
-				}
 			}
 		}
 	}

@@ -5,6 +5,13 @@
 	}
 
 	let { amount = $bindable(), customAmount = $bindable() }: Props = $props()
+
+	$effect(() => {
+		const floored = Math.abs(Math.floor(amount))
+		if (floored < amount || floored > amount) {
+			amount = floored
+		}
+	})
 </script>
 
 <div class="price-cols">
@@ -92,7 +99,6 @@
 		flex-wrap: wrap;
 		gap: min(0.5rem, 1vw);
 		max-width: 450px;
-		margin-inline: auto;
 	}
 
 	.price-button {
