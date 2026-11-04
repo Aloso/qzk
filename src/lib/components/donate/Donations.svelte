@@ -13,7 +13,7 @@
 
 	interface Props {
 		tab: 'lastschrift' | 'ueberweisung' | 'paypal' | undefined
-		amount: number
+		amount: number | null
 		donationsInfo: DonationsInfo['fields']
 	}
 
@@ -43,7 +43,7 @@
 	})
 
 	$effect(() => {
-		if (amount > 0 && amount < 5) {
+		if (amount && amount < 5) {
 			const t = setTimeout(() => {
 				smallAmount = true
 			}, 1200)
@@ -58,14 +58,14 @@
 
 	let customAmount = $state(false)
 
-	function formatEuro(amount: number) {
+	function formatEuro(amount: number | null) {
 		return new Intl.NumberFormat(undefined, {
 			style: 'currency',
 			currencyDisplay: 'name',
 			trailingZeroDisplay: 'stripIfInteger',
 			currency: 'EUR',
 			maximumFractionDigits: 2,
-		}).format(amount)
+		}).format(amount ?? 0)
 	}
 
 	function roundYearly(monthlyAmount: number) {
@@ -131,7 +131,7 @@
 					<a
 						class="button checkout-button"
 						class:primary={!amount || (monthly && !smallAmount)}
-						class:hidden={amount === 0}
+						class:hidden={!amount}
 						href="/spende"
 					>
 						{monthly ? 'Monatlich' : 'Einmalig'} <b>{formatEuro(amount)}</b> spenden
@@ -478,6 +478,7 @@
 		&:not(.primary) {
 			color: vars.$COLOR_T4;
 			background-color: white;
+			box-shadow: inset 0 0 0 1.5px color.adjust(vars.$COLOR_T4, $lightness: 10%);
 
 			&:hover,
 			&:focus {

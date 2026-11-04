@@ -1,12 +1,13 @@
 <script lang="ts">
 	interface Props {
-		amount: number
+		amount: number | null
 		customAmount?: boolean
 	}
 
 	let { amount = $bindable(), customAmount = $bindable() }: Props = $props()
 
 	$effect(() => {
+		if (amount === null) return
 		const floored = Math.abs(Math.floor(amount))
 		if (floored < amount || floored > amount) {
 			amount = floored
