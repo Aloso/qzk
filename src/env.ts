@@ -6,6 +6,8 @@ export const variables = defineEnvVars({
 	ALGOLIA_API_KEY: {},
 	DEEPL_API_KEY: {},
 
+	STRIPE_SECRET_KEY: {},
+
 	CONTACT_FORM_RECIPIENT: { static: true },
 	SMTP_USERNAME: { static: true },
 	SMTP_PASSWORD: { static: true },

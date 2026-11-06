@@ -2,7 +2,6 @@
 	import type { Navigations } from '#lib/data/index.js'
 	import { m } from '#lib/paraglide/messages.js'
 	import { deLocalizeHref, getLocale, localizeHref, setLocale } from '#lib/paraglide/runtime.js'
-	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
 	import { isNavItem } from './navUtil'
 
@@ -51,7 +50,7 @@
 		{/if}
 	{/each}
 
-	<a href={resolve('/spende/[[tab=donationTab]]', { tab: undefined })} class="a fancy-glitter">
+	<a href={localizeHref('/spende')} class="a fancy-glitter">
 		<i class="heart"></i>
 		<span class="nav-link-inner">{m.donations_button()}</span>
 	</a>

@@ -54,7 +54,9 @@
 	{/each}
 </section>
 
-<Donations bind:amount {tab} donationsInfo={data} />
+<section>
+	<Donations bind:amount {tab} donationsInfo={data} />
+</section>
 
 <section>
 	{#each locale === 'en' ? data.finalDescriptionEn : data.finalDescription as part, i (i)}
@@ -81,6 +83,8 @@
 
 <style lang="scss">
 	section {
+		width: 100%;
 		max-width: 44rem;
+		margin: 0 auto;
 	}
 </style>

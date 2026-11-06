@@ -6,10 +6,11 @@
 	import sepaIcon from '#assets/sepa.svg'
 	import stripeLogo from '#assets/stripe.svg'
 	import type { DonationsInfo } from '#lib/contentful/data.ts'
-	import { resolve } from '$app/paths'
+	import { localizeHref } from '#lib/paraglide/runtime.js'
 	import { slide } from 'svelte/transition'
 	import ReactiveTabBar from '../ReactiveTabBar.svelte'
 	import DonationAmountInput from './DonationAmountInput.svelte'
+	import DonationCheckoutButton from './DonationCheckoutButton.svelte'
 
 	interface Props {
 		tab: 'lastschrift' | 'ueberweisung' | 'paypal' | undefined
@@ -58,16 +59,6 @@
 
 	let customAmount = $state(false)
 
-	function formatEuro(amount: number | null) {
-		return new Intl.NumberFormat(undefined, {
-			style: 'currency',
-			currencyDisplay: 'name',
-			trailingZeroDisplay: 'stripIfInteger',
-			currency: 'EUR',
-			maximumFractionDigits: 2,
-		}).format(amount ?? 0)
-	}
-
 	function roundYearly(monthlyAmount: number) {
 		return monthlyAmount === 1 ? 12 : Math.round((monthlyAmount * 12) / 5) * 5
 	}
@@ -77,13 +68,11 @@
 	<a
 		class="accordion-button"
 		class:active={tab === 'lastschrift'}
-		href={tab === 'lastschrift'
-			? resolve('/spende/[[tab=donationTab]]', { tab: 'auswahl' })
-			: resolve('/spende/[[tab=donationTab]]', { tab: undefined })}
+		href={tab === 'lastschrift' ? localizeHref('/spende/auswahl') : localizeHref('/spende')}
 		data-sveltekit-reset="false"
 	>
 		<img src={sepaIcon} alt="SEPA" class="payment-provider-icon" />
-		Lastschrift
+		Lastschrift oder Karte
 	</a>
 
 	{#if tab === 'lastschrift'}
@@ -107,36 +96,25 @@
 								Zentrum auch langfristig zu erhalten.
 							</p>
 							{#if amount < 5}
-								<a class="button checkout-button primary" href="/spende">
-									Jährlich <b>{formatEuro(roundYearly(amount))}</b> spenden
-								</a>
+								<DonationCheckoutButton primary amount={roundYearly(amount)} interval="year" />
 							{:else}
-								<a class="button checkout-button primary" href="/spende">
-									Monatlich <b>{formatEuro(amount)}</b> spenden
-								</a>
+								<DonationCheckoutButton primary {amount} interval="month" />
 							{/if}
 						{:else}
 							<p>
 								Jede Zahlung kostet uns eine Gebühr. Damit bei uns möglichst viel von deiner Spende
 								ankommt, empfehlen wir eine <em>jährliche Spende</em>.
 							</p>
-							<a class="button checkout-button primary" href="/spende">
-								Jährlich <b>{formatEuro(Math.max(5, roundYearly(amount)))}</b> spenden
-							</a>
+							<DonationCheckoutButton primary amount={roundYearly(amount)} interval="year" />
 						{/if}
 					</div>
 				{/if}
 
-				<p>
-					<a
-						class="button checkout-button"
-						class:primary={!amount || (monthly && !smallAmount)}
-						class:hidden={!amount}
-						href="/spende"
-					>
-						{monthly ? 'Monatlich' : 'Einmalig'} <b>{formatEuro(amount)}</b> spenden
-					</a>
-				</p>
+				<DonationCheckoutButton
+					primary={!amount || (monthly && !smallAmount)}
+					amount={amount ?? 0}
+					interval={monthly ? 'month' : 'once'}
+				/>
 				<p class="security">
 					<img src={lockIcon} alt="" width="20px" height="20px" />
 					sichere Zahlungsabwicklung mit
@@ -153,9 +131,7 @@
 	<a
 		class="accordion-button"
 		class:active={tab === 'paypal'}
-		href={tab === 'paypal'
-			? resolve('/spende/[[tab=donationTab]]', { tab: 'auswahl' })
-			: resolve('/spende/[[tab=donationTab]]', { tab: 'paypal' })}
+		href={tab === 'paypal' ? localizeHref('/spende/auswahl') : localizeHref('/spende/paypal')}
 		data-sveltekit-reset="false"
 	>
 		<img src={paypalIcon} alt="" class="payment-provider-icon" />
@@ -183,8 +159,8 @@
 		class="accordion-button"
 		class:active={tab === 'ueberweisung'}
 		href={tab === 'ueberweisung'
-			? resolve('/spende/[[tab=donationTab]]', { tab: 'auswahl' })
-			: resolve('/spende/[[tab=donationTab]]', { tab: 'ueberweisung' })}
+			? localizeHref('/spende/auswahl')
+			: localizeHref('/spende/ueberweisung')}
 		data-sveltekit-reset="false"
 	>
 		Überweisung
@@ -484,10 +460,6 @@
 			&:focus {
 				background-color: vars.$COLOR_T1;
 			}
-		}
-
-		&.hidden {
-			visibility: hidden;
 		}
 	}
 
