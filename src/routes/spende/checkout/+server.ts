@@ -45,9 +45,6 @@ export async function POST({ request }): Promise<Response> {
 		allow_promotion_codes: false,
 		submit_type: 'donate',
 		origin_context: 'web',
-		invoice_creation: {
-			enabled: true,
-		},
 	})
 
 	if (!session.url) {
